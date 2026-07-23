@@ -1,0 +1,362 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Using incremental analysis with the CodeQL CLI</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Scan from the command line</a> / </nav><h1 id="using-incremental-analysis-with-the-codeql-cli">Using incremental analysis with the CodeQL CLI<a href="#using-incremental-analysis-with-the-codeql-cli" aria-label="Link to heading 'Using incremental analysis with the CodeQL CLI'" data-heading-content="Using incremental analysis with the CodeQL CLI" class="anchor"></a></h1>
+<p>Get faster CodeQL results on pull requests by analyzing only what changed. Incremental analysis can reduce scan times by up to 10x when you run the CodeQL CLI in your own CI/CD system.</p>
+<h2 id="about-incremental-analysis" title="About incremental analysis">About incremental analysis<a href="#about-incremental-analysis" aria-label="Link to heading 'About incremental analysis'" data-heading-content="About incremental analysis" class="anchor"></a></h2>
+<p>Full CodeQL scans on every pull request can be slow, especially in large codebases. If you run the CodeQL CLI in your own CI/CD system, incremental analysis gives you two ways to speed things up:</p>
+<ul>
+<li><strong>Diff-informed analysis</strong> reports only alerts in lines you added or changed, so queries run faster and results are more relevant.</li>
+<li><strong>Overlay analysis</strong> reuses a cached database from your default branch instead of building one from scratch, cutting database creation and query evaluation time dramatically.</li>
+</ul>
+<p>You can use these features independently or together. For most teams analyzing pull requests in established codebases, we recommend using both: overlay analysis for fast database creation and query evaluation, and diff-informed analysis for focused, relevant results.</p>
+<p>If you use code scanning default setup or the <code>codeql-action</code> on GitHub, incremental analysis is already handled automatically. This article is for teams running the CodeQL CLI directly in their own CI/CD infrastructure.</p>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<p>Before setting up incremental analysis, make sure you meet the following requirements:</p>
+<ul>
+<li><strong>CodeQL CLI bundle version:</strong> 2.21.0 or later for diff-informed analysis; 2.23.8 or later for overlay analysis (with per-language minimums, see <a href="#minimum-cli-bundle-versions">Minimum CLI bundle versions</a>)</li>
+<li><strong>Source root</strong> must be inside a Git repository</li>
+<li><strong>Git version</strong> 2.38.0 or later (required for overlay analysis, specifically the <code>--format</code> option used by <code>git ls-files</code>)</li>
+<li><strong>All files of interest</strong> must be tracked by Git (not in <code>.gitignore</code>)</li>
+<li><strong>Git index</strong> must accurately reflect the source tree being analyzed</li>
+<li><strong>Build mode:</strong> Overlay analysis supports only <code>build-mode: none</code> (traced builds are not supported). Go works with overlay analysis despite not explicitly supporting this mode.</li>
+</ul>
+<h2 id="choosing-an-approach" title="Choosing an approach">Choosing an approach<a href="#choosing-an-approach" aria-label="Link to heading 'Choosing an approach'" data-heading-content="Choosing an approach" class="anchor"></a></h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Diff-informed</th>
+<th>Overlay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Default branch push</td>
+<td>No (not a PR)</td>
+<td>overlay-base mode</td>
+</tr>
+<tr>
+<td>PR analysis (first time, no cache)</td>
+<td>Yes</td>
+<td>No (run full analysis)</td>
+</tr>
+<tr>
+<td>PR analysis (with cached base)</td>
+<td>Yes</td>
+<td>overlay mode</td>
+</tr>
+<tr>
+<td>Non-PR, non-default branch</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>For complete working examples in various CI systems, see the <a href="https://github.com/advanced-security/sample-codeql-pipeline-config" class="external">sample CodeQL pipeline configurations</a> repository.</p>
+<h2 id="diff-informed-analysis" title="Diff-informed analysis">Diff-informed analysis<a href="#diff-informed-analysis" aria-label="Link to heading 'Diff-informed analysis'" data-heading-content="Diff-informed analysis" class="anchor"></a></h2>
+<p>Diff-informed analysis is an optimization for pull request analysis. Instead of reporting all alerts found in the codebase, it reports only alerts in lines that were added or modified in the pull request diff.</p>
+<h3 id="step-1-identify-the-diff-ranges" title="Diff-informed analysis / Step 1: Identify the diff ranges">Step 1: Identify the diff ranges<a href="#step-1-identify-the-diff-ranges" aria-label="Link to heading 'Step 1: Identify the diff ranges'" data-heading-content="Step 1: Identify the diff ranges" class="anchor"></a></h3>
+<p>You need the added or modified line ranges from the pull request diff. The input can come from any source (<code>git diff</code>, your CI platform's API, or another mechanism).</p>
+<p>For each changed file, produce a list of ranges with the following structure:</p>
+<ul>
+<li><code>path</code>: Absolute file path (always use forward slashes)</li>
+<li><code>startLine</code>: 1-based, inclusive start line</li>
+<li><code>endLine</code>: 1-based, inclusive end line</li>
+</ul>
+<p>For example, given this unified diff (generated by <code>git diff</code>):</p>
+<pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">--- a/src/utils.ts
+</span><span style="color:#c0c5ce;">+++ b/src/utils.ts
+</span><span style="color:#c0c5ce;">@@ -2,7 +2,6 @@ import { helper } from './helper';
+</span><span style="color:#c0c5ce;"> 
+</span><span style="color:#c0c5ce;"> function existing() {
+</span><span style="color:#c0c5ce;">   const x = 1;
+</span><span style="color:#bf616a;">-  const unused = 2;
+</span><span style="color:#c0c5ce;">   return x;
+</span><span style="color:#c0c5ce;"> }
+</span><span style="color:#c0c5ce;"> 
+</span><span style="color:#c0c5ce;">@@ -14,6 +13,8 @@ function validate(input: string) {
+</span><span style="color:#c0c5ce;"> function process(input: string) {
+</span><span style="color:#c0c5ce;">   // validate
+</span><span style="color:#c0c5ce;">   if (!input) return;
+</span><span style="color:#a3be8c;">+  const sanitized = input.trim();
+</span><span style="color:#a3be8c;">+  console.log(sanitized);
+</span><span style="color:#c0c5ce;">   return input;
+</span><span style="color:#c0c5ce;"> }
+</span><span style="color:#c0c5ce;"> 
+</span><span style="color:#c0c5ce;">@@ -23,5 +24,5 @@ function format(value: number) {
+</span><span style="color:#c0c5ce;"> 
+</span><span style="color:#c0c5ce;"> function render(data: object) {
+</span><span style="color:#c0c5ce;">   const output = JSON.stringify(data);
+</span><span style="color:#bf616a;">-  return output;
+</span><span style="color:#a3be8c;">+  return `&lt;div&gt;${output}&lt;/div&gt;`;
+</span><span style="color:#c0c5ce;"> }
+</span></code></pre>
+<p>The resulting diff ranges for <code>src/utils.ts</code> would be:</p>
+<ul>
+<li><code>["/path/to/repo/src/utils.ts", 16, 17]</code> (the two inserted lines in the second hunk)</li>
+<li><code>["/path/to/repo/src/utils.ts", 27, 27]</code> (the modified line in the third hunk)</li>
+</ul>
+<p>The first hunk contains only a deletion, so it produces no range. Note that ranges use the "to" (new file) line numbers, not the "from" (old file) numbers.</p>
+<p><strong>Special cases:</strong></p>
+<ul>
+<li><strong>Binary files or very large diffs</strong> (no patch content available): Use the sentinel range <code>{path, startLine: 0, endLine: 0}</code> to indicate "entire file."</li>
+<li><strong>Renamed files with no content changes</strong>: Return an empty array (no ranges).</li>
+<li><strong>Truncated diffs</strong>: If your diff source is incomplete for large pull requests (for example, an API that limits the number of changed files), you should skip diff-informed analysis and run full analysis for that run.</li>
+</ul>
+<p>For a reference implementation of diff parsing, see <a href="https://github.com/github/codeql-action/blob/v4.36.0/src/diff-informed-analysis-utils.ts" class="external"><code>getDiffRanges()</code></a> in the <code>codeql-action</code> source code.</p>
+<h3 id="step-2-create-a-data-extension-pack" title="Diff-informed analysis / Step 2: Create a data extension pack">Step 2: Create a data extension pack<a href="#step-2-create-a-data-extension-pack" aria-label="Link to heading 'Step 2: Create a data extension pack'" data-heading-content="Step 2: Create a data extension pack" class="anchor"></a></h3>
+<p>Create a temporary directory containing two files. This extension pack feeds into the <code>restrictAlertsTo</code> extensible predicate defined in the CodeQL standard library.</p>
+<p><strong><code>qlpack.yml</code>:</strong></p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">my-ci/pr-diff-range
+</span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.0.0
+</span><span style="color:#bf616a;">library</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
+</span><span style="color:#bf616a;">extensionTargets</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">codeql/util</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">*</span><span style="color:#c0c5ce;">'  </span><span style="color:#65737e;"># Target the codeql/util pack where restrictAlertsTo is defined
+</span><span style="color:#bf616a;">dataExtensions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  - </span><span style="color:#a3be8c;">pr-diff-range.yml
+</span></code></pre>
+<p><strong><code>pr-diff-range.yml</code>:</strong></p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">extensions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">addsTo</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">pack</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql/util
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">extensible</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">restrictAlertsTo
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">checkPresence</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">false  </span><span style="color:#65737e;"># Don't error if the predicate doesn't exist in older CLI versions
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Each row: [filePath, startLine, endLine]
+</span><span style="color:#c0c5ce;">      - ["</span><span style="color:#a3be8c;">/path/to/repo/src/utils.ts</span><span style="color:#c0c5ce;">", </span><span style="color:#d08770;">16</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">17</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">      - ["</span><span style="color:#a3be8c;">/path/to/repo/src/utils.ts</span><span style="color:#c0c5ce;">", </span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">27</span><span style="color:#c0c5ce;">]
+</span></code></pre>
+<p>Each data row is <code>[filePath, lineStart, lineEnd]</code>. Line numbers are 1-based. The special case <code>lineStart = 0, lineEnd = 0</code> denotes a whole-file match.</p>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title">Important</p>
+<p>If the diff has zero added or modified lines (for example, only deletions), you must still provide a non-empty data extension with a sentinel entry <code>["", 0, 0]</code>. An empty <code>data</code> section would leave the <code>restrictAlertsTo</code> predicate inactive, which means all alerts would be produced—the opposite of the desired behavior.</p>
+</div>
+<h3 id="step-3-pass-the-extension-pack-to-the-codeql-cli" title="Diff-informed analysis / Step 3: Pass the extension pack to the CodeQL CLI">Step 3: Pass the extension pack to the CodeQL CLI<a href="#step-3-pass-the-extension-pack-to-the-codeql-cli" aria-label="Link to heading 'Step 3: Pass the extension pack to the CodeQL CLI'" data-heading-content="Step 3: Pass the extension pack to the CodeQL CLI" class="anchor"></a></h3>
+<p>When running queries, add the following flags to <code>codeql database run-queries</code>:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database run-queries \
+</span><span style="color:#c0c5ce;">  --additional-packs=PATH_TO_EXTENSION_PACK \
+</span><span style="color:#c0c5ce;">  --extension-packs=my-ci/pr-diff-range \
+</span><span style="color:#c0c5ce;">  PATH_TO_DATABASE \
+</span><span style="color:#c0c5ce;">  QUERIES
+</span></code></pre>
+<ul>
+<li><code>--additional-packs</code> tells CodeQL where to find the pack on disk. For more information, see <a href="../../../reference/code-scanning/codeql/codeql-cli-manual/database-run-queries.html">database run-queries</a>.</li>
+<li><code>--extension-packs</code> tells CodeQL to load the named extension pack.</li>
+</ul>
+<h3 id="step-4-exclude-diagnostic-queries" title="Diff-informed analysis / Step 4: Exclude diagnostic queries">Step 4: Exclude diagnostic queries<a href="#step-4-exclude-diagnostic-queries" aria-label="Link to heading 'Step 4: Exclude diagnostic queries'" data-heading-content="Step 4: Exclude diagnostic queries" class="anchor"></a></h3>
+<p>When using diff-informed analysis, you should exclude queries tagged with <code>exclude-from-incremental</code>. These diagnostic queries do not produce alerts (for example, metrics or code coverage), so they provide no value in an incremental context but still consume resources.</p>
+<p>You can add this to your code scanning configuration file:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">query-filters</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">exclude</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">tags</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">exclude-from-incremental
+</span></code></pre>
+<p>Alternatively, create a query suite file (<code>.qls</code>) that excludes those queries:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">description</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Pull request queries for Java
+</span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">import</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql-suites/java-code-scanning.qls
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">from</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql/java-queries
+</span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">exclude</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">tags contain</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">exclude-from-incremental
+</span></code></pre>
+<p>For more information, see <a href="../../../reference/code-scanning/workflow-configuration-options.html#filtering-the-queries-in-a-codeql-pack">Workflow configuration options for code scanning</a>.</p>
+<h3 id="step-5-filter-the-sarif-output" title="Diff-informed analysis / Step 5: Filter the SARIF output">Step 5: Filter the SARIF output<a href="#step-5-filter-the-sarif-output" aria-label="Link to heading 'Step 5: Filter the SARIF output'" data-heading-content="Step 5: Filter the SARIF output" class="anchor"></a></h3>
+<p>After CodeQL generates the SARIF file, you must filter the output on the CI side to remove results whose locations fall outside the diff ranges.</p>
+<p>For each result in the SARIF, check whether any of its <code>locations</code> or <code>relatedLocations</code> intersect with a diff range for that file. A location intersects a range when <code>range.startLine &lt;= location.endLine</code> and <code>location.startLine &lt;= range.endLine</code>. The special case <code>range.startLine == range.endLine == 0</code> matches any location in the file. Make sure SARIF artifact locations are resolved to the same absolute path format used in the diff ranges before comparing.</p>
+<p>The <code>restrictAlertsTo</code> predicate permits but does not guarantee that queries omit out-of-range alerts, so CI-side filtering is required for stable results.</p>
+<p>For a reference implementation of SARIF filtering, see <a href="https://github.com/github/codeql-action/blob/v4.36.0/src/upload-lib.ts" class="external"><code>filterAlertsByDiffRange()</code></a> in the <code>codeql-action</code> source code.</p>
+<h3 id="summary-of-cli-flags-for-diff-informed-analysis" title="Diff-informed analysis / Summary of CLI flags for diff-informed analysis">Summary of CLI flags for diff-informed analysis<a href="#summary-of-cli-flags-for-diff-informed-analysis" aria-label="Link to heading 'Summary of CLI flags for diff-informed analysis'" data-heading-content="Summary of CLI flags for diff-informed analysis" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>CLI command</th>
+<th>Flag</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codeql database init</code></td>
+<td><code class="keyword">--codescanning-config=FILE</code></td>
+<td>Code scanning configuration file (for query filter)</td>
+</tr>
+<tr>
+<td><code>codeql database run-queries</code></td>
+<td><code class="keyword">--additional-packs=DIR</code></td>
+<td>Location of the extension pack</td>
+</tr>
+<tr>
+<td><code>codeql database run-queries</code></td>
+<td><code class="keyword">--extension-packs=my-ci/pr-diff-range</code></td>
+<td>Name of the extension pack to load</td>
+</tr>
+<tr>
+<td><code>codeql database interpret-results</code></td>
+<td><code class="keyword">--sarif-run-property=incrementalMode=diff-informed</code></td>
+<td>(Optional) Tag SARIF with diff-informed metadata</td>
+</tr>
+</tbody>
+</table>
+<h2 id="overlay-analysis" title="Overlay analysis">Overlay analysis<a href="#overlay-analysis" aria-label="Link to heading 'Overlay analysis'" data-heading-content="Overlay analysis" class="anchor"></a></h2>
+<p>Overlay analysis speeds up CodeQL database creation and query evaluation for pull requests by building on top of a pre-existing "base" database:</p>
+<ol>
+<li><strong>On the default branch:</strong> Build an "overlay-base" database (a full database with cached intermediate results). This can be any long-lived branch that pull requests target.</li>
+<li><strong>On pull requests:</strong> Download the cached overlay-base database, then create a lightweight "overlay" database that only processes the changed files.</li>
+</ol>
+<h3 id="overlay-base-mode-default-branch" title="Overlay analysis / Overlay-base mode (default branch)">Overlay-base mode (default branch)<a href="#overlay-base-mode-default-branch" aria-label="Link to heading 'Overlay-base mode (default branch)'" data-heading-content="Overlay-base mode (default branch)" class="anchor"></a></h3>
+<p>Run overlay-base mode on your default or long-lived target branch after each merge to create and cache a base database.</p>
+<h4 id="1-initialize-the-database-with---overlay-base">1. Initialize the database with <code>--overlay-base</code><a href="#1-initialize-the-database-with---overlay-base" aria-label="Link to heading '1. Initialize the database with --overlay-base'" data-heading-content="1. Initialize the database with --overlay-base" class="anchor"></a></h4>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database init \
+</span><span style="color:#c0c5ce;">  --overlay-base \
+</span><span style="color:#c0c5ce;">  --db-cluster \
+</span><span style="color:#c0c5ce;">  PATH_TO_DATABASE \
+</span><span style="color:#c0c5ce;">  --source-root=PATH_TO_SOURCE \
+</span><span style="color:#c0c5ce;">  --language=LANGUAGE
+</span></code></pre>
+<p>The <code>--overlay-base</code> flag tells CodeQL to build a database that can serve as a base for future overlay analysis.</p>
+<h4 id="2-build-and-extract-as-normal">2. Build and extract as normal<a href="#2-build-and-extract-as-normal" aria-label="Link to heading '2. Build and extract as normal'" data-heading-content="2. Build and extract as normal" class="anchor"></a></h4>
+<p>Run any build steps and extraction as you normally would for your project.</p>
+<h4 id="3-record-file-oids">3. Record file OIDs<a href="#3-record-file-oids" aria-label="Link to heading '3. Record file OIDs'" data-heading-content="3. Record file OIDs" class="anchor"></a></h4>
+<p>After extraction completes, record the Git object IDs (OIDs) of all tracked files under the source root. Run this command from your source root directory (<code>PATH_TO_SOURCE</code>). This snapshot is used later to determine which files changed.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">cd PATH_TO_SOURCE &amp;&amp; git ls-files --recurse-submodules --format='%(objectname)_%(path)'
+</span></code></pre>
+<p>Parse this output into a JSON map of <code>{ "relative/path": "git-oid" }</code> and store it alongside the database. The output includes files in Git submodules, which overlay analysis needs to accurately track all file changes between the base and the overlay.</p>
+<h4 id="4-run-queries-and-preserve-the-cache">4. Run queries and preserve the cache<a href="#4-run-queries-and-preserve-the-cache" aria-label="Link to heading '4. Run queries and preserve the cache'" data-heading-content="4. Run queries and preserve the cache" class="anchor"></a></h4>
+<p>When running queries on an overlay-base database, do <strong>not</strong> pass <code>--expect-discarded-cache</code>. The cached intermediate results are what makes pull request builds fast. Discarding them would force full re-evaluation on every PR.</p>
+<h4 id="5-clean-up-and-cache-the-database">5. Clean up and cache the database<a href="#5-clean-up-and-cache-the-database" aria-label="Link to heading '5. Clean up and cache the database'" data-heading-content="5. Clean up and cache the database" class="anchor"></a></h4>
+<p>After analysis, clean up the database using the <code>overlay</code> cleanup level:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database cleanup PATH_TO_DATABASE --cache-cleanup=overlay
+</span></code></pre>
+<p>The <code>overlay</code> cleanup level preserves more cached data than the default <code>clear</code> level. Overlay mode reuses this cached data for efficient query evaluation on pull requests, so discarding it would eliminate the performance benefit.</p>
+<p>Then store the database (including the OIDs file) in your caching system for later retrieval by pull request builds.</p>
+<h3 id="overlay-mode-pull-requests" title="Overlay analysis / Overlay mode (pull requests)">Overlay mode (pull requests)<a href="#overlay-mode-pull-requests" aria-label="Link to heading 'Overlay mode (pull requests)'" data-heading-content="Overlay mode (pull requests)" class="anchor"></a></h3>
+<p>Run overlay mode on pull request builds to create a lightweight database on top of the cached base. If no compatible overlay-base database is available in the cache (for example, on the first run or after a CodeQL CLI version upgrade), skip <code>--overlay-changes</code> and run a normal full analysis instead. Cache keys should include at least the CodeQL CLI version and language set to avoid incompatible base databases.</p>
+<h4 id="1-download-the-cached-overlay-base-database">1. Download the cached overlay-base database<a href="#1-download-the-cached-overlay-base-database" aria-label="Link to heading '1. Download the cached overlay-base database'" data-heading-content="1. Download the cached overlay-base database" class="anchor"></a></h4>
+<p>Retrieve the most recent overlay-base database from your cache. The database should include the OIDs file recorded during overlay-base mode.</p>
+<h4 id="2-compute-changed-files">2. Compute changed files<a href="#2-compute-changed-files" aria-label="Link to heading '2. Compute changed files'" data-heading-content="2. Compute changed files" class="anchor"></a></h4>
+<p>Compare the OIDs recorded in the base database with the current Git state. Run this command from the same source root directory (<code>PATH_TO_SOURCE</code>) used during overlay-base mode:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">cd PATH_TO_SOURCE &amp;&amp; git ls-files --recurse-submodules --format='%(objectname)_%(path)'
+</span></code></pre>
+<p>Compare the two maps to find files that were added, removed, or modified (different OID). Write the result as a JSON file:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">changes</span><span style="color:#c0c5ce;">": ["</span><span style="color:#a3be8c;">src/modified-file.ts</span><span style="color:#c0c5ce;">", "</span><span style="color:#a3be8c;">src/new-file.ts</span><span style="color:#c0c5ce;">", "</span><span style="color:#a3be8c;">src/deleted-file.ts</span><span style="color:#c0c5ce;">"]
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>The file paths must be relative to the source root.</p>
+<h4 id="3-initialize-the-database-with---overlay-changes">3. Initialize the database with <code>--overlay-changes</code><a href="#3-initialize-the-database-with---overlay-changes" aria-label="Link to heading '3. Initialize the database with --overlay-changes'" data-heading-content="3. Initialize the database with --overlay-changes" class="anchor"></a></h4>
+<p>Run <code>codeql database init</code> against the restored overlay-base database directory. The <code>PATH_TO_DATABASE</code> must point to the restored cached overlay-base database, not a new empty directory—the command extends the existing base for the pull request analysis.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database init \
+</span><span style="color:#c0c5ce;">  --overlay-changes=PATH_TO_OVERLAY_CHANGES_JSON \
+</span><span style="color:#c0c5ce;">  --db-cluster \
+</span><span style="color:#c0c5ce;">  PATH_TO_DATABASE \
+</span><span style="color:#c0c5ce;">  --source-root=PATH_TO_SOURCE \
+</span><span style="color:#c0c5ce;">  --language=LANGUAGE
+</span></code></pre>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title">Important</p>
+<p>In overlay mode, do not pass <code>--overwrite</code> or <code>--force-overwrite</code>. You are building on top of the existing cached base database, not replacing it.</p>
+</div>
+<h4 id="4-build-extract-and-run-queries-as-normal">4. Build, extract, and run queries as normal<a href="#4-build-extract-and-run-queries-as-normal" aria-label="Link to heading '4. Build, extract, and run queries as normal'" data-heading-content="4. Build, extract, and run queries as normal" class="anchor"></a></h4>
+<p>Proceed with build, extraction, and query execution as normal. You can add the <code>--sarif-run-property</code> flag to your existing <code>codeql database interpret-results</code> command to tag the SARIF output with overlay metadata:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database interpret-results \
+</span><span style="color:#c0c5ce;">  --format=sarif-latest \
+</span><span style="color:#c0c5ce;">  --output=results.sarif \
+</span><span style="color:#c0c5ce;">  --sarif-run-property=incrementalMode=overlay \
+</span><span style="color:#c0c5ce;">  PATH_TO_DATABASE \
+</span><span style="color:#c0c5ce;">  QUERIES_OR_SUITES
+</span></code></pre>
+<p>If both overlay and diff-informed analysis are active, use <code>incrementalMode=overlay,diff-informed</code>.</p>
+<p>Alerts from incremental analysis appear in the pull request's code scanning results the same way as alerts from full scans. Any overlay-base database will work regardless of age, but fresher bases produce faster and more accurate results.</p>
+<p>As with diff-informed analysis, exclude queries tagged <code>exclude-from-incremental</code> when using overlay mode. For details, see <a href="#step-4-exclude-diagnostic-queries">Step 4: Exclude diagnostic queries</a>.</p>
+<h3 id="summary-of-cli-flags-for-overlay-analysis" title="Overlay analysis / Summary of CLI flags for overlay analysis">Summary of CLI flags for overlay analysis<a href="#summary-of-cli-flags-for-overlay-analysis" aria-label="Link to heading 'Summary of CLI flags for overlay analysis'" data-heading-content="Summary of CLI flags for overlay analysis" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>CLI command</th>
+<th>Flag</th>
+<th>Mode</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codeql database init</code></td>
+<td><code>--codescanning-config=FILE</code></td>
+<td>overlay</td>
+<td>Code scanning configuration file (for query filter)</td>
+</tr>
+<tr>
+<td><code>codeql database init</code></td>
+<td><code>--overlay-base</code></td>
+<td>overlay-base</td>
+<td>Build a base database for future overlay use</td>
+</tr>
+<tr>
+<td><code>codeql database init</code></td>
+<td><code>--overlay-changes=FILE</code></td>
+<td>overlay</td>
+<td>Build overlay database using only changed files</td>
+</tr>
+<tr>
+<td><code>codeql database init</code></td>
+<td><em>(no <code>--overwrite</code>)</em></td>
+<td>overlay</td>
+<td>Don't overwrite the cached base database</td>
+</tr>
+<tr>
+<td><code>codeql database run-queries</code></td>
+<td><em>(no <code>--expect-discarded-cache</code>)</em></td>
+<td>overlay-base</td>
+<td>Preserve cached intermediate results</td>
+</tr>
+<tr>
+<td><code>codeql database cleanup</code></td>
+<td><code>--cache-cleanup=overlay</code></td>
+<td>overlay-base</td>
+<td>Use overlay-specific cleanup level</td>
+</tr>
+<tr>
+<td><code>codeql database interpret-results</code></td>
+<td><code>--sarif-run-property=incrementalMode=overlay</code></td>
+<td>overlay</td>
+<td>Tag SARIF with overlay metadata</td>
+</tr>
+</tbody>
+</table>
+<h3 id="minimum-cli-bundle-versions" title="Overlay analysis / Minimum CLI bundle versions">Minimum CLI bundle versions<a href="#minimum-cli-bundle-versions" aria-label="Link to heading 'Minimum CLI bundle versions'" data-heading-content="Minimum CLI bundle versions" class="anchor"></a></h3>
+<p>The base minimum version for overlay analysis is 2.23.8. Some languages require higher minimum versions:</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Minimum CodeQL CLI bundle version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C/C++</td>
+<td>2.25.0</td>
+</tr>
+<tr>
+<td>C#</td>
+<td>2.24.1</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>2.24.2</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>2.23.8</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>2.23.9</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>2.23.9</td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>2.23.9</td>
+</tr>
+</tbody>
+</table>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

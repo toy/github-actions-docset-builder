@@ -1,8 +1,8 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Controlling which dependencies are updated by Dependabot</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your supply chain</a> / <a href="index.html">Manage your dependency security</a> / </nav><h1><a href="#controlling-which-dependencies-are-updated-by-dependabot" aria-hidden="true" class="anchor" id="controlling-which-dependencies-are-updated-by-dependabot"></a>Controlling which dependencies are updated by Dependabot</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Controlling which dependencies are updated by Dependabot</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your supply chain</a> / <a href="index.html">Manage your dependency security</a> / </nav><h1 id="controlling-which-dependencies-are-updated-by-dependabot">Controlling which dependencies are updated by Dependabot<a href="#controlling-which-dependencies-are-updated-by-dependabot" aria-label="Link to heading 'Controlling which dependencies are updated by Dependabot'" data-heading-content="Controlling which dependencies are updated by Dependabot" class="anchor"></a></h1>
 <p>Learn how to configure your dependabot.yml file so that Dependabot automatically updates the packages you specify, in the way you define.</p>
 <p>You can customize your Dependabot configuration to suit your needs, by adding options to your <code>dependabot.yml</code> file. For example, you can make sure that Dependabot uses the correct package manifest files, and updates only the dependencies you want maintained.</p>
 <p>This article collates customization options you may find useful.</p>
-<h2 title="Defining multiple locations for manifest files"><a href="#defining-multiple-locations-for-manifest-files" aria-hidden="true" class="anchor" id="defining-multiple-locations-for-manifest-files"></a>Defining multiple locations for manifest files</h2>
+<h2 id="defining-multiple-locations-for-manifest-files" title="Defining multiple locations for manifest files">Defining multiple locations for manifest files<a href="#defining-multiple-locations-for-manifest-files" aria-label="Link to heading 'Defining multiple locations for manifest files'" data-heading-content="Defining multiple locations for manifest files" class="anchor"></a></h2>
 <p>If you want to enable Dependabot version updates for manifest files stored in more than one location, you can use <code>directories</code> in place of <code>directory</code>. For example, this configuration sets two different update schedules for manifest files stored in different directories.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># Specify the locations of the manifest files to update for each package manager
 </span><span style="color:#65737e;"># using both `directories` and `directory`
@@ -54,7 +54,7 @@
 </span></code></pre>
 </li>
 </ul>
-<h2 title="Ignoring specific dependencies"><a href="#ignoring-specific-dependencies" aria-hidden="true" class="anchor" id="ignoring-specific-dependencies"></a>Ignoring specific dependencies</h2>
+<h2 id="ignoring-specific-dependencies" title="Ignoring specific dependencies">Ignoring specific dependencies<a href="#ignoring-specific-dependencies" aria-label="Link to heading 'Ignoring specific dependencies'" data-heading-content="Ignoring specific dependencies" class="anchor"></a></h2>
 <p>If you are not ready to adopt changes from certain dependencies in your project, you can configure Dependabot to ignore those dependencies when it opens pull requests for version updates and security updates. You can do this using one of the following methods.</p>
 <ul>
 <li>Configure the <code>ignore</code> option for the dependency in your <code>dependabot.yml</code> file.
@@ -66,7 +66,7 @@
 <li>Use <code>@dependabot ignore</code> comment commands on a Dependabot pull request for version updates and security updates.
 <ul>
 <li><strong>You can use comment commands to ignore updates for specific dependencies and versions.</strong></li>
-<li>For more information, see <a href="managing-pull-requests-for-dependency-updates.html#managing-dependabot-pull-requests-with-comment-commands">Managing pull requests for dependency updates</a>.</li>
+<li>For more information, see <a href="manage-dependabot-prs.html#managing-dependabot-pull-requests-with-comment-commands">Managing pull requests for dependency updates</a>.</li>
 </ul>
 </li>
 </ul>
@@ -103,8 +103,8 @@
 <li>Un-ignore a specific dependency</li>
 <li>Un-ignore all ignore conditions for all dependencies in a Dependabot pull request</li>
 </ul>
-<p>For more information, see <a href="managing-pull-requests-for-dependency-updates.html#managing-dependabot-pull-requests-for-grouped-updates-with-comment-commands">Managing pull requests for dependency updates</a>.</p>
-<h2 title="Allowing specific dependencies to be updated"><a href="#allowing-specific-dependencies-to-be-updated" aria-hidden="true" class="anchor" id="allowing-specific-dependencies-to-be-updated"></a>Allowing specific dependencies to be updated</h2>
+<p>For more information, see <a href="manage-dependabot-prs.html#managing-dependabot-pull-requests-for-grouped-updates-with-comment-commands">Managing pull requests for dependency updates</a>.</p>
+<h2 id="allowing-specific-dependencies-to-be-updated" title="Allowing specific dependencies to be updated">Allowing specific dependencies to be updated<a href="#allowing-specific-dependencies-to-be-updated" aria-label="Link to heading 'Allowing specific dependencies to be updated'" data-heading-content="Allowing specific dependencies to be updated" class="anchor"></a></h2>
 <p>You can use <code>allow</code> to tell Dependabot about the dependencies you want to maintain. <code>allow</code> is usually used in conjunction with <code>ignore</code>.</p>
 <p>For more information, see <code>allow</code> in <a href="../../../reference/supply-chain-security/dependabot-options-reference.html#allow--">Dependabot options reference</a>.</p>
 <p>By default, Dependabot creates version update pull requests only for the dependencies that are explicitly defined in a manifest (<code>direct</code> dependencies). This configuration uses <code>allow</code> to tell Dependabot that we want it to maintain <code>all</code> types of dependency. That is, both the <code>direct</code> dependencies and their dependencies (also known as indirect dependencies, sub-dependencies, or transient dependencies). In addition, the configuration tells Dependabot to ignore all dependencies with a name matching the pattern <code>org.xwiki.*</code> because we have a different process for maintaining them.</p>
@@ -142,7 +142,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">dependency-name</span><span style="color:#c0c5ce;">: "</span><span style="color:#a3be8c;">org.xwiki.*</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">open-pull-requests-limit</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">15
 </span></code></pre>
-<h2 title="Allowing specific semantic versioning levels for updates"><a href="#allowing-specific-semantic-versioning-levels-for-updates" aria-hidden="true" class="anchor" id="allowing-specific-semantic-versioning-levels-for-updates"></a>Allowing specific semantic versioning levels for updates</h2>
+<h2 id="allowing-specific-semantic-versioning-levels-for-updates" title="Allowing specific semantic versioning levels for updates">Allowing specific semantic versioning levels for updates<a href="#allowing-specific-semantic-versioning-levels-for-updates" aria-label="Link to heading 'Allowing specific semantic versioning levels for updates'" data-heading-content="Allowing specific semantic versioning levels for updates" class="anchor"></a></h2>
 <p>You can use <code>update-types</code> with <code>allow</code> to restrict updates to specific semantic versioning (SemVer) levels. This is useful when you want to be explicit about which types of updates Dependabot should create pull requests for.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -186,7 +186,7 @@
 <p>In this example, production dependencies will only receive patch updates, while development dependencies will receive both minor and patch updates.</p>
 </li>
 </ul>
-<h2 title="Ignoring specific versions or ranges of versions"><a href="#ignoring-specific-versions-or-ranges-of-versions" aria-hidden="true" class="anchor" id="ignoring-specific-versions-or-ranges-of-versions"></a>Ignoring specific versions or ranges of versions</h2>
+<h2 id="ignoring-specific-versions-or-ranges-of-versions" title="Ignoring specific versions or ranges of versions">Ignoring specific versions or ranges of versions<a href="#ignoring-specific-versions-or-ranges-of-versions" aria-label="Link to heading 'Ignoring specific versions or ranges of versions'" data-heading-content="Ignoring specific versions or ranges of versions" class="anchor"></a></h2>
 <p>You can use <code>versions</code> in conjunction with <code>ignore</code> to ignore specific versions or ranges of versions.</p>
 <p>For more information, see <code>versions</code> in <a href="../../../reference/supply-chain-security/dependabot-options-reference.html#versions-ignore">Dependabot options reference</a>.</p>
 <ul>
@@ -215,7 +215,7 @@
 </span></code></pre>
 </li>
 </ul>
-<h2 title="Specifying the semantic versioning level to ignore"><a href="#specifying-the-semantic-versioning-level-to-ignore" aria-hidden="true" class="anchor" id="specifying-the-semantic-versioning-level-to-ignore"></a>Specifying the semantic versioning level to ignore</h2>
+<h2 id="specifying-the-semantic-versioning-level-to-ignore" title="Specifying the semantic versioning level to ignore">Specifying the semantic versioning level to ignore<a href="#specifying-the-semantic-versioning-level-to-ignore" aria-label="Link to heading 'Specifying the semantic versioning level to ignore'" data-heading-content="Specifying the semantic versioning level to ignore" class="anchor"></a></h2>
 <p>You can specify one or more semantic versioning (SemVer) levels to ignore using <code>update-types</code> with <code>ignore</code>. Alternatively, you can use <code>update-types</code> with <code>allow</code> to explicitly specify which update levels to allow, see <a href="#allowing-specific-semantic-versioning-levels-for-updates">Allowing specific semantic versioning levels for updates</a>.</p>
 <p>For more information, see <code>update-types</code> in <a href="../../../reference/supply-chain-security/dependabot-options-reference.html#update-types-ignore">Dependabot options reference</a>.</p>
 <p>In this example, Dependabot will ignore patch versions for Node.</p>
@@ -235,7 +235,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#65737e;"># For Node types, ignore any patch versions
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">update-types</span><span style="color:#c0c5ce;">: ["</span><span style="color:#a3be8c;">version-update:semver-patch</span><span style="color:#c0c5ce;">"]
 </span></code></pre>
-<h2 title="Defining a versioning strategy"><a href="#defining-a-versioning-strategy" aria-hidden="true" class="anchor" id="defining-a-versioning-strategy"></a>Defining a versioning strategy</h2>
+<h2 id="defining-a-versioning-strategy" title="Defining a versioning strategy">Defining a versioning strategy<a href="#defining-a-versioning-strategy" aria-label="Link to heading 'Defining a versioning strategy'" data-heading-content="Defining a versioning strategy" class="anchor"></a></h2>
 <p>By default, Dependabot tries to increase the minimum version requirement for dependencies it identifies as apps, and widens the allowed version requirements to include both the new and old versions for dependencies it identifies as libraries.</p>
 <p>You can change this default strategy. For more information, see <code>versioning-strategy</code> in <a href="../../../reference/supply-chain-security/dependabot-options-reference.html#versioning-strategy--">Dependabot options reference</a>.</p>
 <p>In this example, Dependabot will increase the minimum version requirement to match the new version for both apps and libraries.</p>
@@ -261,7 +261,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># only when required
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">versioning-strategy</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">increase-if-necessary
 </span></code></pre>
-<h2 title="Updating vendored dependencies"><a href="#updating-vendored-dependencies" aria-hidden="true" class="anchor" id="updating-vendored-dependencies"></a>Updating vendored dependencies</h2>
+<h2 id="updating-vendored-dependencies" title="Updating vendored dependencies">Updating vendored dependencies<a href="#updating-vendored-dependencies" aria-label="Link to heading 'Updating vendored dependencies'" data-heading-content="Updating vendored dependencies" class="anchor"></a></h2>
 <p>You can instruct Dependabot to vendor specific dependencies when updating them.</p>
 <p>Dependabot automatically maintains vendored dependencies for Go modules, and you can configure Bundler to also update vendored dependencies.</p>
 <p>For more information, see <code>vendor</code> in <a href="../../../reference/supply-chain-security/dependabot-options-reference.html#vendor--">Dependabot options reference</a>.</p>

@@ -1,0 +1,113 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Security overview dashboard metrics</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">Reference</a> / <a href="index.html">Security at scale</a> / </nav><h1 id="security-overview-dashboard-metrics">Security overview dashboard metrics<a href="#security-overview-dashboard-metrics" aria-label="Link to heading 'Security overview dashboard metrics'" data-heading-content="Security overview dashboard metrics" class="anchor"></a></h1>
+<p>Detailed explanations of metrics, calculations, and data visualizations on the overview page of your security overview.</p>
+<h2 id="dashboard-metrics" title="Dashboard metrics">Dashboard metrics<a href="#dashboard-metrics" aria-label="Link to heading 'Dashboard metrics'" data-heading-content="Dashboard metrics" class="anchor"></a></h2>
+<p>In security overview, the overview dashboard displays security alert metrics for your organization. You can use the dashboard to monitor the health of your application security program, collaborate with engineering teams, and gather data for benchmarking purposes.</p>
+<p>The dashboard displays trending data that tracks alert counts and activity over time, as well as snapshot data that reflects the current state. All data and metrics across the dashboard change as you apply filters. By default, the dashboard displays all alerts from GitHub tools, but you can use the tool filter to show alerts from a specific tool (secret scanning, Dependabot, code scanning using CodeQL, a specific third-party tool) or all third-party code scanning tools. See <a href="../../how-tos/manage-security-alerts/remediate-alerts-at-scale/filtering-alerts-in-security-overview.html">Filtering alerts in security overview</a>.</p>
+<p><strong>Trend indicators</strong> show percentage change compared to the previous period. For example:</p>
+<ul>
+<li>10 alerts this week vs. 20 alerts last week = 50% decrease</li>
+<li>An average alert age of 15 days vs. 5 days = 200% increase</li>
+</ul>
+<p><strong>Alert severity filtering:</strong> The dashboard only includes alerts with security severity levels: <code>Critical</code>, <code>High</code>, <code>Medium</code>, or <code>Low</code>. Non-security alerts (<code>Error</code>, <code>Warning</code>, or <code>Note</code>) are excluded. This may cause the dashboard count to differ from code scanning alert totals. For more information, see <a href="../../concepts/code-scanning/code-scanning-alerts.html#about-alert-severity-and-security-severity-levels">Code scanning alerts</a>.</p>
+<h3 id="limitations" title="Dashboard metrics / Limitations">Limitations<a href="#limitations" aria-label="Link to heading 'Limitations'" data-heading-content="Limitations" class="anchor"></a></h3>
+<p>The data that populates the overview page can and will change over time due to various factors, such as repository deletion or modifications to a security advisory. This means that the overview metrics for the same time period could vary if viewed at two different times. For compliance reports or other scenarios where data consistency is crucial, we recommend that you source data from the audit log. See <a href="../../concepts/security-at-scale/audit-security-alerts.html">Auditing security alerts</a>.</p>
+<p>The overview page tracks how security alerts changed over time. However, when you filter by another attribute, such as repository status, it uses that attribute's current value, not its historical value.</p>
+<p>For example, archiving a repository closes any open alerts it contains. If you view the overview page for a week before you archived the repository:</p>
+<ul>
+<li>The repository's data only appears if you filter to show archived repositories, because that's the repository's current status.</li>
+<li>The alerts still show up as open, because that reflects their status at that point in time.</li>
+</ul>
+<!--Content for FPT, GHEC, and GHES 3.16+ see next HTML comment for GHES <= 3.15-->
+<h2 id="dashboard-structure" title="Dashboard structure">Dashboard structure<a href="#dashboard-structure" aria-label="Link to heading 'Dashboard structure'" data-heading-content="Dashboard structure" class="anchor"></a></h2>
+<p>The dashboard is divided into three tabs, each focused around a different security goal:</p>
+<ul>
+<li><strong>Detection:</strong> Shows metrics about the status and age of alerts in your organization, the secrets that have been blocked or bypassed, and the top repositories and vulnerabilities that pose the highest potential security risk.</li>
+<li><strong>Remediation:</strong> Shows metrics about how alerts are resolved and alert activity over time.</li>
+<li><strong>Prevention:</strong> Shows metrics about how vulnerabilities have been prevented and fixed in pull requests.</li>
+</ul>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Unlike the <strong>Detection</strong> and <strong>Remediation</strong> tabs which report alerts on the default branch, the <strong>Prevention</strong> tab gives you insights for CodeQL alerts found in merged pull requests.</p>
+</div>
+<h2 id="detection-metrics" title="Detection metrics">Detection metrics<a href="#detection-metrics" aria-label="Link to heading 'Detection metrics'" data-heading-content="Detection metrics" class="anchor"></a></h2>
+<p>Track the current state of security alerts in your organization.</p>
+<h3 id="open-alerts-over-time" title="Detection metrics / Open alerts over time">Open alerts over time<a href="#open-alerts-over-time" aria-label="Link to heading 'Open alerts over time'" data-heading-content="Open alerts over time" class="anchor"></a></h3>
+<p>Shows the change in the number of open alerts over the time period you have chosen. By default, alerts are grouped by severity. You can change the way alerts are grouped.</p>
+<ul>
+<li>New alerts are represented on their creation date.</li>
+<li>Alerts that existed before the chosen time period are represented at the start of the period.</li>
+<li>Once an alert is remediated or dismissed, it is not included in the graph. Instead, the alert moves to the closed alerts graph.</li>
+</ul>
+<h3 id="age-of-alerts" title="Detection metrics / Age of alerts">Age of alerts<a href="#age-of-alerts" aria-label="Link to heading 'Age of alerts'" data-heading-content="Age of alerts" class="anchor"></a></h3>
+<p>The average age of all alerts that are still open at the end of the chosen time period.</p>
+<p><strong>Formula:</strong> The age of each open alert is calculated by subtracting the date the alert was created from the date that the chosen time period ends, then averaging across all open alerts.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>For reopened alerts, the age is calculated by subtracting the original creation date rather than the date the alert was reopened.</p>
+</div>
+<h3 id="reopened-alerts" title="Detection metrics / Reopened alerts">Reopened alerts<a href="#reopened-alerts" aria-label="Link to heading 'Reopened alerts'" data-heading-content="Reopened alerts" class="anchor"></a></h3>
+<p>The total number of open alerts that were reopened during the chosen time period. Only alerts that are open at the end of the reporting period are reported. This includes:</p>
+<ul>
+<li>Alerts that were closed before the chosen time period and remain open at the end of the period.</li>
+<li>Newly created alerts that were closed and then reopened during the chosen time period.</li>
+<li>Alerts that were open at the start of the chosen time period, but closed and then reopened within the same period.</li>
+</ul>
+<h3 id="secrets-bypassed-or-blocked" title="Detection metrics / Secrets bypassed or blocked">Secrets bypassed or blocked<a href="#secrets-bypassed-or-blocked" aria-label="Link to heading 'Secrets bypassed or blocked'" data-heading-content="Secrets bypassed or blocked" class="anchor"></a></h3>
+<p>Shows the ratio of secrets bypassed to the total secrets blocked by push protection.</p>
+<ul>
+<li><strong>Bypassed:</strong> Detected secrets that were committed anyway.</li>
+<li><strong>Successfully blocked:</strong> Total blocked minus bypassed. A secret is considered to have been successfully blocked when it has been corrected and not committed to the repository.</li>
+</ul>
+<p>Click <strong>View details</strong> to view the secret scanning report with the same filters and time period selected.</p>
+<p>For more information on secret scanning push protection metrics, see <a href="../../how-tos/view-and-interpret-data/analyze-organization-data/viewing-metrics-for-secret-scanning-push-protection.html">Viewing metrics for secret scanning push protection</a>.</p>
+<h3 id="impact-analysis-table" title="Detection metrics / Impact analysis table">Impact analysis table<a href="#impact-analysis-table" aria-label="Link to heading 'Impact analysis table'" data-heading-content="Impact analysis table" class="anchor"></a></h3>
+<p>The impact analysis table has separate tabs showing data for: "Repositories," "Advisories," and "SAST vulnerabilities."</p>
+<ul>
+<li><strong>Repositories tab:</strong> Shows the top 10 repositories with the most open alerts at the end of the chosen time period, ranked by total number of open alerts. For each repository, the total number of open alerts is shown alongside a breakdown by severity.</li>
+<li><strong>Advisories tab:</strong> Shows the 10 CVE advisories that triggered the most Dependabot alerts at the end of the chosen time period, ranked by total number of open alerts. For each advisory, the total number of open alerts is shown alongside a severity rating.</li>
+<li><strong>SAST vulnerabilities tab:</strong> Shows the 10 Static Application Security Testing (SAST) vulnerabilities that triggered the most code scanning alerts, ranked by total number of open alerts. For each vulnerability, the total number of open alerts is shown alongside a severity rating.</li>
+</ul>
+<h2 id="remediation-metrics" title="Remediation metrics">Remediation metrics<a href="#remediation-metrics" aria-label="Link to heading 'Remediation metrics'" data-heading-content="Remediation metrics" class="anchor"></a></h2>
+<p>Track how quickly and effectively alerts are resolved.</p>
+<h3 id="closed-alerts-over-time" title="Remediation metrics / Closed alerts over time">Closed alerts over time<a href="#closed-alerts-over-time" aria-label="Link to heading 'Closed alerts over time'" data-heading-content="Closed alerts over time" class="anchor"></a></h3>
+<p>Shows the change in the number of closed alerts over the time period you have chosen. By default, alerts are grouped by severity. You can change the way alerts are grouped. Closed alerts include security alerts that have been successfully remediated or dismissed prior to or during the chosen time period.</p>
+<ul>
+<li>Alerts closed during the time period are represented on the graph on their close date.</li>
+<li>Alerts remediated or dismissed before the chosen time period are represented at the start of the period.</li>
+</ul>
+<h3 id="mean-time-to-remediate" title="Remediation metrics / Mean time to remediate">Mean time to remediate<a href="#mean-time-to-remediate" aria-label="Link to heading 'Mean time to remediate'" data-heading-content="Mean time to remediate" class="anchor"></a></h3>
+<p>The average age of all alerts that were remediated or dismissed during the chosen time period. Alerts that were closed as "false positive" are excluded.</p>
+<p><strong>Formula:</strong> The age of each closed alert is calculated by subtracting the date the alert was created from the date that the alert was last closed during the chosen time period, then averaging across all closed alerts.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>For reopened alerts, the age is calculated by subtracting the original creation date rather than the date the alert was reopened.</p>
+</div>
+<h3 id="net-resolve-rate" title="Remediation metrics / Net resolve rate">Net resolve rate<a href="#net-resolve-rate" aria-label="Link to heading 'Net resolve rate'" data-heading-content="Net resolve rate" class="anchor"></a></h3>
+<p>The rate at which alerts are being closed. This metric is similar to measuring "developer velocity," reflecting the speed and efficiency with which alerts are resolved.</p>
+<p><strong>Formula:</strong> Number of alerts that were closed and remained closed during the chosen time period ÷ Number of alerts created during the time period</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>The net resolve rate takes into account any new and any closed alerts during the chosen time period. This means that the set of new alerts and set of closed alerts used for the calculation do not necessarily correspond, since they may represent different populations of alerts.</p>
+</div>
+<p><strong>Excluded:</strong> Alerts that are reopened and re-closed during the chosen time period are ignored.</p>
+<h3 id="alert-activity-graph" title="Remediation metrics / Alert activity graph">Alert activity graph<a href="#alert-activity-graph" aria-label="Link to heading 'Alert activity graph'" data-heading-content="Alert activity graph" class="anchor"></a></h3>
+<p>Shows alert inflows and outflows over your chosen time period.</p>
+<ul>
+<li><strong>Green bars:</strong> Number of new alerts created during the segmented time period</li>
+<li><strong>Purple bars:</strong> Number of alerts closed during the segmented time period</li>
+<li><strong>Blue dotted line:</strong> Net alert activity (difference between new and closed alerts)</li>
+</ul>
+<h2 id="prevention-metrics" title="Prevention metrics">Prevention metrics<a href="#prevention-metrics" aria-label="Link to heading 'Prevention metrics'" data-heading-content="Prevention metrics" class="anchor"></a></h2>
+<p>Track vulnerabilities caught and fixed before reaching production.</p>
+<h3 id="introduced-versus-prevented" title="Prevention metrics / Introduced versus prevented">Introduced versus prevented<a href="#introduced-versus-prevented" aria-label="Link to heading 'Introduced versus prevented'" data-heading-content="Introduced versus prevented" class="anchor"></a></h3>
+<p>Shows the cumulative number of vulnerabilities that were caught in the developer workflow versus the vulnerabilities introduced over the time period you have chosen.</p>
+<ul>
+<li><strong>Prevented:</strong> Count of pull request alerts detected by CodeQL that have been fixed for merged pull requests. Dates are based on fix date.</li>
+<li><strong>Introduced:</strong> Count of new pull request alerts detected by CodeQL that were dismissed as "Risk accepted" or were unresolved at the time the pull request was merged. Dates are based on creation date.</li>
+</ul>
+<h3 id="vulnerabilities-fixed-in-pull-requests" title="Prevention metrics / Vulnerabilities fixed in pull requests">Vulnerabilities fixed in pull requests<a href="#vulnerabilities-fixed-in-pull-requests" aria-label="Link to heading 'Vulnerabilities fixed in pull requests'" data-heading-content="Vulnerabilities fixed in pull requests" class="anchor"></a></h3>
+<p>The count of pull request alerts detected by CodeQL or secret scanning with a close reason of "Fixed" that are tied to a merged pull request.</p>
+<h3 id="pull-request-alerts-fixed-with-copilot-autofix-suggestions" title="Prevention metrics / Pull request alerts fixed with Copilot Autofix suggestions">Pull request alerts fixed with Copilot Autofix suggestions<a href="#pull-request-alerts-fixed-with-copilot-autofix-suggestions" aria-label="Link to heading 'Pull request alerts fixed with Copilot Autofix suggestions'" data-heading-content="Pull request alerts fixed with Copilot Autofix suggestions" class="anchor"></a></h3>
+<p>Shows the ratio of accepted Copilot Autofix suggestions to the total number of Copilot Autofix suggestions on pull request alerts detected by code scanning.</p>
+<p>Copilot Autofix for code scanning provides targeted recommendations to help you fix code scanning alerts. See <a href="../../responsible-use/security-and-quality-ai-features.html">Application card: GitHub security and quality AI features</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,15 +1,15 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Publishing and using CodeQL packs</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Scan from the command line</a> / </nav><h1><a href="#publishing-and-using-codeql-packs" aria-hidden="true" class="anchor" id="publishing-and-using-codeql-packs"></a>Publishing and using CodeQL packs</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Publishing and using CodeQL packs</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Scan from the command line</a> / </nav><h1 id="publishing-and-using-codeql-packs">Publishing and using CodeQL packs<a href="#publishing-and-using-codeql-packs" aria-label="Link to heading 'Publishing and using CodeQL packs'" data-heading-content="Publishing and using CodeQL packs" class="anchor"></a></h1>
 <p>Share or download a CodeQL pack, then analyze your CodeQL database.</p>
-<h2 title="Authenticating to GitHub Container registries"><a href="#authenticating-to-github-container-registries" aria-hidden="true" class="anchor" id="authenticating-to-github-container-registries"></a>Authenticating to GitHub Container registries</h2>
+<h2 id="authenticating-to-github-container-registries" title="Authenticating to GitHub Container registries">Authenticating to GitHub Container registries<a href="#authenticating-to-github-container-registries" aria-label="Link to heading 'Authenticating to GitHub Container registries'" data-heading-content="Authenticating to GitHub Container registries" class="anchor"></a></h2>
 <p>You can publish packs and download private packs by authenticating to the appropriate GitHub Container registry.</p>
 <p>You can authenticate to the Container registry in two ways:</p>
 <ol>
 <li>Pass the <code>--github-auth-stdin</code> option to the CodeQL CLI, then supply a GitHub Apps token or personal access token via standard input.</li>
 <li>Set the <code>GITHUB_TOKEN</code> environment variable to a GitHub Apps token or personal access token.</li>
 </ol>
-<h2 title="Publishing your CodeQL pack"><a href="#publishing-your-codeql-pack" aria-hidden="true" class="anchor" id="publishing-your-codeql-pack"></a>Publishing your CodeQL pack</h2>
+<h2 id="publishing-your-codeql-pack" title="Publishing your CodeQL pack">Publishing your CodeQL pack<a href="#publishing-your-codeql-pack" aria-label="Link to heading 'Publishing your CodeQL pack'" data-heading-content="Publishing your CodeQL pack" class="anchor"></a></h2>
 <p>To share your CodeQL pack with other people, you can publish it to the Container registry.</p>
-<h3 title="Publishing your CodeQL pack / Configuring the qlpack.yml file before publishing"><a href="#configuring-the-qlpackyml-file-before-publishing" aria-hidden="true" class="anchor" id="configuring-the-qlpackyml-file-before-publishing"></a>Configuring the <code>qlpack.yml</code> file before publishing</h3>
+<h3 id="configuring-the-qlpackyml-file-before-publishing" title="Publishing your CodeQL pack / Configuring the qlpack.yml file before publishing">Configuring the <code>qlpack.yml</code> file before publishing<a href="#configuring-the-qlpackyml-file-before-publishing" aria-label="Link to heading 'Configuring the qlpack.yml file before publishing'" data-heading-content="Configuring the qlpack.yml file before publishing" class="anchor"></a></h3>
 <p>You can check and modify the configuration details of your CodeQL pack prior to publishing. Open the <code>qlpack.yml</code> file in your preferred text editor.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">library</span><span style="color:#c0c5ce;">: </span><span style="color:#65737e;"># set to true if the pack is a library. Set to false or omit for a query pack
 </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">&lt;scope&gt;/&lt;pack&gt;
@@ -29,16 +29,16 @@
 <p>A maximum of one of <code>defaultSuite</code> or <code>defaultSuiteFile</code> is allowed. These are two different ways to define a default query suite to be run, the first by specifying queries directly in the qlpack.yml file and the second by specifying a query suite in the pack.</p>
 </li>
 </ul>
-<h3 title="Publishing your CodeQL pack / Running codeql pack publish"><a href="#running-codeql-pack-publish" aria-hidden="true" class="anchor" id="running-codeql-pack-publish"></a>Running <code>codeql pack publish</code></h3>
+<h3 id="running-codeql-pack-publish" title="Publishing your CodeQL pack / Running codeql pack publish">Running <code>codeql pack publish</code><a href="#running-codeql-pack-publish" aria-label="Link to heading 'Running codeql pack publish'" data-heading-content="Running codeql pack publish" class="anchor"></a></h3>
 <p>When you are ready to publish a pack to the GitHub Container registry, you can run the following command in the root of the pack directory:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql pack publish
 </span></code></pre>
 <p>The published package will be displayed in the packages section of GitHub organization specified by the scope in the <code>qlpack.yml</code> file.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
-<p>If you're publishing model packs to the GitHub Container registry in order to extend coverage to all repositories in an organization as part of a default setup configuration, then you need to ensure that repositories running code scanning can access those model packs. For more information, see <a href="../manage-your-configuration/editing-your-configuration-of-default-setup.html">Editing your configuration of default setup</a> and <a href="https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility" class="external">Configuring a package's access control and visibility</a>.</p>
+<p>If you're publishing model packs to the GitHub Container registry in order to extend coverage to all repositories in an organization as part of a default setup configuration, then you need to ensure that repositories running code scanning can access those model packs. For more information, see <a href="../manage-your-configuration/edit-default-setup.html">Editing your configuration of default setup</a> and <a href="https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility" class="external">Configuring a package's access control and visibility</a>.</p>
 </div>
-<h2 title="Downloading an existing CodeQL pack"><a href="#downloading-an-existing-codeql-pack" aria-hidden="true" class="anchor" id="downloading-an-existing-codeql-pack"></a>Downloading an existing CodeQL pack</h2>
+<h2 id="downloading-an-existing-codeql-pack" title="Downloading an existing CodeQL pack">Downloading an existing CodeQL pack<a href="#downloading-an-existing-codeql-pack" aria-label="Link to heading 'Downloading an existing CodeQL pack'" data-heading-content="Downloading an existing CodeQL pack" class="anchor"></a></h2>
 <p>To run a pack that someone else has created, you must first download it by running the following command:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql pack download &lt;scope&gt;/&lt;pack&gt;@x.x.x
 </span></code></pre>
@@ -55,7 +55,7 @@ also need to switch to a newer version of the query pack. Newer<br>
 versions of CodeQL <em>may</em> provide<br>
 degraded performance when used with query packs that have been pinned<br>
 to a very old version. For more information, see <a href="../../../reference/code-scanning/codeql/codeql-cli/codeql-query-packs.html#codeql-pack-compatibility">CodeQL query packs reference</a>.</p>
-<h2 title="Using a CodeQL pack to analyze a CodeQL database"><a href="#using-a-codeql-pack-to-analyze-a-codeql-database" aria-hidden="true" class="anchor" id="using-a-codeql-pack-to-analyze-a-codeql-database"></a>Using a CodeQL pack to analyze a CodeQL database</h2>
+<h2 id="using-a-codeql-pack-to-analyze-a-codeql-database" title="Using a CodeQL pack to analyze a CodeQL database">Using a CodeQL pack to analyze a CodeQL database<a href="#using-a-codeql-pack-to-analyze-a-codeql-database" aria-label="Link to heading 'Using a CodeQL pack to analyze a CodeQL database'" data-heading-content="Using a CodeQL pack to analyze a CodeQL database" class="anchor"></a></h2>
 <p>To analyze a CodeQL database with a CodeQL pack, run the following command:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database analyze &lt;database&gt; &lt;scope&gt;/&lt;pack&gt;@x.x.x:&lt;path&gt;
 </span></code></pre>
@@ -71,6 +71,6 @@ to a very old version. For more information, see <a href="../../../reference/cod
 </span></code></pre>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
-<p>The <code>codeql pack download</code> command stores the pack it downloads in an internal location that is not intended for local modification. Unexpected (and hard to troubleshoot) behavior may result if the pack is modified after downloading. For more information about customizing packs, see <a href="../../../tutorials/customize-code-scanning/creating-and-working-with-codeql-packs.html">Creating and working with CodeQL packs</a>.</p>
+<p>The <code>codeql pack download</code> command stores the pack it downloads in an internal location that is not intended for local modification. Unexpected (and hard to troubleshoot) behavior may result if the pack is modified after downloading. For more information about customizing packs, see <a href="../../../tutorials/customize-code-scanning/create-and-work-with-codeql-packs.html">Creating and working with CodeQL packs</a>.</p>
 </div>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

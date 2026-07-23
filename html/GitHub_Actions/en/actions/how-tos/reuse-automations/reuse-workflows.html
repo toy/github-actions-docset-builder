@@ -1,12 +1,12 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Reuse workflows</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">How-tos</a> / <a href="index.html">Reuse automations</a> / </nav><h1><a href="#reuse-workflows" aria-hidden="true" class="anchor" id="reuse-workflows"></a>Reuse workflows</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Reuse workflows</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">How-tos</a> / <a href="index.html">Reuse automations</a> / </nav><h1 id="reuse-workflows">Reuse workflows<a href="#reuse-workflows" aria-label="Link to heading 'Reuse workflows'" data-heading-content="Reuse workflows" class="anchor"></a></h1>
 <p>Learn how to avoid duplication when creating a workflow by reusing existing workflows.</p>
-<h2 title="Creating a reusable workflow"><a href="#creating-a-reusable-workflow" aria-hidden="true" class="anchor" id="creating-a-reusable-workflow"></a>Creating a reusable workflow</h2>
+<h2 id="creating-a-reusable-workflow" title="Creating a reusable workflow">Creating a reusable workflow<a href="#creating-a-reusable-workflow" aria-label="Link to heading 'Creating a reusable workflow'" data-heading-content="Creating a reusable workflow" class="anchor"></a></h2>
 <p>Reusable workflows are YAML-formatted files, very similar to any other workflow file. As with other workflow files, you locate reusable workflows in the <code>.github/workflows</code> directory of a repository. Subdirectories of the <code>workflows</code> directory are not supported.</p>
 <p>For a workflow to be reusable, the values for <code>on</code> must include <code>workflow_call</code>:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_call</span><span style="color:#c0c5ce;">:
 </span></code></pre>
-<h2 title="Using inputs and secrets in a reusable workflow"><a href="#using-inputs-and-secrets-in-a-reusable-workflow" aria-hidden="true" class="anchor" id="using-inputs-and-secrets-in-a-reusable-workflow"></a>Using inputs and secrets in a reusable workflow</h2>
+<h2 id="using-inputs-and-secrets-in-a-reusable-workflow" title="Using inputs and secrets in a reusable workflow">Using inputs and secrets in a reusable workflow<a href="#using-inputs-and-secrets-in-a-reusable-workflow" aria-label="Link to heading 'Using inputs and secrets in a reusable workflow'" data-heading-content="Using inputs and secrets in a reusable workflow" class="anchor"></a></h2>
 <p>You can define inputs and secrets, which can be passed from the caller workflow and then used within the called workflow. There are three stages to using an input or a secret in a reusable workflow.</p>
 <ol>
 <li>
@@ -41,7 +41,7 @@
 <p>In the example above, <code>personal_access_token</code> is a secret that's defined at the repository or organization level.</p>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>
-<p>Environment secrets cannot be passed from the caller workflow as <code>on.workflow_call</code> does not support the <code>environment</code> keyword. If you include <code>environment</code> in the reusable workflow at the job level, the environment secret will be used, and not the secret passed from the caller workflow. For more information, see <a href="../deploy/configure-and-manage-deployments/manage-environments.html#environment-secrets">Managing environments for deployment</a> and <a href="../../reference/workflows-and-actions/workflow-syntax.html#onworkflow_call">Workflow syntax for GitHub Actions</a>.</p>
+<p>Environment secrets cannot be passed from the caller workflow as <code>on.workflow_call</code> does not support the <code>environment</code> keyword. If you include <code>environment</code> in the reusable workflow at the job level, the environment secret will be used, and not the secret passed from the caller workflow. For more information, see <a href="../deploy/configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a> and <a href="../../reference/workflows-and-actions/workflow-syntax.html#onworkflow_call">Workflow syntax for GitHub Actions</a>.</p>
 </div>
 </li>
 <li>
@@ -65,7 +65,7 @@
 </span></code></pre>
 </li>
 </ol>
-<h3 title="Using inputs and secrets in a reusable workflow / Example reusable workflow"><a href="#example-reusable-workflow" aria-hidden="true" class="anchor" id="example-reusable-workflow"></a>Example reusable workflow</h3>
+<h3 id="example-reusable-workflow" title="Using inputs and secrets in a reusable workflow / Example reusable workflow">Example reusable workflow<a href="#example-reusable-workflow" aria-label="Link to heading 'Example reusable workflow'" data-heading-content="Example reusable workflow" class="anchor"></a></h3>
 <p>This reusable workflow file named <code>workflow-B.yml</code> (we'll refer to this later in the <a href="#example-caller-workflow">example caller workflow</a>) takes an input string and a secret from the caller workflow and uses them in an action.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Reusable workflow example
 </span><span style="color:#c0c5ce;">
@@ -88,7 +88,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">repo-token</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.token }}
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">configuration-path</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ inputs.config-path }}
 </span></code></pre>
-<h2 title="Calling a reusable workflow"><a href="#calling-a-reusable-workflow" aria-hidden="true" class="anchor" id="calling-a-reusable-workflow"></a>Calling a reusable workflow</h2>
+<h2 id="calling-a-reusable-workflow" title="Calling a reusable workflow">Calling a reusable workflow<a href="#calling-a-reusable-workflow" aria-label="Link to heading 'Calling a reusable workflow'" data-heading-content="Calling a reusable workflow" class="anchor"></a></h2>
 <p>You call a reusable workflow by using the <code>uses</code> keyword. Unlike when you are using actions within a workflow, you call reusable workflows directly within a job, and not from within job steps.</p>
 <p><a href="../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_iduses"><code>jobs.&lt;job_id&gt;.uses</code></a></p>
 <p>You reference reusable workflow files using one of the following syntaxes:</p>
@@ -107,7 +107,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-in-another-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/another-repo/.github/workflows/workflow.yml@v1
 </span></code></pre>
-<h3 title="Calling a reusable workflow / Example caller workflow"><a href="#example-caller-workflow" aria-hidden="true" class="anchor" id="example-caller-workflow"></a>Example caller workflow</h3>
+<h3 id="example-caller-workflow" title="Calling a reusable workflow / Example caller workflow">Example caller workflow<a href="#example-caller-workflow" aria-label="Link to heading 'Example caller workflow'" data-heading-content="Example caller workflow" class="anchor"></a></h3>
 <p>This workflow file calls two workflow files. The second of these, <code>workflow-B.yml</code> (shown in the <a href="#example-reusable-workflow">example reusable workflow</a>), is passed an input (<code>config-path</code>) and a secret (<code>token</code>).</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Call a reusable workflow
 </span><span style="color:#c0c5ce;">
@@ -130,7 +130,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">secrets</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">token</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.GITHUB_TOKEN }}
 </span></code></pre>
-<h2 title="Passing inputs and secrets to a reusable workflow"><a href="#passing-inputs-and-secrets-to-a-reusable-workflow" aria-hidden="true" class="anchor" id="passing-inputs-and-secrets-to-a-reusable-workflow"></a>Passing inputs and secrets to a reusable workflow</h2>
+<h2 id="passing-inputs-and-secrets-to-a-reusable-workflow" title="Passing inputs and secrets to a reusable workflow">Passing inputs and secrets to a reusable workflow<a href="#passing-inputs-and-secrets-to-a-reusable-workflow" aria-label="Link to heading 'Passing inputs and secrets to a reusable workflow'" data-heading-content="Passing inputs and secrets to a reusable workflow" class="anchor"></a></h2>
 <p>To pass named inputs to a called workflow, use the <code>with</code> keyword in a job. Use the <code>secrets</code> keyword to pass named secrets. For inputs, the data type of the input value must match the type specified in the called workflow (either boolean, number, or string).</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-passing-data</span><span style="color:#c0c5ce;">:
@@ -148,7 +148,7 @@
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">config-path</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">.github/labeler.yml
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">secrets</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">inherit
 </span></code></pre>
-<h2 title="Using a matrix strategy with a reusable workflow"><a href="#using-a-matrix-strategy-with-a-reusable-workflow" aria-hidden="true" class="anchor" id="using-a-matrix-strategy-with-a-reusable-workflow"></a>Using a matrix strategy with a reusable workflow</h2>
+<h2 id="using-a-matrix-strategy-with-a-reusable-workflow" title="Using a matrix strategy with a reusable workflow">Using a matrix strategy with a reusable workflow<a href="#using-a-matrix-strategy-with-a-reusable-workflow" aria-label="Link to heading 'Using a matrix strategy with a reusable workflow'" data-heading-content="Using a matrix strategy with a reusable workflow" class="anchor"></a></h2>
 <p>Jobs using the matrix strategy can call a reusable workflow.</p>
 <p>A matrix strategy lets you use variables in a single job definition to automatically create multiple job runs that are based on the combinations of the variables. For example, you can use a matrix strategy to pass different inputs to a reusable workflow. For more information about matrices, see <a href="../write-workflows/choose-what-workflows-do/run-job-variations.html">Running variations of jobs in a workflow</a>.</p>
 <p>This example job below calls a reusable workflow and references the matrix context by defining the variable <code>target</code> with the values <code>[dev, stage, prod]</code>. It will run three jobs, one for each value in the variable.</p>
@@ -161,12 +161,12 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">target</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.target }}
 </span></code></pre>
-<h2 title="Nesting reusable workflows"><a href="#nesting-reusable-workflows" aria-hidden="true" class="anchor" id="nesting-reusable-workflows"></a>Nesting reusable workflows</h2>
+<h2 id="nesting-reusable-workflows" title="Nesting reusable workflows">Nesting reusable workflows<a href="#nesting-reusable-workflows" aria-label="Link to heading 'Nesting reusable workflows'" data-heading-content="Nesting reusable workflows" class="anchor"></a></h2>
 <p>You can connect a maximum of ten levels of workflows - that is, the top-level caller workflow and up to nine levels of reusable workflows. For example: <em>caller-workflow<span data-escaped-char="">.</span>yml</em> → <em>called-workflow-1.yml</em> → <em>called-workflow-2.yml</em> → <em>called-workflow-3.yml</em> → ... → <em>called-workflow-9.yml</em>.</p>
 <p>Loops in the workflow tree are not permitted.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
-<p>Nested reusable workflows require all workflows in the chain to be accessible to the caller, and permissions can only be maintained or reduced—not elevated—throughout the chain. For more information, see <a href="../../reference/workflows-and-actions/reusing-workflow-configurations.html#access-and-permissions-for-nested-workflows">Reusing workflow configurations</a>.</p>
+<p>Nested reusable workflows require all workflows in the chain to be accessible to the caller, and permissions can only be maintained or reduced—not elevated—throughout the chain. For more information, see <a href="../../reference/workflows-and-actions/reusing-workflow-configurations.html">Reusing workflow configurations</a>.</p>
 </div>
 <p>From within a reusable workflow you can call another reusable workflow.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Reusable workflow
@@ -178,7 +178,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-another-reusable</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/example-repo/.github/workflows/another-reusable.yml@v1
 </span></code></pre>
-<h2 title="Passing secrets to nested workflows"><a href="#passing-secrets-to-nested-workflows" aria-hidden="true" class="anchor" id="passing-secrets-to-nested-workflows"></a>Passing secrets to nested workflows</h2>
+<h2 id="passing-secrets-to-nested-workflows" title="Passing secrets to nested workflows">Passing secrets to nested workflows<a href="#passing-secrets-to-nested-workflows" aria-label="Link to heading 'Passing secrets to nested workflows'" data-heading-content="Passing secrets to nested workflows" class="anchor"></a></h2>
 <p>You can use <code>jobs.&lt;job_id&gt;.secrets</code> in a calling workflow to pass named secrets to a directly called workflow. Alternatively, you can use <code>jobs.&lt;job_id&gt;.secrets.inherit</code> to pass all of the calling workflow's secrets to a directly called workflow. For more information, see the section <a href="#passing-inputs-and-secrets-to-a-reusable-workflow">Reuse workflows</a> above, and the reference article <a href="../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idsecretsinherit">Workflow syntax for GitHub Actions</a>. Secrets are only passed to directly called workflow, so in the workflow chain A &gt; B &gt; C, workflow C will only receive secrets from A if they have been passed from A to B, and then from B to C.</p>
 <p>In the following example, workflow A passes all of its secrets to workflow B, by using the <code>inherit</code> keyword, but workflow B only passes one secret to workflow C. Any of the other secrets passed to workflow B are not available to workflow C.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -192,7 +192,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">secrets</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">repo-token</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.personal_access_token }} </span><span style="color:#65737e;"># pass just this secret
 </span></code></pre>
-<h2 title="Using outputs from a reusable workflow"><a href="#using-outputs-from-a-reusable-workflow" aria-hidden="true" class="anchor" id="using-outputs-from-a-reusable-workflow"></a>Using outputs from a reusable workflow</h2>
+<h2 id="using-outputs-from-a-reusable-workflow" title="Using outputs from a reusable workflow">Using outputs from a reusable workflow<a href="#using-outputs-from-a-reusable-workflow" aria-label="Link to heading 'Using outputs from a reusable workflow'" data-heading-content="Using outputs from a reusable workflow" class="anchor"></a></h2>
 <p>A reusable workflow may generate data that you want to use in the caller workflow. To use these outputs, you must specify them as the outputs of the reusable workflow.</p>
 <p>If a reusable workflow that sets an output is executed with a matrix strategy, the output will be the output set by the last successful completing reusable workflow of the matrix which actually sets a value.<br>
 That means if the last successful completing reusable workflow sets an empty string for its output, and the second last successful completing reusable workflow sets an actual value for its output, the output will contain the value of the second last completing reusable workflow.</p>
@@ -243,8 +243,8 @@ That means if the last successful completing reusable workflow sets an empty str
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
 </span></code></pre>
 <p>For more information on using job outputs, see <a href="../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idoutputs">Workflow syntax for GitHub Actions</a>. If you want to share something other than a variable (e.g. a build artifact) between workflows, see <a href="../../tutorials/store-and-share-data.html">Store and share data with workflow artifacts</a>.</p>
-<h2 title="Monitoring which workflows are being used"><a href="#monitoring-which-workflows-are-being-used" aria-hidden="true" class="anchor" id="monitoring-which-workflows-are-being-used"></a>Monitoring which workflows are being used</h2>
+<h2 id="monitoring-which-workflows-are-being-used" title="Monitoring which workflows are being used">Monitoring which workflows are being used<a href="#monitoring-which-workflows-are-being-used" aria-label="Link to heading 'Monitoring which workflows are being used'" data-heading-content="Monitoring which workflows are being used" class="anchor"></a></h2>
 <p>Organizations that use GitHub Enterprise Cloud can interact with the audit log via the GitHub REST API to monitor which workflows are being used. For more information, see <a href="https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization#using-the-audit-log-api" class="external">the GitHub Enterprise Cloud documentation</a>.</p>
-<h2 title="Next steps"><a href="#next-steps" aria-hidden="true" class="anchor" id="next-steps"></a>Next steps</h2>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
 <p>To find information on the intricacies of reusing workflows, see <a href="../../reference/workflows-and-actions/reusing-workflow-configurations.html">Reusing workflow configurations</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

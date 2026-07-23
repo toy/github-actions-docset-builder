@@ -1,13 +1,13 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Installing an Apple certificate on macOS runners for Xcode development</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Deploy</a> / <a href="index.html">Deploy to third-party platforms</a> / </nav><h1><a href="#installing-an-apple-certificate-on-macos-runners-for-xcode-development" aria-hidden="true" class="anchor" id="installing-an-apple-certificate-on-macos-runners-for-xcode-development"></a>Installing an Apple certificate on macOS runners for Xcode development</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Installing an Apple certificate on macOS runners for Xcode development</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Deploy</a> / <a href="index.html">Deploy to third-party platforms</a> / </nav><h1 id="installing-an-apple-certificate-on-macos-runners-for-xcode-development">Installing an Apple certificate on macOS runners for Xcode development<a href="#installing-an-apple-certificate-on-macos-runners-for-xcode-development" aria-label="Link to heading 'Installing an Apple certificate on macOS runners for Xcode development'" data-heading-content="Installing an Apple certificate on macOS runners for Xcode development" class="anchor"></a></h1>
 <p>Learn how to sign Xcode apps within a continuous integration (CI) workflow by installing an Apple code signing certificate on GitHub Actions runners.</p>
-<h2 title="Prerequisites"><a href="#prerequisites" aria-hidden="true" class="anchor" id="prerequisites"></a>Prerequisites</h2>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>You should be familiar with YAML and the syntax for GitHub Actions. For more information, see:</p>
 <ul>
 <li><a href="../../write-workflows/index.html">Writing workflows</a></li>
 <li><a href="../../../reference/workflows-and-actions/workflow-syntax.html">Workflow syntax for GitHub Actions</a></li>
 </ul>
 <p>You should have an understanding of Xcode app building and signing. For more information, see the <a href="https://developer.apple.com/documentation/" class="external">Apple developer documentation</a>.</p>
-<h2 title="Creating secrets for your certificate and provisioning profile"><a href="#creating-secrets-for-your-certificate-and-provisioning-profile" aria-hidden="true" class="anchor" id="creating-secrets-for-your-certificate-and-provisioning-profile"></a>Creating secrets for your certificate and provisioning profile</h2>
+<h2 id="creating-secrets-for-your-certificate-and-provisioning-profile" title="Creating secrets for your certificate and provisioning profile">Creating secrets for your certificate and provisioning profile<a href="#creating-secrets-for-your-certificate-and-provisioning-profile" aria-label="Link to heading 'Creating secrets for your certificate and provisioning profile'" data-heading-content="Creating secrets for your certificate and provisioning profile" class="anchor"></a></h2>
 <p>The signing process involves storing certificates and provisioning profiles, transferring them to the runner, importing them to the runner's keychain, and using them in your build.</p>
 <p>To use your certificate and provisioning profile on a runner, we strongly recommend that you use GitHub secrets. For more information on creating secrets and using them in a workflow, see <a href="../../write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 <p>Create secrets in your repository or organization for the following items:</p>
@@ -57,7 +57,7 @@
 </ul>
 </li>
 </ul>
-<h2 title="Add a step to your workflow"><a href="#add-a-step-to-your-workflow" aria-hidden="true" class="anchor" id="add-a-step-to-your-workflow"></a>Add a step to your workflow</h2>
+<h2 id="add-a-step-to-your-workflow" title="Add a step to your workflow">Add a step to your workflow<a href="#add-a-step-to-your-workflow" aria-label="Link to heading 'Add a step to your workflow'" data-heading-content="Add a step to your workflow" class="anchor"></a></h2>
 <p>This example workflow includes a step that imports the Apple certificate and provisioning profile from the GitHub secrets, and installs them on the runner.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">App build
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -105,7 +105,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>For iOS build targets, your provisioning profile should have the extension <code>.mobileprovision</code>. For macOS build targets, the extension should be <code>.provisionprofile</code>. The example workflow above should be updated to reflect your target platform.</p>
 </div>
-<h2 title="Required clean-up on self-hosted runners"><a href="#required-clean-up-on-self-hosted-runners" aria-hidden="true" class="anchor" id="required-clean-up-on-self-hosted-runners"></a>Required clean-up on self-hosted runners</h2>
+<h2 id="required-clean-up-on-self-hosted-runners" title="Required clean-up on self-hosted runners">Required clean-up on self-hosted runners<a href="#required-clean-up-on-self-hosted-runners" aria-label="Link to heading 'Required clean-up on self-hosted runners'" data-heading-content="Required clean-up on self-hosted runners" class="anchor"></a></h2>
 <p>GitHub-hosted runners are isolated virtual machines that are automatically destroyed at the end of the job execution. This means that the certificates and provisioning profile used on the runner during the job will be destroyed with the runner when the job is completed.</p>
 <p>On self-hosted runners, the <code>$RUNNER_TEMP</code> directory is cleaned up at the end of the job execution, but the keychain and provisioning profile might still exist on the runner.</p>
 <p>If you use self-hosted runners, you should add a final step to your workflow to help ensure that these sensitive files are deleted at the end of the job. The workflow step shown below is an example of how to do this.</p>

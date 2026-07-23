@@ -1,0 +1,150 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Setting up code coverage for your repository</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">How-tos</a> / <a href="index.html">Maintain quality code</a> / </nav><h1 id="setting-up-code-coverage-for-your-repository">Setting up code coverage for your repository<a href="#setting-up-code-coverage-for-your-repository" aria-label="Link to heading 'Setting up code coverage for your repository'" data-heading-content="Setting up code coverage for your repository" class="anchor"></a></h1>
+<p>Give your teams visibility into code coverage directly on pull requests, without paying for or maintaining a separate third-party coverage service.</p>
+<p>Built-in code coverage lets you track how thoroughly your tests exercise your code, without adding a third-party service to your toolchain or budget. In the following procedures, you will generate a Cobertura XML coverage report from your test suite, upload it to GitHub, and view the coverage results on your pull requests.</p>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<ul>
+<li>Code Quality is enabled for your repository.</li>
+<li>Your repository has a test suite that runs in GitHub Actions.</li>
+<li>Your test framework can produce a coverage report in <strong>Cobertura XML</strong> format.</li>
+</ul>
+<h2 id="step-1-generate-a-cobertura-xml-coverage-report" title="Step 1: Generate a Cobertura XML coverage report">Step 1: Generate a Cobertura XML coverage report<a href="#step-1-generate-a-cobertura-xml-coverage-report" aria-label="Link to heading 'Step 1: Generate a Cobertura XML coverage report'" data-heading-content="Step 1: Generate a Cobertura XML coverage report" class="anchor"></a></h2>
+<p>Configure your test framework to output a coverage report in the Cobertura XML format. Code coverage works with any programming language that can produce this format.</p>
+<ol>
+<li>Identify the coverage tool for your language from the table below.</li>
+<li>Add the appropriate command or configuration to your CI workflow so that a Cobertura XML file is generated each time your tests run.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Framework / Tool</th>
+<th>How to generate Cobertura XML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td><code>pytest</code> + <code>pytest-cov</code></td>
+<td><code>pytest --cov=. --cov-report=xml</code></td>
+</tr>
+<tr>
+<td>Java</td>
+<td>JaCoCo</td>
+<td>Use the <code>cover2cover.py</code> script or the JaCoCo-to-Cobertura Gradle/Maven plugin</td>
+</tr>
+<tr>
+<td>JavaScript/TypeScript</td>
+<td>Istanbul / <code>nyc</code></td>
+<td><code>nyc report --reporter=cobertura</code></td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td>SimpleCov</td>
+<td>Add <code>SimpleCov::Formatter::CoberturaFormatter</code></td>
+</tr>
+<tr>
+<td>Go</td>
+<td><code>go test</code> + <code>gocover-cobertura</code></td>
+<td><code>go test -coverprofile=cover.out &amp;&amp; gocover-cobertura &lt; cover.out &gt; coverage.xml</code></td>
+</tr>
+</tbody>
+</table>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title">Tip</p>
+<p>If your framework isn't listed above, check its documentation for Cobertura output support. Many tools either support it directly or can convert to Cobertura XML from other formats.</p>
+</div>
+<h2 id="step-2-upload-the-coverage-report" title="Step 2: Upload the coverage report">Step 2: Upload the coverage report<a href="#step-2-upload-the-coverage-report" aria-label="Link to heading 'Step 2: Upload the coverage report'" data-heading-content="Step 2: Upload the coverage report" class="anchor"></a></h2>
+<p>After your tests generate a Cobertura XML report, upload it to GitHub so coverage results appear on pull requests.</p>
+<ol>
+<li>
+<p>Open your repository's CI workflow file (for example, <code>.github/workflows/ci.yml</code>).</p>
+</li>
+<li>
+<p>Add the following step after the step that runs your tests and generates the coverage report:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Upload coverage report
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/upload-code-coverage@v1
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">file</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">COVERAGE-FILE-PATH.xml
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">language</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">LANGUAGE
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">label</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">LABEL
+</span></code></pre>
+</li>
+<li>
+<p>Replace the following values:</p>
+<ul>
+<li><strong><code>COVERAGE-FILE-PATH.xml</code></strong>: The path to your Cobertura XML report (for example, <code>coverage.xml</code> or <code>target/site/jacoco/cobertura.xml</code>).</li>
+<li><strong><code>LANGUAGE</code></strong>: The primary language of the code being covered (for example, <code>Python</code>, <code>Java</code>, <code>JavaScript</code>).</li>
+<li><strong><code>LABEL</code></strong>: An optional label to identify this coverage report (for example, <code>code-coverage/pytest</code>).</li>
+</ul>
+</li>
+<li>
+<p>Commit and push the workflow change.</p>
+</li>
+</ol>
+<h3 id="full-workflow-example" title="Step 2: Upload the coverage report / Full workflow example">Full workflow example<a href="#full-workflow-example" aria-label="Link to heading 'Full workflow example'" data-heading-content="Full workflow example" class="anchor"></a></h3>
+<p>This example runs Python tests with <code>pytest-cov</code> and uploads the coverage report:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># This workflow runs your test suite, generates a Cobertura XML coverage report, and uploads it to GitHub. Once this workflow is committed, coverage results appear automatically on every pull request.
+</span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Code Coverage
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># Run on pushes to the default branch (to establish the baseline) and on pull requests (to compare against it). Code Quality compares PR branch coverage to the default branch, so both triggers are needed.
+</span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">push</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">branches</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">main</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">pull_request</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">branches</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">main</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># The `code-quality: write` permission is required to upload coverage data. No other elevated permissions are needed.
+</span><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">contents</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">code-quality</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">write
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">test</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Check out the PR head commit (not the merge commit) so coverage line numbers map correctly to the diff.
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">ref</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.event.pull_request.head.sha || github.sha }}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Replace this step with whatever language setup your project uses (Node.js, Java, Go, etc.). The upload action works with any language that produces a Cobertura XML report.
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-python@v5
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">python-version</span><span style="color:#c0c5ce;">: "</span><span style="color:#a3be8c;">3.x</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install dependencies
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          python -m pip install --upgrade pip
+</span><span style="color:#a3be8c;">          pip install -r requirements.txt
+</span><span style="color:#a3be8c;">          pip install pytest pytest-cov
+</span><span style="color:#a3be8c;">
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Adapt this step for your test framework. The key requirement is producing a Cobertura XML file. For other languages, see the framework table earlier in this article.
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run tests with coverage
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">pytest --cov=. --cov-report=xml
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># This step replaces any third-party coverage upload (Codecov, Coveralls, etc.). After this runs, the `github-code-quality[bot]` bot posts a coverage summary directly on the pull request.
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Upload coverage report
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/upload-code-coverage@v1
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">file</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">coverage.xml
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">language</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Python
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">label</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">code-coverage/pytest
+</span></code></pre>
+<h2 id="step-3-view-coverage-results-on-pull-requests" title="Step 3: View coverage results on pull requests">Step 3: View coverage results on pull requests<a href="#step-3-view-coverage-results-on-pull-requests" aria-label="Link to heading 'Step 3: View coverage results on pull requests'" data-heading-content="Step 3: View coverage results on pull requests" class="anchor"></a></h2>
+<ol>
+<li>Open a pull request (or push to an existing one) that triggers the workflow you configured.</li>
+<li>After the workflow completes, look for a comment from <code>github-code-quality[bot]</code> on the pull request. The comment includes:
+<ul>
+<li>The aggregate coverage percentage for the pull request branch compared to the default branch.</li>
+<li>A per-file breakdown showing which files gained or lost coverage.</li>
+</ul>
+</li>
+</ol>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<ul>
+<li><strong>Interpret results:</strong> Understand coverage metrics and per-file breakdowns on your pull requests. See <a href="interpret-results.html">Interpreting the code quality results for your repository</a>.</li>
+<li><strong>Enforce coverage thresholds:</strong> Block pull requests that don't meet a minimum coverage percentage or that cause coverage to drop. See <a href="restrict-code-coverage.html">Setting code coverage thresholds for pull requests</a>.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

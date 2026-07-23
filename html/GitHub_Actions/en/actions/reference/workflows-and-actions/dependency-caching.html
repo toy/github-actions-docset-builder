@@ -1,6 +1,6 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dependency caching reference</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Workflows and actions</a> / </nav><h1><a href="#dependency-caching-reference" aria-hidden="true" class="anchor" id="dependency-caching-reference"></a>Dependency caching reference</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Dependency caching reference</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Workflows and actions</a> / </nav><h1 id="dependency-caching-reference">Dependency caching reference<a href="#dependency-caching-reference" aria-label="Link to heading 'Dependency caching reference'" data-heading-content="Dependency caching reference" class="anchor"></a></h1>
 <p>Find information on the functionality of dependency caching in workflows.</p>
-<h2 title="cache action usage"><a href="#cache-action-usage" aria-hidden="true" class="anchor" id="cache-action-usage"></a><code>cache</code> action usage</h2>
+<h2 id="cache-action-usage" title="cache action usage"><code>cache</code> action usage<a href="#cache-action-usage" aria-label="Link to heading 'cache action usage'" data-heading-content="cache action usage" class="anchor"></a></h2>
 <p>The <a href="https://github.com/actions/cache" class="external"><code>cache</code> action</a> will attempt the following sequence when restoring a cache:</p>
 <ol>
 <li>First, it searches for an exact match to your provided <code>key</code>.</li>
@@ -9,7 +9,7 @@
 </ol>
 <p>If there is an exact match to the provided <code>key</code>, this is considered a cache hit. If no cache exactly matches the provided <code>key</code>, this is considered a cache miss. On a cache miss, the action automatically creates a new cache if the job completes successfully. The new cache will use the <code>key</code> you provided and contains the files you specify in <code>path</code>. For more information about how this is handled, see <a href="#cache-hits-and-misses">Cache hits and misses</a>.</p>
 <p>You cannot change the contents of an existing cache. Instead, you can create a new cache with a new key.</p>
-<h3 title="cache action usage / Input parameters for the cache action"><a href="#input-parameters-for-the-cache-action" aria-hidden="true" class="anchor" id="input-parameters-for-the-cache-action"></a>Input parameters for the <code>cache</code> action</h3>
+<h3 id="input-parameters-for-the-cache-action" title="cache action usage / Input parameters for the cache action">Input parameters for the <code>cache</code> action<a href="#input-parameters-for-the-cache-action" aria-label="Link to heading 'Input parameters for the cache action'" data-heading-content="Input parameters for the cache action" class="anchor"></a></h3>
 <ul>
 <li>
 <p><code>key</code>: <strong>Required</strong> The key created when saving a cache and the key used to search for a cache. It can be any combination of variables, context values, static strings, and functions. Keys have a maximum length of 512 characters, and keys longer than the maximum length will cause the action to fail.</p>
@@ -51,11 +51,11 @@
 <p class="markdown-alert-title">Note</p>
 <p>We recommend that you don't store any sensitive information, such as access tokens or login credentials, in files in the cache path. Anyone with read access can create a pull request on a repository and access the contents of a cache. Additionally, forks of a repository can create pull requests on the base branch and access caches on the base branch.</p>
 </div>
-<h3 title="cache action usage / Output parameters for the cache action"><a href="#output-parameters-for-the-cache-action" aria-hidden="true" class="anchor" id="output-parameters-for-the-cache-action"></a>Output parameters for the <code>cache</code> action</h3>
+<h3 id="output-parameters-for-the-cache-action" title="cache action usage / Output parameters for the cache action">Output parameters for the <code>cache</code> action<a href="#output-parameters-for-the-cache-action" aria-label="Link to heading 'Output parameters for the cache action'" data-heading-content="Output parameters for the cache action" class="anchor"></a></h3>
 <ul>
 <li><code>cache-hit</code>: A boolean value to indicate an exact match was found for the key.</li>
 </ul>
-<h3 title="cache action usage / Cache hits and misses"><a href="#cache-hits-and-misses" aria-hidden="true" class="anchor" id="cache-hits-and-misses"></a>Cache hits and misses</h3>
+<h3 id="cache-hits-and-misses" title="cache action usage / Cache hits and misses">Cache hits and misses<a href="#cache-hits-and-misses" aria-label="Link to heading 'Cache hits and misses'" data-heading-content="Cache hits and misses" class="anchor"></a></h3>
 <p>When <code>key</code> exactly matches an existing cache, it's called a <em>cache hit</em>, and the action restores the cached files to the <code>path</code> directory.</p>
 <p>When <code>key</code> doesn't match an existing cache, it's called a <em>cache miss</em>, and a new cache is automatically created if the job completes successfully.</p>
 <p>When a cache miss occurs, the action also searches your specified <code>restore-keys</code> for any matches:</p>
@@ -70,7 +70,7 @@
 <li>If the job completes successfully, the action automatically creates a new cache with the contents of the <code>path</code> directory.</li>
 </ol>
 <p>For a more detailed explanation of the cache matching process, see <a href="#cache-key-matching">Cache key matching</a>.</p>
-<h3 title="cache action usage / Example using the cache action"><a href="#example-using-the-cache-action" aria-hidden="true" class="anchor" id="example-using-the-cache-action"></a>Example using the <code>cache</code> action</h3>
+<h3 id="example-using-the-cache-action" title="cache action usage / Example using the cache action">Example using the <code>cache</code> action<a href="#example-using-the-cache-action" aria-label="Link to heading 'Example using the cache action'" data-heading-content="Example using the cache action" class="anchor"></a></h3>
 <p>This example creates a new cache when the packages in <code>package-lock.json</code> file change, or when the runner's operating system changes. The cache key uses contexts and expressions to generate a key that includes the runner's operating system and a SHA-256 hash of the <code>package-lock.json</code> file.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Caching with npm
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -108,7 +108,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Test
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm test
 </span></code></pre>
-<h3 title="cache action usage / Using contexts to create cache keys"><a href="#using-contexts-to-create-cache-keys" aria-hidden="true" class="anchor" id="using-contexts-to-create-cache-keys"></a>Using contexts to create cache keys</h3>
+<h3 id="using-contexts-to-create-cache-keys" title="cache action usage / Using contexts to create cache keys">Using contexts to create cache keys<a href="#using-contexts-to-create-cache-keys" aria-label="Link to heading 'Using contexts to create cache keys'" data-heading-content="Using contexts to create cache keys" class="anchor"></a></h3>
 <p>A cache key can include any of the contexts, functions, literals, and operators supported by GitHub Actions. For more information, see <a href="contexts.html">Contexts reference</a> and <a href="expressions.html">Evaluate expressions in workflows and actions</a>.</p>
 <p>Using expressions to create a <code>key</code> allows you to automatically create a new cache when dependencies change.</p>
 <p>For example, you can create a <code>key</code> using an expression that calculates the hash of an npm <code>package-lock.json</code> file. So, when the dependencies that make up the <code>package-lock.json</code> file change, the cache key changes and a new cache is automatically created.</p>
@@ -117,7 +117,7 @@
 <p>GitHub evaluates the expression <code>hash "package-lock.json"</code> to derive the final <code>key</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#a3be8c;">npm-d5ea0750
 </span></code></pre>
-<h3 title="cache action usage / Using the output of the cache action"><a href="#using-the-output-of-the-cache-action" aria-hidden="true" class="anchor" id="using-the-output-of-the-cache-action"></a>Using the output of the <code>cache</code> action</h3>
+<h3 id="using-the-output-of-the-cache-action" title="cache action usage / Using the output of the cache action">Using the output of the <code>cache</code> action<a href="#using-the-output-of-the-cache-action" aria-label="Link to heading 'Using the output of the cache action'" data-heading-content="Using the output of the cache action" class="anchor"></a></h3>
 <p>You can use the output of the <code>cache</code> action to do something based on whether a cache hit or miss occurred. When an exact match is found for a cache for the specified <code>key</code>, the <code>cache-hit</code> output is set to <code>true</code>.</p>
 <p>In the example workflow above, there is a step that lists the state of the Node modules if a cache miss occurred:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.cache-npm.outputs.cache-hit != 'true' }}
@@ -125,11 +125,11 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">continue-on-error</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm list
 </span></code></pre>
-<h2 title="Cache key matching"><a href="#cache-key-matching" aria-hidden="true" class="anchor" id="cache-key-matching"></a>Cache key matching</h2>
+<h2 id="cache-key-matching" title="Cache key matching">Cache key matching<a href="#cache-key-matching" aria-label="Link to heading 'Cache key matching'" data-heading-content="Cache key matching" class="anchor"></a></h2>
 <p>The <code>cache</code> action first searches for cache hits for <code>key</code> and the cache <em>version</em> in the branch containing the workflow run. If there is no hit, it searches for prefix-matches for <code>key</code>, and if there is still no hit, it searches for <code>restore-keys</code> and the <em>version</em>. If there are still no hits in the current branch, the <code>cache</code> action retries the same steps on the default branch. Please note that the scope restrictions apply during the search. For more information, see <a href="#restrictions-for-accessing-a-cache">Restrictions for accessing a cache</a>.</p>
 <p>Cache version is a way to stamp a cache with metadata of the <code>path</code> and the compression tool used while creating the cache. This ensures that the consuming workflow run uniquely matches a cache it can actually decompress and use. For more information, see <a href="https://github.com/actions/cache#cache-version" class="external">Cache Version</a> in the Actions Cache documentation.</p>
 <p><code>restore-keys</code> allows you to specify a list of alternate restore keys to use when there is a cache miss on <code>key</code>. You can create multiple restore keys ordered from the most specific to least specific. The <code>cache</code> action searches the <code>restore-keys</code> in sequential order. When a key doesn't match directly, the action searches for keys prefixed with the restore key. If there are multiple partial matches for a restore key, the action returns the most recently created cache.</p>
-<h3 title="Cache key matching / Example using multiple restore keys"><a href="#example-using-multiple-restore-keys" aria-hidden="true" class="anchor" id="example-using-multiple-restore-keys"></a>Example using multiple restore keys</h3>
+<h3 id="example-using-multiple-restore-keys" title="Cache key matching / Example using multiple restore keys">Example using multiple restore keys<a href="#example-using-multiple-restore-keys" aria-label="Link to heading 'Example using multiple restore keys'" data-heading-content="Example using multiple restore keys" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">restore-keys</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
 </span><span style="color:#a3be8c;">  npm-feature-${{ hashFiles('package-lock.json') }}
 </span><span style="color:#a3be8c;">  npm-feature-
@@ -147,7 +147,7 @@
 <li><strong><code>npm-feature-</code></strong> matches cache keys prefixed with <code>npm-feature-</code>.</li>
 <li><strong><code>npm-</code></strong> matches any keys prefixed with <code>npm-</code>.</li>
 </ol>
-<h4><a href="#example-of-search-priority" aria-hidden="true" class="anchor" id="example-of-search-priority"></a>Example of search priority</h4>
+<h4 id="example-of-search-priority">Example of search priority<a href="#example-of-search-priority" aria-label="Link to heading 'Example of search priority'" data-heading-content="Example of search priority" class="anchor"></a></h4>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">key</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#a3be8c;">npm-feature-d5ea0750
 </span><span style="color:#bf616a;">restore-keys</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
@@ -163,7 +163,7 @@
 <li>Key <code>npm-feature-</code> in the <code>main</code> branch</li>
 <li>Key <code>npm-</code> in the <code>main</code> branch</li>
 </ol>
-<h2 title="setup-* actions for specific package managers"><a href="#setup--actions-for-specific-package-managers" aria-hidden="true" class="anchor" id="setup--actions-for-specific-package-managers"></a><code>setup-*</code> actions for specific package managers</h2>
+<h2 id="setup--actions-for-specific-package-managers" title="setup-* actions for specific package managers"><code>setup-*</code> actions for specific package managers<a href="#setup--actions-for-specific-package-managers" aria-label="Link to heading 'setup-* actions for specific package managers'" data-heading-content="setup-* actions for specific package managers" class="anchor"></a></h2>
 <p>If you are caching the package managers listed below, using their respective setup-<span data-escaped-char="">*</span> actions requires minimal configuration and will create and restore dependency caches for you.</p>
 <table>
 <thead>
@@ -199,19 +199,46 @@
 </tr>
 </tbody>
 </table>
-<h2 title="Restrictions for accessing a cache"><a href="#restrictions-for-accessing-a-cache" aria-hidden="true" class="anchor" id="restrictions-for-accessing-a-cache"></a>Restrictions for accessing a cache</h2>
+<h2 id="restrictions-for-accessing-a-cache" title="Restrictions for accessing a cache">Restrictions for accessing a cache<a href="#restrictions-for-accessing-a-cache" aria-label="Link to heading 'Restrictions for accessing a cache'" data-heading-content="Restrictions for accessing a cache" class="anchor"></a></h2>
 <p>Access restrictions provide cache isolation and security by creating a logical boundary between different branches or tags.<br>
 Workflow runs can restore caches created in either the current branch or the default branch (usually <code>main</code>). If a workflow run is triggered for a pull request, it can also restore caches created in the base branch, including base branches of forked repositories. For example, if the branch <code>feature-b</code> has the base branch <code>feature-a</code>, a workflow run triggered on a pull request would have access to caches created in the default <code>main</code> branch, the base <code>feature-a</code> branch, and the current <code>feature-b</code> branch.</p>
 <p>Workflow runs cannot restore caches created for child branches or sibling branches. For example, a cache created for the child <code>feature-b</code> branch would not be accessible to a workflow run triggered on the parent <code>main</code> branch. Similarly, a cache created for the <code>feature-a</code> branch with the base <code>main</code> would not be accessible to its sibling <code>feature-c</code> branch with the base <code>main</code>. Workflow runs also cannot restore caches created for different tag names. For example, a cache created for the tag <code>release-a</code> with the base <code>main</code> would not be accessible to a workflow run triggered for the tag <code>release-b</code> with the base <code>main</code>.</p>
 <p>When a cache is created by a workflow run triggered on a pull request, the cache is created for the merge ref (<code>refs/pull/.../merge</code>). Because of this, the cache will have a limited scope and can only be restored by re-runs of the pull request. It cannot be restored by the base branch or other pull requests targeting that base branch.</p>
 <p>Multiple workflow runs in a repository can share caches. A cache created for a branch in a workflow run can be accessed and restored from another workflow run for the same repository and branch.</p>
-<h2 title="Usage limits and eviction policy"><a href="#usage-limits-and-eviction-policy" aria-hidden="true" class="anchor" id="usage-limits-and-eviction-policy"></a>Usage limits and eviction policy</h2>
+<h2 id="cache-access-for-low-trust-workflow-triggers" title="Cache access for low-trust workflow triggers">Cache access for low-trust workflow triggers<a href="#cache-access-for-low-trust-workflow-triggers" aria-label="Link to heading 'Cache access for low-trust workflow triggers'" data-heading-content="Cache access for low-trust workflow triggers" class="anchor"></a></h2>
+<p>Some workflows run in response to events that can be initiated by people who do not have write access to the repository, such as a fork pull request or an issue comment. When these events run in the context of the default branch, they could be used to write a malicious cache that a later, more privileged workflow restores and trusts. This class of attack is known as <em>cache poisoning</em>.</p>
+<p>To reduce this risk, only these workflow triggers can create or overwrite caches in the default branch’s scope:</p>
+<ul>
+<li><code>push</code></li>
+<li><code>workflow_dispatch</code></li>
+<li><code>repository_dispatch</code></li>
+<li><code>delete</code></li>
+<li><code>registry_package</code></li>
+<li><code>page_build</code></li>
+<li><code>schedule</code></li>
+</ul>
+<p>Runs triggered by any other event that resolves to the default branch are given read-only access to caches in the default branch's scope. These runs can restore existing caches but cannot create or overwrite them. This includes triggers whose payload or initiating actor can be influenced by someone outside the repository, such as <code>pull_request_target</code>, <code>issue_comment</code>, and <code>workflow_run</code>.</p>
+<p>The <code>pull_request</code> event is not affected. Caches created by a <code>pull_request</code> run are already scoped to the merge ref (<code>refs/pull/.../merge</code>) and cannot be written to the default branch's scope. For more information, see <a href="#restrictions-for-accessing-a-cache">Restrictions for accessing a cache</a>.</p>
+<p>When a run with read-only cache access tries to save a cache, the save fails but the step and the job do not. The workflow continues, and the failure is reported as a warning in the workflow log. In that case, consider the following:</p>
+<ul>
+<li>To retain the performance benefits of caching on the default branch scope, ensure there is a trusted workflow that keeps the cache updated, for example a CI build triggered by a <code>push</code> to the default branch. Those cache entries can then be restored by workflows triggered by low-trust events such as <code>pull_request_target</code>.</li>
+<li>In low-trust workflows, switch to a restore-only cache operation such as <code>actions/cache/restore</code> to make the intended cache usage clear and avoid the warning in the workflow run logs.</li>
+</ul>
+<h2 id="best-practices-for-using-caches-securely" title="Best practices for using caches securely">Best practices for using caches securely<a href="#best-practices-for-using-caches-securely" aria-label="Link to heading 'Best practices for using caches securely'" data-heading-content="Best practices for using caches securely" class="anchor"></a></h2>
+<p>Cache contents are not signed or verified, and any workflow run that can read a cache may extract its contents. Extracted caches may modify files that are subsequently executed in a workflow run, leading to malicious code execution. Follow these practices to reduce the security risk of using caches.</p>
+<ul>
+<li><strong>Don't store sensitive information in a cache.</strong> Anyone who can open a pull request against your repository can read the contents of caches in the base branch. Don't write secrets, tokens, or credentials to a cached path. Store sensitive values as secrets instead. See <a href="../../concepts/security/secrets.html">Secrets</a>.</li>
+<li><strong>Save caches from trusted triggers.</strong> Restrict cache writes to workflows triggered by trusted actors (typically those with write access to the repository). See <a href="#cache-access-for-low-trust-workflow-triggers">Cache access for low-trust workflow triggers</a> for the default restrictions that are enforced to limit what workflow triggers can write to the cache. Additionally, consider using environments with deployment protection rules to further limit the workflows that can modify the cache. See <a href="../../how-tos/deploy/configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a>.</li>
+<li><strong>Follow workflow best security practices to harden your workflows:</strong> Limit workflows that have cache-write access to those that have been hardened against workflow vulnerabilities. Follow the guidance at <a href="../security/secure-use.html#writing-workflows">Secure use reference</a> to prevent vulnerabilities in your workflows that could lead to code execution and the introduction of malicious cache entries.</li>
+</ul>
+<p>For broader guidance on securing your workflows, see <a href="../security/secure-use.html">Secure use reference</a>.</p>
+<h2 id="usage-limits-and-eviction-policy" title="Usage limits and eviction policy">Usage limits and eviction policy<a href="#usage-limits-and-eviction-policy" aria-label="Link to heading 'Usage limits and eviction policy'" data-heading-content="Usage limits and eviction policy" class="anchor"></a></h2>
 <p>GitHub applies limits to cache storage and retention to manage storage costs and prevent abuse. Understanding these limits helps you optimize your cache usage.</p>
-<h3 title="Usage limits and eviction policy / Default limits"><a href="#default-limits" aria-hidden="true" class="anchor" id="default-limits"></a>Default limits</h3>
+<h3 id="default-limits" title="Usage limits and eviction policy / Default limits">Default limits<a href="#default-limits" aria-label="Link to heading 'Default limits'" data-heading-content="Default limits" class="anchor"></a></h3>
 <p>GitHub will remove any cache entries that have not been accessed in over 7 days. There is no limit on the number of caches you can store, but the total size of all caches in a repository is limited. By default, the limit is 10 GB per repository, but this limit can be increased by enterprise owners, organization owners, or repository administrators. Any usage beyond 10 GB is billed to your account. Once a repository has reached its maximum cache storage, the cache eviction policy will create space by deleting the caches in order of last access date, from oldest to most recent.</p>
 <p>If you exceed the limit, GitHub will save the new cache but will begin evicting caches until the total size is less than the repository limit. The cache eviction process may cause cache thrashing, where caches are created and deleted at a high frequency. To reduce this, you can review the caches for a repository and take corrective steps, such as removing caching from specific workflows or increasing your cache size. This functionality is only available to users with a payment method on file who opt in by configuring cache settings. See <a href="../../how-tos/manage-workflow-runs/manage-caches.html">Managing caches</a>.</p>
 <p>You can create cache entries at a rate of up to 200 uploads per minute per repository, and download them at a rate of 1500 downloads per minute per repository. If you exceed this rate, subsequent cache upload or download attempts will fail until the relevant rate limit resets. The time until the rate limit resets is returned in the <code>Retry-After</code> header of the response. See <a href="../limits.html">Actions limits</a> for more information about GitHub Actions rate limits.</p>
-<h3 title="Usage limits and eviction policy / Increasing cache size"><a href="#increasing-cache-size" aria-hidden="true" class="anchor" id="increasing-cache-size"></a>Increasing cache size</h3>
+<h3 id="increasing-cache-size" title="Usage limits and eviction policy / Increasing cache size">Increasing cache size<a href="#increasing-cache-size" aria-label="Link to heading 'Increasing cache size'" data-heading-content="Increasing cache size" class="anchor"></a></h3>
 <p>If you want to reduce the rate at which cache entries are evicted, you can increase the storage limits for your cache in the Actions Settings. Repositories owned by users can configure up to 10 TB per repository. For repositories owned by organizations, the maximum configurable limit is determined by the organization's settings. For organizations owned by an enterprise, the maximum configurable limit is determined by the enterprise's settings. Increasing the limit beyond the default 10 GB will incur additional costs, if that storage is used.</p>
 <p>For more information, see:</p>
 <ul>
@@ -244,6 +271,6 @@ Workflow runs can restore caches created in either the current branch or the def
 </tr>
 </tbody>
 </table>
-<h2 title="Next steps"><a href="#next-steps" aria-hidden="true" class="anchor" id="next-steps"></a>Next steps</h2>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
 <p>To manage your dependency caches, see <a href="../../how-tos/manage-workflow-runs/manage-caches.html">Managing caches</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

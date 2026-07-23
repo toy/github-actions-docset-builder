@@ -1,0 +1,137 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Preventing code quality issues from reaching your default branch</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Improve code quality</a> / </nav><h1 id="preventing-code-quality-issues-from-reaching-your-default-branch">Preventing code quality issues from reaching your default branch<a href="#preventing-code-quality-issues-from-reaching-your-default-branch" aria-label="Link to heading 'Preventing code quality issues from reaching your default branch'" data-heading-content="Preventing code quality issues from reaching your default branch" class="anchor"></a></h1>
+<p>Move through Code Quality findings on your pull request, including understanding severity labels, when each finding is best fixed, delegated, or dismissed, and how those choices shape your repository's code health.</p>
+<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<p>In this tutorial, you'll follow a single pull request through Code Quality's analysis, from first comment to merge. You'll learn:</p>
+<ul>
+<li>How to read the Code Quality comments on a pull request and tell the two types of finding apart.</li>
+<li>How to use a finding's severity label to decide what to fix, what to dismiss, and in what order.</li>
+<li>How the choices you make on a pull request shape your repository's scores, backlog, and merge gates.</li>
+</ul>
+<p>By the end, you'll have resolved every blocking finding on the example pull request and merged it with a clean Code Quality check, and you'll understand <em>why</em> you made each choice.</p>
+<p>This is a guided walkthrough, so it favors understanding over speed. For basic steps on how to commit an autofix or dismiss a finding, see the companion how-to: <a href="../../how-tos/maintain-quality-code/fix-findings-on-a-pr.html">Fixing code quality findings on a pull request</a>.</p>
+<h3 id="before-you-start" title="Introduction / Before you start">Before you start<a href="#before-you-start" aria-label="Link to heading 'Before you start'" data-heading-content="Before you start" class="anchor"></a></h3>
+<ul>
+<li>Code Quality is enabled on a repository you contribute to. See <a href="../../how-tos/maintain-quality-code/enable-code-quality.html">Enabling GitHub Code Quality</a>.</li>
+<li>The repository uses a language supported by CodeQL so that rule-based findings and scores are generated. For a list of supported languages, see <a href="../../concepts/code-quality/code-quality.html#supported-languages">GitHub Code Quality</a>.</li>
+<li>You have a pull request open against the default branch with at least one Code Quality finding to triage. If you don't have a pull request ready, you can follow the example below.</li>
+</ul>
+<p>Throughout this tutorial, we'll use a running example: a pull request that refactors some code will introduce several code quality issues into the default branch if it's merged as it is. A Code Quality scan has automatically run on the pull request and has reported several findings as comments.</p>
+<h2 id="why-the-pull-request-is-the-best-place-to-fix-a-finding" title="Why the pull request is the best place to fix a finding">Why the pull request is the best place to fix a finding<a href="#why-the-pull-request-is-the-best-place-to-fix-a-finding" aria-label="Link to heading 'Why the pull request is the best place to fix a finding'" data-heading-content="Why the pull request is the best place to fix a finding" class="anchor"></a></h2>
+<p>Every finding you don't resolve at the pull request stage becomes an action item in your repository's backlog, and technical debt is often more expensive to pay down later than to address now. Right now, while the pull request is open, the code's context and intent are still fresh in your mind, which makes each finding, and its autofix, faster to assess, apply, or confidently dismiss.</p>
+<p>Resolving findings at the pull request stage means your team spends less time triaging remediation work against feature work, and avoids the overhead of extra pull requests just to burn down a backlog.</p>
+<h2 id="step-1-find-the-code-quality-comments-on-your-pull-request" title="Step 1: Find the Code Quality comments on your pull request">Step 1: Find the Code Quality comments on your pull request<a href="#step-1-find-the-code-quality-comments-on-your-pull-request" aria-label="Link to heading 'Step 1: Find the Code Quality comments on your pull request'" data-heading-content="Step 1: Find the Code Quality comments on your pull request" class="anchor"></a></h2>
+<p>When you open a pull request, Code Quality runs <strong>two types of analysis</strong> and posts findings as comments. Open the <strong>Files changed</strong> tab of your pull request and look at who left each comment—the author tells you which type of finding it is.</p>
+<ol>
+<li>
+<p><strong>Rules-based findings</strong> are posted by the <strong><code>github-code-quality[bot]</code></strong>. Code Quality uses CodeQL to scan your changes against a set of rules, and each comment includes a suggested autofix.</p>
+</li>
+<li>
+<p><strong>AI-powered findings</strong> are posted by <strong>Copilot</strong>. If your organization has Copilot licenses and AI features are enabled for your enterprise, Copilot code review looks for quality issues that rules-based analysis may miss. These comments also include a suggested autofix.</p>
+</li>
+</ol>
+<p>In our example, we'll look at three comments that have come from <code>github-code-quality[bot]</code>, so they're rules-based findings. On your own pull request you may see both types—note which is which before you go further, because severity labels (Step 2) apply only to the rules-based comments.</p>
+<h2 id="step-2-read-the-severity-label-to-decide-what-matters" title="Step 2: Read the severity label to decide what matters">Step 2: Read the severity label to decide what matters<a href="#step-2-read-the-severity-label-to-decide-what-matters" aria-label="Link to heading 'Step 2: Read the severity label to decide what matters'" data-heading-content="Step 2: Read the severity label to decide what matters" class="anchor"></a></h2>
+<p>Every rules-based finding from <code>github-code-quality[bot]</code> carries a severity label—<strong>Error</strong>, <strong>Warning</strong>, or <strong>Note</strong>. Find the label on one of the comments and check it against this table.</p>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Error</strong></td>
+<td>Indicates a high-severity issue that is likely to cause bugs, failures, or major maintainability risks.</td>
+</tr>
+<tr>
+<td><strong>Warning</strong></td>
+<td>Indicates a moderate-severity issue that may impact code quality or reliability, but is not immediately critical.</td>
+</tr>
+<tr>
+<td><strong>Note</strong></td>
+<td>Indicates a low-severity issue, minor improvement, or recommendation. These findings are useful for ongoing code health and maintainability.</td>
+</tr>
+</tbody>
+</table>
+<p>The label is doing two jobs for you at once:</p>
+<ol>
+<li><strong>It tells you what to fix first.</strong> Severity reflects the expected impact of a rule across typical code. In our example, you'd start with the <strong>Error</strong>, then the <strong>Warning</strong>, and treat the <strong>Note</strong> as optional polish.</li>
+<li><strong>It may decide whether you can merge at all.</strong> A repository administrator or organization owner can configure Code Quality as a merge gate. For example, if the threshold for merging is "Warning and above", every <strong>Warning</strong> <em>and</em> <strong>Error</strong>-level finding must be fixed or dismissed before you can merge (<strong>Note</strong> findings wouldn't prevent you from merging). Similarly, a stricter threshold may require you to resolve <em>all</em> findings before merge.</li>
+</ol>
+<p>To see whether a gate is in effect, scroll to the <strong>Checks</strong> section at the bottom of the pull request. If your changes fall below the required threshold, you'll see a merge block banner: "Merging is blocked: Code quality findings were detected."</p>
+<p><img src="../../../..//assets/images/help/code-quality/code-quality-merge-block.png" alt="Screenshot of the merge block banner in the Checks section of a pull request."></p>
+<p>In our example the gate is set to "Warning and above", so the banner is present: the <strong>Error</strong> and the <strong>Warning</strong> are blocking the merge, and the <strong>Note</strong> is not. That tells you what you have to clear before this pull request can be merged.</p>
+<p>If the merge block banner doesn't specify a severity level, you must clear <em>all</em> findings in order to merge your pull request.</p>
+<h2 id="step-3-resolve-each-finding" title="Step 3: Resolve each finding">Step 3: Resolve each finding<a href="#step-3-resolve-each-finding" aria-label="Link to heading 'Step 3: Resolve each finding'" data-heading-content="Step 3: Resolve each finding" class="anchor"></a></h2>
+<p>For every finding, decide whether it applies to your code and, if it does, how to fix it. That leads you to one of three actions.</p>
+<table>
+<thead>
+<tr>
+<th>Assessment</th>
+<th>Recommended action</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The finding is legitimate and the suggested fix looks correct</td>
+<td><strong>Apply the autofix suggestion</strong></td>
+<td>Clicking <strong>Commit suggestion</strong> doesn't consume AI credits, and rules-based autofixes don't require a Copilot license.</td>
+</tr>
+<tr>
+<td>The finding is real but you want to fix several at once, or the suggested fix needs adapting</td>
+<td><strong>Delegate to Copilot</strong>—mention <code>@copilot</code> in a comment to hand the work to the cloud agent. Copilot reacts with 👀, starts a new agent session, and pushes the necessary fixes to the pull request's branch</td>
+<td>Requires a Copilot license and consumes AI credits.</td>
+</tr>
+<tr>
+<td>The finding doesn't apply, for example, it's test code, an intentional pattern, or a false positive</td>
+<td>Click <strong>Dismiss finding</strong> and provide a reason</td>
+<td>You'll be able to merge your pull request, but the finding will appear in the repository backlog, and in future pull requests.</td>
+</tr>
+</tbody>
+</table>
+<p>Apply the practice to your own pull request, working in severity order.</p>
+<p>In our example:</p>
+<ul>
+<li>The <strong>Error</strong>- and <strong>Warning</strong>-level findings are genuine bugs and the suggested autofixes look reasonable, so we apply the autofix suggestions. The findings resolve and drop out of the blocking count.</li>
+<li>A <strong>Note</strong>-level finding flags a minor pattern in an adjacent test helper. It's intentional, so we dismiss it with a reason like "Used in tests".</li>
+<li>There are several additional <strong>Note</strong>-level findings. Instead of working through each autofix suggestion one by one, we comment: "<code>@copilot</code>, fix all the remaining Note-level findings". We track Copilot's progress in the <strong>Agents</strong> tab of the repository, and review the commits it pushes to the pull request when they're ready.</li>
+</ul>
+<h2 id="step-4-confirm-your-pull-request-is-unblocked-optional" title="Step 4: Confirm your pull request is unblocked (optional)">Step 4: Confirm your pull request is unblocked (optional)<a href="#step-4-confirm-your-pull-request-is-unblocked-optional" aria-label="Link to heading 'Step 4: Confirm your pull request is unblocked (optional)'" data-heading-content="Step 4: Confirm your pull request is unblocked (optional)" class="anchor"></a></h2>
+<p>If you <em>do</em> have blocking findings, once you've fixed or dismissed the relevant findings, return to the <strong>Checks</strong> section at the bottom of the pull request.</p>
+<p>In our example, with the <strong>Error</strong> and <strong>Warning</strong> findings resolved, the merge block banner disappears. Your pull request is now clear to merge.</p>
+<p>If the banner is still there, it means a finding at or above the blocking severity is still open.</p>
+<h2 id="step-5-resolve-the-ai-powered-findings-from-copilot" title="Step 5: Resolve the AI-powered findings from Copilot">Step 5: Resolve the AI-powered findings from Copilot<a href="#step-5-resolve-the-ai-powered-findings-from-copilot" aria-label="Link to heading 'Step 5: Resolve the AI-powered findings from Copilot'" data-heading-content="Step 5: Resolve the AI-powered findings from Copilot" class="anchor"></a></h2>
+<p>If your organization has Copilot licenses and AI features are enabled for your enterprise, you'll also see comments posted by Copilot. These are the <strong>AI-powered findings</strong> introduced in Step 1, and they come from Copilot code review rather than from <code>github-code-quality[bot]</code>.</p>
+<p>Where the rules-based findings match your changes against a fixed set of CodeQL rules, Copilot code review reasons about the intent of your code. It catches quality issues that don't map to a specific rule, so it's a useful complement to the rules-based comments rather than a replacement for them.</p>
+<p>These findings don't carry a severity label of "Error", "Warning", or "Note". Since the merge gate you saw in Step 2 counts only the severity of <em>rules-based findings</em>, AI-powered findings never block your pull request on their own. That doesn't make them optional, resolving them in context is still the optimal place to keep quality issues out of your default branch.</p>
+<p>You resolve an AI-powered finding with the same three choices you used in Step 3:</p>
+<ul>
+<li><strong>Apply the autofix suggestion.</strong> Each comment includes a suggested fix. If it's correct as-is, click <strong>Commit suggestion</strong>. Applying the autofix doesn't consume GitHub AI Credits.</li>
+<li><strong>Delegate to Copilot</strong>—mention <code>@copilot</code> in a comment to hand the work to the cloud agent. Copilot reacts with 👀, starts a new agent session, and pushes the necessary fixes to the pull request's branch. This option requires a Copilot license, and does consume GitHub AI Credits.</li>
+<li><strong>Resolve the comment.</strong> If it doesn't apply to your code, click <strong>Resolve</strong>.</li>
+</ul>
+<h2 id="how-this-connects-to-the-rest-of-your-code-health" title="How this connects to the rest of your code health">How this connects to the rest of your code health<a href="#how-this-connects-to-the-rest-of-your-code-health" aria-label="Link to heading 'How this connects to the rest of your code health'" data-heading-content="How this connects to the rest of your code health" class="anchor"></a></h2>
+<p>The pull request you just cleared is part of a bigger picture:</p>
+<ul>
+<li><strong>Scores.</strong> Your repository's reliability and maintainability scores are computed from findings on the default branch. Resolving findings before merge is how you keep those scores from drifting. See <a href="../../reference/code-quality/metrics-and-ratings.html">Metrics and scores reference</a>.</li>
+<li><strong>Backlog.</strong> Anything you don't fix in the pull request joins the backlog of findings on the default branch. Working that backlog down is a discipline of its own. See <a href="raise-your-quality-rating.html">Raising your repository's code quality score</a>.</li>
+<li><strong>Compliance.</strong> When a class of findings genuinely must not reach the default branch, the "Require code quality results" ruleset helps repository administrators and organization owners encode that decision as a merge gate. See <a href="../../how-tos/maintain-quality-code/unblock-your-pr.html">Resolving a block on your pull request</a>.</li>
+</ul>
+<p>The healthiest teams combine all three: deliberate triage and remediation at the pull request stage, periodic backlog work, and enforced thresholds at the merge boundary.</p>
+<h2 id="troubleshooting" title="Troubleshooting">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
+<ul>
+<li><strong>I don't see any Code Quality comments.</strong> The scan may still be running, your changes may not touch a supported language, or you don't have any findings. Confirm Code Quality is enabled and give the check (called "CodeQL - Code Quality") time to finish. See <a href="../../how-tos/maintain-quality-code/enable-code-quality.html">Enabling GitHub Code Quality</a>.</li>
+<li><strong>I only see comments from <code>github-code-quality[bot]</code>, never from Copilot.</strong> AI-powered findings require Copilot licenses and AI features enabled for your enterprise. Without them, you'll see only rules-based findings.</li>
+<li><strong>I don't see autofixes for my code quality findings.</strong> Autofix generation consumes GitHub AI Credits. Your organization may have depleted its monthly budget of AI credits.</li>
+<li><strong>The merge block banner won't clear.</strong> At least one finding at or above the blocking severity is still open. If you don't see a severity level defined in the merge block banner, it means that your repository is using the most stringent code quality thresholds, which require <em>all</em> findings to be addressed before merging. See <a href="../../how-tos/maintain-quality-code/unblock-your-pr.html">Resolving a block on your pull request</a>.</li>
+</ul>
+<h2 id="conclusion" title="Conclusion">Conclusion<a href="#conclusion" aria-label="Link to heading 'Conclusion'" data-heading-content="Conclusion" class="anchor"></a></h2>
+<p>In this tutorial, you've worked through Code Quality comments on a pull request, used severity to prioritize remediation, and resolved each finding intentionally before merging your pull request. By treating each finding, and its autofix, as a small, in-context decision, you prevented code quality debt from reaching your default branch.</p>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<ul>
+<li>Apply the same thinking to your existing backlog: <a href="raise-your-quality-rating.html">Raising your repository's code quality score</a>.</li>
+<li>Learn how findings translate into scores so you can measure the impact of the work: <a href="../../reference/code-quality/metrics-and-ratings.html">Metrics and scores reference</a>.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

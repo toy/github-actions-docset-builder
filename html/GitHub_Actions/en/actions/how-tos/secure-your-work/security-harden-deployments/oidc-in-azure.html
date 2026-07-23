@@ -1,9 +1,9 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in Azure</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1><a href="#configuring-openid-connect-in-azure" aria-hidden="true" class="anchor" id="configuring-openid-connect-in-azure"></a>Configuring OpenID Connect in Azure</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in Azure</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1 id="configuring-openid-connect-in-azure">Configuring OpenID Connect in Azure<a href="#configuring-openid-connect-in-azure" aria-label="Link to heading 'Configuring OpenID Connect in Azure'" data-heading-content="Configuring OpenID Connect in Azure" class="anchor"></a></h1>
 <p>Use OpenID Connect within your workflows to authenticate with Azure.</p>
-<h2 title="Overview"><a href="#overview" aria-hidden="true" class="anchor" id="overview"></a>Overview</h2>
+<h2 id="overview" title="Overview">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
 <p>OpenID Connect (OIDC) allows your GitHub Actions workflows to access resources in Azure, without needing to store the Azure credentials as long-lived GitHub secrets.</p>
 <p>This guide gives an overview of how to configure Azure to trust GitHub's OIDC as a federated identity, and includes a workflow example for the <a href="https://github.com/Azure/login" class="external"><code>azure/login</code></a> action that uses tokens to authenticate to Azure and access resources.</p>
-<h2 title="Prerequisites"><a href="#prerequisites" aria-hidden="true" class="anchor" id="prerequisites"></a>Prerequisites</h2>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <ul>
 <li>
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
@@ -12,7 +12,8 @@
 <p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>.</p>
 </li>
 </ul>
-<h2 title="Adding the federated credentials to Azure"><a href="#adding-the-federated-credentials-to-azure" aria-hidden="true" class="anchor" id="adding-the-federated-credentials-to-azure"></a>Adding the federated credentials to Azure</h2>
+<p>For repositories created after July 15, 2026, and repository renames or transfers after that date, use an immutable default OIDC <code>sub</code> claim that includes owner and repository IDs (not available on GitHub Enterprise Server). Existing repositories keep the previous format unless they opt in. For more information, see <a href="../../../reference/security/oidc.html#immutable-subject-claims">OpenID Connect reference</a>.</p>
+<h2 id="adding-the-federated-credentials-to-azure" title="Adding the federated credentials to Azure">Adding the federated credentials to Azure<a href="#adding-the-federated-credentials-to-azure" aria-label="Link to heading 'Adding the federated credentials to Azure'" data-heading-content="Adding the federated credentials to Azure" class="anchor"></a></h2>
 <p>GitHub's OIDC provider works with Azure's workload identity federation. For an overview, see Microsoft's documentation at <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/workload-identity-federation" class="external">Workload identity federation</a>.</p>
 <p>To configure the OIDC identity provider in Azure, you will need to perform the following configuration. For instructions on making these changes, refer to <a href="https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure" class="external">the Azure documentation</a>.</p>
 <p>In the following procedure, you will create an application for Microsoft Entra ID (previously known as Azure AD).</p>
@@ -26,7 +27,7 @@
 <li>For security hardening, make sure you've reviewed <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>. For an example, see <a href="../../../concepts/security/openid-connect.html#configuring-the-subject-in-your-cloud-provider">OpenID Connect</a>.</li>
 <li>For the <code>audience</code> setting, <code>api://AzureADTokenExchange</code> is the recommended value, but you can also specify other values here.</li>
 </ul>
-<h2 title="Updating your GitHub Actions workflow"><a href="#updating-your-github-actions-workflow" aria-hidden="true" class="anchor" id="updating-your-github-actions-workflow"></a>Updating your GitHub Actions workflow</h2>
+<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
 <p>To update your workflows for OIDC, you will need to make two changes to your YAML:</p>
 <ol>
 <li>Add permissions settings for the token.</li>
@@ -36,14 +37,14 @@
 <p class="markdown-alert-title">Note</p>
 <p>When environments are used in workflows or in OIDC policies, we recommend adding protection rules to the environment for additional security. For example, you can configure deployment rules on an environment to restrict which branches and tags can deploy to the environment or access environment secrets. For more information, see <a href="../../deploy/configure-and-manage-deployments/manage-environments.html#deployment-protection-rules">Managing environments for deployment</a>.</p>
 </div>
-<h3 title="Updating your GitHub Actions workflow / Adding permissions settings"><a href="#adding-permissions-settings" aria-hidden="true" class="anchor" id="adding-permissions-settings"></a>Adding permissions settings</h3>
+<h3 id="adding-permissions-settings" title="Updating your GitHub Actions workflow / Adding permissions settings">Adding permissions settings<a href="#adding-permissions-settings" aria-label="Link to heading 'Adding permissions settings'" data-heading-content="Adding permissions settings" class="anchor"></a></h3>
 <p>The job or workflow run requires a <code>permissions</code> setting with <a href="../../../tutorials/authenticate-with-github_token.html#modifying-the-permissions-for-the-github_token"><code>id-token: write</code></a> to allow GitHub's OIDC provider to create a JSON Web Token for every run.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Setting <code>id-token: write</code> in the workflow’s permissions does not give the workflow permission to modify or write to any resources. Instead, it only allows the workflow to request (fetch) and use (set) an OIDC token for an action or step. This token is then used to authenticate with external services using a short-lived access token.</p>
 </div>
-<p>For detailed information on required permissions, configuration examples, and advanced scenarios, see <a href="../../../reference/security/oidc.html##workflow-permissions-for-the-requesting-the-oidc-token">OpenID Connect reference</a>.</p>
-<h3 title="Updating your GitHub Actions workflow / Requesting the access token"><a href="#requesting-the-access-token" aria-hidden="true" class="anchor" id="requesting-the-access-token"></a>Requesting the access token</h3>
+<p>For detailed information on required permissions, configuration examples, and advanced scenarios, see <a href="../../../reference/security/oidc.html#workflow-permissions-for-the-requesting-the-oidc-token">OpenID Connect reference</a>.</p>
+<h3 id="requesting-the-access-token" title="Updating your GitHub Actions workflow / Requesting the access token">Requesting the access token<a href="#requesting-the-access-token" aria-label="Link to heading 'Requesting the access token'" data-heading-content="Requesting the access token" class="anchor"></a></h3>
 <p>The <a href="https://github.com/Azure/login" class="external"><code>azure/login</code></a> action receives a JWT from the GitHub OIDC provider, and then requests an access token from Azure. For more information, see the <a href="https://github.com/Azure/login" class="external"><code>azure/login</code></a> documentation.</p>
 <p>The following example exchanges an OIDC ID token with Azure to receive an access token, which can then be used to access cloud resources.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># This workflow uses actions that are not certified by GitHub.
@@ -72,7 +73,7 @@
 </span><span style="color:#a3be8c;">          az account show
 </span><span style="color:#a3be8c;">          az group list
 </span></code></pre>
-<h2 title="Further reading"><a href="#further-reading" aria-hidden="true" class="anchor" id="further-reading"></a>Further reading</h2>
+<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>
 <li><a href="oidc-with-reusable-workflows.html">Using OpenID Connect with reusable workflows</a></li>
 <li><a href="../../../reference/runners/self-hosted-runners.html">Self-hosted runners reference</a></li>

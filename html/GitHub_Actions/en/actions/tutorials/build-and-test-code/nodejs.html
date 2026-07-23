@@ -1,14 +1,14 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Building and testing Node.js</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Build and test code</a> / </nav><h1><a href="#building-and-testing-nodejs" aria-hidden="true" class="anchor" id="building-and-testing-nodejs"></a>Building and testing Node.js</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Building and testing Node.js</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Build and test code</a> / </nav><h1 id="building-and-testing-nodejs">Building and testing Node.js<a href="#building-and-testing-nodejs" aria-label="Link to heading 'Building and testing Node.js'" data-heading-content="Building and testing Node.js" class="anchor"></a></h1>
 <p>Learn how to create a continuous integration (CI) workflow to build and test your Node.js project.</p>
-<h2 title="Introduction"><a href="#introduction" aria-hidden="true" class="anchor" id="introduction"></a>Introduction</h2>
+<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>This guide shows you how to create a continuous integration (CI) workflow that builds and tests Node.js code. If your CI tests pass, you may want to deploy your code or publish a package.</p>
-<h2 title="Prerequisites"><a href="#prerequisites" aria-hidden="true" class="anchor" id="prerequisites"></a>Prerequisites</h2>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>We recommend that you have a basic understanding of Node.js, YAML, workflow configuration options, and how to create a workflow file. For more information, see:</p>
 <ul>
 <li><a href="../../how-tos/write-workflows/index.html">Writing workflows</a></li>
 <li><a href="https://nodejs.org/en/docs/guides/getting-started-guide/" class="external">Getting started with Node.js</a></li>
 </ul>
-<h2 title="Using a Node.js workflow template"><a href="#using-a-nodejs-workflow-template" aria-hidden="true" class="anchor" id="using-a-nodejs-workflow-template"></a>Using a Node.js workflow template</h2>
+<h2 id="using-a-nodejs-workflow-template" title="Using a Node.js workflow template">Using a Node.js workflow template<a href="#using-a-nodejs-workflow-template" aria-label="Link to heading 'Using a Node.js workflow template'" data-heading-content="Using a Node.js workflow template" class="anchor"></a></h2>
 <p>To get started quickly, add a workflow template to the <code>.github/workflows</code> directory of your repository.</p>
 <p>GitHub provides a workflow template for Node.js that should work for most Node.js projects. The subsequent sections of this guide give examples of how you can customize this workflow template.</p>
 <ol>
@@ -39,7 +39,7 @@
 <p>The <code>node.js.yml</code> workflow file is added to the <code>.github/workflows</code> directory of your repository.</p>
 </li>
 </ol>
-<h2 title="Specifying the Node.js version"><a href="#specifying-the-nodejs-version" aria-hidden="true" class="anchor" id="specifying-the-nodejs-version"></a>Specifying the Node.js version</h2>
+<h2 id="specifying-the-nodejs-version" title="Specifying the Node.js version">Specifying the Node.js version<a href="#specifying-the-nodejs-version" aria-label="Link to heading 'Specifying the Node.js version'" data-heading-content="Specifying the Node.js version" class="anchor"></a></h2>
 <p>The easiest way to specify a Node.js version is by using the <code>setup-node</code> action provided by GitHub. For more information see, <a href="https://github.com/actions/setup-node/" class="external"><code>setup-node</code></a>.</p>
 <p>The <code>setup-node</code> action takes a Node.js version as an input and configures that version on the runner. The <code>setup-node</code> action finds a specific version of Node.js from the tools cache on each runner and adds the necessary binaries to <code>PATH</code>, which persists for the rest of the job. Using the <code>setup-node</code> action is the recommended way of using Node.js with GitHub Actions because it ensures consistent behavior across different runners and different versions of Node.js. If you are using a self-hosted runner, you must install Node.js and add it to <code>PATH</code>.</p>
 <p>The workflow template includes a matrix strategy that builds and tests your code with the Node.js versions listed in <code>node-version</code>. The 'x' in the version number is a wildcard character that matches the latest minor and patch release available for a version. Each version of Node.js specified in the <code>node-version</code> array creates a job that runs the same steps.</p>
@@ -82,10 +82,10 @@
 </span></code></pre>
 <p>If you don't specify a Node.js version, GitHub uses the environment's default Node.js version.<br>
 For more information, see <a href="../../concepts/runners/github-hosted-runners.html#supported-software">GitHub-hosted runners</a>.</p>
-<h2 title="Installing dependencies"><a href="#installing-dependencies" aria-hidden="true" class="anchor" id="installing-dependencies"></a>Installing dependencies</h2>
+<h2 id="installing-dependencies" title="Installing dependencies">Installing dependencies<a href="#installing-dependencies" aria-label="Link to heading 'Installing dependencies'" data-heading-content="Installing dependencies" class="anchor"></a></h2>
 <p>GitHub-hosted runners have npm and Yarn dependency managers installed. You can use npm and Yarn to install dependencies in your workflow before building and testing your code. The Windows and Linux GitHub-hosted runners also have Grunt, Gulp, and Bower installed.</p>
 <p>You can also cache dependencies to speed up your workflow. For more information, see <a href="../../reference/workflows-and-actions/dependency-caching.html">Dependency caching reference</a>.</p>
-<h3 title="Installing dependencies / Example using npm"><a href="#example-using-npm" aria-hidden="true" class="anchor" id="example-using-npm"></a>Example using npm</h3>
+<h3 id="example-using-npm" title="Installing dependencies / Example using npm">Example using npm<a href="#example-using-npm" aria-label="Link to heading 'Example using npm'" data-heading-content="Example using npm" class="anchor"></a></h3>
 <p>This example installs the versions in the <code>package-lock.json</code> or <code>npm-shrinkwrap.json</code> file and prevents updates to the lock file. Using <code>npm ci</code> is generally faster than running <code>npm install</code>. For more information, see <a href="https://docs.npmjs.com/cli/ci.html" class="external"><code>npm ci</code></a> and <a href="https://blog.npmjs.org/post/171556855892/introducing-npm-ci-for-faster-more-reliable" class="external">Introducing <code>npm ci</code> for faster, more reliable builds</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
@@ -106,7 +106,7 @@ For more information, see <a href="../../concepts/runners/github-hosted-runners.
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install dependencies
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install
 </span></code></pre>
-<h3 title="Installing dependencies / Example using Yarn"><a href="#example-using-yarn" aria-hidden="true" class="anchor" id="example-using-yarn"></a>Example using Yarn</h3>
+<h3 id="example-using-yarn" title="Installing dependencies / Example using Yarn">Example using Yarn<a href="#example-using-yarn" aria-label="Link to heading 'Example using Yarn'" data-heading-content="Example using Yarn" class="anchor"></a></h3>
 <p>This example installs the dependencies defined in the <code>yarn.lock</code> file and prevents updates to the <code>yarn.lock</code> file. For more information, see <a href="https://yarnpkg.com/en/docs/cli/install" class="external"><code>yarn install</code></a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
@@ -127,7 +127,7 @@ For more information, see <a href="../../concepts/runners/github-hosted-runners.
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install dependencies
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">yarn
 </span></code></pre>
-<h3 title="Installing dependencies / Example using a private registry and creating the .npmrc file"><a href="#example-using-a-private-registry-and-creating-the-npmrc-file" aria-hidden="true" class="anchor" id="example-using-a-private-registry-and-creating-the-npmrc-file"></a>Example using a private registry and creating the .npmrc file</h3>
+<h3 id="example-using-a-private-registry-and-creating-the-npmrc-file" title="Installing dependencies / Example using a private registry and creating the .npmrc file">Example using a private registry and creating the .npmrc file<a href="#example-using-a-private-registry-and-creating-the-npmrc-file" aria-label="Link to heading 'Example using a private registry and creating the .npmrc file'" data-heading-content="Example using a private registry and creating the .npmrc file" class="anchor"></a></h3>
 <p>You can use the <code>setup-node</code> action to create a local <code>.npmrc</code> file on the runner that configures the default registry and scope. The <code>setup-node</code> action also accepts an authentication token as input, used to access private registries or publish node packages. For more information, see <a href="https://github.com/actions/setup-node/" class="external"><code>setup-node</code></a>.</p>
 <p>To authenticate to your private registry, you'll need to store your npm authentication token as a secret. For example, create a repository secret called <code>NPM_TOKEN</code>. For more information, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 <p>In the example below, the secret <code>NPM_TOKEN</code> stores the npm authentication token. The <code>setup-node</code> action configures the <code>.npmrc</code> file to read the npm authentication token from the <code>NODE_AUTH_TOKEN</code> environment variable. When using the <code>setup-node</code> action to create an <code>.npmrc</code> file, you must set the <code>NODE_AUTH_TOKEN</code> environment variable with the secret that contains your npm authentication token.</p>
@@ -151,7 +151,7 @@ For more information, see <a href="../../concepts/runners/github-hosted-runners.
 </span><span style="color:#c0c5ce;">@octocat:registry=https://registry.npmjs.org/
 </span><span style="color:#c0c5ce;">always-auth=true
 </span></code></pre>
-<h3 title="Installing dependencies / Example caching dependencies"><a href="#example-caching-dependencies" aria-hidden="true" class="anchor" id="example-caching-dependencies"></a>Example caching dependencies</h3>
+<h3 id="example-caching-dependencies" title="Installing dependencies / Example caching dependencies">Example caching dependencies<a href="#example-caching-dependencies" aria-label="Link to heading 'Example caching dependencies'" data-heading-content="Example caching dependencies" class="anchor"></a></h3>
 <p>You can cache and restore the dependencies using the <a href="https://github.com/actions/setup-node" class="external"><code>setup-node</code> action</a>.</p>
 <p>The following example caches dependencies for npm.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
@@ -194,7 +194,7 @@ For more information, see <a href="../../concepts/runners/github-hosted-runners.
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">pnpm test
 </span></code></pre>
 <p>If you have a custom requirement or need finer controls for caching, you can use the <a href="https://github.com/marketplace/actions/cache" class="external"><code>cache</code> action</a>. For more information, see <a href="../../reference/workflows-and-actions/dependency-caching.html">Dependency caching reference</a>.</p>
-<h2 title="Building and testing your code"><a href="#building-and-testing-your-code" aria-hidden="true" class="anchor" id="building-and-testing-your-code"></a>Building and testing your code</h2>
+<h2 id="building-and-testing-your-code" title="Building and testing your code">Building and testing your code<a href="#building-and-testing-your-code" aria-label="Link to heading 'Building and testing your code'" data-heading-content="Building and testing your code" class="anchor"></a></h2>
 <p>You can use the same commands that you use locally to build and test your code. For example, if you run <code>npm run build</code> to run build steps defined in your <code>package.json</code> file and <code>npm test</code> to run your test suite, you would add those commands in your workflow file.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
@@ -206,8 +206,8 @@ For more information, see <a href="../../concepts/runners/github-hosted-runners.
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm run build --if-present
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm test
 </span></code></pre>
-<h2 title="Packaging workflow data as artifacts"><a href="#packaging-workflow-data-as-artifacts" aria-hidden="true" class="anchor" id="packaging-workflow-data-as-artifacts"></a>Packaging workflow data as artifacts</h2>
+<h2 id="packaging-workflow-data-as-artifacts" title="Packaging workflow data as artifacts">Packaging workflow data as artifacts<a href="#packaging-workflow-data-as-artifacts" aria-label="Link to heading 'Packaging workflow data as artifacts'" data-heading-content="Packaging workflow data as artifacts" class="anchor"></a></h2>
 <p>You can save artifacts from your build and test steps to view after a job completes. For example, you may need to save log files, core dumps, test results, or screenshots. For more information, see <a href="../store-and-share-data.html">Store and share data with workflow artifacts</a>.</p>
-<h2 title="Publishing to package registries"><a href="#publishing-to-package-registries" aria-hidden="true" class="anchor" id="publishing-to-package-registries"></a>Publishing to package registries</h2>
+<h2 id="publishing-to-package-registries" title="Publishing to package registries">Publishing to package registries<a href="#publishing-to-package-registries" aria-label="Link to heading 'Publishing to package registries'" data-heading-content="Publishing to package registries" class="anchor"></a></h2>
 <p>You can configure your workflow to publish your Node.js package to a package registry after your CI tests pass. For more information about publishing to npm and GitHub Packages, see <a href="../publish-packages/publish-nodejs-packages.html">Publishing Node.js packages</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

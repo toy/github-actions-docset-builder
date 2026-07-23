@@ -1,14 +1,14 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Customizing the containers used by jobs</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Manage runners</a> / <a href="index.html">Self-hosted runners</a> / </nav><h1><a href="#customizing-the-containers-used-by-jobs" aria-hidden="true" class="anchor" id="customizing-the-containers-used-by-jobs"></a>Customizing the containers used by jobs</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Customizing the containers used by jobs</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Manage runners</a> / <a href="index.html">Self-hosted runners</a> / </nav><h1 id="customizing-the-containers-used-by-jobs">Customizing the containers used by jobs<a href="#customizing-the-containers-used-by-jobs" aria-label="Link to heading 'Customizing the containers used by jobs'" data-heading-content="Customizing the containers used by jobs" class="anchor"></a></h1>
 <p>You can customize how your self-hosted runner invokes a container for a job.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>This feature is currently in public preview and is subject to change.</p>
 </div>
-<h2 title="About container customization"><a href="#about-container-customization" aria-hidden="true" class="anchor" id="about-container-customization"></a>About container customization</h2>
+<h2 id="about-container-customization" title="About container customization">About container customization<a href="#about-container-customization" aria-label="Link to heading 'About container customization'" data-heading-content="About container customization" class="anchor"></a></h2>
 <p>GitHub Actions allows you to run a job within a container, using the <code>container:</code> statement in your workflow file. For more information, see <a href="../../write-workflows/choose-where-workflows-run/run-jobs-in-a-container.html">Running jobs in a container</a>. To process container-based jobs, the self-hosted runner creates a container for each job.</p>
 <p>GitHub Actions supports commands that let you customize the way your containers are created by the self-hosted runner. For example, you can use these commands to manage the containers through Kubernetes or Podman, and you can also customize the <code>docker run</code> or <code>docker create</code> commands used to invoke the container. The customization commands are run by a script, which is automatically triggered when a specific environment variable is set on the runner. For more information, see <a href="#triggering-the-customization-script">Triggering the customization script</a> below.</p>
 <p>This customization is only available for Linux-based self-hosted runners, and root user access is not required.</p>
-<h2 title="Container customization commands"><a href="#container-customization-commands" aria-hidden="true" class="anchor" id="container-customization-commands"></a>Container customization commands</h2>
+<h2 id="container-customization-commands" title="Container customization commands">Container customization commands<a href="#container-customization-commands" aria-label="Link to heading 'Container customization commands'" data-heading-content="Container customization commands" class="anchor"></a></h2>
 <p>GitHub Actions includes the following commands for container customization:</p>
 <ul>
 <li><a href="#prepare_job"><code>prepare_job</code></a>: Called when a job is started.</li>
@@ -18,7 +18,7 @@
 </ul>
 <p>Each of these customization commands must be defined in its own JSON file. The file name must match the command name, with the extension <code>.json</code>. For example, the <code>prepare_job</code> command is defined in <code>prepare_job.json</code>. These JSON files will then be run together on the self-hosted runner, as part of the main <code>index.js</code> script. This process is described in more detail in <a href="#generating-the-customization-script">Generating the customization script</a>.</p>
 <p>These commands also include configuration arguments, explained below in more detail.</p>
-<h3 title="Container customization commands / prepare_job"><a href="#prepare_job" aria-hidden="true" class="anchor" id="prepare_job"></a><code>prepare_job</code></h3>
+<h3 id="prepare_job" title="Container customization commands / prepare_job"><code>prepare_job</code><a href="#prepare_job" aria-label="Link to heading 'prepare_job'" data-heading-content="prepare_job" class="anchor"></a></h3>
 <p>The <code>prepare_job</code> command is called when a job is started. GitHub Actions passes in any job or service containers the job has. This command will be called if you have any service or job containers in the job.</p>
 <p>GitHub Actions assumes that you will do the following tasks in the <code>prepare_job</code> command:</p>
 <ul>
@@ -35,7 +35,7 @@
 </li>
 <li>Return <code>0</code> when the health checks have succeeded and the job/service containers are started.</li>
 </ul>
-<h4><a href="#arguments-for-prepare_job" aria-hidden="true" class="anchor" id="arguments-for-prepare_job"></a>Arguments for <code>prepare_job</code></h4>
+<h4 id="arguments-for-prepare_job">Arguments for <code>prepare_job</code><a href="#arguments-for-prepare_job" aria-label="Link to heading 'Arguments for prepare_job'" data-heading-content="Arguments for prepare_job" class="anchor"></a></h4>
 <ul>
 <li><code>jobContainer</code>: <strong>Optional</strong>. An object containing information about the specified job container.
 <ul>
@@ -91,7 +91,7 @@
 </ul>
 </li>
 </ul>
-<h4><a href="#example-input-for-prepare_job" aria-hidden="true" class="anchor" id="example-input-for-prepare_job"></a>Example input for <code>prepare_job</code></h4>
+<h4 id="example-input-for-prepare_job">Example input for <code>prepare_job</code><a href="#example-input-for-prepare_job" aria-label="Link to heading 'Example input for prepare_job'" data-heading-content="Example input for prepare_job" class="anchor"></a></h4>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">command</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">prepare_job</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">responseFile</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">/users/octocat/runner/_work/{guid}.json</span><span style="color:#c0c5ce;">",
@@ -173,7 +173,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-output-for-prepare_job" aria-hidden="true" class="anchor" id="example-output-for-prepare_job"></a>Example output for <code>prepare_job</code></h4>
+<h4 id="example-output-for-prepare_job">Example output for <code>prepare_job</code><a href="#example-output-for-prepare_job" aria-label="Link to heading 'Example output for prepare_job'" data-heading-content="Example output for prepare_job" class="anchor"></a></h4>
 <p>This example output is the contents of the <code>responseFile</code> defined in the input above.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">state</span><span style="color:#c0c5ce;">": {
@@ -201,7 +201,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 title="Container customization commands / cleanup_job"><a href="#cleanup_job" aria-hidden="true" class="anchor" id="cleanup_job"></a><code>cleanup_job</code></h3>
+<h3 id="cleanup_job" title="Container customization commands / cleanup_job"><code>cleanup_job</code><a href="#cleanup_job" aria-label="Link to heading 'cleanup_job'" data-heading-content="cleanup_job" class="anchor"></a></h3>
 <p>The <code>cleanup_job</code> command is called at the end of a job. GitHub Actions assumes that you will do the following tasks in the <code>cleanup_job</code> command:</p>
 <ul>
 <li>Stop any running service or job containers (or the equivalent pod).</li>
@@ -210,9 +210,9 @@
 <li>Delete the network (if one exists).</li>
 <li>Cleanup anything else that was created for the job.</li>
 </ul>
-<h4><a href="#arguments-for-cleanup_job" aria-hidden="true" class="anchor" id="arguments-for-cleanup_job"></a>Arguments for <code>cleanup_job</code></h4>
+<h4 id="arguments-for-cleanup_job">Arguments for <code>cleanup_job</code><a href="#arguments-for-cleanup_job" aria-label="Link to heading 'Arguments for cleanup_job'" data-heading-content="Arguments for cleanup_job" class="anchor"></a></h4>
 <p>No arguments are provided for <code>cleanup_job</code>.</p>
-<h4><a href="#example-input-for-cleanup_job" aria-hidden="true" class="anchor" id="example-input-for-cleanup_job"></a>Example input for <code>cleanup_job</code></h4>
+<h4 id="example-input-for-cleanup_job">Example input for <code>cleanup_job</code><a href="#example-input-for-cleanup_job" aria-label="Link to heading 'Example input for cleanup_job'" data-heading-content="Example input for cleanup_job" class="anchor"></a></h4>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">command</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">cleanup_job</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">responseFile</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">null</span><span style="color:#c0c5ce;">,
@@ -226,9 +226,9 @@
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">args</span><span style="color:#c0c5ce;">": {}
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-output-for-cleanup_job" aria-hidden="true" class="anchor" id="example-output-for-cleanup_job"></a>Example output for <code>cleanup_job</code></h4>
+<h4 id="example-output-for-cleanup_job">Example output for <code>cleanup_job</code><a href="#example-output-for-cleanup_job" aria-label="Link to heading 'Example output for cleanup_job'" data-heading-content="Example output for cleanup_job" class="anchor"></a></h4>
 <p>No output is expected for <code>cleanup_job</code>.</p>
-<h3 title="Container customization commands / run_container_step"><a href="#run_container_step" aria-hidden="true" class="anchor" id="run_container_step"></a><code>run_container_step</code></h3>
+<h3 id="run_container_step" title="Container customization commands / run_container_step"><code>run_container_step</code><a href="#run_container_step" aria-label="Link to heading 'run_container_step'" data-heading-content="run_container_step" class="anchor"></a></h3>
 <p>The <code>run_container_step</code> command is called once for each container action in your job. GitHub Actions assumes that you will do the following tasks in the <code>run_container_step</code> command:</p>
 <ul>
 <li>Pull or build the required container (or fail if you cannot).</li>
@@ -236,7 +236,7 @@
 <li>Stream any step logs output to stdout and stderr.</li>
 <li>Cleanup the container after it executes.</li>
 </ul>
-<h4><a href="#arguments-for-run_container_step" aria-hidden="true" class="anchor" id="arguments-for-run_container_step"></a>Arguments for <code>run_container_step</code></h4>
+<h4 id="arguments-for-run_container_step">Arguments for <code>run_container_step</code><a href="#arguments-for-run_container_step" aria-label="Link to heading 'Arguments for run_container_step'" data-heading-content="Arguments for run_container_step" class="anchor"></a></h4>
 <ul>
 <li><code>image</code>: <strong>Optional</strong>. A string containing the docker image. Otherwise a dockerfile must be provided.</li>
 <li><code>dockerfile</code>: <strong>Optional</strong>. A string containing the path to the dockerfile, otherwise an image must be provided.</li>
@@ -269,7 +269,7 @@
 </li>
 <li><code>portMappings</code>: <strong>Optional</strong>. A key value hash of the <em>source:target</em> ports to map into the container.</li>
 </ul>
-<h4><a href="#example-input-for-image" aria-hidden="true" class="anchor" id="example-input-for-image"></a>Example input for image</h4>
+<h4 id="example-input-for-image">Example input for image<a href="#example-input-for-image" aria-label="Link to heading 'Example input for image'" data-heading-content="Example input for image" class="anchor"></a></h4>
 <p>If you're using a Docker image, you can specify the image name in the <code>"image":</code> parameter.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">command</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">run_container_step</span><span style="color:#c0c5ce;">",
@@ -341,7 +341,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-input-for-dockerfile" aria-hidden="true" class="anchor" id="example-input-for-dockerfile"></a>Example input for Dockerfile</h4>
+<h4 id="example-input-for-dockerfile">Example input for Dockerfile<a href="#example-input-for-dockerfile" aria-label="Link to heading 'Example input for Dockerfile'" data-heading-content="Example input for Dockerfile" class="anchor"></a></h4>
 <p>If your container is defined by a Dockerfile, this example demonstrates how to specify the path to a <code>Dockerfile</code> in your input, using the <code>"dockerfile":</code> parameter.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">command</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">run_container_step</span><span style="color:#c0c5ce;">",
@@ -413,15 +413,15 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-output-for-run_container_step" aria-hidden="true" class="anchor" id="example-output-for-run_container_step"></a>Example output for <code>run_container_step</code></h4>
+<h4 id="example-output-for-run_container_step">Example output for <code>run_container_step</code><a href="#example-output-for-run_container_step" aria-label="Link to heading 'Example output for run_container_step'" data-heading-content="Example output for run_container_step" class="anchor"></a></h4>
 <p>No output is expected for <code>run_container_step</code>.</p>
-<h3 title="Container customization commands / run_script_step"><a href="#run_script_step" aria-hidden="true" class="anchor" id="run_script_step"></a><code>run_script_step</code></h3>
+<h3 id="run_script_step" title="Container customization commands / run_script_step"><code>run_script_step</code><a href="#run_script_step" aria-label="Link to heading 'run_script_step'" data-heading-content="run_script_step" class="anchor"></a></h3>
 <p>GitHub Actions assumes that you will do the following tasks:</p>
 <ul>
 <li>Invoke the provided script inside the job container and return the exit code.</li>
 <li>Stream any step log output to stdout and stderr.</li>
 </ul>
-<h4><a href="#arguments-for-run_script_step" aria-hidden="true" class="anchor" id="arguments-for-run_script_step"></a>Arguments for <code>run_script_step</code></h4>
+<h4 id="arguments-for-run_script_step">Arguments for <code>run_script_step</code><a href="#arguments-for-run_script_step" aria-label="Link to heading 'Arguments for run_script_step'" data-heading-content="Arguments for run_script_step" class="anchor"></a></h4>
 <ul>
 <li><code>entryPointArgs</code>: <strong>Optional</strong>. A list containing the entry point arguments.</li>
 <li><code>entryPoint</code>: <strong>Optional</strong>. The container entry point to use if the default image entrypoint should be overwritten.</li>
@@ -429,7 +429,7 @@
 <li><code>workingDirectory</code>: <strong>Required</strong>. A string containing the absolute path of the working directory.</li>
 <li><code>environmentVariables</code>: <strong>Optional</strong>. Sets a map of key environment variables.</li>
 </ul>
-<h4><a href="#example-input-for-run_script_step" aria-hidden="true" class="anchor" id="example-input-for-run_script_step"></a>Example input for <code>run_script_step</code></h4>
+<h4 id="example-input-for-run_script_step">Example input for <code>run_script_step</code><a href="#example-input-for-run_script_step" aria-label="Link to heading 'Example input for run_script_step'" data-heading-content="Example input for run_script_step" class="anchor"></a></h4>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">command</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">run_script_step</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">responseFile</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">null</span><span style="color:#c0c5ce;">,
@@ -451,9 +451,9 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-output-for-run_script_step" aria-hidden="true" class="anchor" id="example-output-for-run_script_step"></a>Example output for <code>run_script_step</code></h4>
+<h4 id="example-output-for-run_script_step">Example output for <code>run_script_step</code><a href="#example-output-for-run_script_step" aria-label="Link to heading 'Example output for run_script_step'" data-heading-content="Example output for run_script_step" class="anchor"></a></h4>
 <p>No output is expected for <code>run_script_step</code>.</p>
-<h2 title="Generating the customization script"><a href="#generating-the-customization-script" aria-hidden="true" class="anchor" id="generating-the-customization-script"></a>Generating the customization script</h2>
+<h2 id="generating-the-customization-script" title="Generating the customization script">Generating the customization script<a href="#generating-the-customization-script" aria-label="Link to heading 'Generating the customization script'" data-heading-content="Generating the customization script" class="anchor"></a></h2>
 <p>GitHub has created an example repository that demonstrates how to generate customization scripts for Docker and Kubernetes.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -478,7 +478,7 @@
 </li>
 </ol>
 <p>When the resulting <code>index.js</code> is triggered by GitHub Actions, it will run the customization commands defined in the JSON files. To trigger the <code>index.js</code>, you will need to add it to your <code>ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER</code> environment variable, as described in the next section.</p>
-<h2 title="Triggering the customization script"><a href="#triggering-the-customization-script" aria-hidden="true" class="anchor" id="triggering-the-customization-script"></a>Triggering the customization script</h2>
+<h2 id="triggering-the-customization-script" title="Triggering the customization script">Triggering the customization script<a href="#triggering-the-customization-script" aria-label="Link to heading 'Triggering the customization script'" data-heading-content="Triggering the customization script" class="anchor"></a></h2>
 <p>The custom script must be located on the runner, but should not be stored in the self-hosted runner application directory (that is, the directory into which you downloaded and unpacked the runner software). The scripts are executed in the security context of the service account that's running the runner service.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -492,9 +492,9 @@
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#bf616a;">ACTIONS_RUNNER_CONTAINER_HOOKS</span><span style="color:#c0c5ce;">=</span><span style="color:#a3be8c;">/Users/octocat/runner/index.js
 </span></code></pre>
 <p>If you want to ensure that your job always runs inside a container, and subsequently always applies your container customizations, you can set the <code>ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER</code> variable on the self hosted runner to <code>true</code>. This will fail jobs that do not specify a job container.</p>
-<h2 title="Troubleshooting"><a href="#troubleshooting" aria-hidden="true" class="anchor" id="troubleshooting"></a>Troubleshooting</h2>
-<h3 title="Troubleshooting / No timeout setting"><a href="#no-timeout-setting" aria-hidden="true" class="anchor" id="no-timeout-setting"></a>No timeout setting</h3>
+<h2 id="troubleshooting" title="Troubleshooting">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
+<h3 id="no-timeout-setting" title="Troubleshooting / No timeout setting">No timeout setting<a href="#no-timeout-setting" aria-label="Link to heading 'No timeout setting'" data-heading-content="No timeout setting" class="anchor"></a></h3>
 <p>There is currently no timeout setting available for the script executed by <code>ACTIONS_RUNNER_CONTAINER_HOOKS</code>. As a result, you could consider adding timeout handling to your script.</p>
-<h3 title="Troubleshooting / Reviewing the workflow run log"><a href="#reviewing-the-workflow-run-log" aria-hidden="true" class="anchor" id="reviewing-the-workflow-run-log"></a>Reviewing the workflow run log</h3>
+<h3 id="reviewing-the-workflow-run-log" title="Troubleshooting / Reviewing the workflow run log">Reviewing the workflow run log<a href="#reviewing-the-workflow-run-log" aria-label="Link to heading 'Reviewing the workflow run log'" data-heading-content="Reviewing the workflow run log" class="anchor"></a></h3>
 <p>To confirm whether your scripts are executing, you can review the logs for that job. For more information on checking the logs, see <a href="../../monitor-workflows/use-workflow-run-logs.html#viewing-logs-to-diagnose-failures">Using workflow run logs</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

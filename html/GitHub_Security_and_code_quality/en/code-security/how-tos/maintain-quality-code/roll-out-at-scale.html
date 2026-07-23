@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Rolling out GitHub Code Quality at scale</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">How-tos</a> / <a href="index.html">Maintain quality code</a> / </nav><h1 id="rolling-out-github-code-quality-at-scale">Rolling out GitHub Code Quality at scale<a href="#rolling-out-github-code-quality-at-scale" aria-label="Link to heading 'Rolling out GitHub Code Quality at scale'" data-heading-content="Rolling out GitHub Code Quality at scale" class="anchor"></a></h1>
+<p>Bring Code Quality to every team with confidence by piloting on a small group first, then expanding once your quality thresholds are tuned.</p>
+<p>Turning Code Quality on everywhere at once means every team starts seeing Code Quality findings on their pull requests on the same day, which can be surprising and disruptive. In this tutorial, you'll learn how to roll it out in phases: introduce findings to a small group first, calibrate your thresholds, and then expand. You'll prove the value before it affects your whole organization.</p>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<ul>
+<li>An enterprise owner has allowed Code Quality in your enterprise. See <a href="../secure-at-scale/configure-enterprise-security/configure-specific-tools/allow-github-code-quality-in-enterprise.html">Allowing use of GitHub Code Quality in your enterprise</a>.</li>
+<li>You're an organization owner, so you can enable Code Quality and configure rulesets at the organization level.</li>
+</ul>
+<h2 id="plan-your-pilot" title="Plan your pilot">Plan your pilot<a href="#plan-your-pilot" aria-label="Link to heading 'Plan your pilot'" data-heading-content="Plan your pilot" class="anchor"></a></h2>
+<p><strong>Start with a small pilot group</strong> rather than your whole organization. A good pilot group is a single engineering team, or a related set of applications, that's active enough to generate meaningful findings and owned by people who can give you feedback on the results.</p>
+<p>To target that group, use your organization's <strong>Repository access</strong> setting for Code Quality. You have two good options for a pilot:</p>
+<ul>
+<li><strong>Selected repositories:</strong> Pick a fixed list of pilot repositories by hand. Best when your pilot group is small and stable.</li>
+<li><strong>Matching a filter:</strong> Enable every repository that matches criteria you define, such as a custom property like <code>code-quality-enabled: true</code>. Best when you want the pilot to grow automatically as teams tag more repositories.</li>
+</ul>
+<p>Targeting by a custom property, rather than naming repositories one by one, means you can widen the pilot later just by setting the property on more repositories. If you want to use a custom property:</p>
+<ol>
+<li>Create the custom property. See <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a>.</li>
+<li>Enable Code Quality at the organization level, for repositories matching a filter. See <a href="../../concepts/code-quality/enablement-at-scale.html#organization-level-repository-access">Code Quality enablement across organizations and enterprises</a>.</li>
+</ol>
+<h2 id="turn-on-quality-rulesets-in-evaluate-mode" title="Turn on quality rulesets in evaluate mode">Turn on quality rulesets in evaluate mode<a href="#turn-on-quality-rulesets-in-evaluate-mode" aria-label="Link to heading 'Turn on quality rulesets in evaluate mode'" data-heading-content="Turn on quality rulesets in evaluate mode" class="anchor"></a></h2>
+<p><strong>Enable your quality thresholds in evaluate mode first.</strong> In this mode, Code Quality reports which pull requests <em>would</em> be blocked, without actually blocking them, so your pilot teams can see the impact before it becomes enforcing.</p>
+<p>Set up your thresholds as an organization ruleset scoped to the pilot repositories, and leave it in evaluate mode until you've gathered enough pull request activity to judge the impact, typically <strong>a week or two</strong>. See <a href="set-pr-thresholds.html">Setting code quality thresholds for pull requests</a>.</p>
+<h2 id="tune-your-thresholds" title="Tune your thresholds">Tune your thresholds<a href="#tune-your-thresholds" aria-label="Link to heading 'Tune your thresholds'" data-heading-content="Tune your thresholds" class="anchor"></a></h2>
+<p><strong>Use the evaluate-mode results to calibrate your thresholds.</strong> Check the <strong>ruleset insights</strong> (the ruleset's history) to see exactly which pull requests would have been blocked and why. If too many pull requests would be blocked, your thresholds may be stricter than your codebase is ready for. If almost none would be blocked, you may want to tighten them. Adjust until the gate reflects the quality bar you actually want to enforce.</p>
+<h2 id="move-to-enforce-mode" title="Move to enforce mode">Move to enforce mode<a href="#move-to-enforce-mode" aria-label="Link to heading 'Move to enforce mode'" data-heading-content="Move to enforce mode" class="anchor"></a></h2>
+<p><strong>When the evaluate-mode results look right, switch your ruleset from Evaluate to Active.</strong> The thresholds now start blocking pull requests that don't meet them. Your pilot teams experience the enforced gate, giving you a final check before you widen the rollout.</p>
+<h2 id="expand-across-your-organization" title="Expand across your organization">Expand across your organization<a href="#expand-across-your-organization" aria-label="Link to heading 'Expand across your organization'" data-heading-content="Expand across your organization" class="anchor"></a></h2>
+<p><strong>Expand the rollout using what you learned from the pilot.</strong> You can widen it in two ways:</p>
+<ul>
+<li>Add repositories to your <strong>Selected repositories</strong> list, or set your custom property on more repositories that match your filter.</li>
+<li>Once you're confident in your thresholds, switch your <strong>Repository access</strong> setting to <strong>All repositories</strong> to apply Code Quality across your whole organization in a single change.</li>
+</ul>
+<p>A few things to know about how organization-level enablement behaves, so you can choose the right approach:</p>
+<ul>
+<li>Your <strong>Repository access</strong> choice applies to <strong>both existing and future repositories</strong>, so repositories created later inherit your choice automatically. This is true for <strong>All repositories</strong>, <strong>Matching a filter</strong>, and <strong>No repositories</strong>.</li>
+<li>Turn on <strong>Enforce access</strong> for a guaranteed baseline that repository administrators can't override. Leave it off, or choose <strong>Let repositories decide</strong>, to let teams opt in on their own timeline.</li>
+<li>Enabling Code Quality does <strong>not</strong> automatically turn on <strong>code coverage</strong>. Coverage is opt-in per repository. It starts reporting only after someone adds a workflow that uploads coverage data, so teams can adopt Code Quality first and add coverage later. See <a href="set-up-code-coverage.html">Setting up code coverage for your repository</a>.</li>
+</ul>
+<p>For the full list of access options and how enforcement works, see <a href="../../concepts/code-quality/enablement-at-scale.html#organization-level-repository-access">Code Quality enablement across organizations and enterprises</a>.</p>
+<h3 id="scale-programmatically" title="Expand across your organization / Scale programmatically">Scale programmatically<a href="#scale-programmatically" aria-label="Link to heading 'Scale programmatically'" data-heading-content="Scale programmatically" class="anchor"></a></h3>
+<p>For most rollouts, enabling through the UI is the best starting point: it lets you filter and target repositories directly, which is harder to reproduce in a script.</p>
+<p>If you need automation around your rollout, you can fetch Code Quality findings through the REST API, which is useful for reporting on progress as you expand. You can also enable Code Quality on repositories through the REST API, so you can script enablement across your organization instead of enabling each repository in the UI. See <a href="https://docs.github.com/en/rest/code-quality/code-quality" class="external">REST API endpoints for code quality</a>.</p>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<ul>
+<li><strong>Assess health across your organization.</strong> See <a href="explore-code-quality.html">Exploring GitHub Code Quality results in your organization</a>.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

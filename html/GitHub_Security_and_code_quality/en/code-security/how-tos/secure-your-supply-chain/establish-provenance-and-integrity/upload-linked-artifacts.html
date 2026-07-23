@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Uploading storage and deployment data to the linked artifacts page</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your supply chain</a> / <a href="index.html">Establish provenance and integrity</a> / </nav><h1><a href="#uploading-storage-and-deployment-data-to-the-linked-artifacts-page" aria-hidden="true" class="anchor" id="uploading-storage-and-deployment-data-to-the-linked-artifacts-page"></a>Uploading storage and deployment data to the linked artifacts page</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Uploading storage and deployment data to the linked artifacts page</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your supply chain</a> / <a href="index.html">Establish provenance and integrity</a> / </nav><h1 id="uploading-storage-and-deployment-data-to-the-linked-artifacts-page">Uploading storage and deployment data to the linked artifacts page<a href="#uploading-storage-and-deployment-data-to-the-linked-artifacts-page" aria-label="Link to heading 'Uploading storage and deployment data to the linked artifacts page'" data-heading-content="Uploading storage and deployment data to the linked artifacts page" class="anchor"></a></h1>
 <p>Associate packages and builds in your organization with storage and deployment data.</p>
 <p>The linked artifacts page includes storage records and deployment records for artifacts that you build in your organization. Metadata for each artifact is provided by your organization using one of the following methods:</p>
 <ul>
@@ -7,9 +7,9 @@
 <li>A custom script using the <strong>artifact metadata REST API</strong></li>
 </ul>
 <p>The available methods depend on whether you are uploading a storage record or a deployment record. For more information about record types, see <a href="../../../concepts/supply-chain-security/linked-artifacts.html#which-metadata-is-included">About linked artifacts</a>.</p>
-<h2 title="Uploading a storage record"><a href="#uploading-a-storage-record" aria-hidden="true" class="anchor" id="uploading-a-storage-record"></a>Uploading a storage record</h2>
+<h2 id="uploading-a-storage-record" title="Uploading a storage record">Uploading a storage record<a href="#uploading-a-storage-record" aria-label="Link to heading 'Uploading a storage record'" data-heading-content="Uploading a storage record" class="anchor"></a></h2>
 <p>You can upload a storage record by creating an <strong>artifact attestation</strong> or enabling an integration with <strong>JFrog Artifactory</strong>. If you don't want to use these options, you must set up a custom integration with the <strong>REST API</strong>.</p>
-<h3 title="Uploading a storage record / Attesting with GitHub Actions"><a href="#attesting-with-github-actions" aria-hidden="true" class="anchor" id="attesting-with-github-actions"></a>Attesting with GitHub Actions</h3>
+<h3 id="attesting-with-github-actions" title="Uploading a storage record / Attesting with GitHub Actions">Attesting with GitHub Actions<a href="#attesting-with-github-actions" aria-label="Link to heading 'Attesting with GitHub Actions'" data-heading-content="Attesting with GitHub Actions" class="anchor"></a></h3>
 <p>You can upload a storage record for an artifact using GitHub's first-party actions for artifact attestations. You can do this in the same workflow you use to build the artifact. These actions create signed provenance and integrity guarantees for the software you build, as well as automatically uploading a storage record to the linked artifacts page.</p>
 <p>The <a href="https://github.com/actions/attest" class="external">attest</a> action automatically creates storage records on the linked artifacts page if both:</p>
 <ul>
@@ -18,18 +18,18 @@
 </ul>
 <p>For more information on using these actions, see <a href="https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations" class="external">Using artifact attestations to establish provenance for builds</a>.</p>
 <p>If the artifact does not require attestation, or if you want to upload deployment records or additional storage metadata, see the following sections.</p>
-<h3 title="Uploading a storage record / Using the JFrog integration"><a href="#using-the-jfrog-integration" aria-hidden="true" class="anchor" id="using-the-jfrog-integration"></a>Using the JFrog integration</h3>
+<h3 id="using-the-jfrog-integration" title="Uploading a storage record / Using the JFrog integration">Using the JFrog integration<a href="#using-the-jfrog-integration" aria-label="Link to heading 'Using the JFrog integration'" data-heading-content="Using the JFrog integration" class="anchor"></a></h3>
 <p>This two-way integration automatically keeps your storage records on GitHub up to date with the artifact on JFrog. For example, attestations you create on GitHub are automatically uploaded to JFrog, and promoting an artifact to production on JFrog automatically adds the production context to the record on GitHub.</p>
 <p>For setup instructions, see <a href="https://jfrog.com/help/r/jfrog-and-github-integration-guide/get-started-with-jfrog-artifactory-and-github-integration" class="external">Get Started with JFrog Artifactory and GitHub Integration</a> in the JFrog documentation.</p>
-<h3 title="Uploading a storage record / Using the REST API"><a href="#using-the-rest-api" aria-hidden="true" class="anchor" id="using-the-rest-api"></a>Using the REST API</h3>
+<h3 id="using-the-rest-api" title="Uploading a storage record / Using the REST API">Using the REST API<a href="#using-the-rest-api" aria-label="Link to heading 'Using the REST API'" data-heading-content="Using the REST API" class="anchor"></a></h3>
 <p>For artifacts that do not need to be attested and are not stored on JFrog, you can create a custom integration using the <a href="https://docs.github.com/en/rest/orgs/artifact-metadata#create-artifact-metadata-storage-record" class="external">Create artifact metadata storage record</a> API endpoint. You should configure your system to call the endpoint whenever an artifact is published to your chosen package repository.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>If the artifact is not associated with a provenance attestation on GitHub, the <code>github_repository</code> parameter is mandatory.</p>
 </div>
-<h2 title="Uploading a deployment record"><a href="#uploading-a-deployment-record" aria-hidden="true" class="anchor" id="uploading-a-deployment-record"></a>Uploading a deployment record</h2>
+<h2 id="uploading-a-deployment-record" title="Uploading a deployment record">Uploading a deployment record<a href="#uploading-a-deployment-record" aria-label="Link to heading 'Uploading a deployment record'" data-heading-content="Uploading a deployment record" class="anchor"></a></h2>
 <p>If you monitor deployed workloads with Dynatrace or Microsoft Defender for Cloud (MDC), you can use an integration to automatically sync deployment data to the linked artifacts page. Otherwise, you must set up a custom integration with the REST API.</p>
-<h3 title="Uploading a deployment record / Using the Dynatrace integration"><a href="#using-the-dynatrace-integration" aria-hidden="true" class="anchor" id="using-the-dynatrace-integration"></a>Using the Dynatrace integration</h3>
+<h3 id="using-the-dynatrace-integration" title="Uploading a deployment record / Using the Dynatrace integration">Using the Dynatrace integration<a href="#using-the-dynatrace-integration" aria-label="Link to heading 'Using the Dynatrace integration'" data-heading-content="Using the Dynatrace integration" class="anchor"></a></h3>
 <p>You can configure Dynatrace to send deployment records to GitHub for container images running in your Dynatrace-monitored Kubernetes environments. Dynatrace maps deployed images to your repositories, then reports runtime context.</p>
 <p>In addition, deployment records from Dynatrace can include runtime risk context, such as:</p>
 <ul>
@@ -38,26 +38,26 @@
 </ul>
 <p>You can use this context in organization-level alert filtering and in security campaigns to prioritize remediation for alerts that affect internet-exposed or sensitive-data workloads.</p>
 <p>For setup instructions, see <a href="https://docs.dynatrace.com/docs/secure/threat-observability/security-events-ingest/ingest-github-advanced-security#credentials--github-app-based-authentication" class="external">GitHub Advanced Security security integration - Get Started</a> in the Dynatrace documentation.</p>
-<h3 title="Uploading a deployment record / Using the Microsoft Defender for Cloud integration"><a href="#using-the-microsoft-defender-for-cloud-integration" aria-hidden="true" class="anchor" id="using-the-microsoft-defender-for-cloud-integration"></a>Using the Microsoft Defender for Cloud integration</h3>
+<h3 id="using-the-microsoft-defender-for-cloud-integration" title="Uploading a deployment record / Using the Microsoft Defender for Cloud integration">Using the Microsoft Defender for Cloud integration<a href="#using-the-microsoft-defender-for-cloud-integration" aria-label="Link to heading 'Using the Microsoft Defender for Cloud integration'" data-heading-content="Using the Microsoft Defender for Cloud integration" class="anchor"></a></h3>
 <p>You can connect your MDC instance to your GitHub organization. MDC will automatically send deployment and runtime data to GitHub.</p>
 <p>For setup instructions, see <a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/quickstart-onboard-github" class="external">Quick Start: Connect your GitHub Environment to Microsoft Defender for Cloud</a> in the documentation for MDC.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>The integration with Microsoft Defender for Cloud is in public preview and subject to change.</p>
 </div>
-<h3 title="Uploading a deployment record / Using the REST API"><a href="#using-the-rest-api-1" aria-hidden="true" class="anchor" id="using-the-rest-api-1"></a>Using the REST API</h3>
+<h3 id="using-the-rest-api-1" title="Uploading a deployment record / Using the REST API">Using the REST API<a href="#using-the-rest-api-1" aria-label="Link to heading 'Using the REST API'" data-heading-content="Using the REST API" class="anchor"></a></h3>
 <p>The <a href="https://docs.github.com/en/rest/orgs/artifact-metadata#create-an-artifact-deployment-record" class="external">Create an artifact deployment record</a> API endpoint allows systems to send deployment data for a specific artifact to GitHub, such as its name, digest, environments, cluster, and deployment. You should call this endpoint whenever an artifact is deployed to a new staging or production environment.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>If the artifact is not associated with a provenance attestation on GitHub, the <code>github_repository</code> parameter is mandatory.</p>
 </div>
-<h2 title="Verifying an upload"><a href="#verifying-an-upload" aria-hidden="true" class="anchor" id="verifying-an-upload"></a>Verifying an upload</h2>
+<h2 id="verifying-an-upload" title="Verifying an upload">Verifying an upload<a href="#verifying-an-upload" aria-label="Link to heading 'Verifying an upload'" data-heading-content="Verifying an upload" class="anchor"></a></h2>
 <p>To check that a record has been uploaded successfully, you can view the updated artifact in your organization settings. See <a href="view-linked-artifacts.html">Auditing your organization's builds on the linked artifacts page</a>.</p>
-<h2 title="Removing unwanted records"><a href="#removing-unwanted-records" aria-hidden="true" class="anchor" id="removing-unwanted-records"></a>Removing unwanted records</h2>
+<h2 id="removing-unwanted-records" title="Removing unwanted records">Removing unwanted records<a href="#removing-unwanted-records" aria-label="Link to heading 'Removing unwanted records'" data-heading-content="Removing unwanted records" class="anchor"></a></h2>
 <p>It is not possible to delete an artifact from the linked artifacts page. However, you can update a storage record or deployment record to reflect an artifact's status. See <a href="remove-linked-artifacts.html">Removing artifacts from the linked artifacts page</a>.</p>
-<h2 title="GitHub Actions examples"><a href="#github-actions-examples" aria-hidden="true" class="anchor" id="github-actions-examples"></a>GitHub Actions examples</h2>
+<h2 id="github-actions-examples" title="GitHub Actions examples">GitHub Actions examples<a href="#github-actions-examples" aria-label="Link to heading 'GitHub Actions examples'" data-heading-content="GitHub Actions examples" class="anchor"></a></h2>
 <p>You can upload data to the linked artifacts page in the same workflow you use to build and publish an artifact.</p>
-<h3 title="GitHub Actions examples / Generating an attestation"><a href="#generating-an-attestation" aria-hidden="true" class="anchor" id="generating-an-attestation"></a>Generating an attestation</h3>
+<h3 id="generating-an-attestation" title="GitHub Actions examples / Generating an attestation">Generating an attestation<a href="#generating-an-attestation" aria-label="Link to heading 'Generating an attestation'" data-heading-content="Generating an attestation" class="anchor"></a></h3>
 <p>In the following example, we build and publish a Docker image, then use the <code>${{ steps.push.outputs.digest }}</code> output in the next step to generate a provenance attestation.</p>
 <p>The <code>attest</code> action automatically uploads a storage record to the linked artifacts page when <code>push-to-registry: true</code> is set and the workflow includes the <code>artifact-metadata: write</code> permission.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">
@@ -95,7 +95,7 @@
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">push-to-registry</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span><span style="color:#c0c5ce;">
 </span></code></pre>
-<h3 title="GitHub Actions examples / Using the REST API"><a href="#using-the-rest-api-2" aria-hidden="true" class="anchor" id="using-the-rest-api-2"></a>Using the REST API</h3>
+<h3 id="using-the-rest-api-2" title="GitHub Actions examples / Using the REST API">Using the REST API<a href="#using-the-rest-api-2" aria-label="Link to heading 'Using the REST API'" data-heading-content="Using the REST API" class="anchor"></a></h3>
 <p>Alternatively, if you are not generating an attestation, you can call the artifact metadata API directly.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">
 </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
@@ -134,6 +134,6 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">bash
 </span><span style="color:#c0c5ce;">
 </span></code></pre>
-<h2 title="Next steps"><a href="#next-steps" aria-hidden="true" class="anchor" id="next-steps"></a>Next steps</h2>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
 <p>Once you have uploaded data, teams in your organization can use the context from storage and deployment data to prioritize security alerts. See <a href="../../../tutorials/secure-your-organization/prioritize-alerts-in-production-code.html">Prioritizing Dependabot and code scanning alerts using production context</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

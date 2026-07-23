@@ -1,17 +1,17 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Building and testing PowerShell</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Build and test code</a> / </nav><h1><a href="#building-and-testing-powershell" aria-hidden="true" class="anchor" id="building-and-testing-powershell"></a>Building and testing PowerShell</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Building and testing PowerShell</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Build and test code</a> / </nav><h1 id="building-and-testing-powershell">Building and testing PowerShell<a href="#building-and-testing-powershell" aria-label="Link to heading 'Building and testing PowerShell'" data-heading-content="Building and testing PowerShell" class="anchor"></a></h1>
 <p>Learn how to create a continuous integration (CI) workflow to build and test your PowerShell project.</p>
-<h2 title="Introduction"><a href="#introduction" aria-hidden="true" class="anchor" id="introduction"></a>Introduction</h2>
+<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>This guide shows you how to use PowerShell for CI. It describes how to use Pester, install dependencies, test your module, and publish to the PowerShell Gallery.</p>
 <p>GitHub-hosted runners have a tools cache with pre-installed software, which includes PowerShell and Pester.</p>
 <p>For a full list of up-to-date software and the pre-installed versions of PowerShell and Pester, see <a href="../../concepts/runners/github-hosted-runners.html#supported-software">GitHub-hosted runners</a>.</p>
-<h2 title="Prerequisites"><a href="#prerequisites" aria-hidden="true" class="anchor" id="prerequisites"></a>Prerequisites</h2>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>You should be familiar with YAML and the syntax for GitHub Actions. For more information, see <a href="../../how-tos/write-workflows/index.html">Writing workflows</a>.</p>
 <p>We recommend that you have a basic understanding of PowerShell and Pester. For more information, see:</p>
 <ul>
 <li><a href="https://docs.microsoft.com/powershell/scripting/learn/ps101/01-getting-started" class="external">Getting started with PowerShell</a></li>
 <li><a href="https://pester.dev" class="external">Pester</a></li>
 </ul>
-<h2 title="Adding a workflow for Pester"><a href="#adding-a-workflow-for-pester" aria-hidden="true" class="anchor" id="adding-a-workflow-for-pester"></a>Adding a workflow for Pester</h2>
+<h2 id="adding-a-workflow-for-pester" title="Adding a workflow for Pester">Adding a workflow for Pester<a href="#adding-a-workflow-for-pester" aria-label="Link to heading 'Adding a workflow for Pester'" data-heading-content="Adding a workflow for Pester" class="anchor"></a></h2>
 <p>To automate your testing with PowerShell and Pester, you can add a workflow that runs every time a change is pushed to your repository. In the following example, <code>Test-Path</code> is used to check that a file called <code>resultsfile.log</code> is present.</p>
 <p>This example workflow file must be added to your repository's <code>.github/workflows/</code> directory:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Test PowerShell on Ubuntu
@@ -53,7 +53,7 @@
 </span></code></pre>
 </li>
 </ul>
-<h2 title="PowerShell module locations"><a href="#powershell-module-locations" aria-hidden="true" class="anchor" id="powershell-module-locations"></a>PowerShell module locations</h2>
+<h2 id="powershell-module-locations" title="PowerShell module locations">PowerShell module locations<a href="#powershell-module-locations" aria-label="Link to heading 'PowerShell module locations'" data-heading-content="PowerShell module locations" class="anchor"></a></h2>
 <p>The table below describes the locations for various PowerShell modules in each GitHub-hosted runner.</p>
 <div class="ghd-tool rowheaders">
 <table>
@@ -91,7 +91,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>On Ubuntu runners, Azure PowerShell modules are stored in <code>/usr/share/</code> instead of the default location of PowerShell add-on modules (i.e. <code>/usr/local/share/powershell/Modules/</code>).</p>
 </div>
-<h2 title="Installing dependencies"><a href="#installing-dependencies" aria-hidden="true" class="anchor" id="installing-dependencies"></a>Installing dependencies</h2>
+<h2 id="installing-dependencies" title="Installing dependencies">Installing dependencies<a href="#installing-dependencies" aria-label="Link to heading 'Installing dependencies'" data-heading-content="Installing dependencies" class="anchor"></a></h2>
 <p>GitHub-hosted runners have PowerShell 7 and Pester installed. You can use <code>Install-Module</code> to install additional dependencies from the PowerShell Gallery before building and testing your code.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -115,7 +115,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>By default, no repositories are trusted by PowerShell. When installing modules from the PowerShell Gallery, you must explicitly set the installation policy for <code>PSGallery</code> to <code>Trusted</code>.</p>
 </div>
-<h3 title="Installing dependencies / Caching dependencies"><a href="#caching-dependencies" aria-hidden="true" class="anchor" id="caching-dependencies"></a>Caching dependencies</h3>
+<h3 id="caching-dependencies" title="Installing dependencies / Caching dependencies">Caching dependencies<a href="#caching-dependencies" aria-label="Link to heading 'Caching dependencies'" data-heading-content="Caching dependencies" class="anchor"></a></h3>
 <p>You can cache PowerShell dependencies using a unique key, which allows you to restore the dependencies for future workflows with the <a href="https://github.com/marketplace/actions/cache" class="external"><code>cache</code></a> action. For more information, see <a href="../../reference/workflows-and-actions/dependency-caching.html">Dependency caching reference</a>.</p>
 <p>PowerShell caches its dependencies in different locations, depending on the runner's operating system. For example, the <code>path</code> location used in the following Ubuntu example will be different for a Windows operating system.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
@@ -133,9 +133,9 @@
 </span><span style="color:#a3be8c;">      Set-PSRepository PSGallery -InstallationPolicy Trusted
 </span><span style="color:#a3be8c;">      Install-Module SqlServer, PSScriptAnalyzer -ErrorAction Stop
 </span></code></pre>
-<h2 title="Testing your code"><a href="#testing-your-code" aria-hidden="true" class="anchor" id="testing-your-code"></a>Testing your code</h2>
+<h2 id="testing-your-code" title="Testing your code">Testing your code<a href="#testing-your-code" aria-label="Link to heading 'Testing your code'" data-heading-content="Testing your code" class="anchor"></a></h2>
 <p>You can use the same commands that you use locally to build and test your code.</p>
-<h3 title="Testing your code / Using PSScriptAnalyzer to lint code"><a href="#using-psscriptanalyzer-to-lint-code" aria-hidden="true" class="anchor" id="using-psscriptanalyzer-to-lint-code"></a>Using PSScriptAnalyzer to lint code</h3>
+<h3 id="using-psscriptanalyzer-to-lint-code" title="Testing your code / Using PSScriptAnalyzer to lint code">Using PSScriptAnalyzer to lint code<a href="#using-psscriptanalyzer-to-lint-code" aria-label="Link to heading 'Using PSScriptAnalyzer to lint code'" data-heading-content="Using PSScriptAnalyzer to lint code" class="anchor"></a></h3>
 <p>The following example installs <code>PSScriptAnalyzer</code> and uses it to lint all <code>ps1</code> files in the repository. For more information, see <a href="https://github.com/PowerShell/PSScriptAnalyzer" class="external">PSScriptAnalyzer on GitHub</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">lint-with-PSScriptAnalyzer</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install and run PSScriptAnalyzer
@@ -159,7 +159,7 @@
 </span><span style="color:#a3be8c;">              Write-Output "There were $($errors.Count) errors and $($warnings.Count) warnings total."
 </span><span style="color:#a3be8c;">          }
 </span></code></pre>
-<h2 title="Packaging workflow data as artifacts"><a href="#packaging-workflow-data-as-artifacts" aria-hidden="true" class="anchor" id="packaging-workflow-data-as-artifacts"></a>Packaging workflow data as artifacts</h2>
+<h2 id="packaging-workflow-data-as-artifacts" title="Packaging workflow data as artifacts">Packaging workflow data as artifacts<a href="#packaging-workflow-data-as-artifacts" aria-label="Link to heading 'Packaging workflow data as artifacts'" data-heading-content="Packaging workflow data as artifacts" class="anchor"></a></h2>
 <p>You can upload artifacts to view after a workflow completes. For example, you may need to save log files, core dumps, test results, or screenshots. For more information, see <a href="../store-and-share-data.html">Store and share data with workflow artifacts</a>.</p>
 <p>The following example demonstrates how you can use the <code>upload-artifact</code> action to archive the test results received from <code>Invoke-Pester</code>. For more information, see the <a href="https://github.com/actions/upload-artifact" class="external"><code>upload-artifact</code> action</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Upload artifact from Ubuntu
@@ -183,7 +183,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ always() }}
 </span></code></pre>
 <p>The <code>always()</code> function configures the job to continue processing even if there are test failures. For more information, see <a href="../../reference/workflows-and-actions/contexts.html#always">Contexts reference</a>.</p>
-<h2 title="Publishing to PowerShell Gallery"><a href="#publishing-to-powershell-gallery" aria-hidden="true" class="anchor" id="publishing-to-powershell-gallery"></a>Publishing to PowerShell Gallery</h2>
+<h2 id="publishing-to-powershell-gallery" title="Publishing to PowerShell Gallery">Publishing to PowerShell Gallery<a href="#publishing-to-powershell-gallery" aria-label="Link to heading 'Publishing to PowerShell Gallery'" data-heading-content="Publishing to PowerShell Gallery" class="anchor"></a></h2>
 <p>You can configure your workflow to publish your PowerShell module to the PowerShell Gallery when your CI tests pass. You can use secrets to store any tokens or credentials needed to publish your package. For more information, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 <p>The following example creates a package and uses <code>Publish-Module</code> to publish it to the PowerShell Gallery:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Publish PowerShell Module

@@ -1,0 +1,73 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Code Quality enablement across organizations and enterprises</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">Concepts</a> / <a href="index.html">Code quality</a> / </nav><h1 id="code-quality-enablement-across-organizations-and-enterprises">Code Quality enablement across organizations and enterprises<a href="#code-quality-enablement-across-organizations-and-enterprises" aria-label="Link to heading 'Code Quality enablement across organizations and enterprises'" data-heading-content="Code Quality enablement across organizations and enterprises" class="anchor"></a></h1>
+<p>GitHub Code Quality can cover one repository or thousands from a single control point, giving every team the same quality baseline and giving you the guardrails to keep it there.</p>
+<h2 id="how-enablement-works-across-your-enterprise" title="How enablement works across your enterprise">How enablement works across your enterprise<a href="#how-enablement-works-across-your-enterprise" aria-label="Link to heading 'How enablement works across your enterprise'" data-heading-content="How enablement works across your enterprise" class="anchor"></a></h2>
+<p>Code Quality is controlled at three levels, so you can decide how much autonomy to give organizations and repositories:</p>
+<ul>
+<li><strong>Enterprise:</strong> An enterprise owner must first allow Code Quality for the enterprise. Until they do, organization owners cannot enable it.</li>
+<li><strong>Organization:</strong> Organization owners control which repositories have Code Quality enabled or disabled, by granting access to all repositories, a selected list, or repositories that match a filter. They can also enforce these settings so that repository administrators cannot change them.</li>
+<li><strong>Repository:</strong> Repository administrators can enable or disable Code Quality for individual repositories, unless organization-level enforcement applies.</li>
+</ul>
+<p>When Code Quality is enabled on a repository, CodeQL analysis runs via GitHub Actions and surfaces findings in pull requests and on the default branch. Developers see quality checks and annotations on their pull requests.</p>
+<h2 id="organization-level-repository-access" title="Organization-level repository access">Organization-level repository access<a href="#organization-level-repository-access" aria-label="Link to heading 'Organization-level repository access'" data-heading-content="Organization-level repository access" class="anchor"></a></h2>
+<p>At the organization level, you control Code Quality with a single <strong>Repository access</strong> setting. This setting determines which repositories have Code Quality enabled and which have it disabled: repositories within your selection are enabled, and repositories outside your selection are disabled.</p>
+<div class="markdown-alert markdown-alert-important">
+<p class="markdown-alert-title">Important</p>
+<p>Changing the <strong>Repository access</strong> setting can both enable <strong>and</strong> disable Code Quality across many repositories at once. For example, if you enable Code Quality for repositories matching a filter, any repository that does not match the filter is disabled. Before your change is applied, a dialog shows the total number of enabled and disabled repositories, along with the billing impact.</p>
+</div>
+<h3 id="repository-access-options" title="Organization-level repository access / Repository access options">Repository access options<a href="#repository-access-options" aria-label="Link to heading 'Repository access options'" data-heading-content="Repository access options" class="anchor"></a></h3>
+<p>You can apply one of the following options at a time.</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No repositories</strong></td>
+<td>Disables Code Quality for all current and future repositories in the organization.</td>
+</tr>
+<tr>
+<td><strong>Let repositories decide</strong></td>
+<td>The organization neither enables nor disables Code Quality. Repository administrators choose whether to enable it for their own repositories. This option cannot be enforced.</td>
+</tr>
+<tr>
+<td><strong>All repositories</strong></td>
+<td>Enables Code Quality for all current and future repositories.</td>
+</tr>
+<tr>
+<td><strong>Selected repositories</strong></td>
+<td>Enables Code Quality for a specific list of repositories that you choose. Repositories you do not select are disabled, and new repositories are not enabled automatically. Best for pilots or exceptions.</td>
+</tr>
+<tr>
+<td><strong>Matching a filter</strong></td>
+<td>Enables Code Quality for repositories that match a filter you define, now and in the future. Repositories that do not match are disabled. See <a href="#filtering-repositories">Filtering repositories</a>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="filtering-repositories" title="Organization-level repository access / Filtering repositories">Filtering repositories<a href="#filtering-repositories" aria-label="Link to heading 'Filtering repositories'" data-heading-content="Filtering repositories" class="anchor"></a></h3>
+<p>When you choose <strong>Matching a filter</strong>, you create a dynamic filter that automatically enables Code Quality for existing and future repositories that match your criteria. This is useful for ongoing governance at scale.</p>
+<p>You can filter on any combination of the following criteria:</p>
+<ul>
+<li><strong>Visibility:</strong> Whether repositories are public, private, or internal. Useful for broad policies, such as enabling Code Quality for all private repositories.</li>
+<li><strong>Fork status:</strong> Whether repositories are forks. Useful when forks should not consume analysis resources.</li>
+<li><strong>Custom property:</strong> Whether repositories have a specific custom property value. For example, you could target repositories with a <code>team:platform</code> property.</li>
+</ul>
+<p>All conditions in a filter are combined with <code>AND</code>, so a repository must match every condition to be enabled. You can also exclude repositories that match specific conditions.</p>
+<h3 id="enforcing-access" title="Organization-level repository access / Enforcing access">Enforcing access<a href="#enforcing-access" aria-label="Link to heading 'Enforcing access'" data-heading-content="Enforcing access" class="anchor"></a></h3>
+<p>By default, repository administrators can change Code Quality settings for their own repositories. To prevent this, enable <strong>Enforce access</strong>.</p>
+<p>Enforcement locks in both the enabled and disabled states set by your <strong>Repository access</strong> option, so repository administrators cannot override them. This improves consistency across your organization, but reduces flexibility for individual repository administrators.</p>
+<ul>
+<li>Enforcement applies to most <strong>Repository access</strong> options you select, including <strong>No repositories</strong>, which enforces Code Quality as disabled.</li>
+<li>Enforcement is not available with <strong>Let repositories decide</strong>, which intentionally leaves the choice to repository administrators.</li>
+</ul>
+<h2 id="planning-your-rollout" title="Planning your rollout">Planning your rollout<a href="#planning-your-rollout" aria-label="Link to heading 'Planning your rollout'" data-heading-content="Planning your rollout" class="anchor"></a></h2>
+<p>Because a single <strong>Repository access</strong> setting change can enable Code Quality across many repositories at once, and each analysis consumes GitHub Actions minutes, it's worth rolling out in phases rather than all at once. As you plan, weigh a few things:</p>
+<ul>
+<li><strong>Cost and capacity.</strong> Confirm your runners can absorb the additional GitHub Actions load before you enable Code Quality broadly.</li>
+<li><strong>How much to enforce.</strong> Enforcement gives you consistent coverage and stops repository administrators opting out, but it removes their flexibility. Leaving it off lets teams opt in on their own timeline.</li>
+<li><strong>When to expand.</strong> Start with a small, representative pilot group, confirm that analysis runs smoothly and developers trust the findings, then widen your selection or filter to cover more repositories.</li>
+</ul>
+<p>For a step-by-step rollout procedure, including piloting your quality thresholds in evaluate mode before you enforce them, see <a href="/en/code-security/how-tos/maintain-quality-code/roll-out-at-scale?utm_campaign=code-quality-ga-july-2026&amp;utm_medium=docs&amp;utm_source=docs-enable-at-scale-roll-out-plan">Rolling out GitHub Code Quality at scale</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

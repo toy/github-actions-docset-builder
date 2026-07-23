@@ -1,10 +1,10 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>OpenID Connect reference</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Security</a> / </nav><h1><a href="#openid-connect-reference" aria-hidden="true" class="anchor" id="openid-connect-reference"></a>OpenID Connect reference</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>OpenID Connect reference</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Security</a> / </nav><h1 id="openid-connect-reference">OpenID Connect reference<a href="#openid-connect-reference" aria-label="Link to heading 'OpenID Connect reference'" data-heading-content="OpenID Connect reference" class="anchor"></a></h1>
 <p>Find information about using OpenID Connect (OIDC) to authenticate GitHub Actions workflows with cloud providers.</p>
-<h2 title="OIDC token claims"><a href="#oidc-token-claims" aria-hidden="true" class="anchor" id="oidc-token-claims"></a>OIDC token claims</h2>
+<h2 id="oidc-token-claims" title="OIDC token claims">OIDC token claims<a href="#oidc-token-claims" aria-label="Link to heading 'OIDC token claims'" data-heading-content="OIDC token claims" class="anchor"></a></h2>
 <p>To see all the claims supported by GitHub's OIDC provider, review the <code>claims_supported</code> entries at<br>
 <a href="https://token.actions.githubusercontent.com/.well-known/openid-configuration" class="external">https://token.actions.githubusercontent.com/.well-known/openid-configuration</a>.</p>
 <p>The OIDC token includes the following claims.</p>
-<h3 title="OIDC token claims / Standard audience, issuer, and subject claims"><a href="#standard-audience-issuer-and-subject-claims" aria-hidden="true" class="anchor" id="standard-audience-issuer-and-subject-claims"></a>Standard audience, issuer, and subject claims</h3>
+<h3 id="standard-audience-issuer-and-subject-claims" title="OIDC token claims / Standard audience, issuer, and subject claims">Standard audience, issuer, and subject claims<a href="#standard-audience-issuer-and-subject-claims" aria-label="Link to heading 'Standard audience, issuer, and subject claims'" data-heading-content="Standard audience, issuer, and subject claims" class="anchor"></a></h3>
 <table>
 <thead>
 <tr>
@@ -27,11 +27,11 @@
 <tr>
 <td><code class="keyword">sub</code></td>
 <td>Subject</td>
-<td>Defines the subject claim that is to be validated by the cloud provider. This setting is essential for making sure that access tokens are only allocated in a predictable way.</td>
+<td>Defines the subject claim that is to be validated by the cloud provider. This setting is essential for making sure that access tokens are only allocated in a predictable way. For repositories using immutable subject claims, the <code>sub</code> format includes immutable owner and repository IDs (not available on GitHub Enterprise Server).</td>
 </tr>
 </tbody>
 </table>
-<h3 title="OIDC token claims / Additional standard JOSE header parameters and claims"><a href="#additional-standard-jose-header-parameters-and-claims" aria-hidden="true" class="anchor" id="additional-standard-jose-header-parameters-and-claims"></a>Additional standard JOSE header parameters and claims</h3>
+<h3 id="additional-standard-jose-header-parameters-and-claims" title="OIDC token claims / Additional standard JOSE header parameters and claims">Additional standard JOSE header parameters and claims<a href="#additional-standard-jose-header-parameters-and-claims" aria-label="Link to heading 'Additional standard JOSE header parameters and claims'" data-heading-content="Additional standard JOSE header parameters and claims" class="anchor"></a></h3>
 <table>
 <thead>
 <tr>
@@ -89,7 +89,7 @@
 </tr>
 </tbody>
 </table>
-<h3 title="OIDC token claims / Custom claims provided by GitHub"><a href="#custom-claims-provided-by-github" aria-hidden="true" class="anchor" id="custom-claims-provided-by-github"></a>Custom claims provided by GitHub</h3>
+<h3 id="custom-claims-provided-by-github" title="OIDC token claims / Custom claims provided by GitHub">Custom claims provided by GitHub<a href="#custom-claims-provided-by-github" aria-label="Link to heading 'Custom claims provided by GitHub'" data-heading-content="Custom claims provided by GitHub" class="anchor"></a></h3>
 <table>
 <thead>
 <tr>
@@ -220,7 +220,7 @@
 </tr>
 </tbody>
 </table>
-<h2 title="OIDC claims used to define trust conditions on cloud roles"><a href="#oidc-claims-used-to-define-trust-conditions-on-cloud-roles" aria-hidden="true" class="anchor" id="oidc-claims-used-to-define-trust-conditions-on-cloud-roles"></a>OIDC claims used to define trust conditions on cloud roles</h2>
+<h2 id="oidc-claims-used-to-define-trust-conditions-on-cloud-roles" title="OIDC claims used to define trust conditions on cloud roles">OIDC claims used to define trust conditions on cloud roles<a href="#oidc-claims-used-to-define-trust-conditions-on-cloud-roles" aria-label="Link to heading 'OIDC claims used to define trust conditions on cloud roles'" data-heading-content="OIDC claims used to define trust conditions on cloud roles" class="anchor"></a></h2>
 <p>Audience and subject claims are typically used in combination while setting conditions on the cloud role/resources to scope its access to the GitHub workflows.</p>
 <ul>
 <li><strong>Audience:</strong> By default, this value uses the URL of the organization or repository owner. This can be used to set a condition that only the workflows in the specific organization can access the cloud role.</li>
@@ -232,44 +232,55 @@
 <p class="markdown-alert-title">Note</p>
 <p>To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources.</p>
 </div>
-<h2 title="Example subject claims"><a href="#example-subject-claims" aria-hidden="true" class="anchor" id="example-subject-claims"></a>Example subject claims</h2>
+<h2 id="example-subject-claims" title="Example subject claims">Example subject claims<a href="#example-subject-claims" aria-label="Link to heading 'Example subject claims'" data-heading-content="Example subject claims" class="anchor"></a></h2>
 <p>The following examples demonstrate how to use "Subject" as a condition, and explain how the "Subject" is assembled from concatenated metadata. The <a href="https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims" class="external">subject</a> uses information from the <a href="../workflows-and-actions/contexts.html#job-context"><code>job</code> context</a>, and instructs your cloud provider that access token requests may only be granted for requests from workflows running in specific branches, environments. The following sections describe some common subjects you can use.</p>
-<h3 title="Example subject claims / Filtering for a specific environment"><a href="#filtering-for-a-specific-environment" aria-hidden="true" class="anchor" id="filtering-for-a-specific-environment"></a>Filtering for a specific environment</h3>
+<h3 id="filtering-for-a-specific-environment" title="Example subject claims / Filtering for a specific environment">Filtering for a specific environment<a href="#filtering-for-a-specific-environment" aria-label="Link to heading 'Filtering for a specific environment'" data-heading-content="Filtering for a specific environment" class="anchor"></a></h3>
 <p>The subject claim includes the environment name when the job references an environment.</p>
 <p>You can configure a subject that filters for a specific <a href="../../how-tos/deploy/configure-and-manage-deployments/manage-environments.html">environment</a> name. In this example, the workflow run must have originated from a job that has an environment named <code>Production</code>, in a repository named <code>octo-repo</code> that is owned by the <code>octo-org</code> organization:</p>
 <ul>
 <li>Syntax: <code>repo:ORG-NAME/REPO-NAME:environment:ENVIRONMENT-NAME</code></li>
 <li>Example: <code>repo:octo-org/octo-repo:environment:Production</code></li>
 </ul>
-<h3 title="Example subject claims / Filtering for pull_request events"><a href="#filtering-for-pull_request-events" aria-hidden="true" class="anchor" id="filtering-for-pull_request-events"></a>Filtering for <code>pull_request</code> events</h3>
+<h3 id="filtering-for-pull_request-events" title="Example subject claims / Filtering for pull_request events">Filtering for <code>pull_request</code> events<a href="#filtering-for-pull_request-events" aria-label="Link to heading 'Filtering for pull_request events'" data-heading-content="Filtering for pull_request events" class="anchor"></a></h3>
 <p>The subject claim includes the <code>pull_request</code> string when the workflow is triggered by a pull request event, but only if the job doesn't reference an environment.</p>
 <p>You can configure a subject that filters for the <a href="../workflows-and-actions/events-that-trigger-workflows.html#pull_request"><code>pull_request</code></a> event. In this example, the workflow run must have been triggered by a <code>pull_request</code> event in a repository named <code>octo-repo</code> that is owned by the <code>octo-org</code> organization:</p>
 <ul>
 <li>Syntax: <code>repo:ORG-NAME/REPO-NAME:pull_request</code></li>
 <li>Example: <code>repo:octo-org/octo-repo:pull_request</code></li>
 </ul>
-<h3 title="Example subject claims / Filtering for a specific branch"><a href="#filtering-for-a-specific-branch" aria-hidden="true" class="anchor" id="filtering-for-a-specific-branch"></a>Filtering for a specific branch</h3>
+<h3 id="filtering-for-a-specific-branch" title="Example subject claims / Filtering for a specific branch">Filtering for a specific branch<a href="#filtering-for-a-specific-branch" aria-label="Link to heading 'Filtering for a specific branch'" data-heading-content="Filtering for a specific branch" class="anchor"></a></h3>
 <p>The subject claim includes the branch name of the workflow, but only if the job doesn't reference an environment, and if the workflow is not triggered by a pull request event.</p>
 <p>You can configure a subject that filters for a specific branch name. In this example, the workflow run must have originated from a branch named <code>demo-branch</code>, in a repository named <code>octo-repo</code> that is owned by the <code>octo-org</code> organization:</p>
 <ul>
 <li>Syntax:  <code>repo:ORG-NAME/REPO-NAME:ref:refs/heads/BRANCH-NAME</code></li>
 <li>Example: <code>repo:octo-org/octo-repo:ref:refs/heads/demo-branch</code></li>
 </ul>
-<h3 title="Example subject claims / Filtering for a specific tag"><a href="#filtering-for-a-specific-tag" aria-hidden="true" class="anchor" id="filtering-for-a-specific-tag"></a>Filtering for a specific tag</h3>
+<h3 id="filtering-for-a-specific-tag" title="Example subject claims / Filtering for a specific tag">Filtering for a specific tag<a href="#filtering-for-a-specific-tag" aria-label="Link to heading 'Filtering for a specific tag'" data-heading-content="Filtering for a specific tag" class="anchor"></a></h3>
 <p>The subject claim includes the tag name of the workflow, but only if the job doesn't reference an environment, and if the workflow is not triggered by a pull request event.</p>
 <p>You can create a subject that filters for specific tag. In this example, the workflow run must have originated with a tag named <code>demo-tag</code>, in a repository named <code>octo-repo</code> that is owned by the <code>octo-org</code> organization:</p>
 <ul>
 <li>Syntax: <code>repo:ORG-NAME/REPO-NAME:ref:refs/tags/TAG-NAME</code></li>
 <li>Example: <code>repo:octo-org/octo-repo:ref:refs/tags/demo-tag</code></li>
 </ul>
-<h3 title="Example subject claims / Filtering for metadata containing :"><a href="#filtering-for-metadata-containing-" aria-hidden="true" class="anchor" id="filtering-for-metadata-containing-"></a>Filtering for metadata containing <code>:</code></h3>
+<h3 id="filtering-for-metadata-containing-" title="Example subject claims / Filtering for metadata containing :">Filtering for metadata containing <code>:</code><a href="#filtering-for-metadata-containing-" aria-label="Link to heading 'Filtering for metadata containing :'" data-heading-content="Filtering for metadata containing :" class="anchor"></a></h3>
 <p>Any <code>:</code> within the metadata values will be replaced with <code>%3A</code> in the subject claim.</p>
 <p>You can configure a subject that includes metadata containing colons. In this example, the workflow run must have originated from a job that has an environment named <code>Production:V1</code>, in a repository named <code>octo-repo</code> that is owned by the <code>octo-org</code> organization:</p>
 <ul>
 <li>Syntax: <code>repo:ORG-NAME/REPO-NAME:environment:ENVIRONMENT-NAME</code></li>
 <li>Example: <code>repo:octo-org/octo-repo:environment:Production%3AV1</code></li>
 </ul>
-<h2 title="Configuring the subject in your cloud provider"><a href="#configuring-the-subject-in-your-cloud-provider" aria-hidden="true" class="anchor" id="configuring-the-subject-in-your-cloud-provider"></a>Configuring the subject in your cloud provider</h2>
+<h2 id="immutable-subject-claims" title="Immutable subject claims">Immutable subject claims<a href="#immutable-subject-claims" aria-label="Link to heading 'Immutable subject claims'" data-heading-content="Immutable subject claims" class="anchor"></a></h2>
+<p>The OpenID Connect (OIDC) specification requires subject (<code>sub</code>) claims to be locally unique and never reassigned. Previously, the default <code>sub</code> format used only organization and repository names. If a namespace was recycled, a different owner could create the same subject value.</p>
+<p>To help prevent this scenario, repositories created after July 15, 2026 now use an immutable default subject format that includes both the owner ID and repository ID. This rollout does not include GitHub Enterprise Server.</p>
+<ul>
+<li>Syntax: <code>repo:OWNER@OWNER-ID/REPO@REPO-ID:ref:refs/heads/BRANCH</code></li>
+<li>Previous format example: <code>repo:octo-org/octo-repo:ref:refs/heads/main</code></li>
+<li>Immutable format example: <code>repo:octo-org@123456/octo-repo@456789:ref:refs/heads/main</code></li>
+</ul>
+<p>The <code>@</code> separator is used between names and IDs because <code>@</code> cannot appear in GitHub usernames or repository names.</p>
+<p>Repositories created before July 15, 2026 keep the previous format unless you opt in to immutable subject claims. You can opt in at the organization or repository level by using the OIDC settings UI or REST API.</p>
+<p>Repository renames and transfers after July 15, 2026 also move to the immutable subject format.</p>
+<h2 id="configuring-the-subject-in-your-cloud-provider" title="Configuring the subject in your cloud provider">Configuring the subject in your cloud provider<a href="#configuring-the-subject-in-your-cloud-provider" aria-label="Link to heading 'Configuring the subject in your cloud provider'" data-heading-content="Configuring the subject in your cloud provider" class="anchor"></a></h2>
 <p>To configure the subject in your cloud provider's trust relationship, you must add the subject string to its trust configuration. The following examples demonstrate how various cloud providers can accept the same <code>repo:octo-org/octo-repo:ref:refs/heads/demo-branch</code> subject in different ways:</p>
 <table>
 <thead>
@@ -297,8 +308,35 @@
 </tr>
 </tbody>
 </table>
+<p>For repositories created after July 15, 2026, or that have opted in to immutable subject claims, the <code>sub</code> claim includes <code>owner_id</code> and <code>repo_id</code> as shown in the immutable examples. Update your trust policies to match the format your repository uses. Immutable subject claims are not available on GitHub Enterprise Server.</p>
+<table>
+<thead>
+<tr>
+<th>Cloud provider</th>
+<th>Immutable format example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amazon Web Services</td>
+<td><code class="keyword">"token.actions.githubusercontent.com:sub": "repo:octo-org@123456/octo-repo@456789:ref:refs/heads/demo-branch"</code></td>
+</tr>
+<tr>
+<td>Azure</td>
+<td><code class="keyword">repo:octo-org@123456/octo-repo@456789:ref:refs/heads/demo-branch</code></td>
+</tr>
+<tr>
+<td>Google Cloud Platform</td>
+<td><code class="keyword">(assertion.sub=='repo:octo-org@123456/octo-repo@456789:ref:refs/heads/demo-branch')</code></td>
+</tr>
+<tr>
+<td>HashiCorp Vault</td>
+<td><code class="keyword">bound_subject="repo:octo-org@123456/octo-repo@456789:ref:refs/heads/demo-branch"</code></td>
+</tr>
+</tbody>
+</table>
 <p>For more information about configuring specific cloud providers, see the guides listed in <a href="../../how-tos/secure-your-work/security-harden-deployments/index.html">Security hardening your deployments</a>.</p>
-<h2 title="Customizing the token claims"><a href="#customizing-the-token-claims" aria-hidden="true" class="anchor" id="customizing-the-token-claims"></a>Customizing the token claims</h2>
+<h2 id="customizing-the-token-claims" title="Customizing the token claims">Customizing the token claims<a href="#customizing-the-token-claims" aria-label="Link to heading 'Customizing the token claims'" data-heading-content="Customizing the token claims" class="anchor"></a></h2>
 <p>You can security harden your OIDC configuration by customizing the claims that are included with the JWT. These customizations allow you to define more granular trust conditions on your cloud roles when allowing your workflows to access resources hosted in the cloud:</p>
 <ul>
 <li>
@@ -314,13 +352,13 @@
 <p>You can include repository custom properties as claims in OIDC tokens, enabling attribute-based access control policies. See <a href="#including-repository-custom-properties-in-oidc-tokens">Including repository custom properties in OIDC tokens</a>.</p>
 </li>
 </ul>
-<h3 title="Customizing the token claims / Customizing the audience value"><a href="#customizing-the-audience-value" aria-hidden="true" class="anchor" id="customizing-the-audience-value"></a>Customizing the <code>audience</code> value</h3>
+<h3 id="customizing-the-audience-value" title="Customizing the token claims / Customizing the audience value">Customizing the <code>audience</code> value<a href="#customizing-the-audience-value" aria-label="Link to heading 'Customizing the audience value'" data-heading-content="Customizing the audience value" class="anchor"></a></h3>
 <p>When you use custom actions in your workflows, those actions may use the GitHub Actions Toolkit to enable you to supply a custom value for the <code>audience</code> claim. Some cloud providers also use this in their official login actions to enforce a default value for the <code>audience</code> claim. For example, the <a href="https://github.com/Azure/login/blob/master/action.yml" class="external">GitHub Action for Azure Login</a> provides a default <code>aud</code> value of <code>api://AzureADTokenExchange</code>, or it allows you to set a custom <code>aud</code> value in your workflows. For more information on the GitHub Actions Toolkit, see the <a href="https://github.com/actions/toolkit/tree/main/packages/core#oidc-token" class="external">OIDC token</a> section in the documentation.</p>
 <p>If you do not want to use the default <code>aud</code> value offered by an action, you can provide a custom value for the <code>audience</code> claim. This allows you to set a condition that only workflows in a specific repository or organization can access the cloud role. If the action you are using supports this, you can use the <code>with</code> keyword in your workflow to pass a custom <code>aud</code> value to the action. For more information, see <a href="../workflows-and-actions/metadata-syntax.html#inputs">Metadata syntax reference</a>.</p>
-<h3 title="Customizing the token claims / Including repository custom properties in OIDC tokens"><a href="#including-repository-custom-properties-in-oidc-tokens" aria-hidden="true" class="anchor" id="including-repository-custom-properties-in-oidc-tokens"></a>Including repository custom properties in OIDC tokens</h3>
+<h3 id="including-repository-custom-properties-in-oidc-tokens" title="Customizing the token claims / Including repository custom properties in OIDC tokens">Including repository custom properties in OIDC tokens<a href="#including-repository-custom-properties-in-oidc-tokens" aria-label="Link to heading 'Including repository custom properties in OIDC tokens'" data-heading-content="Including repository custom properties in OIDC tokens" class="anchor"></a></h3>
 <p>Organization and enterprise admins can select repository custom properties to include as claims in GitHub Actions OIDC tokens. Once a custom property is added to the OIDC configuration, every repository in the organization or enterprise that has a value set for that property will automatically include it in its OIDC tokens. The property name appears in the token prefixed with <code>repo_property_</code>.</p>
 <p>This allows you to create attribute-based access control (ABAC) policies in your cloud provider that bind directly to your repository metadata, reducing configuration drift and eliminating the need to manage separate access configuration for each repository.</p>
-<h4><a href="#claim-format" aria-hidden="true" class="anchor" id="claim-format"></a>Claim format</h4>
+<h4 id="claim-format">Claim format<a href="#claim-format" aria-label="Link to heading 'Claim format'" data-heading-content="Claim format" class="anchor"></a></h4>
 <p>Each enabled custom property appears as a separate claim in the OIDC token. The claim name is the property name prefixed with <code>repo_property_</code>.</p>
 <table>
 <thead>
@@ -344,7 +382,7 @@
 </tr>
 </tbody>
 </table>
-<h4><a href="#supported-property-types" aria-hidden="true" class="anchor" id="supported-property-types"></a>Supported property types</h4>
+<h4 id="supported-property-types">Supported property types<a href="#supported-property-types" aria-label="Link to heading 'Supported property types'" data-heading-content="Supported property types" class="anchor"></a></h4>
 <p>The following custom property types are supported as OIDC claims. The value representation in the token depends on the property type.</p>
 <table>
 <thead>
@@ -377,20 +415,20 @@
 </tr>
 </tbody>
 </table>
-<h4><a href="#multi-select-value-representation" aria-hidden="true" class="anchor" id="multi-select-value-representation"></a>Multi-select value representation</h4>
+<h4 id="multi-select-value-representation">Multi-select value representation<a href="#multi-select-value-representation" aria-label="Link to heading 'Multi-select value representation'" data-heading-content="Multi-select value representation" class="anchor"></a></h4>
 <p>When a repository has a multi-select custom property with multiple values selected, the values are joined into a single comma-separated string in the OIDC token. For example, if a repository has a <code>regions</code> property with the values <code>us-east-1</code> and <code>eu-west-1</code>, the claim appears as:</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">repo_property_regions</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">us-east-1,eu-west-1</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">} 
 </span></code></pre>
 <p>When configuring trust policies in your cloud provider, use string matching or contains checks to evaluate multi-select claims.</p>
-<h4><a href="#prerequisites-for-including-custom-properties" aria-hidden="true" class="anchor" id="prerequisites-for-including-custom-properties"></a>Prerequisites for including custom properties</h4>
+<h4 id="prerequisites-for-including-custom-properties">Prerequisites for including custom properties<a href="#prerequisites-for-including-custom-properties" aria-label="Link to heading 'Prerequisites for including custom properties'" data-heading-content="Prerequisites for including custom properties" class="anchor"></a></h4>
 <ul>
 <li>Custom properties must already be defined at the organization or enterprise level. For more information, see <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a>.</li>
 <li>You must be an organization admin or enterprise admin.</li>
 <li>After adding a custom property to the OIDC configuration, all repositories in the organization or enterprise that have a value set for that property will automatically include it in their OIDC tokens.</li>
 </ul>
-<h4><a href="#adding-a-custom-property-to-oidc-token-claims" aria-hidden="true" class="anchor" id="adding-a-custom-property-to-oidc-token-claims"></a>Adding a custom property to OIDC token claims</h4>
+<h4 id="adding-a-custom-property-to-oidc-token-claims">Adding a custom property to OIDC token claims<a href="#adding-a-custom-property-to-oidc-token-claims" aria-label="Link to heading 'Adding a custom property to OIDC token claims'" data-heading-content="Adding a custom property to OIDC token claims" class="anchor"></a></h4>
 <p>You can manage which custom properties are included in OIDC tokens using the settings UI or the REST API.</p>
 <ul>
 <li>
@@ -407,7 +445,7 @@ For request parameters and full details, see the REST API documentation for mana
 </ul>
 </li>
 </ul>
-<h4><a href="#example-token-with-custom-properties" aria-hidden="true" class="anchor" id="example-token-with-custom-properties"></a>Example token with custom properties</h4>
+<h4 id="example-token-with-custom-properties">Example token with custom properties<a href="#example-token-with-custom-properties" aria-label="Link to heading 'Example token with custom properties'" data-heading-content="Example token with custom properties" class="anchor"></a></h4>
 <p>After a custom property is added to the OIDC configuration, repositories with a value set for that property will include it in their tokens. In the following example, two custom properties (<code>business_unit</code> and <code>workspace_id</code>) are included in the token:</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">sub</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">repo:my-org/my-repo:ref:refs/heads/main</span><span style="color:#c0c5ce;">",
@@ -418,7 +456,7 @@ For request parameters and full details, see the REST API documentation for mana
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>You can use these <code>repo_property_*</code> claims as conditions in your cloud provider's trust policy. For an example, see <a href="#example-filtering-on-a-repository-custom-property">Example: Filtering on a repository custom property</a>.</p>
-<h3 title="Customizing the token claims / Customizing the subject claims for an organization or repository"><a href="#customizing-the-subject-claims-for-an-organization-or-repository" aria-hidden="true" class="anchor" id="customizing-the-subject-claims-for-an-organization-or-repository"></a>Customizing the subject claims for an organization or repository</h3>
+<h3 id="customizing-the-subject-claims-for-an-organization-or-repository" title="Customizing the token claims / Customizing the subject claims for an organization or repository">Customizing the subject claims for an organization or repository<a href="#customizing-the-subject-claims-for-an-organization-or-repository" aria-label="Link to heading 'Customizing the subject claims for an organization or repository'" data-heading-content="Customizing the subject claims for an organization or repository" class="anchor"></a></h3>
 <p>To help improve security, compliance, and standardization, you can customize the standard claims to suit your required access conditions. If your cloud provider supports conditions on subject claims, you can create a condition that checks whether the <code>sub</code> value matches the path of the reusable workflow, such as <code>"job_workflow_ref:octo-org/octo-automation/.github/workflows/oidc.yml@refs/heads/main"</code>. The exact format will vary depending on your cloud provider's OIDC configuration. To configure the matching condition on GitHub, you can use the REST API to require that the <code>sub</code> claim must always include a specific custom claim, such as <code>job_workflow_ref</code>. You can use the REST API to apply a customization template for the OIDC subject claim; for example, you can require that the <code>sub</code> claim within the OIDC token must always include a specific custom claim, such as <code>job_workflow_ref</code>. For more information, see <a href="https://docs.github.com/en/rest/actions/oidc" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -428,12 +466,13 @@ For request parameters and full details, see the REST API documentation for mana
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>The <code>sub</code> claim uses the shortened form <code>repo</code> (for example, <code>repo:ORG-NAME/REPO-NAME</code>) instead of <code>repository</code> to reference the repository.<br>
-Any <code>:</code> within the context value will be replaced with <code>%3A</code>.</p>
+Any <code>:</code> within the context value will be replaced with <code>%3A</code>.<br>
+For repositories using immutable subject claims (not available on GitHub Enterprise Server), <code>owner_id</code> and <code>repo_id</code> are always included in the <code>repo</code> segment of the <code>sub</code> claim, even when you customize claims with <code>include_claim_keys</code>. You can't remove these IDs from the immutable format.</p>
 </div>
 <p>The following example templates demonstrate various ways to customize the subject claim. To configure these settings on GitHub, admins use the REST API to specify a list of claims that must be included in the subject (<code>sub</code>) claim.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <p>To customize your subject claims, you should first create a matching condition in your cloud provider's OIDC configuration, before customizing the configuration using the REST API. Once the configuration is completed, each time a new job runs, the OIDC token generated during that job will follow the new customization template. If the matching condition doesn't exist in the cloud provider's OIDC configuration before the job runs, the generated token might not be accepted by the cloud provider, since the cloud conditions may not be synchronized.</p>
-<h4><a href="#example-allowing-repository-based-on-visibility-and-owner" aria-hidden="true" class="anchor" id="example-allowing-repository-based-on-visibility-and-owner"></a>Example: Allowing repository based on visibility and owner</h4>
+<h4 id="example-allowing-repository-based-on-visibility-and-owner">Example: Allowing repository based on visibility and owner<a href="#example-allowing-repository-based-on-visibility-and-owner" aria-label="Link to heading 'Example: Allowing repository based on visibility and owner'" data-heading-content="Example: Allowing repository based on visibility and owner" class="anchor"></a></h4>
 <p>This example template allows the <code>sub</code> claim to have a new format, using <code>repository_owner</code> and <code>repository_visibility</code>:</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">   "</span><span style="color:#a3be8c;">include_claim_keys</span><span style="color:#c0c5ce;">": [
@@ -443,7 +482,7 @@ Any <code>:</code> within the context value will be replaced with <code>%3A</cod
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include specific values for <code>repository_owner</code> and <code>repository_visibility</code>. For example: <code>"sub": "repository_owner:monalisa:repository_visibility:private"</code>. The approach lets you restrict cloud role access to only private repositories within an organization or enterprise.</p>
-<h4><a href="#example-allowing-access-to-all-repositories-with-a-specific-owner" aria-hidden="true" class="anchor" id="example-allowing-access-to-all-repositories-with-a-specific-owner"></a>Example: Allowing access to all repositories with a specific owner</h4>
+<h4 id="example-allowing-access-to-all-repositories-with-a-specific-owner">Example: Allowing access to all repositories with a specific owner<a href="#example-allowing-access-to-all-repositories-with-a-specific-owner" aria-label="Link to heading 'Example: Allowing access to all repositories with a specific owner'" data-heading-content="Example: Allowing access to all repositories with a specific owner" class="anchor"></a></h4>
 <p>This example template enables the <code>sub</code> claim to have a new format with only the value of <code>repository_owner</code>.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -454,7 +493,7 @@ Any <code>:</code> within the context value will be replaced with <code>%3A</cod
 </span><span style="color:#c0c5ce;">
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include a specific value for <code>repository_owner</code>. For example: <code>"sub": "repository_owner:monalisa"</code></p>
-<h4><a href="#example-requiring-a-reusable-workflow" aria-hidden="true" class="anchor" id="example-requiring-a-reusable-workflow"></a>Example: Requiring a reusable workflow</h4>
+<h4 id="example-requiring-a-reusable-workflow">Example: Requiring a reusable workflow<a href="#example-requiring-a-reusable-workflow" aria-label="Link to heading 'Example: Requiring a reusable workflow'" data-heading-content="Example: Requiring a reusable workflow" class="anchor"></a></h4>
 <p>This example template allows the <code>sub</code> claim to have a new format that contains the value of the <code>job_workflow_ref</code> claim. This enables an enterprise to use reusable workflows to enforce consistent deployments across its organizations and repositories.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">  {
@@ -464,7 +503,7 @@ Any <code>:</code> within the context value will be replaced with <code>%3A</cod
 </span><span style="color:#c0c5ce;">  }
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include a specific value for <code>job_workflow_ref</code>. For example: <code>"sub": "job_workflow_ref:octo-org/octo-automation/.github/workflows/oidc.yml@refs/heads/main"</code>.</p>
-<h4><a href="#example-requiring-a-reusable-workflow-and-other-claims" aria-hidden="true" class="anchor" id="example-requiring-a-reusable-workflow-and-other-claims"></a>Example: Requiring a reusable workflow and other claims</h4>
+<h4 id="example-requiring-a-reusable-workflow-and-other-claims">Example: Requiring a reusable workflow and other claims<a href="#example-requiring-a-reusable-workflow-and-other-claims" aria-label="Link to heading 'Example: Requiring a reusable workflow and other claims'" data-heading-content="Example: Requiring a reusable workflow and other claims" class="anchor"></a></h4>
 <p>The following example template combines the requirement of a specific reusable workflow with additional claims.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <p>This example also demonstrates how to use <code>"context"</code> to define your conditions. This is the part that follows the repository in the default <code>sub</code> format. For example, when the job references an environment, the context contains: <code>environment:ENVIRONMENT-NAME</code>.</p>
@@ -479,7 +518,7 @@ Any <code>:</code> within the context value will be replaced with <code>%3A</cod
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include specific values for <code>repo</code>, <code>context</code>, and <code>job_workflow_ref</code>.</p>
 <p>This customization template requires that the <code>sub</code> uses the following format: <code>repo:ORG-NAME/REPO-NAME:environment:ENVIRONMENT-NAME:job_workflow_ref:REUSABLE-WORKFLOW-PATH</code>.<br>
 For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow_ref:octo-org/octo-automation/.github/workflows/oidc.yml@refs/heads/main"</code></p>
-<h4><a href="#example-granting-access-to-a-specific-repository" aria-hidden="true" class="anchor" id="example-granting-access-to-a-specific-repository"></a>Example: Granting access to a specific repository</h4>
+<h4 id="example-granting-access-to-a-specific-repository">Example: Granting access to a specific repository<a href="#example-granting-access-to-a-specific-repository" aria-label="Link to heading 'Example: Granting access to a specific repository'" data-heading-content="Example: Granting access to a specific repository" class="anchor"></a></h4>
 <p>This example template lets you grant cloud access to all the workflows in a specific repository, across all branches/tags and environments.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -489,7 +528,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require a <code>repo</code> claim that matches the required value.</p>
-<h4><a href="#example-using-system-generated-guids" aria-hidden="true" class="anchor" id="example-using-system-generated-guids"></a>Example: Using system-generated GUIDs</h4>
+<h4 id="example-using-system-generated-guids">Example: Using system-generated GUIDs<a href="#example-using-system-generated-guids" aria-label="Link to heading 'Example: Using system-generated GUIDs'" data-heading-content="Example: Using system-generated GUIDs" class="anchor"></a></h4>
 <p>This example template enables predictable OIDC claims with system-generated GUIDs that do not change between renames of entities (such as renaming a repository).</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">  {
@@ -507,7 +546,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require a <code>repository_owner_id</code> claim that matches the required value.</p>
-<h4><a href="#example-context-value-with-" aria-hidden="true" class="anchor" id="example-context-value-with-"></a>Example: Context value with <code>:</code></h4>
+<h4 id="example-context-value-with-">Example: Context value with <code>:</code><a href="#example-context-value-with-" aria-label="Link to heading 'Example: Context value with :'" data-heading-content="Example: Context value with :" class="anchor"></a></h4>
 <p>This example demonstrates how to handle context value with <code>:</code>. For example, when the job references an environment named <code>production:eastus</code>.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -518,7 +557,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include a specific value for <code>environment</code> and <code>repository_owner</code>. For example: <code>"sub": "environment:production%3Aeastus:repository_owner:octo-org"</code>.</p>
-<h4><a href="#example-filtering-on-a-repository-custom-property" aria-hidden="true" class="anchor" id="example-filtering-on-a-repository-custom-property"></a>Example: Filtering on a repository custom property</h4>
+<h4 id="example-filtering-on-a-repository-custom-property">Example: Filtering on a repository custom property<a href="#example-filtering-on-a-repository-custom-property" aria-label="Link to heading 'Example: Filtering on a repository custom property'" data-heading-content="Example: Filtering on a repository custom property" class="anchor"></a></h4>
 <p>This example template allows the <code>sub</code> claim to include a repository custom property claim. Custom properties included in OIDC tokens appear prefixed with <code>repo_property_</code> in the token, but the <code>include_claim_keys</code> value uses the full claim name as it appears in the token.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -528,7 +567,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include a specific value for <code>repo_property_workspace_id</code>. For example: <code>"sub": "repo_property_workspace_id:ws-abc123"</code>.</p>
-<h4><a href="#resetting-organization-template-customizations" aria-hidden="true" class="anchor" id="resetting-organization-template-customizations"></a>Resetting organization template customizations</h4>
+<h4 id="resetting-organization-template-customizations">Resetting organization template customizations<a href="#resetting-organization-template-customizations" aria-label="Link to heading 'Resetting organization template customizations'" data-heading-content="Resetting organization template customizations" class="anchor"></a></h4>
 <p>This example template resets the subject claims to the default format. This template effectively opts out of any organization-level customization policy.</p>
 <p>To apply this configuration, submit a request to the API endpoint and include the required configuration in the request body. For organizations, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization" class="external">REST API endpoints for GitHub Actions OIDC</a>, and for repositories, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -539,7 +578,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>In your cloud provider's OIDC configuration, configure the <code>sub</code> condition to require that claims must include specific values for <code>repo</code> and <code>context</code>.</p>
-<h4><a href="#resetting-repository-template-customizations" aria-hidden="true" class="anchor" id="resetting-repository-template-customizations"></a>Resetting repository template customizations</h4>
+<h4 id="resetting-repository-template-customizations">Resetting repository template customizations<a href="#resetting-repository-template-customizations" aria-label="Link to heading 'Resetting repository template customizations'" data-heading-content="Resetting repository template customizations" class="anchor"></a></h4>
 <p>All repositories in an organization have the ability to opt in or opt out of (organization and repository-level) customized <code>sub</code> claim templates.</p>
 <p>To opt out a repository and reset back to the default <code>sub</code> claim format, a repository administrator must use the REST API endpoint at <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <p>To configure repositories to use the default <code>sub</code> claim format, use the <code>PUT /repos/{owner}/{repo}/actions/oidc/customization/sub</code> REST API endpoint at with the following request body.</p>
@@ -547,17 +586,17 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 </span><span style="color:#c0c5ce;">   "</span><span style="color:#a3be8c;">use_default</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">true
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h4><a href="#example-configuring-a-repository-to-use-an-organization-template" aria-hidden="true" class="anchor" id="example-configuring-a-repository-to-use-an-organization-template"></a>Example: Configuring a repository to use an organization template</h4>
+<h4 id="example-configuring-a-repository-to-use-an-organization-template">Example: Configuring a repository to use an organization template<a href="#example-configuring-a-repository-to-use-an-organization-template" aria-label="Link to heading 'Example: Configuring a repository to use an organization template'" data-heading-content="Example: Configuring a repository to use an organization template" class="anchor"></a></h4>
 <p>Once an organization has created a customized <code>sub</code> claim template, the REST API can be used to programmatically apply the template to repositories within the organization. A repository administrator can configure their repository to use the template created by the administrator of their organization.</p>
 <p>To configure the repository to use the organization's template, a repository admin must use the <code>PUT /repos/{owner}/{repo}/actions/oidc/customization/sub</code> REST API endpoint at with the following request body. For more information, see <a href="https://docs.github.com/en/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-a-repository" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">   "</span><span style="color:#a3be8c;">use_default</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">false
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h2 title="Debugging your OIDC claims"><a href="#debugging-your-oidc-claims" aria-hidden="true" class="anchor" id="debugging-your-oidc-claims"></a>Debugging your OIDC claims</h2>
+<h2 id="debugging-your-oidc-claims" title="Debugging your OIDC claims">Debugging your OIDC claims<a href="#debugging-your-oidc-claims" aria-label="Link to heading 'Debugging your OIDC claims'" data-heading-content="Debugging your OIDC claims" class="anchor"></a></h2>
 <p>You can use the <a href="https://github.com/github/actions-oidc-debugger" class="external"><code>github/actions-oidc-debugger</code></a> action to visualize the claims that would be sent, before integrating with a cloud provider. This action requests a JWT and prints the claims included within the JWT that were received from GitHub Actions.</p>
-<h2 title="Workflow permissions for the requesting the OIDC token"><a href="#workflow-permissions-for-the-requesting-the-oidc-token" aria-hidden="true" class="anchor" id="workflow-permissions-for-the-requesting-the-oidc-token"></a>Workflow permissions for the requesting the OIDC token</h2>
-<h3 title="Workflow permissions for the requesting the OIDC token / Required permission"><a href="#required-permission" aria-hidden="true" class="anchor" id="required-permission"></a>Required permission</h3>
+<h2 id="workflow-permissions-for-the-requesting-the-oidc-token" title="Workflow permissions for the requesting the OIDC token">Workflow permissions for the requesting the OIDC token<a href="#workflow-permissions-for-the-requesting-the-oidc-token" aria-label="Link to heading 'Workflow permissions for the requesting the OIDC token'" data-heading-content="Workflow permissions for the requesting the OIDC token" class="anchor"></a></h2>
+<h3 id="required-permission" title="Workflow permissions for the requesting the OIDC token / Required permission">Required permission<a href="#required-permission" aria-label="Link to heading 'Required permission'" data-heading-content="Required permission" class="anchor"></a></h3>
 <ul>
 <li>
 <p>The job or workflow must grant the <a href="../workflows-and-actions/workflow-syntax.html#permissions"><code>id-token: write</code></a> permission to allow GitHub's OIDC provider to create a JSON Web Token (JWT):</p>
@@ -569,7 +608,7 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 <p>Without <code>id-token: write</code>, the OIDC JWT ID token cannot be requested. This setting only enables fetching and setting the OIDC token; it does not grant write access to other resources.</p>
 </li>
 </ul>
-<h3 title="Workflow permissions for the requesting the OIDC token / Setting permissions"><a href="#setting-permissions" aria-hidden="true" class="anchor" id="setting-permissions"></a>Setting permissions</h3>
+<h3 id="setting-permissions" title="Workflow permissions for the requesting the OIDC token / Setting permissions">Setting permissions<a href="#setting-permissions" aria-label="Link to heading 'Setting permissions'" data-heading-content="Setting permissions" class="anchor"></a></h3>
 <ul>
 <li>
 <p>To fetch an OIDC token for a workflow, set the permission at the workflow level:</p>
@@ -588,12 +627,12 @@ For example: <code>"sub": "repo:octo-org/octo-repo:environment:prod:job_workflow
 <p>Additional permissions may be required depending on workflow needs.</p>
 </li>
 </ul>
-<h3 title="Workflow permissions for the requesting the OIDC token / Reusable workflows"><a href="#reusable-workflows" aria-hidden="true" class="anchor" id="reusable-workflows"></a>Reusable workflows</h3>
+<h3 id="reusable-workflows" title="Workflow permissions for the requesting the OIDC token / Reusable workflows">Reusable workflows<a href="#reusable-workflows" aria-label="Link to heading 'Reusable workflows'" data-heading-content="Reusable workflows" class="anchor"></a></h3>
 <ul>
 <li>For reusable workflows owned by the same user, organization, or enterprise as the caller, the OIDC token generated in the reusable workflow is accessible from the caller's context.</li>
 <li>For reusable workflows outside your enterprise or organization, set the <code>permissions</code> setting for <code>id-token</code> to <code>write</code> explicitly at the caller workflow or job level. This ensures the OIDC token is only available to intended caller workflows.</li>
 </ul>
-<h2 title="Methods for requesting the OIDC token"><a href="#methods-for-requesting-the-oidc-token" aria-hidden="true" class="anchor" id="methods-for-requesting-the-oidc-token"></a>Methods for requesting the OIDC token</h2>
+<h2 id="methods-for-requesting-the-oidc-token" title="Methods for requesting the OIDC token">Methods for requesting the OIDC token<a href="#methods-for-requesting-the-oidc-token" aria-label="Link to heading 'Methods for requesting the OIDC token'" data-heading-content="Methods for requesting the OIDC token" class="anchor"></a></h2>
 <p>Custom actions can request the OIDC token using:</p>
 <ul>
 <li>

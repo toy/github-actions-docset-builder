@@ -1,13 +1,13 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in Amazon Web Services</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1><a href="#configuring-openid-connect-in-amazon-web-services" aria-hidden="true" class="anchor" id="configuring-openid-connect-in-amazon-web-services"></a>Configuring OpenID Connect in Amazon Web Services</h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in Amazon Web Services</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1 id="configuring-openid-connect-in-amazon-web-services">Configuring OpenID Connect in Amazon Web Services<a href="#configuring-openid-connect-in-amazon-web-services" aria-label="Link to heading 'Configuring OpenID Connect in Amazon Web Services'" data-heading-content="Configuring OpenID Connect in Amazon Web Services" class="anchor"></a></h1>
 <p>Use OpenID Connect within your workflows to authenticate with Amazon Web Services.</p>
-<h2 title="Overview"><a href="#overview" aria-hidden="true" class="anchor" id="overview"></a>Overview</h2>
+<h2 id="overview" title="Overview">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
 <p>OpenID Connect (OIDC) allows your GitHub Actions workflows to access resources in Amazon Web Services (AWS), without needing to store the AWS credentials as long-lived GitHub secrets.</p>
 <p>This guide explains how to configure AWS to trust GitHub's OIDC as a federated identity, and includes a workflow example for the <a href="https://github.com/aws-actions/configure-aws-credentials" class="external"><code>aws-actions/configure-aws-credentials</code></a> that uses tokens to authenticate to AWS and access resources.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Support for custom claims for OIDC is unavailable in AWS.</p>
 </div>
-<h2 title="Prerequisites"><a href="#prerequisites" aria-hidden="true" class="anchor" id="prerequisites"></a>Prerequisites</h2>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <ul>
 <li>
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
@@ -16,13 +16,13 @@
 <p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>.</p>
 </li>
 </ul>
-<h2 title="Adding the identity provider to AWS"><a href="#adding-the-identity-provider-to-aws" aria-hidden="true" class="anchor" id="adding-the-identity-provider-to-aws"></a>Adding the identity provider to AWS</h2>
+<h2 id="adding-the-identity-provider-to-aws" title="Adding the identity provider to AWS">Adding the identity provider to AWS<a href="#adding-the-identity-provider-to-aws" aria-label="Link to heading 'Adding the identity provider to AWS'" data-heading-content="Adding the identity provider to AWS" class="anchor"></a></h2>
 <p>To add the GitHub OIDC provider to IAM, see the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html" class="external">AWS documentation</a>.</p>
 <ul>
 <li>For the provider URL: Use <code>https://token.actions.githubusercontent.com</code></li>
 <li>For the "Audience": Use <code>sts.amazonaws.com</code> if you are using the <a href="https://github.com/aws-actions/configure-aws-credentials" class="external">official action</a>.</li>
 </ul>
-<h3 title="Adding the identity provider to AWS / Configuring the role and trust policy"><a href="#configuring-the-role-and-trust-policy" aria-hidden="true" class="anchor" id="configuring-the-role-and-trust-policy"></a>Configuring the role and trust policy</h3>
+<h3 id="configuring-the-role-and-trust-policy" title="Adding the identity provider to AWS / Configuring the role and trust policy">Configuring the role and trust policy<a href="#configuring-the-role-and-trust-policy" aria-label="Link to heading 'Configuring the role and trust policy'" data-heading-content="Configuring the role and trust policy" class="anchor"></a></h3>
 <p>To configure the role and trust in IAM, see the AWS documentation <a href="https://github.com/aws-actions/configure-aws-credentials#configure-aws-credentials-for-github-actions" class="external">Configure AWS Credentials for GitHub Actions</a> and <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub" class="external">Configuring a role for GitHub OIDC identity provider</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -33,6 +33,14 @@
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">StringEquals</span><span style="color:#c0c5ce;">": {
 </span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">token.actions.githubusercontent.com:aud</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">sts.amazonaws.com</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">token.actions.githubusercontent.com:sub</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">repo:octo-org/octo-repo:ref:refs/heads/octo-branch</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>For repositories created after July 15, 2026, or that have opted in to immutable subject claims, the <code>sub</code> claim includes immutable owner and repository IDs (not available on GitHub Enterprise Server). Make sure your trust policy matches the format your repository uses. For more information, see <a href="../../../reference/security/oidc.html#immutable-subject-claims">OpenID Connect reference</a>.</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">Condition</span><span style="color:#c0c5ce;">": {
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">StringEquals</span><span style="color:#c0c5ce;">": {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">token.actions.githubusercontent.com:aud</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">sts.amazonaws.com</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">token.actions.githubusercontent.com:sub</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">repo:octo-org@123456/octo-repo@456789:ref:refs/heads/octo-branch</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
@@ -70,20 +78,20 @@
 </span><span style="color:#c0c5ce;">    ]
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h2 title="Updating your GitHub Actions workflow"><a href="#updating-your-github-actions-workflow" aria-hidden="true" class="anchor" id="updating-your-github-actions-workflow"></a>Updating your GitHub Actions workflow</h2>
+<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
 <p>To update your workflows for OIDC, you will need to make two changes to your YAML:</p>
 <ol>
 <li>Add permissions settings for the token.</li>
 <li>Use the <a href="https://github.com/aws-actions/configure-aws-credentials" class="external"><code>aws-actions/configure-aws-credentials</code></a> action to exchange the OIDC token (JWT) for a cloud access token.</li>
 </ol>
-<h3 title="Updating your GitHub Actions workflow / Adding permissions settings"><a href="#adding-permissions-settings" aria-hidden="true" class="anchor" id="adding-permissions-settings"></a>Adding permissions settings</h3>
+<h3 id="adding-permissions-settings" title="Updating your GitHub Actions workflow / Adding permissions settings">Adding permissions settings<a href="#adding-permissions-settings" aria-label="Link to heading 'Adding permissions settings'" data-heading-content="Adding permissions settings" class="anchor"></a></h3>
 <p>The job or workflow run requires a <code>permissions</code> setting with <a href="../../../tutorials/authenticate-with-github_token.html#modifying-the-permissions-for-the-github_token"><code>id-token: write</code></a> to allow GitHub's OIDC provider to create a JSON Web Token for every run.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Setting <code>id-token: write</code> in the workflow’s permissions does not give the workflow permission to modify or write to any resources. Instead, it only allows the workflow to request (fetch) and use (set) an OIDC token for an action or step. This token is then used to authenticate with external services using a short-lived access token.</p>
 </div>
-<p>For detailed information on required permissions, configuration examples, and advanced scenarios, see <a href="../../../reference/security/oidc.html##workflow-permissions-for-the-requesting-the-oidc-token">OpenID Connect reference</a>.</p>
-<h3 title="Updating your GitHub Actions workflow / Requesting the access token"><a href="#requesting-the-access-token" aria-hidden="true" class="anchor" id="requesting-the-access-token"></a>Requesting the access token</h3>
+<p>For detailed information on required permissions, configuration examples, and advanced scenarios, see <a href="../../../reference/security/oidc.html#workflow-permissions-for-the-requesting-the-oidc-token">OpenID Connect reference</a>.</p>
+<h3 id="requesting-the-access-token" title="Updating your GitHub Actions workflow / Requesting the access token">Requesting the access token<a href="#requesting-the-access-token" aria-label="Link to heading 'Requesting the access token'" data-heading-content="Requesting the access token" class="anchor"></a></h3>
 <p>The <code>aws-actions/configure-aws-credentials</code> action receives a JWT from the GitHub OIDC provider, and then requests an access token from AWS. For more information, see the AWS <a href="https://github.com/aws-actions/configure-aws-credentials" class="external">documentation</a>.</p>
 <ul>
 <li><code>BUCKET-NAME</code>: Replace this with the name of your S3 bucket.</li>
@@ -123,7 +131,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
 </span><span style="color:#a3be8c;">          aws s3 cp ./index.html s3://${{ env.BUCKET_NAME }}/
 </span></code></pre>
-<h2 title="Further reading"><a href="#further-reading" aria-hidden="true" class="anchor" id="further-reading"></a>Further reading</h2>
+<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>
 <li><a href="oidc-with-reusable-workflows.html">Using OpenID Connect with reusable workflows</a></li>
 <li><a href="../../../reference/runners/self-hosted-runners.html">Self-hosted runners reference</a></li>
