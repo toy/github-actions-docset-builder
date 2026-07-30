@@ -325,7 +325,7 @@
 <p class="markdown-alert-title">Warning</p>
 <p>When using the whole <code>github</code> context, be mindful that it includes sensitive information such as <code>github.token</code>. GitHub masks secrets when they are printed to the console, but you should be cautious when exporting or printing the context.<br>
 [!WARNING]<br>
-When creating workflows and actions, you should always consider whether your code might execute untrusted input from possible attackers. Certain contexts should be treated as untrusted input, as an attacker could insert their own malicious content. For more information, see <a href="../security/secure-use.html#understanding-the-risk-of-script-injections">Secure use reference</a>.</p>
+When creating workflows and actions, you should always consider whether your code might execute untrusted input from possible attackers. Certain contexts should be treated as untrusted input, as an attacker could insert their own malicious content. For more information, see <a href="../security/secure-use.html#good-practices-for-mitigating-script-injection-attacks">Secure use reference</a>.</p>
 </div>
 <table>
 <thead>
@@ -394,7 +394,7 @@ When creating workflows and actions, you should always consider whether your cod
 <tr>
 <td><code class="keyword">github.event</code></td>
 <td><code>object</code></td>
-<td>The full event webhook payload. You can access individual properties of the event using this context. This object is identical to the webhook payload of the event that triggered the workflow run, and is different for each event. The webhooks for each GitHub Actions event is linked in <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>. For example, for a workflow run triggered by the <a href="events-that-trigger-workflows.html#push"><code>push</code> event</a>, this object contains the contents of the <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#push" class="external">push webhook payload</a>.</td>
+<td>The full event webhook payload. You can access individual properties of the event using this context. This object is identical to the webhook payload of the event that triggered the workflow run, and is different for each event. The webhooks for each GitHub Actions event is linked in <a href="events-that-trigger-workflows.html#workflow_call">Events that trigger workflows</a>. For example, for a workflow run triggered by the <a href="events-that-trigger-workflows.html#push"><code>push</code> event</a>, this object contains the contents of the <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#push" class="external">push webhook payload</a>.</td>
 </tr>
 <tr>
 <td><code class="keyword">github.event_name</code></td>
@@ -656,7 +656,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo 'Hi ${{ env.mascot }}'  </span><span style="color:#65737e;"># Hi Tux
 </span></code></pre>
 <h2 id="vars-context" title="vars context"><code>vars</code> context<a href="#vars-context" aria-label="Link to heading 'vars context'" data-heading-content="vars context" class="anchor"></a></h2>
-<p>The <code>vars</code> context contains custom configuration variables set at the organization, repository, and environment levels. For more information about defining configuration variables for use in multiple workflows, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-variables.html#defining-variables-for-multiple-workflows">Store information in variables</a>.</p>
+<p>The <code>vars</code> context contains custom configuration variables set at the organization, repository, and environment levels. For more information about defining configuration variables for use in multiple workflows, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-variables.html#defining-configuration-variables-for-multiple-workflows">Store information in variables</a>.</p>
 <h3 id="example-contents-of-the-vars-context" title="Example contents of the vars context">Example contents of the <code>vars</code> context<a href="#example-contents-of-the-vars-context" aria-label="Link to heading 'Example contents of the vars context'" data-heading-content="Example contents of the vars context" class="anchor"></a></h3>
 <p>The contents of the <code>vars</code> context is a mapping of configuration variable names to their values.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
@@ -1045,7 +1045,7 @@ When creating workflows and actions, you should always consider whether your cod
 <tr>
 <td><code class="keyword">runner.tool_cache</code></td>
 <td><code>string</code></td>
-<td>The path to the directory containing preinstalled tools for GitHub-hosted runners. For more information, see <a href="../../concepts/runners/github-hosted-runners.html#supported-software">GitHub-hosted runners</a>.</td>
+<td>The path to the directory containing preinstalled tools for GitHub-hosted runners. For more information, see <a href="../../concepts/runners/github-hosted-runners.html#preinstalled-software-for-github-owned-images">GitHub-hosted runners</a>.</td>
 </tr>
 <tr>
 <td><code class="keyword">runner.debug</code></td>
@@ -1261,7 +1261,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">os</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">ubuntu-latest</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">windows-latest</span><span style="color:#c0c5ce;">]
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">node</span><span style="color:#c0c5ce;">: [</span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">16</span><span style="color:#c0c5ce;">]
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.node }}
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Output node version
@@ -1347,7 +1347,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Failed to build and deploy"
 </span></code></pre>
 <h2 id="inputs-context" title="inputs context"><code>inputs</code> context<a href="#inputs-context" aria-label="Link to heading 'inputs context'" data-heading-content="inputs context" class="anchor"></a></h2>
-<p>The <code>inputs</code> context contains input properties passed to an action, to a reusable workflow, or to a manually triggered workflow. For reusable workflows, the input names and types are defined in the <a href="events-that-trigger-workflows.html#workflow-reuse-events"><code>workflow_call</code> event configuration</a> of a reusable workflow, and the input values are passed from <a href="workflow-syntax.html#jobsjob_idwith"><code>jobs.&lt;job_id&gt;.with</code></a> in an external workflow that calls the reusable workflow. For manually triggered workflows, the inputs are defined in the <a href="events-that-trigger-workflows.html#workflow_dispatch"><code>workflow_dispatch</code> event configuration</a> of a workflow.</p>
+<p>The <code>inputs</code> context contains input properties passed to an action, to a reusable workflow, or to a manually triggered workflow. For reusable workflows, the input names and types are defined in the <a href="events-that-trigger-workflows.html"><code>workflow_call</code> event configuration</a> of a reusable workflow, and the input values are passed from <a href="workflow-syntax.html#jobsjob_idwith"><code>jobs.&lt;job_id&gt;.with</code></a> in an external workflow that calls the reusable workflow. For manually triggered workflows, the inputs are defined in the <a href="events-that-trigger-workflows.html#workflow_dispatch"><code>workflow_dispatch</code> event configuration</a> of a workflow.</p>
 <p>The properties in the <code>inputs</code> context are defined in the workflow file. They are only available in a <a href="../../how-tos/reuse-automations/reuse-workflows.html">reusable workflow</a> or in a workflow triggered by the <a href="events-that-trigger-workflows.html#workflow_dispatch"><code>workflow_dispatch</code> event</a></p>
 <table>
 <thead>

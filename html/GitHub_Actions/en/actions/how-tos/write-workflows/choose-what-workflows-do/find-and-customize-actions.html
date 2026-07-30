@@ -33,7 +33,7 @@
 </ol>
 <p>You can also enable Dependabot version updates for the actions that you add to your workflow. For more information, see <a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/auto-update-actions" class="external">Keeping your actions up to date with Dependabot</a>.</p>
 <h3 id="adding-an-action-from-the-same-repository" title="Adding an action to your workflow / Adding an action from the same repository">Adding an action from the same repository<a href="#adding-an-action-from-the-same-repository" aria-label="Link to heading 'Adding an action from the same repository'" data-heading-content="Adding an action from the same repository" class="anchor"></a></h3>
-<p>If an action is defined in the same repository where your workflow file uses the action, you can reference the action with either the ‌<code>{owner}/{repo}@{ref}</code> or <code>./path/to/dir</code> syntax in your workflow file.</p>
+<p>If an action is defined in the same repository where your workflow file uses the action, you can reference the action with the <code>$/path/to/dir</code> self repository reference, or with the <code>{owner}/{repo}@{ref}</code> or <code>./path/to/dir</code> syntax in your workflow file. The <code>$/</code> syntax is not available in GitHub Enterprise Server.</p>
 <p>Example repository file structure:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">|-- hello-world (repository)
 </span><span style="color:#c0c5ce;">|   |__ .github
@@ -43,8 +43,19 @@
 </span><span style="color:#c0c5ce;">|           |__ hello-world-action
 </span><span style="color:#c0c5ce;">|               └── action.yml
 </span></code></pre>
-<p>The path is relative (<code>./</code>) to the default working directory (<code>github.workspace</code>, <code>$GITHUB_WORKSPACE</code>). If the action checks out the repository to a location different than the workflow, the relative path used for local actions must be updated.</p>
-<p>Example workflow file:</p>
+<p>We recommend referencing the action with the <code>$/path/to/dir</code> self repository reference. This resolves to the same repository at the running commit, so you do not need to check out the repository first. For more information about how <code>$/</code> compares to <code>{owner}/{repo}@{ref}</code> and <code>./</code>, see <a href="../../../reference/workflows-and-actions/workflow-syntax.html#example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended">Workflow syntax for GitHub Actions</a>.</p>
+<p>Example workflow file using <code>$/</code>:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># This step references an action in the same repository at the
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># running commit. No repository checkout is required.
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Use hello-world-action
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/actions/hello-world-action
+</span></code></pre>
+<p>You can also reference the action with the relative <code>./path/to/dir</code> syntax, but it is more error-prone. The path is relative (<code>./</code>) to the default working directory (<code>github.workspace</code>, <code>$GITHUB_WORKSPACE</code>), so it requires a checkout step, and if the action checks out the repository to a location different than the workflow, the relative path must be updated.</p>
+<p>Example workflow file using <code>./</code>:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
@@ -64,7 +75,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
-</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span></code></pre>
 <h3 id="referencing-a-container-on-docker-hub" title="Adding an action to your workflow / Referencing a container on Docker Hub">Referencing a container on Docker Hub<a href="#referencing-a-container-on-docker-hub" aria-label="Link to heading 'Referencing a container on Docker Hub'" data-heading-content="Referencing a container on Docker Hub" class="anchor"></a></h3>
 <p>If an action is defined in a published Docker container image on Docker Hub, you must reference the action with the <code>docker://{image}:{tag}</code> syntax in your workflow file. To protect your code and data, we strongly recommend you verify the integrity of the Docker container image from Docker Hub before using it in your workflow.</p>
@@ -99,7 +110,7 @@
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/javascript-action@main
 </span></code></pre>
-<p>For more information, see <a href="../../../concepts/workflows-and-actions/custom-actions.html#using-release-management-for-actions">About custom actions</a>.</p>
+<p>For more information, see <a href="../../create-and-publish-actions/manage-custom-actions.html#using-release-management-for-actions">Managing custom actions</a>.</p>
 <h2 id="using-inputs-and-outputs-with-an-action" title="Using inputs and outputs with an action">Using inputs and outputs with an action<a href="#using-inputs-and-outputs-with-an-action" aria-label="Link to heading 'Using inputs and outputs with an action'" data-heading-content="Using inputs and outputs with an action" class="anchor"></a></h2>
 <p>An action often accepts or requires inputs and generates outputs that you can use. For example, an action might require you to specify a path to a file, the name of a label, or other data it will use as part of the action processing.</p>
 <p>To see the inputs and outputs of an action, check the <code>action.yml</code> in the root directory of the repository.</p>

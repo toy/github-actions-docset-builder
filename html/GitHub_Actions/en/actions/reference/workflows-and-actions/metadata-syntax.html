@@ -201,6 +201,8 @@
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@main
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># References a subdirectory in a public GitHub repository at a specific branch, ref, or SHA
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/aws/ec2@main
+</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># References an action in the same repository at the running commit
+</span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/actions/my-action
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># References a local action
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">./.github/actions/my-action
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># References a docker public registry action
@@ -208,6 +210,8 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># Reference a docker image published on docker hub
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">docker://alpine:3.8
 </span></code></pre>
+<p>To reference an action stored in the same repository as your composite action, use the <code>$/</code> self repository reference, as shown in the <code>$/.github/actions/my-action</code> example above. It resolves to that repository at the running commit, so you do not need to check out the repository first, and it must not include an <code>@{ref}</code> suffix. The <code>$/</code> syntax is not available in GitHub Enterprise Server.</p>
+<p>For a comparison of <code>$/</code>, <code>{owner}/{repo}@{ref}</code>, and <code>./</code>, see <a href="workflow-syntax.html#example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended">Workflow syntax for GitHub Actions</a>.</p>
 <h4 id="runsstepswith"><code>runs.steps[*].with</code><a href="#runsstepswith" aria-label="Link to heading 'runs.steps[*].with'" data-heading-content="runs.steps[*].with" class="anchor"></a></h4>
 <p><strong>Optional</strong> A <code>map</code> of the input parameters defined by the action. Each input parameter is a key/value pair. For more information, see <a href="#example-specifying-inputs">Example: Specifying inputs</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">runs</span><span style="color:#c0c5ce;">:

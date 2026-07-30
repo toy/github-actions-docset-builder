@@ -1,8 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Using OpenID Connect with reusable workflows</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1 id="using-openid-connect-with-reusable-workflows">Using OpenID Connect with reusable workflows<a href="#using-openid-connect-with-reusable-workflows" aria-label="Link to heading 'Using OpenID Connect with reusable workflows'" data-heading-content="Using OpenID Connect with reusable workflows" class="anchor"></a></h1>
 <p>You can use reusable workflows with OIDC to standardize and security harden your deployment steps.</p>
 <h2 id="about-reusable-workflows" title="About reusable workflows">About reusable workflows<a href="#about-reusable-workflows" aria-label="Link to heading 'About reusable workflows'" data-heading-content="About reusable workflows" class="anchor"></a></h2>
-<p>Rather than copying and pasting deployment jobs from one workflow to another, you can create a reusable workflow that performs the deployment steps. A reusable workflow can be used by another workflow if it meets one of the access requirements described in <a href="../../reuse-automations/reuse-workflows.html#access-to-reusable-workflows">Reuse workflows</a>.</p>
-<p>You should be familiar with the concepts described in <a href="../../reuse-automations/reuse-workflows.html">Reuse workflows</a> and <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
+<p>Rather than copying and pasting deployment jobs from one workflow to another, you can create a reusable workflow that performs the deployment steps. A reusable workflow can be used by another workflow if it meets one of the access requirements described in <a href="../../../reference/workflows-and-actions/reusing-workflow-configurations.html#access-to-reusable-workflows">Reusing workflow configurations</a>.</p>
+<p>You should be familiar with the concepts described in <a href="../../reuse-automations/reuse-workflows.html">Reuse workflows</a> and <a href="../../../reference/security/oidc.html#customizing-the-token-claims">OpenID Connect reference</a>.</p>
 <h2 id="defining-the-trust-conditions" title="Defining the trust conditions">Defining the trust conditions<a href="#defining-the-trust-conditions" aria-label="Link to heading 'Defining the trust conditions'" data-heading-content="Defining the trust conditions" class="anchor"></a></h2>
 <p>When combined with OpenID Connect (OIDC), reusable workflows let you enforce consistent deployments across your repository, organization, or enterprise. You can do this by defining trust conditions on cloud roles based on reusable workflows. The available options will vary depending on your cloud provider:</p>
 <ul>
@@ -10,13 +10,13 @@
 <p><strong>Using <code>job_workflow_ref</code>:</strong></p>
 <ul>
 <li>To create trust conditions based on reusable workflows, your cloud provider must support custom claims for <code>job_workflow_ref</code>. This allows your cloud provider to identify which repository the job originally came from.</li>
-<li>For clouds that only support the standard claims (audience (<code>aud</code>) and subject (<code>sub</code>)), you can use the API to customize the <code>sub</code> claim to include <code>job_workflow_ref</code>. For more information, see <a href="../../../concepts/security/openid-connect.html#customizing-the-token-claims">OpenID Connect</a>. Support for custom claims is currently available for Google Cloud Platform and HashiCorp Vault.</li>
+<li>For clouds that only support the standard claims (audience (<code>aud</code>) and subject (<code>sub</code>)), you can use the API to customize the <code>sub</code> claim to include <code>job_workflow_ref</code>. For more information, see <a href="../../../reference/security/oidc.html#customizing-the-token-claims">OpenID Connect reference</a>. Support for custom claims is currently available for Google Cloud Platform and HashiCorp Vault.</li>
 </ul>
 </li>
 <li>
 <p><strong>Customizing the token claims:</strong></p>
 <ul>
-<li>You can configure more granular trust conditions by customizing the subject (<code>sub</code>) claim that's included with the JWT. For more information, see <a href="../../../concepts/security/openid-connect.html#customizing-the-token-claims">OpenID Connect</a>.</li>
+<li>You can configure more granular trust conditions by customizing the subject (<code>sub</code>) claim that's included with the JWT. For more information, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</li>
 </ul>
 </li>
 </ul>

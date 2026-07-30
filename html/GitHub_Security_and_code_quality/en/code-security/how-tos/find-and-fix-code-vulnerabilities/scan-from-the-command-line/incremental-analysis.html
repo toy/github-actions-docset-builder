@@ -155,7 +155,7 @@
 </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">exclude</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">tags contain</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">exclude-from-incremental
 </span></code></pre>
-<p>For more information, see <a href="../../../reference/code-scanning/workflow-configuration-options.html#filtering-the-queries-in-a-codeql-pack">Workflow configuration options for code scanning</a>.</p>
+<p>For more information, see <a href="../../../tutorials/customize-code-scanning/create-query-suites.html#filtering-the-queries-in-a-query-suite">Creating CodeQL query suites</a>.</p>
 <h3 id="step-5-filter-the-sarif-output" title="Diff-informed analysis / Step 5: Filter the SARIF output">Step 5: Filter the SARIF output<a href="#step-5-filter-the-sarif-output" aria-label="Link to heading 'Step 5: Filter the SARIF output'" data-heading-content="Step 5: Filter the SARIF output" class="anchor"></a></h3>
 <p>After CodeQL generates the SARIF file, you must filter the output on the CI side to remove results whose locations fall outside the diff ranges.</p>
 <p>For each result in the SARIF, check whether any of its <code>locations</code> or <code>relatedLocations</code> intersect with a diff range for that file. A location intersects a range when <code>range.startLine &lt;= location.endLine</code> and <code>location.startLine &lt;= range.endLine</code>. The special case <code>range.startLine == range.endLine == 0</code> matches any location in the file. Make sure SARIF artifact locations are resolved to the same absolute path format used in the diff ranges before comparing.</p>

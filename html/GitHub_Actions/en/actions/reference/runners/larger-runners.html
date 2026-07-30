@@ -181,4 +181,51 @@
 <p class="markdown-alert-title">Note</p>
 <p>If runners are unused for more than 90 days, their IP address ranges are automatically removed and cannot be recovered.</p>
 </div>
+<h2 id="communication-requirements-for-larger-runners" title="Communication requirements for larger runners">Communication requirements for larger runners<a href="#communication-requirements-for-larger-runners" aria-label="Link to heading 'Communication requirements for larger runners'" data-heading-content="Communication requirements for larger runners" class="anchor"></a></h2>
+<p>A larger runner must establish connections to GitHub-owned endpoints to perform essential communication operations. In addition, your runner may require access to additional networks that you specify or utilize within an action.</p>
+<p>To ensure proper communications for larger runners between networks within your configuration, ensure that the following communications are allowed.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Some of the domains listed are configured using <code>CNAME</code> records. Some firewalls might require you to add rules recursively for all <code>CNAME</code> records. Note that the <code>CNAME</code> records might change in the future, and that only the domains listed will remain constant.</p>
+</div>
+<p><strong>Needed for essential operations:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">github.com
+</span><span style="color:#c0c5ce;">api.github.com
+</span><span style="color:#c0c5ce;">*.actions.githubusercontent.com
+</span></code></pre>
+<p><strong>Needed for downloading actions:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeload.github.com
+</span></code></pre>
+<p><strong>Needed for uploading/downloading job summaries, logs, workflow artifacts, and caches:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">results-receiver.actions.githubusercontent.com
+</span><span style="color:#c0c5ce;">*.blob.core.windows.net
+</span></code></pre>
+<p><strong>Needed for runner version updates:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">objects.githubusercontent.com
+</span><span style="color:#c0c5ce;">objects-origin.githubusercontent.com
+</span><span style="color:#c0c5ce;">github-releases.githubusercontent.com
+</span><span style="color:#c0c5ce;">github-registry-files.githubusercontent.com
+</span></code></pre>
+<p><strong>Needed for retrieving OIDC tokens:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">*.actions.githubusercontent.com
+</span></code></pre>
+<p><strong>Needed for downloading or publishing packages or containers to GitHub Packages:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">*.pkg.github.com
+</span><span style="color:#c0c5ce;">pkg-containers.githubusercontent.com
+</span><span style="color:#c0c5ce;">ghcr.io
+</span></code></pre>
+<p><strong>Needed for Git Large File Storage</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">github-cloud.githubusercontent.com
+</span><span style="color:#c0c5ce;">github-cloud.s3.amazonaws.com
+</span></code></pre>
+<p><strong>Needed for jobs for Dependabot updates</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">dependabot-actions.githubapp.com
+</span></code></pre>
+<p><strong>Needed for downloading release assets:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">release-assets.githubusercontent.com
+</span></code></pre>
+<p><strong>Needed for VNet:</strong></p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">api.snapcraft.io
+</span><span style="color:#c0c5ce;">*.core.windows.net
+</span></code></pre>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

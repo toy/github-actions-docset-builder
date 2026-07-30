@@ -67,7 +67,7 @@
 </span></code></pre>
 <h2 id="onevent_nametypes" title="on.<event_name>.types"><code>on.&lt;event_name&gt;.types</code><a href="#onevent_nametypes" aria-label="Link to heading 'on.<event_name>.types'" data-heading-content="on.<event_name>.types" class="anchor"></a></h2>
 <p>Use <code>on.&lt;event_name&gt;.types</code> to define the type of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the <code>label</code> is triggered when a label is <code>created</code>, <code>edited</code>, or <code>deleted</code>. The <code>types</code> keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the <code>types</code> keyword is unnecessary.</p>
-<p>You can use an array of event <code>types</code>. For more information about each event and their activity types, see <a href="events-that-trigger-workflows.html#available-events">Events that trigger workflows</a>.</p>
+<p>You can use an array of event <code>types</code>. For more information about each event and their activity types, see <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">label</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">types</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">created</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">edited</span><span style="color:#c0c5ce;">]
@@ -557,7 +557,7 @@
 </tr>
 <tr>
 <td><code>id-token</code></td>
-<td>Fetch an OpenID Connect (OIDC) token. This requires <code>id-token: write</code>. For more information, see <a href="../../concepts/security/openid-connect.html#updating-your-actions-for-oidc">OpenID Connect</a></td>
+<td>Fetch an OpenID Connect (OIDC) token. This requires <code>id-token: write</code>. For more information, see <a href="../../concepts/security/openid-connect.html#updating-your-workflows-for-oidc">OpenID Connect</a></td>
 </tr>
 <tr>
 <td></td>
@@ -645,7 +645,7 @@
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">: {}
 </span></code></pre>
 <h4 id="changing-the-permissions-in-a-forked-repository">Changing the permissions in a forked repository<a href="#changing-the-permissions-in-a-forked-repository" aria-label="Link to heading 'Changing the permissions in a forked repository'" data-heading-content="Changing the permissions in a forked repository" class="anchor"></a></h4>
-<p>You can use the <code>permissions</code> key to add and remove read permissions for forked repositories, but typically you can't grant write access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-private-repository-forks" class="external">Managing GitHub Actions settings for a repository</a>.</p>
+<p>You can use the <code>permissions</code> key to add and remove read permissions for forked repositories, but typically you can't grant write access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <h2 id="how-permissions-are-calculated-for-a-workflow-job" title="How permissions are calculated for a workflow job">How permissions are calculated for a workflow job<a href="#how-permissions-are-calculated-for-a-workflow-job" aria-label="Link to heading 'How permissions are calculated for a workflow job'" data-heading-content="How permissions are calculated for a workflow job" class="anchor"></a></h2>
 <p>The permissions for the <code>GITHUB_TOKEN</code> are initially set to the default setting for the enterprise, organization, or repository. If the default is set to the restricted permissions at any of these levels then this will apply to the relevant repositories. For example, if you choose the restricted default at the organization level then all repositories in that organization will use the restricted permissions as the default. The permissions are then adjusted based on any configuration within the workflow file, first at the workflow level and then at the job level. Finally, if the workflow was triggered by a pull request event other than <code>pull_request_target</code> from a forked repository, and the <strong>Send write tokens to workflows from pull requests</strong> setting is not selected, the permissions are adjusted to change any write permissions to read only.</p>
 <h3 id="setting-the-github_token-permissions-for-all-jobs-in-a-workflow" title="How permissions are calculated for a workflow job / Setting the GITHUB_TOKEN permissions for all jobs in a workflow">Setting the <code>GITHUB_TOKEN</code> permissions for all jobs in a workflow<a href="#setting-the-github_token-permissions-for-all-jobs-in-a-workflow" aria-label="Link to heading 'Setting the GITHUB_TOKEN permissions for all jobs in a workflow'" data-heading-content="Setting the GITHUB_TOKEN permissions for all jobs in a workflow" class="anchor"></a></h3>
@@ -662,7 +662,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#d08770;">...
 </span></code></pre>
 <h3 id="using-the-permissions-key-for-forked-repositories" title="How permissions are calculated for a workflow job / Using the permissions key for forked repositories">Using the <code>permissions</code> key for forked repositories<a href="#using-the-permissions-key-for-forked-repositories" aria-label="Link to heading 'Using the permissions key for forked repositories'" data-heading-content="Using the permissions key for forked repositories" class="anchor"></a></h3>
-<p>You can use the <code>permissions</code> key to add and remove <code>read</code> permissions for forked repositories, but typically you can't grant <code>write</code> access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-private-repository-forks" class="external">Managing GitHub Actions settings for a repository</a>.</p>
+<p>You can use the <code>permissions</code> key to add and remove <code>read</code> permissions for forked repositories, but typically you can't grant <code>write</code> access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <h3 id="permissions-for-workflow-runs-triggered-by-dependabot" title="How permissions are calculated for a workflow job / Permissions for workflow runs triggered by Dependabot">Permissions for workflow runs triggered by Dependabot<a href="#permissions-for-workflow-runs-triggered-by-dependabot" aria-label="Link to heading 'Permissions for workflow runs triggered by Dependabot'" data-heading-content="Permissions for workflow runs triggered by Dependabot" class="anchor"></a></h3>
 <p>Workflow runs triggered by Dependabot pull requests run as if they are from a forked repository, and therefore use a read-only <code>GITHUB_TOKEN</code>. These workflow runs cannot access any secrets. For information about strategies to keep these workflows secure, see <a href="../security/secure-use.html">Secure use reference</a>.</p>
 <h2 id="env" title="env"><code>env</code><a href="#env" aria-label="Link to heading 'env'" data-heading-content="env" class="anchor"></a></h2>
@@ -954,7 +954,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </tr>
 <tr>
 <td><code>id-token</code></td>
-<td>Fetch an OpenID Connect (OIDC) token. This requires <code>id-token: write</code>. For more information, see <a href="../../concepts/security/openid-connect.html#updating-your-actions-for-oidc">OpenID Connect</a></td>
+<td>Fetch an OpenID Connect (OIDC) token. This requires <code>id-token: write</code>. For more information, see <a href="../../concepts/security/openid-connect.html#updating-your-workflows-for-oidc">OpenID Connect</a></td>
 </tr>
 <tr>
 <td></td>
@@ -1042,7 +1042,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">: {}
 </span></code></pre>
 <h4 id="changing-the-permissions-in-a-forked-repository-1">Changing the permissions in a forked repository<a href="#changing-the-permissions-in-a-forked-repository-1" aria-label="Link to heading 'Changing the permissions in a forked repository'" data-heading-content="Changing the permissions in a forked repository" class="anchor"></a></h4>
-<p>You can use the <code>permissions</code> key to add and remove read permissions for forked repositories, but typically you can't grant write access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-private-repository-forks" class="external">Managing GitHub Actions settings for a repository</a>.</p>
+<p>You can use the <code>permissions</code> key to add and remove read permissions for forked repositories, but typically you can't grant write access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <h4 id="example-setting-the-github_token-permissions-for-one-job-in-a-workflow">Example: Setting the <code>GITHUB_TOKEN</code> permissions for one job in a workflow<a href="#example-setting-the-github_token-permissions-for-one-job-in-a-workflow" aria-label="Link to heading 'Example: Setting the GITHUB_TOKEN permissions for one job in a workflow'" data-heading-content="Example: Setting the GITHUB_TOKEN permissions for one job in a workflow" class="anchor"></a></h4>
 <p>This example shows permissions being set for the <code>GITHUB_TOKEN</code> that will only apply to the job named <code>stale</code>. Write access is granted for the <code>issues</code> and <code>pull-requests</code> permissions. All other permissions will have no access.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1104,7 +1104,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">14</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install -g bats
@@ -1398,7 +1398,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">build-runners
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">14</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install -g bats
@@ -1416,7 +1416,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">labels</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-24.04-16core
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">14</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install -g bats
@@ -1835,9 +1835,51 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/aws/ec2@main
 </span></code></pre>
+<h3 id="example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended" title="jobs.<job_id>.steps[*].uses / Example: Using an action in the same repository as the workflow at the running commit (recommended)">Example: Using an action in the same repository as the workflow at the running commit (recommended)<a href="#example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow at the running commit (recommended)'" data-heading-content="Example: Using an action in the same repository as the workflow at the running commit (recommended)" class="anchor"></a></h3>
+<p><code>$/path/to/action</code></p>
+<p>The <code>$/</code> prefix is the self repository reference. It references an action stored in the same repository as the workflow or action that is currently running, and resolves to that repository at the running commit (the same SHA as the running workflow or action). You do not need to check out the repository first, so it is the recommended way to reference an action within its own repository.</p>
+<p>The <code>$/</code> syntax is not available in GitHub Enterprise Server.</p>
+<p>A <code>$/</code> reference must not include an <code>@{ref}</code> suffix. The ref is always the commit the running workflow or action is using, so a reference such as <code>$/actions/my-action@v1</code> is invalid.</p>
+<p><code>$/</code> always resolves against the repository of the file it appears in, not the repository that called it. For example, if a reusable workflow in one repository is called by a workflow in another repository, a <code>$/</code> reference in the called workflow resolves to the called workflow's repository, not the calling workflow's repository. This makes <code>$/</code> reliable for action composition, where a relative <code>./</code> path would instead resolve against whatever is checked out in the caller's workspace. For using <code>$/</code> in a composite action's steps, see <a href="metadata-syntax.html#runsstepsuses">Metadata syntax reference</a>.</p>
+<p>The following table compares the ways to reference an action.</p>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Resolves to</th>
+<th>Recommended for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">$/path/to/action</code></td>
+<td>The same repository as the running workflow or action, at the running commit</td>
+<td>Actions in the same repository</td>
+</tr>
+<tr>
+<td><code class="keyword">{owner}/{repo}@{ref}</code></td>
+<td>The specified repository at the specified ref</td>
+<td>Actions in another repository</td>
+</tr>
+<tr>
+<td><code class="keyword">./path/to/action</code></td>
+<td>A path in the runner's checked-out workspace, relative to the default working directory (<code>${{ github.workspace }}</code>)</td>
+<td>Edge cases only</td>
+</tr>
+</tbody>
+</table>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">push</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># References an action in the same repository at the running commit
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/actions/hello-world-action
+</span></code></pre>
 <h3 id="example-using-an-action-in-the-same-repository-as-the-workflow" title="jobs.<job_id>.steps[*].uses / Example: Using an action in the same repository as the workflow">Example: Using an action in the same repository as the workflow<a href="#example-using-an-action-in-the-same-repository-as-the-workflow" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow'" data-heading-content="Example: Using an action in the same repository as the workflow" class="anchor"></a></h3>
 <p><code>./path/to/dir</code></p>
-<p>The path to the directory that contains the action in your workflow's repository. You must check out your repository before using the action.</p>
+<p>The path to the directory that contains the action in your workflow's repository. You must check out your repository before using the action, and the <code>./</code> path resolves against the runner's workspace rather than the repository of the running workflow. For most cases, use the <code>$/</code> syntax shown above instead.</p>
 <p>Example repository file structure:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">|-- hello-world (repository)
 </span><span style="color:#c0c5ce;">|   |__ .github
@@ -1888,7 +1930,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">docker://gcr.io/cloud-builders/gradle
 </span></code></pre>
 <h3 id="example-using-an-action-inside-a-different-private-repository-than-the-workflow" title="jobs.<job_id>.steps[*].uses / Example: Using an action inside a different private repository than the workflow">Example: Using an action inside a different private repository than the workflow<a href="#example-using-an-action-inside-a-different-private-repository-than-the-workflow" aria-label="Link to heading 'Example: Using an action inside a different private repository than the workflow'" data-heading-content="Example: Using an action inside a different private repository than the workflow" class="anchor"></a></h3>
-<p>If the action is in an internal repository, or in a private repository configured to allow access from your workflow's repository, you can reference the action directly. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-an-internal-repository" class="external">Managing GitHub Actions settings for a repository</a> and <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-a-private-repository" class="external">Managing GitHub Actions settings for a repository</a>.</p>
+<p>If the action is in an internal repository, or in a private repository configured to allow access from your workflow's repository, you can reference the action directly. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository" class="external">Managing GitHub Actions settings for a repository</a> and <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-a-private-repository" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <p>If the action isn't in a repository configured to allow access, you need to check out the repository and reference the action locally. Generate a personal access token and add the token as a secret. The following example shows this method for referencing an action. For more information, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a> and <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 <p>Replace <code>PERSONAL_ACCESS_TOKEN</code> in the example with the name of your secret.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -2246,7 +2288,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>The group above is equivalent to declaring each step with <code>background: true</code> followed by a <code>wait</code> step.</p>
 <h2 id="jobsjob_idtimeout-minutes" title="jobs.<job_id>.timeout-minutes"><code>jobs.&lt;job_id&gt;.timeout-minutes</code><a href="#jobsjob_idtimeout-minutes" aria-label="Link to heading 'jobs.<job_id>.timeout-minutes'" data-heading-content="jobs.<job_id>.timeout-minutes" class="anchor"></a></h2>
 <p>The maximum number of minutes to let a job run before GitHub automatically cancels it. Default: 360</p>
-<p>If the timeout exceeds the job execution time limit for the runner, the job will be canceled when the execution time limit is met instead. For more information about job execution time limits, see <a href="../../concepts/billing-and-usage.html#usage-limits">Billing and usage</a> for GitHub-hosted runners and <a href="../limits.html">Actions limits</a> for self-hosted runner usage limits.</p>
+<p>If the timeout exceeds the job execution time limit for the runner, the job will be canceled when the execution time limit is met instead. For more information about job execution time limits, see <a href="../../concepts/billing-and-usage.html#usage-limits-and-policy">Billing and usage</a> for GitHub-hosted runners and <a href="../limits.html">Actions limits</a> for self-hosted runner usage limits.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>The <code>GITHUB_TOKEN</code> expires when a job finishes or after a maximum of 24 hours. For self-hosted runners, the token may be the limiting factor if the job timeout is greater than 24 hours. For more information on the <code>GITHUB_TOKEN</code>, see <a href="../../tutorials/authenticate-with-github_token.html">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>.</p>
@@ -2266,7 +2308,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">matrix</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: [</span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">]
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.version }}
 </span></code></pre>
@@ -2286,7 +2328,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: [</span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">]
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.os }}
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.version }}
 </span></code></pre>
@@ -2328,7 +2370,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">            </span><span style="color:#bf616a;">npm</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">6
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.os }}
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
-</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v4
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.node }}
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.npm }}
@@ -2580,17 +2622,21 @@ When more than one default setting is defined with the same name, GitHub uses th
 <h2 id="jobsjob_iduses" title="jobs.<job_id>.uses"><code>jobs.&lt;job_id&gt;.uses</code><a href="#jobsjob_iduses" aria-label="Link to heading 'jobs.<job_id>.uses'" data-heading-content="jobs.<job_id>.uses" class="anchor"></a></h2>
 <p>The location and version of a reusable workflow file to run as a job. Use one of the following syntaxes:</p>
 <ul>
+<li><code>$/.github/workflows/{filename}</code> for a reusable workflow in the same repository. This is the recommended syntax for referencing a reusable workflow in the same repository. This syntax is not available in GitHub Enterprise Server.</li>
 <li><code>{owner}/{repo}/.github/workflows/{filename}@{ref}</code> for reusable workflows in public and private repositories.</li>
 <li><code>./.github/workflows/{filename}</code> for reusable workflows in the same repository.</li>
 </ul>
-<p>In the first option, <code>{ref}</code> can be a SHA, a release tag, or a branch name. If a release tag and a branch have the same name, the release tag takes precedence over the branch name. Using the commit SHA is the safest option for stability and security. For more information, see <a href="../security/secure-use.html#reusing-third-party-workflows">Secure use reference</a>.</p>
-<p>If you use the second syntax option (without <code>{owner}/{repo}</code> and <code>@{ref}</code>) the called workflow is from the same commit as the caller workflow. Ref prefixes such as <code>refs/heads</code> and <code>refs/tags</code> are not allowed. You cannot use contexts or expressions in this keyword.</p>
+<p>When you reference a reusable workflow with <code>{owner}/{repo}</code> and <code>@{ref}</code>, the <code>{ref}</code> can be a SHA, a release tag, or a branch name. If a release tag and a branch have the same name, the release tag takes precedence over the branch name. Using the commit SHA is the safest option for stability and security. For more information, see <a href="../security/secure-use.html#reusing-third-party-workflows">Secure use reference</a>.</p>
+<p>When you reference a reusable workflow in the same repository using <code>$/</code> or <code>./</code> (without <code>{owner}/{repo}</code> and <code>@{ref}</code>), the called workflow is from the same commit as the caller workflow. A <code>$/</code> reference must not include an <code>@{ref}</code> suffix, and <code>$/</code> is not available in GitHub Enterprise Server. Ref prefixes such as <code>refs/heads</code> and <code>refs/tags</code> are not allowed. You cannot use contexts or expressions in this keyword.</p>
 <h3 id="example-of-jobsjob_iduses" title="Example of jobs.<job_id>.uses">Example of <code>jobs.&lt;job_id&gt;.uses</code><a href="#example-of-jobsjob_iduses" aria-label="Link to heading 'Example of jobs.<job_id>.uses'" data-heading-content="Example of jobs.<job_id>.uses" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-1-in-local-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/this-repo/.github/workflows/workflow-1.yml@172239021f7ba04fe7327647b213799853a9eb89
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-2-in-local-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">./.github/workflows/workflow-2.yml
+</span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># The `$/` syntax is not available in GitHub Enterprise Server.
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-in-same-repo-at-running-commit</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/workflows/workflow-2.yml
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-in-another-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/another-repo/.github/workflows/workflow.yml@v1
 </span></code></pre>

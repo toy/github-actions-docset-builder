@@ -9,7 +9,7 @@
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
 </li>
 <li>
-<p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>.</p>
+<p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../reference/security/oidc.html#oidc-claims-used-to-define-trust-conditions-on-cloud-roles">OpenID Connect reference</a>.</p>
 </li>
 </ul>
 <h2 id="adding-the-identity-provider-to-hashicorp-vault" title="Adding the identity provider to HashiCorp Vault">Adding the identity provider to HashiCorp Vault<a href="#adding-the-identity-provider-to-hashicorp-vault" aria-label="Link to heading 'Adding the identity provider to HashiCorp Vault'" data-heading-content="Adding the identity provider to HashiCorp Vault" class="anchor"></a></h2>
@@ -57,7 +57,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 <li><code>ttl</code> defines the validity of the resulting access token.</li>
 <li>Ensure that the <code>bound_claims</code> parameter is defined for your security requirements, and has at least one condition. Optionally, you can also set the <code>bound_subject</code> as well as the <code>bound_audiences</code> parameter.</li>
 <li>To check arbitrary claims in the received JWT payload, the <code>bound_claims</code> parameter contains a set of claims and their required values. In the above example, the role will accept any incoming authentication requests from the <code>repo-name</code> repository owned by the <code>user-or-org-name</code> account.</li>
-<li>To see all the available claims supported by GitHub's OIDC provider, see <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>.</li>
+<li>To see all the available claims supported by GitHub's OIDC provider, see <a href="../../../reference/security/oidc.html#oidc-token-claims">OpenID Connect reference</a>.</li>
 </ul>
 <p>For more information, see the HashiCorp Vault <a href="https://www.vaultproject.io/docs/auth/jwt" class="external">documentation</a>.</p>
 <h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
@@ -68,7 +68,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 </ol>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
-<p>When environments are used in workflows or in OIDC policies, we recommend adding protection rules to the environment for additional security. For example, you can configure deployment rules on an environment to restrict which branches and tags can deploy to the environment or access environment secrets. For more information, see <a href="../../deploy/configure-and-manage-deployments/manage-environments.html#deployment-protection-rules">Managing environments for deployment</a>.</p>
+<p>When environments are used in workflows or in OIDC policies, we recommend adding protection rules to the environment for additional security. For example, you can configure deployment rules on an environment to restrict which branches and tags can deploy to the environment or access environment secrets. For more information, see <a href="../../deploy/configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a>.</p>
 </div>
 <p>To add OIDC integration to your workflows that allow them to access secrets in Vault, you will need to add the following code changes:</p>
 <ul>

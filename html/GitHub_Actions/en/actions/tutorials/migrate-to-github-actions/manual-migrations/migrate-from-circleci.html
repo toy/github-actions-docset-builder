@@ -13,7 +13,7 @@
 <p>When migrating from CircleCI, consider the following differences:</p>
 <ul>
 <li>CircleCI’s automatic test parallelism automatically groups tests according to user-specified rules or historical timing information. This functionality is not built into GitHub Actions.</li>
-<li>Actions that execute in Docker containers are sensitive to permissions problems since containers have a different mapping of users. You can avoid many of these problems by not using the <code>USER</code> instruction in your <em>Dockerfile</em>. For more information about the Docker filesystem on GitHub-hosted runners, see <a href="../../../concepts/runners/github-hosted-runners.html#docker-container-filesystem">GitHub-hosted runners</a>.</li>
+<li>Actions that execute in Docker containers are sensitive to permissions problems since containers have a different mapping of users. You can avoid many of these problems by not using the <code>USER</code> instruction in your <em>Dockerfile</em>. For more information about the Docker filesystem on GitHub-hosted runners, see <a href="../../../reference/runners/github-hosted-runners.html#docker-container-filesystem">GitHub-hosted runners reference</a>.</li>
 </ul>
 <h2 id="migrating-workflows-and-jobs" title="Migrating workflows and jobs">Migrating workflows and jobs<a href="#migrating-workflows-and-jobs" aria-label="Link to heading 'Migrating workflows and jobs'" data-heading-content="Migrating workflows and jobs" class="anchor"></a></h2>
 <p>CircleCI defines <code>workflows</code> in the <em>config.yml</em> file, which allows you to configure more than one workflow. GitHub requires one workflow file per workflow, and as a consequence, does not require you to declare <code>workflows</code>. You'll need to create a new workflow file for each workflow configured in <em>config.yml</em>.</p>
@@ -25,8 +25,8 @@
 <p>Both CircleCI and GitHub Actions support running steps inside of a Docker image.</p>
 <p>CircleCI provides a set of pre-built images with common dependencies. These images have the <code>USER</code> set to <code>circleci</code>, which causes permissions to conflict with GitHub Actions.</p>
 <p>We recommend that you move away from CircleCI's pre-built images when you migrate to GitHub Actions. In many cases, you can use actions to install the additional dependencies you need.</p>
-<p>For more information about the Docker filesystem, see <a href="../../../concepts/runners/github-hosted-runners.html#docker-container-filesystem">GitHub-hosted runners</a>.</p>
-<p>For more information about the tools and packages available on GitHub-hosted runner images, see <a href="../../../concepts/runners/github-hosted-runners.html#supported-software">GitHub-hosted runners</a>.</p>
+<p>For more information about the Docker filesystem, see <a href="../../../reference/runners/github-hosted-runners.html#docker-container-filesystem">GitHub-hosted runners reference</a>.</p>
+<p>For more information about the tools and packages available on GitHub-hosted runner images, see <a href="../../../concepts/runners/github-hosted-runners.html#preinstalled-software-for-github-owned-images">GitHub-hosted runners</a>.</p>
 <h2 id="using-variables-and-secrets" title="Using variables and secrets">Using variables and secrets<a href="#using-variables-and-secrets" aria-label="Link to heading 'Using variables and secrets'" data-heading-content="Using variables and secrets" class="anchor"></a></h2>
 <p>CircleCI and GitHub Actions support setting variables in the configuration file and creating secrets using the CircleCI or GitHub UI.</p>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/variables.html#default-environment-variables">Variables reference</a> and <a href="../../../how-tos/write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>

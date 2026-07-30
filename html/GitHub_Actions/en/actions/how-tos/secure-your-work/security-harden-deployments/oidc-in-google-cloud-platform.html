@@ -9,7 +9,7 @@
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
 </li>
 <li>
-<p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">OpenID Connect</a>.</p>
+<p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../reference/security/oidc.html#oidc-claims-used-to-define-trust-conditions-on-cloud-roles">OpenID Connect reference</a>.</p>
 </li>
 </ul>
 <p>For repositories created after July 15, 2026, and repository renames or transfers after that date, use an immutable default OIDC <code>sub</code> claim that includes owner and repository IDs (not available on GitHub Enterprise Server). Existing repositories keep the previous format unless they opt in. For more information, see <a href="../../../reference/security/oidc.html#immutable-subject-claims">OpenID Connect reference</a>.</p>
@@ -22,7 +22,7 @@
 </ol>
 <p>Additional guidance for configuring the identity provider:</p>
 <ul>
-<li>For security hardening, make sure you've reviewed <a href="../../../concepts/security/openid-connect.html#configuring-the-oidc-trust-with-the-cloud">Configuring the OIDC trust with the cloud</a>. For an example, see <a href="../../../concepts/security/openid-connect.html#configuring-the-subject-in-your-cloud-provider">Configuring the subject in your cloud provider</a>.</li>
+<li>For security hardening, make sure you've reviewed <a href="../../../reference/security/oidc.html#oidc-claims-used-to-define-trust-conditions-on-cloud-roles">OpenID Connect reference</a>. For an example, see <a href="../../../reference/security/oidc.html#configuring-the-subject-in-your-cloud-provider">OpenID Connect reference</a>.</li>
 <li>For the service account to be available for configuration, it needs to be assigned to the <code>roles/iam.workloadIdentityUser</code> role. For more information, see <a href="https://cloud.google.com/iam/docs/workload-identity-federation?_ga=2.114275588.-285296507.1634918453#conditions" class="external">the GCP documentation</a>.</li>
 <li>The Issuer URL to use: <code>https://token.actions.githubusercontent.com</code></li>
 </ul>
@@ -34,7 +34,7 @@
 </ol>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
-<p>When environments are used in workflows or in OIDC policies, we recommend adding protection rules to the environment for additional security. For example, you can configure deployment rules on an environment to restrict which branches and tags can deploy to the environment or access environment secrets. For more information, see <a href="../../deploy/configure-and-manage-deployments/manage-environments.html#deployment-protection-rules">Managing environments for deployment</a>.</p>
+<p>When environments are used in workflows or in OIDC policies, we recommend adding protection rules to the environment for additional security. For example, you can configure deployment rules on an environment to restrict which branches and tags can deploy to the environment or access environment secrets. For more information, see <a href="../../deploy/configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a>.</p>
 </div>
 <h3 id="adding-permissions-settings" title="Updating your GitHub Actions workflow / Adding permissions settings">Adding permissions settings<a href="#adding-permissions-settings" aria-label="Link to heading 'Adding permissions settings'" data-heading-content="Adding permissions settings" class="anchor"></a></h3>
 <p>The job or workflow run requires a <code>permissions</code> setting with <a href="../../../tutorials/authenticate-with-github_token.html#modifying-the-permissions-for-the-github_token"><code>id-token: write</code></a> to allow GitHub's OIDC provider to create a JSON Web Token for every run.</p>

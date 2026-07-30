@@ -93,17 +93,21 @@
 <p><a href="../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_iduses"><code>jobs.&lt;job_id&gt;.uses</code></a></p>
 <p>You reference reusable workflow files using one of the following syntaxes:</p>
 <ul>
+<li><code>$/.github/workflows/{filename}</code> for a reusable workflow in the same repository. This is the recommended syntax for referencing a reusable workflow in the same repository. This syntax is not available in GitHub Enterprise Server.</li>
 <li><code>{owner}/{repo}/.github/workflows/{filename}@{ref}</code> for reusable workflows in public and private repositories.</li>
 <li><code>./.github/workflows/{filename}</code> for reusable workflows in the same repository.</li>
 </ul>
-<p>In the first option, <code>{ref}</code> can be a SHA, a release tag, or a branch name. If a release tag and a branch have the same name, the release tag takes precedence over the branch name. Using the commit SHA is the safest option for stability and security. For more information, see <a href="../../reference/security/secure-use.html#reusing-third-party-workflows">Secure use reference</a>.</p>
-<p>If you use the second syntax option (without <code>{owner}/{repo}</code> and <code>@{ref}</code>) the called workflow is from the same commit as the caller workflow. Ref prefixes such as <code>refs/heads</code> and <code>refs/tags</code> are not allowed. You cannot use contexts or expressions in this keyword.</p>
+<p>When you reference a reusable workflow with <code>{owner}/{repo}</code> and <code>@{ref}</code>, the <code>{ref}</code> can be a SHA, a release tag, or a branch name. If a release tag and a branch have the same name, the release tag takes precedence over the branch name. Using the commit SHA is the safest option for stability and security. For more information, see <a href="../../reference/security/secure-use.html#reusing-third-party-workflows">Secure use reference</a>.</p>
+<p>When you reference a reusable workflow in the same repository using <code>$/</code> or <code>./</code> (without <code>{owner}/{repo}</code> and <code>@{ref}</code>), the called workflow is from the same commit as the caller workflow. A <code>$/</code> reference must not include an <code>@{ref}</code> suffix, and <code>$/</code> is not available in GitHub Enterprise Server. Ref prefixes such as <code>refs/heads</code> and <code>refs/tags</code> are not allowed. You cannot use contexts or expressions in this keyword.</p>
 <p>You can call multiple workflows, referencing each in a separate job.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-1-in-local-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/this-repo/.github/workflows/workflow-1.yml@172239021f7ba04fe7327647b213799853a9eb89
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-2-in-local-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">./.github/workflows/workflow-2.yml
+</span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># The `$/` syntax is not available in GitHub Enterprise Server.
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-in-same-repo-at-running-commit</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/workflows/workflow-2.yml
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-in-another-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/another-repo/.github/workflows/workflow.yml@v1
 </span></code></pre>
@@ -198,7 +202,7 @@
 That means if the last successful completing reusable workflow sets an empty string for its output, and the second last successful completing reusable workflow sets an actual value for its output, the output will contain the value of the second last completing reusable workflow.</p>
 <p>The following reusable workflow has a single job containing two steps. In each of these steps we set a single word as the output: "hello" and "world." In the <code>outputs</code> section of the job, we map these step outputs to job outputs called: <code>output1</code> and <code>output2</code>. In the <code>on.workflow_call.outputs</code> section we then define two outputs for the workflow itself, one called <code>firstword</code> which we map to <code>output1</code>, and one called <code>secondword</code> which we map to <code>output2</code>.</p>
 <p>The <code>value</code> must be set to the value of a job-level output within the called workflow. Step-level outputs must first be mapped to job-level outputs as shown below.</p>
-<p>For more information, see <a href="../write-workflows/choose-what-workflows-do/pass-job-outputs.html#overview">Passing information between jobs</a> and <a href="../../reference/workflows-and-actions/workflow-syntax.html#onworkflow_calloutputs">Workflow syntax for GitHub Actions</a>.</p>
+<p>For more information, see <a href="../write-workflows/choose-what-workflows-do/pass-job-outputs.html">Passing information between jobs</a> and <a href="../../reference/workflows-and-actions/workflow-syntax.html#onworkflow_calloutputs">Workflow syntax for GitHub Actions</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Reusable workflow
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
