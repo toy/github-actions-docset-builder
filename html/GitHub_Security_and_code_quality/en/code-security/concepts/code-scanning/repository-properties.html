@@ -3,6 +3,9 @@
 <h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>For the repository properties described here to have an effect, you need to have set up code scanning. See <a href="setup-types.html">About setup types for code scanning</a>.</p>
 <p>Repository properties which affect code scanning must be created manually for your organization. You can then set values for them that apply to your entire organization or allow them to be configured differently for each repository. See <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a>.</p>
+<h2 id="testing-changes-before-applying-them" title="Testing changes before applying them">Testing changes before applying them<a href="#testing-changes-before-applying-them" aria-label="Link to heading 'Testing changes before applying them'" data-heading-content="Testing changes before applying them" class="anchor"></a></h2>
+<p>You may wish to test that configurations applied through repository properties have the desired effects before rolling them out to your entire organization. Repository properties can be set to specific values for individual repositories. If you are configuring a repository property for the first time, create it for your organization but do not set it to a value. Instead, set it to a value for a specific test repository where you can validate the change first. Once validated on a test repository, you can then set the value for your entire organization or the desired repositories.</p>
+<p>When changing the value of a supported repository property, you can use the same approach. Override or set the value of the repository property for a test repository, validate the change, and then roll it out to your organization or other repositories.</p>
 <h2 id="supported-repository-properties-for-code-scanning" title="Supported repository properties for code scanning">Supported repository properties for code scanning<a href="#supported-repository-properties-for-code-scanning" aria-label="Link to heading 'Supported repository properties for code scanning'" data-heading-content="Supported repository properties for code scanning" class="anchor"></a></h2>
 <p>Some code scanning functionality can be configured using repository properties. Organizations can use repository properties to both enforce configurations across all repositories and for individual repositories. If code scanning is customized using repository properties, the customization applies to all setup types.</p>
 <p>The following is an overview of repository properties you can set up which affect code scanning analyses when configured:</p>
@@ -15,15 +18,27 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">github-codeql-extra-queries</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>github-codeql-config-file</code></td>
 <td>Text</td>
 </tr>
 <tr>
-<td><code class="keyword">github-codeql-disable-overlay</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>github-codeql-extra-queries</code></td>
+<td>Text</td>
+</tr>
+<tr>
+<td><code>github-codeql-disable-overlay</code></td>
 <td>True/false</td>
 </tr>
 <tr>
-<td><code class="keyword">github-codeql-file-coverage-on-prs</code></td>
+<td><code>github-codeql-file-coverage-on-prs</code></td>
 <td>True/false</td>
 </tr>
 </tbody>
@@ -32,7 +47,11 @@
 <p class="markdown-alert-title">Note</p>
 <p>The repository properties which are supported depend on the version of the <a href="https://github.com/github/codeql-action/" class="external">github/codeql-action</a> that is used by your code scanning analyses. For code scanning advanced setup, check that your workflow is referencing the latest major version. Code scanning default setup automatically uses the latest version.</p>
 </div>
-<h3 id="analysis-customization" title="Supported repository properties for code scanning / Analysis customization">Analysis customization<a href="#analysis-customization" aria-label="Link to heading 'Analysis customization'" data-heading-content="Analysis customization" class="anchor"></a></h3>
+<h3 id="custom-configuration-files" title="Supported repository properties for code scanning / Custom configuration files">Custom configuration files<a href="#custom-configuration-files" aria-label="Link to heading 'Custom configuration files'" data-heading-content="Custom configuration files" class="anchor"></a></h3>
+<p>You can set the <code>github-codeql-config-file</code> property to the local or remote path of a configuration file. Accepted values for this property are the same as for the <code>config-file</code> parameter of the <code>codeql-action/init</code> action. For more information about accepted path formats and possible contents of configuration files, see <a href="../../reference/code-scanning/workflow-configuration-options.html#custom-configuration-files">Workflow configuration options for code scanning</a>.</p>
+<p>A value specified for the <code>github-codeql-config-file</code> property will apply to both code scanning default setup and code scanning advanced setup. If an advanced setup workflow specifies an explicit input for the <code>config-file</code> parameter of the <code>codeql-action/init</code> action, then that input will take precedence over the value configured in the repository property. This allows advanced workflows to use different configurations than those applied to default setup workflows, if desired.</p>
+<p>A custom configuration file applied using the <code>github-codeql-config-file</code> property is merged with the configuration that code scanning default setup generates automatically. Code scanning default setup allows you to customize some analysis settings in the user interface, such as which threat models or CodeQL model packs to use. These selections are kept in the merged configuration: the threat models selected in the default setup UI are combined with any threat models specified in the configuration file, and model packs configured in the UI are kept. See <a href="setup-types.html#configuration-options">About setup types for code scanning</a> for more information about available configuration options in code scanning default setup.</p>
+<h3 id="other-analysis-customization" title="Supported repository properties for code scanning / Other analysis customization">Other analysis customization<a href="#other-analysis-customization" aria-label="Link to heading 'Other analysis customization'" data-heading-content="Other analysis customization" class="anchor"></a></h3>
 <p>The <code>github-codeql-extra-queries</code> property allows you to configure additional queries that should be run. This is useful to add queries to all relevant analyses in your organization without needing to modify individual workflows or switch to an advanced setup. This accepts the same values as the <code>queries</code> input of the <a href="https://github.com/github/codeql-action/" class="external">github/codeql-action</a>. See <a href="../../reference/code-scanning/workflow-configuration-options.html">Workflow configuration options for code scanning</a>.</p>
 <h3 id="enabling-or-disabling-features" title="Supported repository properties for code scanning / Enabling or disabling features">Enabling or disabling features<a href="#enabling-or-disabling-features" aria-label="Link to heading 'Enabling or disabling features'" data-heading-content="Enabling or disabling features" class="anchor"></a></h3>
 <p>You can disable improved incremental analysis by setting the <code>github-codeql-disable-overlay</code> property to <code>true</code>. This may be useful if improved incremental analysis is failing because of increased hardware requirements.</p>

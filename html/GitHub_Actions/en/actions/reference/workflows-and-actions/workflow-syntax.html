@@ -3,6 +3,10 @@
 <h2 id="about-yaml-syntax-for-workflows" title="About YAML syntax for workflows">About YAML syntax for workflows<a href="#about-yaml-syntax-for-workflows" aria-label="Link to heading 'About YAML syntax for workflows'" data-heading-content="About YAML syntax for workflows" class="anchor"></a></h2>
 <p>Workflow files use YAML syntax, and must have either a <code>.yml</code> or <code>.yaml</code> file extension. If you're new to YAML and want to learn more, see <a href="https://learnxinyminutes.com/docs/yaml/" class="external">Learn YAML in Y minutes</a>.</p>
 <p>You must store workflow files in the <code>.github/workflows</code> directory of your repository.</p>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title">Tip</p>
+<p>Unlike traditional GitHub Actions workflows that require you to script every decision as YAML job steps, GitHub Agentic Workflows use YAML frontmatter for triggers and configuration, but let you describe what you want in natural-language Markdown—so you don't need to anticipate and encode every scenario in advance. For more information, see <a href="https://docs.github.com/en/copilot/how-tos/github-agentic-workflows/creating-github-agentic-workflows" class="external">Creating GitHub Agentic Workflows</a>.</p>
+</div>
 <h2 id="name" title="name"><code>name</code><a href="#name" aria-label="Link to heading 'name'" data-heading-content="name" class="anchor"></a></h2>
 <p>The name of the workflow. GitHub displays the names of your workflows under your repository's "Actions" tab. If you omit <code>name</code>, GitHub displays the workflow file path relative to the root of the repository.</p>
 <h2 id="run-name" title="run-name"><code>run-name</code><a href="#run-name" aria-label="Link to heading 'run-name'" data-heading-content="run-name" class="anchor"></a></h2>
@@ -241,7 +245,7 @@
 <li>If the generated diff contains more than 3,000 files and the files the workflow filter matches are not in the first 3,000 returned by the filter, the workflow will <strong>not</strong> run.</li>
 </ul>
 <p>If you observe these behaviors, you might need to make your filters more specific, or change how you work with pushes and pull requests to generate simpler diffs.</p>
-<p>For more information, see <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-comparing-branches-in-pull-requests" class="external">Branches</a>.</p>
+<p>For more information, see <a href="https://docs.github.com/en/pull-requests/reference/branches" class="external">Branches</a>.</p>
 <h2 id="onschedule" title="on.schedule"><code>on.schedule</code><a href="#onschedule" aria-label="Link to heading 'on.schedule'" data-heading-content="on.schedule" class="anchor"></a></h2>
 <p>You can use <code>on.schedule</code> to define a time schedule for your workflows.</p>
 <p>Use <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07" class="external">POSIX cron syntax</a> to schedule workflows to run at specific times. By default, scheduled workflows run in UTC. You can optionally specify a timezone using an <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" class="external">IANA timezone string</a> for timezone-aware scheduling. Scheduled workflows run on the latest commit on the default branch. The shortest interval you can run scheduled workflows is once every 5 minutes.</p>
@@ -568,18 +572,6 @@
 <td>Work with issues. For example, <code>issues: write</code> permits an action to add a comment to an issue. For more information, see <a href="https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-issues" class="external">Permissions required for GitHub Apps</a>.</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>models</code></td>
-<td>Generate AI inference responses with GitHub Models. For example, <code>models: read</code> permits an action to use the GitHub Models inference API. See <a href="https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models" class="external">Prototyping with AI models</a>.</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
 <td><code>packages</code></td>
 <td>Work with GitHub Packages. For example, <code>packages: write</code> permits an action to upload and publish packages on GitHub Packages. For more information, see <a href="https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages#about-scopes-and-permissions-for-package-registries" class="external">About permissions for GitHub Packages</a>.</td>
 </tr>
@@ -625,7 +617,6 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">deployments</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">id-token</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">issues</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
-</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">models</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">discussions</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">packages</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">pages</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
@@ -965,18 +956,6 @@ When more than one default setting is defined with the same name, GitHub uses th
 <td>Work with issues. For example, <code>issues: write</code> permits an action to add a comment to an issue. For more information, see <a href="https://docs.github.com/en/rest/authentication/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-issues" class="external">Permissions required for GitHub Apps</a>.</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>models</code></td>
-<td>Generate AI inference responses with GitHub Models. For example, <code>models: read</code> permits an action to use the GitHub Models inference API. See <a href="https://docs.github.com/en/github-models/use-github-models/prototyping-with-ai-models" class="external">Prototyping with AI models</a>.</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
 <td><code>packages</code></td>
 <td>Work with GitHub Packages. For example, <code>packages: write</code> permits an action to upload and publish packages on GitHub Packages. For more information, see <a href="https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages#about-scopes-and-permissions-for-package-registries" class="external">About permissions for GitHub Packages</a>.</td>
 </tr>
@@ -1022,7 +1001,6 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">deployments</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">id-token</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">issues</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
-</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">models</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">discussions</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">packages</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">pages</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none

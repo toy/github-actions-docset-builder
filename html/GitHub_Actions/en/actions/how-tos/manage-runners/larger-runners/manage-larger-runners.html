@@ -209,4 +209,26 @@ For more information, see <a href="control-access.html">Controlling access to la
 <p>Click <strong>Save</strong>.</p>
 </li>
 </ol>
+<h2 id="azure-storage-firewall-considerations" title="Azure Storage firewall considerations">Azure Storage firewall considerations<a href="#azure-storage-firewall-considerations" aria-label="Link to heading 'Azure Storage firewall considerations'" data-heading-content="Azure Storage firewall considerations" class="anchor"></a></h2>
+<h3 id="virtual-machines-and-storage-accounts-in-the-same-region" title="Azure Storage firewall considerations / Virtual machines and storage accounts in the same region">Virtual machines and storage accounts in the same region<a href="#virtual-machines-and-storage-accounts-in-the-same-region" aria-label="Link to heading 'Virtual machines and storage accounts in the same region'" data-heading-content="Virtual machines and storage accounts in the same region" class="anchor"></a></h3>
+<p>If you use Azure Storage accounts protected by network rules, be aware that traffic from larger runners' VMs to storage accounts in the same Azure region uses private Azure IP addresses rather than the larger runners' public IP range.</p>
+<p>As a result, Azure Storage firewall rules that rely only on runner public IP allowlists might not work as expected. This can cause connectivity failures that appear as 403 (AuthorizationFailure) responses, with an error message similar to:</p>
+<pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">The request may be blocked by network rules of storage account. Please check network rule set using 'az storage account show -n accountname --query networkRuleSet'.
+</span><span style="color:#c0c5ce;">  If you want to change the default action to apply when no rule matches, please use 'az storage account update'.
+</span></code></pre>
+<p>For more information see the Microsoft documentation for <a href="https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security-limitations" class="external">Guidelines and limitations for the Azure Storage firewall</a> and <a href="https://learn.microsoft.com/en-us/azure/storage/common/configure-network-routing-preference?tabs=azure-portal&amp;source=docs" class="external">Configure network routing preference for Azure Storage</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>We don't recommend configuring Azure Storage firewall network rules for larger runners unless you use either <code>static public IP ranges</code> or an <code>Azure VNet</code>.<br>
+Public IP ranges can be dynamic, so allowlist-based rules may break and cause intermittent connectivity failures.<br>
+See <a href="../../../reference/runners/larger-runners.html#networking-for-larger-runners">Larger runners reference</a></p>
+</div>
+<h3 id="use-static-ip-ranges-and-service-endpoints" title="Azure Storage firewall considerations / Use Static IP Ranges and Service Endpoints">Use Static IP Ranges and Service Endpoints<a href="#use-static-ip-ranges-and-service-endpoints" aria-label="Link to heading 'Use Static IP Ranges and Service Endpoints'" data-heading-content="Use Static IP Ranges and Service Endpoints" class="anchor"></a></h3>
+<p>One option for safely enabling Storage Account network rules is to use runners with static IPs and request support for configuring Azure Storage service endpoints for the virtual network hosting those static IPs. See <a href="https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-service-endpoints-overview" class="external">Azure virtual network service endpoints</a> for more information.</p>
+<p>Contact GitHub Support to set up this configuration through the <a href="https://support.github.com/" class="external">GitHub Support portal</a>.</p>
+<h3 id="configure-azure-vnet" title="Azure Storage firewall considerations / Configure Azure VNET">Configure Azure VNET<a href="#configure-azure-vnet" aria-label="Link to heading 'Configure Azure VNET'" data-heading-content="Configure Azure VNET" class="anchor"></a></h3>
+<p>Another option to safely connect to Azure Storage accounts is to enable Azure VNET with GitHub-hosted runners.</p>
+<ul>
+<li><a href="https://docs.github.com/en/organizations/managing-organization-settings/about-azure-private-networking-for-github-hosted-runners-in-your-organization" class="external">About Azure private networking for GitHub-hosted runners in your organization</a></li>
+</ul>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>
