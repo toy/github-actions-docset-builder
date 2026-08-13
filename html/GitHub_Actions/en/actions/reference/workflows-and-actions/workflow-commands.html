@@ -840,4 +840,65 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"$env:HOMEPATH/.local/bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 </span></code></pre>
 </div>
+<h2 id="declaring-workflow-artifacts" title="Declaring workflow artifacts">Declaring workflow artifacts<a href="#declaring-workflow-artifacts" aria-label="Link to heading 'Declaring workflow artifacts'" data-heading-content="Declaring workflow artifacts" class="anchor"></a></h2>
+<p>Declare files or OCI references as workflow artifacts by writing one declaration per line to the <code>GITHUB_ARTIFACTS</code> environment file. Each step writes to a fresh, per-step file; the path is unique to that step.</p>
+<p>Metadata about declared artifacts is collected across all steps in a job and exposed through the <code>GITHUB_ARTIFACTS_LIST</code> file.</p>
+<p>Each line must be one of the following formats. Blank lines and lines starting with <code>#</code> are ignored.</p>
+<ul>
+<li><strong>File path</strong>: A relative or absolute path to a file, optionally prefixed with <code>file://</code>. Relative paths are resolved against <code>GITHUB_WORKSPACE</code>. The path must point to an existing regular file (not a directory). The runner records the file's base name and its SHA-256 digest.</li>
+<li><strong>OCI reference</strong>: A reference in the form <code>REFERENCE@ALGORITHM:HEX</code>, optionally prefixed with <code>oci://</code>. <code>REFERENCE</code> is the image name (including optional tag), and <code>ALGORITHM</code> must be one of <code>sha256</code>, <code>sha384</code>, or <code>sha512</code>. <code>HEX</code> must be the full lowercase digest for the algorithm: 64 hexadecimal characters for <code>sha256</code>, 96 for <code>sha384</code>, or 128 for <code>sha512</code>.</li>
+</ul>
+<p>Limits:</p>
+<ul>
+<li>The per-step command file is capped at 1MiB.</li>
+<li>A job can accumulate up to 500 workflow artifacts across all steps.</li>
+<li>If the same artifact is declared more than once with identical name and digest, it is deduplicated. Conflicting declarations (same name, different digest) produce an error.</li>
+</ul>
+<div class="ghd-tool bash">
+<pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">dist/my-binary</span><span style="color:#c0c5ce;">" &gt;&gt; "$</span><span style="color:#bf616a;">GITHUB_ARTIFACTS</span><span style="color:#c0c5ce;">"
+</span></code></pre>
+<p>To declare an OCI reference:</p>
+<pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">oci://ghcr.io/octocat/myapp:1.0.0@sha256:914b38d45a65e4263a179d9c2b09cc04dcbcaa8257fa85100cf42f9a3b408cfb</span><span style="color:#c0c5ce;">" &gt;&gt; "$</span><span style="color:#bf616a;">GITHUB_ARTIFACTS</span><span style="color:#c0c5ce;">"
+</span></code></pre>
+</div>
+<div class="ghd-tool powershell">
+<pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"dist/my-binary" &gt;&gt; $env:GITHUB_ARTIFACTS
+</span></code></pre>
+<p>To declare an OCI reference:</p>
+<pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"oci://ghcr.io/octocat/myapp:1.0.0@sha256:914b38d45a65e4263a179d9c2b09cc04dcbcaa8257fa85100cf42f9a3b408cfb" &gt;&gt; $env:GITHUB_ARTIFACTS
+</span></code></pre>
+</div>
+<h2 id="reading-workflow-artifacts" title="Reading workflow artifacts">Reading workflow artifacts<a href="#reading-workflow-artifacts" aria-label="Link to heading 'Reading workflow artifacts'" data-heading-content="Reading workflow artifacts" class="anchor"></a></h2>
+<p>Read the aggregated workflow artifact metadata declared by earlier steps in the current job from the <code>GITHUB_ARTIFACTS_LIST</code> environment file. This file is read-only and is updated by the runner after each step completes. It contains a UTF-8-encoded JSON object with the following structure:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">version</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">subjects</span><span style="color:#c0c5ce;">": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">name</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">my-binary</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">digest</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">sha256:abc123...</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">kind</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">file</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">name</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">ghcr.io/octocat/myapp:1.0.0</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">digest</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">sha256:a1b2c3d4...</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">kind</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">oci</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>Each entry in the <code>subjects</code> array contains:</p>
+<ul>
+<li><code>name</code>: The base name of the file or the OCI reference name (without the digest).</li>
+<li><code>digest</code>: The <code>algorithm:hex</code> digest of the artifact.</li>
+<li><code>kind</code>: Either <code>file</code> or <code>oci</code>.</li>
+</ul>
+<p>Artifacts are sorted alphabetically by <code>name</code>.</p>
+<div class="ghd-tool bash">
+<pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">cat </span><span style="color:#c0c5ce;">"$</span><span style="color:#bf616a;">GITHUB_ARTIFACTS_LIST</span><span style="color:#c0c5ce;">"
+</span></code></pre>
+</div>
+<div class="ghd-tool powershell">
+<pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Get-Content $env:GITHUB_ARTIFACTS_LIST
+</span></code></pre>
+</div>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>
