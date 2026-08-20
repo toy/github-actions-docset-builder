@@ -334,7 +334,18 @@ make sure that you also update the MS short link: https://aka.ms/codeql-docs/ind
 </li>
 <li>
 <p>Swift project built with <code>xcodebuild</code>:</p>
-<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database create -l swift -c "xcodebuild build -target your-target" swift-database
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;"># Build using the following xcodebuild flags:
+</span><span style="color:#c0c5ce;"># `CODE_SIGNING_REQUIRED=NO` and `CODE_SIGNING_ALLOWED=NO`: turn off code signing, which may fail with CodeQL
+</span><span style="color:#c0c5ce;"># `COMPILATION_CACHE_ENABLE_CACHING=NO` and `SWIFT_ENABLE_COMPILE_CACHE=NO`: turn off build caching, which may skip compilation steps
+</span><span style="color:#c0c5ce;"># `SWIFT_USE_INTEGRATED_DRIVER=NO`: turn off the Swift integrated driver, which is incompatible with CodeQL
+</span><span style="color:#c0c5ce;">codeql database create -l swift \
+</span><span style="color:#c0c5ce;">-c "xcodebuild build -target your-target
+</span><span style="color:#c0c5ce;">  CODE_SIGNING_REQUIRED=NO
+</span><span style="color:#c0c5ce;">  CODE_SIGNING_ALLOWED=NO
+</span><span style="color:#c0c5ce;">  COMPILATION_CACHE_ENABLE_CACHING=NO
+</span><span style="color:#c0c5ce;">  SWIFT_ENABLE_COMPILE_CACHE=NO
+</span><span style="color:#c0c5ce;">  SWIFT_USE_INTEGRATED_DRIVER=NO" \
+</span><span style="color:#c0c5ce;">swift-database
 </span></code></pre>
 <p>You can pass the <code>archive</code> and <code>test</code> options to <code>xcodebuild</code>. However, the standard <code>xcodebuild</code> command is recommended as it should be the fastest, and should be all that CodeQL requires for a successful scan.</p>
 </li>
