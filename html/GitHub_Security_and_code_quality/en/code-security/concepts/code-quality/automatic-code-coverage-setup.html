@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Automatic code coverage setup</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">Concepts</a> / <a href="index.html">Code quality</a> / </nav><h1 id="automatic-code-coverage-setup">Automatic code coverage setup<a href="#automatic-code-coverage-setup" aria-label="Link to heading 'Automatic code coverage setup'" data-heading-content="Automatic code coverage setup" class="anchor"></a></h1>
+<p>An AI-powered agent can analyze your repository and generate a working code coverage workflow, so you can start tracking test coverage without manually authoring CI configuration.</p>
+<p>When you use automatic setup for code coverage, an AI-powered agent analyzes your repository, identifies your test framework, and opens a pull request with a coverage workflow ready for review.</p>
+<p><strong>There is no additional cost for using this feature.</strong></p>
+<h2 id="how-the-agent-works" title="How the agent works">How the agent works<a href="#how-the-agent-works" aria-label="Link to heading 'How the agent works'" data-heading-content="How the agent works" class="anchor"></a></h2>
+<p>The agent works in three phases:</p>
+<ol>
+<li><strong>Discovery:</strong> The agent reads your CI configuration, documentation, and build files to understand your project structure and identify your test framework.</li>
+<li><strong>Execution:</strong> The agent installs dependencies, builds the project, and runs your tests with coverage enabled. If coverage tooling is not already configured, the agent adds it to your project configuration (for example, <code>vitest.config.ts</code> or <code>jest.config.js</code>).</li>
+<li><strong>Workflow integration:</strong> If the agent produces a valid coverage report, it checks whether your repository already has a GitHub Actions workflow that runs tests on pull requests. If so, the agent augments that workflow with a coverage upload step. If not, it creates a new workflow file and opens a pull request.</li>
+</ol>
+<h2 id="when-the-agent-stops" title="When the agent stops">When the agent stops<a href="#when-the-agent-stops" aria-label="Link to heading 'When the agent stops'" data-heading-content="When the agent stops" class="anchor"></a></h2>
+<p>The agent may stop before opening a pull request in the following situations:</p>
+<ul>
+<li><strong>No tests found.</strong> The agent couldn't find tests to instrument, so there's nothing to generate coverage for.</li>
+<li><strong>Can't reproduce the build.</strong> Missing private registries, proprietary SDKs, or system dependencies prevent the agent from verifying the test suite.</li>
+</ul>
+<p>If the agent stops or produces unexpected results, you can review the agent's session log for details. Navigate to the <strong>Tasks</strong> tab in your repository to find the session associated with the workflow generation attempt.</p>
+<ul>
+<li><strong>Unsupported coverage report conversion.</strong> The agent won't reconstruct Cobertura XML from reports that only expose aggregated counters. For example, JaCoCo XML does not contain enough line and branch structure for a trustworthy Cobertura upload, so JVM projects that only produce JaCoCo XML may need manual setup instead.</li>
+</ul>
+<h2 id="pull-request-outcomes" title="Pull request outcomes">Pull request outcomes<a href="#pull-request-outcomes" aria-label="Link to heading 'Pull request outcomes'" data-heading-content="Pull request outcomes" class="anchor"></a></h2>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>The agent opens the pull request immediately with an initial planning commit that contains no code changes. The actual implementation commit typically arrives a few minutes later. If the pull request initially shows 0 changed files, wait a few minutes and refresh the page.</p>
+</div>
+<p>If the agent successfully opens a pull request, the pull request may be in one of these states:</p>
+<ul>
+<li><strong>Mergeable as-is:</strong> The workflow completes successfully in CI and coverage uploads correctly.</li>
+<li><strong>Ready to iterate:</strong> The workflow runs but requires adjustments (for example, missing secrets, self-hosted runner configuration, or path differences between local verification and CI).</li>
+<li><strong>Useful as a reference:</strong> Maintainers may prefer to configure coverage themselves, using the agent's pull request as a starting point for the build and test commands it discovered.</li>
+</ul>
+<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
+<ul>
+<li><a href="../../how-tos/maintain-quality-code/set-up-code-coverage.html#automatic-setup">Setting up code coverage for your repository</a></li>
+<li><a href="code-quality.html">GitHub Code Quality</a></li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>
