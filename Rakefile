@@ -221,7 +221,7 @@ class GithubDocBuilder
 
     results = {
       result_path / archive_path.basename => archive_path,
-      **%w[README.md icon.png icon@2x.png].to_h do |basename|
+      **%w[README.markdown icon.png icon@2x.png].to_h do |basename|
         [result_path / basename, basename]
       end,
     }
