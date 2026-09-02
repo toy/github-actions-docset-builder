@@ -101,7 +101,9 @@ class GithubDocBuilder
   def self.all
     yield new 'actions'
     yield new 'code-security', name: 'GitHub Security and code quality'
+    yield new 'graphql'
     yield new 'pages'
+    yield new 'rest'
   end
 
   def self.define_tasks
