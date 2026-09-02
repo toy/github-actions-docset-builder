@@ -1,0 +1,1716 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for pull requests</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Pull requests</a> / </nav><h1 id="rest-api-endpoints-for-pull-requests">REST API endpoints for pull requests<a href="#rest-api-endpoints-for-pull-requests" aria-label="Link to heading 'REST API endpoints for pull requests'" data-heading-content="REST API endpoints for pull requests" class="anchor"></a></h1>
+<p>Use the REST API to interact with pull requests.</p>
+<h2 id="about-pull-requests" title="About pull requests">About pull requests<a href="#about-pull-requests" aria-label="Link to heading 'About pull requests'" data-heading-content="About pull requests" class="anchor"></a></h2>
+<p>You can list, view, edit, create, and merge pull requests using the REST API. For information about how to interact with comments on a pull request, see <a href="../issues/comments.html">REST API endpoints for issue comments</a>.</p>
+<p>Pull requests are a type of issue. Any actions that are available in both pull requests and issues, like managing assignees, labels, and milestones, are handled by the REST API to manage issues. To perform these actions on pull requests, you must use the issues API endpoints (for example, <code>/repos/{owner}/{repo}/issues/{issue_number}</code>), not the pull requests endpoints. For more information, see <a href="../issues/index.html">REST API endpoints for issues</a>.</p>
+<h3 id="link-relations" title="About pull requests / Link Relations">Link Relations<a href="#link-relations" aria-label="Link to heading 'Link Relations'" data-heading-content="Link Relations" class="anchor"></a></h3>
+<p>Pull requests have these possible link relations:</p>
+<ul>
+<li><code>self</code>: The API location of this pull request</li>
+<li><code>html</code>: The HTML location of this pull request</li>
+<li><code>issue</code>: The API location of this pull request's <a href="../issues/index.html">issue</a></li>
+<li><code>comments</code>: The API location of this pull request's <a href="../issues/comments.html">issue comments</a></li>
+<li><code>review_comments</code>: The API location of this pull request's <a href="comments.html">review comments</a></li>
+<li><code>review_comment</code>: The <a href="../using-the-rest-api/getting-started-with-the-rest-api.html#hypermedia">URL template</a> to construct the API location for a <a href="comments.html">review comment</a> in this pull request's repository</li>
+<li><code>commits</code>: The API location of this pull request's <a href="#list-commits-on-a-pull-request">commits</a></li>
+<li><code>statuses</code>: The API location of this pull request's <a href="../commits/index.html#commit-statuses">commit statuses</a>, which are the statuses of its <code>head</code> branch</li>
+</ul>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-pull-requests" title="List pull requests">List pull requests<a href="#list-pull-requests" aria-label="Link to heading 'List pull requests'" data-heading-content="List pull requests" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls
+</span></code></pre>
+<p>Lists pull requests in a specified repository.<br>
+Draft pull requests are available in public repositories with GitHub<br>
+Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing<br>
+plans, and in public and private repositories with GitHub Team and GitHub Enterprise<br>
+Cloud. For more information, see GitHub's products<br>
+in the GitHub Help documentation.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.</p>
+<h3 id="parameters" title="List pull requests / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Either open, closed, or all to filter by state.<br>
+Default: <code>open</code><br>
+Can be one of: <code>open</code>, <code>closed</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>head</code></strong> (string)<br>
+Filter pulls by head user or head organization and branch name in the format of user:ref-name or organization:ref-name. For example: github:new-script-format or octocat:test-branch.</p>
+</li>
+<li>
+<p><strong><code>base</code></strong> (string)<br>
+Filter pulls by base branch name. Example: gh-pages.</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+What to sort results by. popularity will sort by the number of comments. long-running will sort by date created and will limit the results to pull requests that have been open for more than a month and have had activity within the past month.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>popularity</code>, <code>long-running</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction of the sort. Default: desc when sort is created or sort is not specified, otherwise asc.<br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List pull requests / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List pull requests / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Pull Request Simple</code>:</p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>diff_url</code>: required, string, format: uri</li>
+<li><code>patch_url</code>: required, string, format: uri</li>
+<li><code>issue_url</code>: required, string, format: uri</li>
+<li><code>commits_url</code>: required, string, format: uri</li>
+<li><code>review_comments_url</code>: required, string, format: uri</li>
+<li><code>review_comment_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string, format: uri</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string</li>
+<li><code>locked</code>: required, boolean</li>
+<li><code>title</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>body</code>: required, string or null</li>
+<li><code>labels</code>: required, array of objects:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+<li><code>default</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>milestone</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Milestone</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code>, default: <code>"open"</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>closed_issues</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>due_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>active_lock_reason</code>: string or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>merged_at</code>: required, string or null, format: date-time</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>requested_reviewers</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>requested_teams</code>: array of <code>Team</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>head</code>: required, object:
+<ul>
+<li><code>label</code>: required, string</li>
+<li><code>ref</code>: required, string</li>
+<li><code>repo</code>: required, <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>sha</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>label</code>: required, string</li>
+<li><code>ref</code>: required, string</li>
+<li><code>repo</code>: required, <code>Repository</code> (see above)</li>
+<li><code>sha</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>comments</code>: required, <code>Link</code>:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+<li><code>commits</code>: required, <code>Link</code> (see above)</li>
+<li><code>statuses</code>: required, <code>Link</code> (see above)</li>
+<li><code>html</code>: required, <code>Link</code> (see above)</li>
+<li><code>issue</code>: required, <code>Link</code> (see above)</li>
+<li><code>review_comments</code>: required, <code>Link</code> (see above)</li>
+<li><code>review_comment</code>: required, <code>Link</code> (see above)</li>
+<li><code>self</code>: required, <code>Link</code> (see above)</li>
+</ul>
+</li>
+<li><code>author_association</code>: required, string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>auto_merge</code>: required, <code>Auto merge</code>:
+<ul>
+<li><code>enabled_by</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>merge_method</code>: required, string, enum: <code>merge</code>, <code>squash</code>, <code>rebase</code></li>
+<li><code>commit_title</code>: required, string</li>
+<li><code>commit_message</code>: required, string</li>
+</ul>
+</li>
+<li><code>stack</code>: <code>Pull Request Stack</code>:
+<ul>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>ref</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+<li><code>size</code>: integer</li>
+<li><code>position</code>: integer</li>
+<li><code>id</code>: integer</li>
+<li><code>number</code>: integer</li>
+</ul>
+</li>
+<li><code>draft</code>: boolean</li>
+</ul>
+<h2 id="create-a-pull-request" title="Create a pull request">Create a pull request<a href="#create-a-pull-request" aria-label="Link to heading 'Create a pull request'" data-heading-content="Create a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pulls
+</span></code></pre>
+<p>Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see GitHub's products in the GitHub Help documentation.<br>
+To open or update a pull request in a public repository, you must have write access to the head or the source branch. For organization-owned repositories, you must be a member of the organization that owns the repository to open or update a pull request.<br>
+This endpoint triggers notifications. Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "Rate limits for the API" and "Best practices for using the REST API."<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.</p>
+<h3 id="parameters-1" title="Create a pull request / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>title</code></strong> (string)<br>
+The title of the new pull request. Required unless issue is specified.</p>
+</li>
+<li>
+<p><strong><code>head</code></strong> (string) (required)<br>
+The name of the branch where your changes are implemented. For cross-repository pull requests in the same network, namespace head with a user like this: username:branch.</p>
+</li>
+<li>
+<p><strong><code>head_repo</code></strong> (string)<br>
+The name of the repository where the changes in the pull request were made. This field is required for cross-repository pull requests if both repositories are owned by the same organization.</p>
+</li>
+<li>
+<p><strong><code>base</code></strong> (string) (required)<br>
+The name of the branch you want the changes pulled into. This should be an existing branch on the current repository. You cannot submit a pull request to one repository that requests a merge to a base of another repository.</p>
+</li>
+<li>
+<p><strong><code>body</code></strong> (string)<br>
+The contents of the pull request.</p>
+</li>
+<li>
+<p><strong><code>maintainer_can_modify</code></strong> (boolean)<br>
+Indicates whether maintainers can modify the pull request.</p>
+</li>
+<li>
+<p><strong><code>draft</code></strong> (boolean)<br>
+Indicates whether the pull request is a draft. See "Draft Pull Requests" in the GitHub Help documentation to learn more.</p>
+</li>
+<li>
+<p><strong><code>issue</code></strong> (integer)<br>
+An issue in the repository to convert to a pull request. The issue title, body, and comments will become the title, body, and comments on the new pull request. Required unless title is specified.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a pull request / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "title": "Amazing new feature",
+</span><span style="color:#c0c5ce;">  "body": "Please pull these awesome changes in!",
+</span><span style="color:#c0c5ce;">  "head": "octocat:new-feature",
+</span><span style="color:#c0c5ce;">  "base": "master"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>diff_url</code>: required, string, format: uri</li>
+<li><code>patch_url</code>: required, string, format: uri</li>
+<li><code>issue_url</code>: required, string, format: uri</li>
+<li><code>commits_url</code>: required, string, format: uri</li>
+<li><code>review_comments_url</code>: required, string, format: uri</li>
+<li><code>review_comment_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string, format: uri</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code></li>
+<li><code>locked</code>: required, boolean</li>
+<li><code>title</code>: required, string</li>
+<li><code>user</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>body</code>: required, string or null</li>
+<li><code>labels</code>: required, array of objects:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>color</code>: required, string</li>
+<li><code>default</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>milestone</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Milestone</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code>, default: <code>"open"</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>closed_issues</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>due_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>active_lock_reason</code>: string or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>merged_at</code>: required, string or null, format: date-time</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>requested_reviewers</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>requested_teams</code>: array of <code>Team Simple</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+<li><code>head</code>: required, object:
+<ul>
+<li><code>label</code>: required, string</li>
+<li><code>ref</code>: required, string</li>
+<li><code>repo</code>: required, <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>sha</code>: required, string</li>
+<li><code>user</code>: required, <code>Simple User</code> (see above)</li>
+</ul>
+</li>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>label</code>: required, string</li>
+<li><code>ref</code>: required, string</li>
+<li><code>repo</code>: required, <code>Repository</code> (see above)</li>
+<li><code>sha</code>: required, string</li>
+<li><code>user</code>: required, <code>Simple User</code> (see above)</li>
+</ul>
+</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>comments</code>: required, <code>Link</code>:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+<li><code>commits</code>: required, <code>Link</code> (see above)</li>
+<li><code>statuses</code>: required, <code>Link</code> (see above)</li>
+<li><code>html</code>: required, <code>Link</code> (see above)</li>
+<li><code>issue</code>: required, <code>Link</code> (see above)</li>
+<li><code>review_comments</code>: required, <code>Link</code> (see above)</li>
+<li><code>review_comment</code>: required, <code>Link</code> (see above)</li>
+<li><code>self</code>: required, <code>Link</code> (see above)</li>
+</ul>
+</li>
+<li><code>author_association</code>: required, string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>auto_merge</code>: required, <code>Auto merge</code>:
+<ul>
+<li><code>enabled_by</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>merge_method</code>: required, string, enum: <code>merge</code>, <code>squash</code>, <code>rebase</code></li>
+<li><code>commit_title</code>: required, string</li>
+<li><code>commit_message</code>: required, string</li>
+</ul>
+</li>
+<li><code>stack</code>: <code>Pull Request Stack</code>:
+<ul>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>ref</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+<li><code>size</code>: integer</li>
+<li><code>position</code>: integer</li>
+<li><code>id</code>: integer</li>
+<li><code>number</code>: integer</li>
+</ul>
+</li>
+<li><code>draft</code>: boolean</li>
+<li><code>merged</code>: required, boolean</li>
+<li><code>mergeable</code>: required, boolean or null</li>
+<li><code>rebaseable</code>: boolean or null</li>
+<li><code>mergeable_state</code>: required, string</li>
+<li><code>merged_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>comments</code>: required, integer</li>
+<li><code>review_comments</code>: required, integer</li>
+<li><code>maintainer_can_modify</code>: required, boolean</li>
+<li><code>commits</code>: required, integer</li>
+<li><code>additions</code>: required, integer</li>
+<li><code>deletions</code>: required, integer</li>
+<li><code>changed_files</code>: required, integer</li>
+</ul>
+<h2 id="get-a-pull-request" title="Get a pull request">Get a pull request<a href="#get-a-pull-request" aria-label="Link to heading 'Get a pull request'" data-heading-content="Get a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}
+</span></code></pre>
+<p>Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Lists details of a pull request by providing its number.<br>
+When you get, create, or edit a pull request, GitHub creates a merge commit to test whether the pull request can be automatically merged into the base branch. This test commit is not added to the base branch or the head branch. You can review the status of the test commit using the mergeable key. For more information, see "Checking mergeability of pull requests".<br>
+The value of the mergeable attribute can be true, false, or null. If the value is null, then GitHub has started a background job to compute the mergeability. After giving the job time to complete, resubmit the request. When the job finishes, you will see a non-null value for the mergeable attribute in the response. If mergeable is true, then merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha will be the SHA of the test merge commit.<br>
+The value of the merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha attribute changes depending on the state of the pull request. Before merging a pull request, the merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha attribute holds the SHA of the test merge commit. After merging a pull request, the merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha attribute changes depending on how you merged the pull request:</p>
+<p>If merged as a merge commit, merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha represents the SHA of the merge commit.<br>
+If merged via a squash, merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha represents the SHA of the squashed commit on the base branch.<br>
+If rebased, merge<span data-escaped-char="">_</span>commit<span data-escaped-char="">_</span>sha represents the commit that the base branch was updated to.</p>
+<p>Pass the appropriate media type to fetch diff and patch formats.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.diff: For more information, see "git-diff" in the Git documentation. If a diff is corrupt, contact us through the GitHub Support portal. Include the repository name and pull request ID in your message.</p>
+<h3 id="parameters-2" title="Get a pull request / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Pass the appropriate media type to fetch diff and patch formats.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>406</strong> - Unacceptable</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a pull request / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-pull-request">Create a pull request</a>.</p>
+<h2 id="update-a-pull-request" title="Update a pull request">Update a pull request<a href="#update-a-pull-request" aria-label="Link to heading 'Update a pull request'" data-heading-content="Update a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/pulls/{pull_number}
+</span></code></pre>
+<p>Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see GitHub's products in the GitHub Help documentation.<br>
+To open or update a pull request in a public repository, you must have write access to the head or the source branch. For organization-owned repositories, you must be a member of the organization that owns the repository to open or update a pull request.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.</p>
+<h3 id="parameters-3" title="Update a pull request / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>title</code></strong> (string)<br>
+The title of the pull request.</p>
+</li>
+<li>
+<p><strong><code>body</code></strong> (string)<br>
+The contents of the pull request.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+State of this Pull Request. Either open or closed.<br>
+Can be one of: <code>open</code>, <code>closed</code></p>
+</li>
+<li>
+<p><strong><code>base</code></strong> (string)<br>
+The name of the branch you want your changes pulled into. This should be an existing branch on the current repository. You cannot update the base branch on a pull request to point to another repository.</p>
+</li>
+<li>
+<p><strong><code>maintainer_can_modify</code></strong> (boolean)<br>
+Indicates whether maintainers can modify the pull request.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Update a pull request / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "title": "new title",
+</span><span style="color:#c0c5ce;">  "body": "updated body",
+</span><span style="color:#c0c5ce;">  "state": "open",
+</span><span style="color:#c0c5ce;">  "base": "master"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-pull-request">Create a pull request</a>.</p>
+<h2 id="list-commits-on-a-pull-request" title="List commits on a pull request">List commits on a pull request<a href="#list-commits-on-a-pull-request" aria-label="Link to heading 'List commits on a pull request'" data-heading-content="List commits on a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/commits
+</span></code></pre>
+<p>Lists a maximum of 250 commits for a pull request. To receive a complete<br>
+commit list for pull requests with more than 250 commits, use the List commits<br>
+endpoint.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.</p>
+<h3 id="parameters-4" title="List commits on a pull request / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List commits on a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="List commits on a pull request / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/commits
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Commit</code>:</p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>sha</code>: required, string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>commit</code>: required, object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>author</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Git User</strong>
+<ul>
+<li><code>name</code>: string</li>
+<li><code>email</code>: string</li>
+<li><code>date</code>: string, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>committer</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Git User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>message</code>: required, string</li>
+<li><code>comment_count</code>: required, integer</li>
+<li><code>tree</code>: required, object:
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>verification</code>: <code>Verification</code>:
+<ul>
+<li><code>verified</code>: required, boolean</li>
+<li><code>reason</code>: required, string</li>
+<li><code>payload</code>: required, string or null</li>
+<li><code>signature</code>: required, string or null</li>
+<li><code>verified_at</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>author</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Empty Object</strong></li>
+</ul>
+</li>
+<li><code>committer</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Empty Object</strong> (see above)</li>
+</ul>
+</li>
+<li><code>parents</code>: required, array of objects:
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+<li><code>stats</code>: object:
+<ul>
+<li><code>additions</code>: integer</li>
+<li><code>deletions</code>: integer</li>
+<li><code>total</code>: integer</li>
+</ul>
+</li>
+<li><code>files</code>: array of <code>Diff Entry</code>:
+<ul>
+<li><code>sha</code>: required, string or null</li>
+<li><code>filename</code>: required, string</li>
+<li><code>status</code>: required, string, enum: <code>added</code>, <code>removed</code>, <code>modified</code>, <code>renamed</code>, <code>copied</code>, <code>changed</code>, <code>unchanged</code></li>
+<li><code>additions</code>: required, integer</li>
+<li><code>deletions</code>: required, integer</li>
+<li><code>changes</code>: required, integer</li>
+<li><code>blob_url</code>: required, string, format: uri</li>
+<li><code>raw_url</code>: required, string, format: uri</li>
+<li><code>contents_url</code>: required, string, format: uri</li>
+<li><code>patch</code>: string</li>
+<li><code>previous_filename</code>: string</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-pull-requests-files" title="List pull requests files">List pull requests files<a href="#list-pull-requests-files" aria-label="Link to heading 'List pull requests files'" data-heading-content="List pull requests files" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/files
+</span></code></pre>
+<p>Lists the files in a specified pull request.<br>
+Note</p>
+<p>Responses include a maximum of 3000 files. The paginated response returns 30 files per page by default.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body<span data-escaped-char="">_</span>text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body<span data-escaped-char="">_</span>html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body<span data-escaped-char="">_</span>text, and body<span data-escaped-char="">_</span>html.</p>
+<h3 id="parameters-5" title="List pull requests files / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List pull requests files / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="List pull requests files / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/files
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Diff Entry</code>:</p>
+<ul>
+<li><code>sha</code>: required, string or null</li>
+<li><code>filename</code>: required, string</li>
+<li><code>status</code>: required, string, enum: <code>added</code>, <code>removed</code>, <code>modified</code>, <code>renamed</code>, <code>copied</code>, <code>changed</code>, <code>unchanged</code></li>
+<li><code>additions</code>: required, integer</li>
+<li><code>deletions</code>: required, integer</li>
+<li><code>changes</code>: required, integer</li>
+<li><code>blob_url</code>: required, string, format: uri</li>
+<li><code>raw_url</code>: required, string, format: uri</li>
+<li><code>contents_url</code>: required, string, format: uri</li>
+<li><code>patch</code>: string</li>
+<li><code>previous_filename</code>: string</li>
+</ul>
+<h2 id="check-if-a-pull-request-has-been-merged" title="Check if a pull request has been merged">Check if a pull request has been merged<a href="#check-if-a-pull-request-has-been-merged" aria-label="Link to heading 'Check if a pull request has been merged'" data-heading-content="Check if a pull request has been merged" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/merge
+</span></code></pre>
+<p>Checks if a pull request has been merged into the base branch. The HTTP status of the response indicates whether or not the pull request has been merged; the response body is empty.</p>
+<h3 id="parameters-6" title="Check if a pull request has been merged / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Check if a pull request has been merged / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Response if pull request has been merged</p>
+</li>
+<li>
+<p><strong>404</strong> - Not Found if pull request has not been merged</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Check if a pull request has been merged / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="merge-a-pull-request" title="Merge a pull request">Merge a pull request<a href="#merge-a-pull-request" aria-label="Link to heading 'Merge a pull request'" data-heading-content="Merge a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge
+</span></code></pre>
+<p>Merges a pull request into the base branch.<br>
+This endpoint triggers notifications. Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "Rate limits for the API" and "Best practices for using the REST API."</p>
+<h3 id="parameters-7" title="Merge a pull request / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>commit_title</code></strong> (string)<br>
+Title for the automatic commit message.</p>
+</li>
+<li>
+<p><strong><code>commit_message</code></strong> (string)<br>
+Extra detail to append to automatic commit message.</p>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string)<br>
+SHA that pull request head must match to allow merge.</p>
+</li>
+<li>
+<p><strong><code>merge_method</code></strong> (string)<br>
+The merge method to use.<br>
+Can be one of: <code>merge</code>, <code>squash</code>, <code>rebase</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Merge a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - if merge was successful</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>405</strong> - Method Not Allowed if merge cannot be performed</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict if sha was provided and pull request head did not match</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Merge a pull request / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "commit_title": "Expand enum",
+</span><span style="color:#c0c5ce;">  "commit_message": "Add a new value to the merge_method enum"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>merged</code>: required, boolean</li>
+<li><code>message</code>: required, string</li>
+</ul>
+<h2 id="merge-a-pull-request-asynchronously" title="Merge a pull request asynchronously">Merge a pull request asynchronously<a href="#merge-a-pull-request-asynchronously" aria-label="Link to heading 'Merge a pull request asynchronously'" data-heading-content="Merge a pull request asynchronously" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge-async
+</span></code></pre>
+<p>Merges a pull request into the base branch in the background. Merging in this way allows certain types of errors to be retried, and avoids the risk of timeouts for particularly complex merges.<br>
+This is the required method for merging stacked PRs, but also supports unstacked PRs. When using this endpoint to merge a stacked pull request, all pull requests in the stack up to and including the requested PR will be merged into the base branch.<br>
+The response includes a UUID that can be used to fetch the result of the merge. If another asynchronous merge request has already been made for this pull request, the UUID of that request will be returned instead with a 409 response status to indicate that the merge options may be different from those that were requested. If there isn't an existing asynchronous merge request, a 202 response status is used.<br>
+If the pull request is already merged, the merge commit OID will be returned immediately with a 200 status.<br>
+If the pull request cannot be merged (e.g. because it is closed, or still a draft) this result will be returned immediately with a 400 response status. Branch protection rules and repository rules are not run at this stage, only basic pull request state checks are performed.</p>
+<h3 id="parameters-8" title="Merge a pull request asynchronously / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>commit_title</code></strong> (string)<br>
+Title for the automatic commit message.</p>
+</li>
+<li>
+<p><strong><code>commit_message</code></strong> (string)<br>
+Extra detail to append to automatic commit message.</p>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string)<br>
+SHA that pull request head must match to allow merge. If not provided, the current head of the PR at the time of the request will be used; if the PR is pushed in between the merge being requested and being executed, the merge will be cancelled.</p>
+</li>
+<li>
+<p><strong><code>merge_method</code></strong> (string)<br>
+The merge method to use.<br>
+Can be one of: <code>merge</code>, <code>squash</code>, <code>rebase</code></p>
+</li>
+<li>
+<p><strong><code>merge_action</code></strong> (string)<br>
+The action that will be taken to merge the pull request. direct<span data-escaped-char="">_</span>merge merges the pull request directly without using a merge queue; merge<span data-escaped-char="">_</span>queue adds the pull request to a merge queue; default selects the most appropriate option.<br>
+Can be one of: <code>default</code>, <code>direct_merge</code>, <code>merge_queue</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Merge a pull request asynchronously / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - if the pull request was already merged, or is already in a merge queue</p>
+</li>
+<li>
+<p><strong>202</strong> - if the merge request was accepted and will run in the background</p>
+</li>
+<li>
+<p><strong>400</strong> - if the pull request is not ready to be merged, e.g. because it is closed</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - if there is an existing merge request already enqueued for this pull request</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Merge a pull request asynchronously / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "commit_title": "Fix race condition",
+</span><span style="color:#c0c5ce;">  "commit_message": "Avoids a race by trying to read the file and handling the exception if it does not exist.",
+</span><span style="color:#c0c5ce;">  "sha": "6358cd125586d9def8c3e5943f23506202da81cc",
+</span><span style="color:#c0c5ce;">  "merge_method": "squash",
+</span><span style="color:#c0c5ce;">  "merge_action": "default"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>status</code>: required, string, enum: <code>pending</code>, <code>merged</code>, <code>enqueued</code>, <code>failed</code></li>
+<li><code>details</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>uuid</code>: required, string</li>
+<li><code>merge_method</code>: required, string, enum: <code>default</code>, <code>merge</code>, <code>squash</code>, <code>rebase</code></li>
+<li><code>merge_action</code>: required, string, enum: <code>default</code>, <code>merge_queue</code>, <code>direct_merge</code></li>
+<li><code>expected_head_sha</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-2-status-code-200">Example 2: Status Code 200<a href="#example-2-status-code-200" aria-label="Link to heading 'Example 2: Status Code 200'" data-heading-content="Example 2: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "commit_title": "Fix race condition",
+</span><span style="color:#c0c5ce;">  "commit_message": "Avoids a race by trying to read the file and handling the exception if it does not exist.",
+</span><span style="color:#c0c5ce;">  "sha": "6358cd125586d9def8c3e5943f23506202da81cc",
+</span><span style="color:#c0c5ce;">  "merge_method": "squash",
+</span><span style="color:#c0c5ce;">  "merge_action": "default"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>status</code>: required, string, enum: <code>pending</code>, <code>merged</code>, <code>enqueued</code>, <code>failed</code></li>
+<li><code>details</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>uuid</code>: required, string</li>
+<li><code>merge_method</code>: required, string, enum: <code>default</code>, <code>merge</code>, <code>squash</code>, <code>rebase</code></li>
+<li><code>merge_action</code>: required, string, enum: <code>default</code>, <code>merge_queue</code>, <code>direct_merge</code></li>
+<li><code>expected_head_sha</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-3-status-code-202">Example 3: Status Code 202<a href="#example-3-status-code-202" aria-label="Link to heading 'Example 3: Status Code 202'" data-heading-content="Example 3: Status Code 202" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "commit_title": "Fix race condition",
+</span><span style="color:#c0c5ce;">  "commit_message": "Avoids a race by trying to read the file and handling the exception if it does not exist.",
+</span><span style="color:#c0c5ce;">  "sha": "6358cd125586d9def8c3e5943f23506202da81cc",
+</span><span style="color:#c0c5ce;">  "merge_method": "squash",
+</span><span style="color:#c0c5ce;">  "merge_action": "default"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>status</code>: required, string, enum: <code>pending</code>, <code>merged</code>, <code>enqueued</code>, <code>failed</code></li>
+<li><code>details</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>uuid</code>: required, string</li>
+<li><code>merge_method</code>: required, string, enum: <code>default</code>, <code>merge</code>, <code>squash</code>, <code>rebase</code></li>
+<li><code>merge_action</code>: required, string, enum: <code>default</code>, <code>merge_queue</code>, <code>direct_merge</code></li>
+<li><code>expected_head_sha</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>message</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-the-result-of-an-asynchronous-merge" title="Get the result of an asynchronous merge">Get the result of an asynchronous merge<a href="#get-the-result-of-an-asynchronous-merge" aria-label="Link to heading 'Get the result of an asynchronous merge'" data-heading-content="Get the result of an asynchronous merge" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/merge-async/{uuid}
+</span></code></pre>
+<p>Fetches the current result of an asynchronous merge request, identified by the UUID that was returned when the merge was requested.<br>
+While the merge is still queued, the response includes the UUID, merge method, and expected head SHA of the request. Once the merge has completed, the response reports whether it was merged, including the merge commit OID on success or a message describing why it could not be merged on failure.<br>
+The result of an asynchronous merge request is retained for 24 hours after its most recent update. After this window the request expires and this endpoint returns a 404 response for its UUID.</p>
+<h3 id="parameters-9" title="Get the result of an asynchronous merge / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>uuid</code></strong> (string) (required)<br>
+The UUID of the asynchronous merge request, as returned when the merge was requested.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Get the result of an asynchronous merge / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - the current result of the asynchronous merge request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Get the result of an asynchronous merge / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200-1">Example 1: Status Code 200<a href="#example-1-status-code-200-1" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async/UUID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#merge-a-pull-request-asynchronously">Merge a pull request asynchronously</a>.</p>
+<h4 id="example-2-status-code-200-1">Example 2: Status Code 200<a href="#example-2-status-code-200-1" aria-label="Link to heading 'Example 2: Status Code 200'" data-heading-content="Example 2: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async/UUID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#merge-a-pull-request-asynchronously">Merge a pull request asynchronously</a>.</p>
+<h4 id="example-3-status-code-200">Example 3: Status Code 200<a href="#example-3-status-code-200" aria-label="Link to heading 'Example 3: Status Code 200'" data-heading-content="Example 3: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async/UUID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#merge-a-pull-request-asynchronously">Merge a pull request asynchronously</a>.</p>
+<h4 id="example-4-status-code-200">Example 4: Status Code 200<a href="#example-4-status-code-200" aria-label="Link to heading 'Example 4: Status Code 200'" data-heading-content="Example 4: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/merge-async/UUID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#merge-a-pull-request-asynchronously">Merge a pull request asynchronously</a>.</p>
+<h2 id="update-a-pull-request-branch" title="Update a pull request branch">Update a pull request branch<a href="#update-a-pull-request-branch" aria-label="Link to heading 'Update a pull request branch'" data-heading-content="Update a pull request branch" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch
+</span></code></pre>
+<p>Updates the pull request branch with the latest upstream changes by merging HEAD from the base branch into the pull request branch.<br>
+Note: If making a request on behalf of a GitHub App you must also have permissions to write the contents of the head repository.</p>
+<h3 id="parameters-10" title="Update a pull request branch / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>expected_head_sha</code></strong> (string)<br>
+The expected SHA of the pull request's HEAD ref. This is the most recent commit on the pull request's branch. If the expected SHA does not match the pull request's HEAD, you will receive a 422 Unprocessable Entity status. You can use the "List commits" endpoint to find the most recent commit SHA. Default: SHA of the pull request's current HEAD ref.</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Update a pull request branch / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Update a pull request branch / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/update-branch \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "expected_head_sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>message</code>: string</li>
+<li><code>url</code>: string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

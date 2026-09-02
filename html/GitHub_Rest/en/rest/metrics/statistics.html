@@ -1,0 +1,295 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for repository statistics</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Metrics</a> / </nav><h1 id="rest-api-endpoints-for-repository-statistics">REST API endpoints for repository statistics<a href="#rest-api-endpoints-for-repository-statistics" aria-label="Link to heading 'REST API endpoints for repository statistics'" data-heading-content="REST API endpoints for repository statistics" class="anchor"></a></h1>
+<p>Use the REST API to fetch the data that GitHub uses for visualizing different types of repository activity.</p>
+<h2 id="about-repository-statistics" title="About repository statistics">About repository statistics<a href="#about-repository-statistics" aria-label="Link to heading 'About repository statistics'" data-heading-content="About repository statistics" class="anchor"></a></h2>
+<p>You can use the REST API to fetch the data that GitHub uses for visualizing different types of repository activity.</p>
+<h3 id="best-practices-for-caching" title="About repository statistics / Best practices for caching">Best practices for caching<a href="#best-practices-for-caching" aria-label="Link to heading 'Best practices for caching'" data-heading-content="Best practices for caching" class="anchor"></a></h3>
+<p>Computing repository statistics is an expensive operation, so we try to return cached<br>
+data whenever possible. If the data hasn't been cached when you query a repository's<br>
+statistics, you'll receive a <code>202</code> response; a background job is also fired to<br>
+start compiling these statistics. You should allow the job a short time to complete, and<br>
+then submit the request again. If the job has completed, that request will receive a<br>
+<code>200</code> response with the statistics in the response body.</p>
+<p>Repository statistics are cached by the SHA of the repository's default branch; pushing to the default branch resets the statistics cache.</p>
+<h3 id="statistics-exclude-some-types-of-commits" title="About repository statistics / Statistics exclude some types of commits">Statistics exclude some types of commits<a href="#statistics-exclude-some-types-of-commits" aria-label="Link to heading 'Statistics exclude some types of commits'" data-heading-content="Statistics exclude some types of commits" class="anchor"></a></h3>
+<p>The statistics exposed by the API match the statistics shown by <a href="https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/about-repository-graphs" class="external">different repository graphs</a>.</p>
+<p>To summarize this:</p>
+<ul>
+<li>All statistics exclude merge commits.</li>
+<li>Contributor statistics also exclude empty commits.</li>
+</ul>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-the-weekly-commit-activity" title="Get the weekly commit activity">Get the weekly commit activity<a href="#get-the-weekly-commit-activity" aria-label="Link to heading 'Get the weekly commit activity'" data-heading-content="Get the weekly commit activity" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stats/code_frequency
+</span></code></pre>
+<p>Returns a weekly aggregate of the number of additions and deletions pushed to a repository.<br>
+Note</p>
+<p>This endpoint can only be used for repositories with fewer than 10,000 commits. If the repository contains 10,000 or more commits, a 422 status code will be returned.</p>
+<h3 id="parameters" title="Get the weekly commit activity / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get the weekly commit activity / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Returns a weekly aggregate of the number of additions and deletions pushed to a repository.</p>
+</li>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>422</strong> - Repository contains more than 10,000 commits</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get the weekly commit activity / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stats/code_frequency
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of array</p>
+<h2 id="get-the-last-year-of-commit-activity" title="Get the last year of commit activity">Get the last year of commit activity<a href="#get-the-last-year-of-commit-activity" aria-label="Link to heading 'Get the last year of commit activity'" data-heading-content="Get the last year of commit activity" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stats/commit_activity
+</span></code></pre>
+<p>Returns the last year of commit activity grouped by week. The days array is a group of commits per day, starting on Sunday.</p>
+<h3 id="parameters-1" title="Get the last year of commit activity / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get the last year of commit activity / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get the last year of commit activity / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stats/commit_activity
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Commit Activity</code>:</p>
+<ul>
+<li><code>days</code>: required, array of integer</li>
+<li><code>total</code>: required, integer</li>
+<li><code>week</code>: required, integer</li>
+</ul>
+<h2 id="get-all-contributor-commit-activity" title="Get all contributor commit activity">Get all contributor commit activity<a href="#get-all-contributor-commit-activity" aria-label="Link to heading 'Get all contributor commit activity'" data-heading-content="Get all contributor commit activity" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stats/contributors
+</span></code></pre>
+<p>Returns the total number of commits authored by the contributor. In addition, the response includes a Weekly Hash (weeks array) with the following information:</p>
+<p>w - Start of the week, given as a Unix timestamp.<br>
+a - Number of additions<br>
+d - Number of deletions<br>
+c - Number of commits</p>
+<p>Note</p>
+<p>This endpoint will return 0 values for all addition and deletion counts in repositories with 10,000 or more commits.</p>
+<h3 id="parameters-2" title="Get all contributor commit activity / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get all contributor commit activity / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get all contributor commit activity / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stats/contributors
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Contributor Activity</code>:</p>
+<ul>
+<li><code>author</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>total</code>: required, integer</li>
+<li><code>weeks</code>: required, array of objects:
+<ul>
+<li><code>w</code>: integer</li>
+<li><code>a</code>: integer</li>
+<li><code>d</code>: integer</li>
+<li><code>c</code>: integer</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-the-weekly-commit-count" title="Get the weekly commit count">Get the weekly commit count<a href="#get-the-weekly-commit-count" aria-label="Link to heading 'Get the weekly commit count'" data-heading-content="Get the weekly commit count" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stats/participation
+</span></code></pre>
+<p>Returns the total commit counts for the owner and total commit counts in all. all is everyone combined, including the owner in the last 52 weeks. If you'd like to get the commit counts for non-owners, you can subtract owner from all.<br>
+The array order is oldest week (index 0) to most recent week.<br>
+The most recent week is seven days ago at UTC midnight to today at UTC midnight.</p>
+<h3 id="parameters-3" title="Get the weekly commit count / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get the weekly commit count / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - The array order is oldest week (index 0) to most recent week.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get the weekly commit count / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stats/participation
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>all</code>: required, array of integer</li>
+<li><code>owner</code>: required, array of integer</li>
+</ul>
+<h2 id="get-the-hourly-commit-count-for-each-day" title="Get the hourly commit count for each day">Get the hourly commit count for each day<a href="#get-the-hourly-commit-count-for-each-day" aria-label="Link to heading 'Get the hourly commit count for each day'" data-heading-content="Get the hourly commit count for each day" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stats/punch_card
+</span></code></pre>
+<p>Each array contains the day number, hour number, and number of commits:</p>
+<p>0-6: Sunday - Saturday<br>
+0-23: Hour of day<br>
+Number of commits</p>
+<p>For example, <span data-escaped-char="">[</span>2, 14, 25] indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.</p>
+<h3 id="parameters-4" title="Get the hourly commit count for each day / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get the hourly commit count for each day / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - For example, <span data-escaped-char="">[</span>2, 14, 25] indicates that there were 25 total commits, during the 2:00pm hour on Tuesdays. All times are based on the time zone of individual commits.</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get the hourly commit count for each day / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stats/punch_card
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-the-weekly-commit-activity">Get the weekly commit activity</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for code quality</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Code quality</a> / </nav><h1 id="rest-api-endpoints-for-code-quality">REST API endpoints for code quality<a href="#rest-api-endpoints-for-code-quality" aria-label="Link to heading 'REST API endpoints for code quality'" data-heading-content="REST API endpoints for code quality" class="anchor"></a></h1>
+<p>Use the REST API to manage a code quality configuration.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-code-quality-findings-for-a-repository" title="List code quality findings for a repository">List code quality findings for a repository<a href="#list-code-quality-findings-for-a-repository" aria-label="Link to heading 'List code quality findings for a repository'" data-heading-content="List code quality findings for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/code-quality/findings
+</span></code></pre>
+<p>Lists code quality findings for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with private or public repositories, or the public_repo scope to use this endpoint with only public repositories.</p>
+<h3 id="parameters" title="List code quality findings for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+If specified, only code quality findings with this state will be returned.<br>
+Can be one of: <code>open</code>, <code>dismissed</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List code quality findings for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Response if the user is not authorized to access Code quality for this repository.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List code quality findings for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/code-quality/findings
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>dismissed</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>rule</code>: required, object:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string</li>
+<li><code>help</code>: string</li>
+<li><code>severity</code>: required, string, enum: <code>error</code>, <code>warning</code>, <code>note</code>, <code>none</code></li>
+<li><code>category</code>: required, string, enum: <code>none</code>, <code>maintainability</code>, <code>reliability</code></li>
+</ul>
+</li>
+<li><code>location</code>: required, object:
+<ul>
+<li><code>path</code>: required, string</li>
+<li><code>start_line</code>: integer</li>
+<li><code>start_column</code>: integer</li>
+<li><code>end_line</code>: integer</li>
+<li><code>end_column</code>: integer</li>
+</ul>
+</li>
+<li><code>message</code>: required, object:
+<ul>
+<li><code>text</code>: required, string</li>
+<li><code>markdown</code>: required, string</li>
+</ul>
+</li>
+<li><code>created_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="get-a-code-quality-finding" title="Get a code quality finding">Get a code quality finding<a href="#get-a-code-quality-finding" aria-label="Link to heading 'Get a code quality finding'" data-heading-content="Get a code quality finding" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/code-quality/findings/{finding_number}
+</span></code></pre>
+<p>Gets a single code quality finding.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with private or public repositories, or the public_repo scope to use this endpoint with only public repositories.</p>
+<h3 id="parameters-1" title="Get a code quality finding / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>finding_number</code></strong> (integer) (required)<br>
+The number that identifies a finding.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a code quality finding / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Response if the user is not authorized to access Code quality for this repository.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a code quality finding / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/code-quality/findings/FINDING_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>dismissed</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>rule</code>: required, object:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string</li>
+<li><code>help</code>: string</li>
+<li><code>severity</code>: required, string, enum: <code>error</code>, <code>warning</code>, <code>note</code>, <code>none</code></li>
+<li><code>category</code>: required, string, enum: <code>none</code>, <code>maintainability</code>, <code>reliability</code></li>
+</ul>
+</li>
+<li><code>location</code>: required, object:
+<ul>
+<li><code>path</code>: required, string</li>
+<li><code>start_line</code>: integer</li>
+<li><code>start_column</code>: integer</li>
+<li><code>end_line</code>: integer</li>
+<li><code>end_column</code>: integer</li>
+</ul>
+</li>
+<li><code>message</code>: required, object:
+<ul>
+<li><code>text</code>: required, string</li>
+<li><code>markdown</code>: required, string</li>
+</ul>
+</li>
+<li><code>created_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="get-a-code-quality-setup-configuration" title="Get a code quality setup configuration">Get a code quality setup configuration<a href="#get-a-code-quality-setup-configuration" aria-label="Link to heading 'Get a code quality setup configuration'" data-heading-content="Get a code quality setup configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/code-quality/setup
+</span></code></pre>
+<p>Gets a code quality setup configuration.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with private or public repositories, or the public_repo scope to use this endpoint with only public repositories.</p>
+<h3 id="parameters-2" title="Get a code quality setup configuration / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a code quality setup configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Response if the user is not authorized to access Code quality for this repository.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a code quality setup configuration / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/code-quality/setup
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>state</code>: string, enum: <code>configured</code>, <code>not-configured</code></li>
+<li><code>languages</code>: array of string, enum: <code>csharp</code>, <code>go</code>, <code>java-kotlin</code>, <code>javascript-typescript</code>, <code>python</code>, <code>ruby</code>, <code>rust</code></li>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>schedule</code>: string or null, enum: <code>weekly</code>, <code>null</code></li>
+<li><code>ai_findings_option</code>: string or null, enum: <code>disabled</code>, <code>on_push</code>, <code>null</code></li>
+</ul>
+<h2 id="update-a-code-quality-setup-configuration" title="Update a code quality setup configuration">Update a code quality setup configuration<a href="#update-a-code-quality-setup-configuration" aria-label="Link to heading 'Update a code quality setup configuration'" data-heading-content="Update a code quality setup configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/code-quality/setup
+</span></code></pre>
+<p>Updates a code quality setup configuration.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with private or public repositories, or the public_repo scope to use this endpoint with only public repositories.</p>
+<h3 id="parameters-3" title="Update a code quality setup configuration / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+The desired state of code quality setup.<br>
+Can be one of: <code>configured</code>, <code>not-configured</code></p>
+</li>
+<li>
+<p><strong><code>runner_type</code></strong> (string)<br>
+Runner type to be used.<br>
+Can be one of: <code>standard</code>, <code>labeled</code></p>
+</li>
+<li>
+<p><strong><code>runner_label</code></strong> (string or null)<br>
+Runner label to be used if the runner type is labeled.</p>
+</li>
+<li>
+<p><strong><code>languages</code></strong> (array of strings)<br>
+Languages to be analyzed.<br>
+Supported values are: csharp, go, java-kotlin, javascript-typescript, python, ruby</p>
+</li>
+<li>
+<p><strong><code>ai_findings_option</code></strong> (string)<br>
+Whether AI findings run for Code Quality on this repository.<br>
+Can be one of: <code>disabled</code>, <code>on_push</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a code quality setup configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Response if the repository is archived or if Code quality is not enabled for this repository</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Response if there is already a code quality setup configuration update in progress</p>
+</li>
+<li>
+<p><strong>422</strong> - Response if the configuration change cannot be made</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Update a code quality setup configuration / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/code-quality/setup \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "state": "configured",
+</span><span style="color:#c0c5ce;">  "languages": [
+</span><span style="color:#c0c5ce;">    "javascript-typescript",
+</span><span style="color:#c0c5ce;">    "python",
+</span><span style="color:#c0c5ce;">    "ruby"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>run_id</code>: integer</li>
+<li><code>run_url</code>: string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,839 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for personal access tokens</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Organizations</a> / </nav><h1 id="rest-api-endpoints-for-personal-access-tokens">REST API endpoints for personal access tokens<a href="#rest-api-endpoints-for-personal-access-tokens" aria-label="Link to heading 'REST API endpoints for personal access tokens'" data-heading-content="REST API endpoints for personal access tokens" class="anchor"></a></h1>
+<p>Use the REST API to manage fine-grained personal access tokens.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens" title="List requests to access organization resources with fine-grained personal access tokens">List requests to access organization resources with fine-grained personal access tokens<a href="#list-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens" aria-label="Link to heading 'List requests to access organization resources with fine-grained personal access tokens'" data-heading-content="List requests to access organization resources with fine-grained personal access tokens" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/personal-access-token-requests
+</span></code></pre>
+<p>Lists requests from organization members to access organization resources with a fine-grained personal access token.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters" title="List requests to access organization resources with fine-grained personal access tokens / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property by which to sort the results.<br>
+Default: <code>created_at</code><br>
+Can be one of: <code>created_at</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (array)<br>
+A list of owner usernames to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>repository</code></strong> (string)<br>
+The name of the repository to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>permission</code></strong> (string)<br>
+The permission to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>last_used_before</code></strong> (string)<br>
+Only show fine-grained personal access tokens used before the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>last_used_after</code></strong> (string)<br>
+Only show fine-grained personal access tokens used after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>token_id</code></strong> (array)<br>
+The ID of the token</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List requests to access organization resources with fine-grained personal access tokens / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List requests to access organization resources with fine-grained personal access tokens / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-token-requests
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Simple Organization Programmatic Access Grant Request</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>reason</code>: required, string or null</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>none</code>, <code>all</code>, <code>subset</code></li>
+<li><code>repositories_url</code>: required, string</li>
+<li><code>permissions</code>: required, object:
+<ul>
+<li><code>organization</code>: object, additional properties: string</li>
+<li><code>repository</code>: object, additional properties: string</li>
+<li><code>other</code>: object, additional properties: string</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string</li>
+<li><code>token_id</code>: required, integer</li>
+<li><code>token_name</code>: required, string</li>
+<li><code>token_expired</code>: required, boolean</li>
+<li><code>token_expires_at</code>: required, string or null</li>
+<li><code>token_last_used_at</code>: required, string or null</li>
+</ul>
+<h2 id="review-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens" title="Review requests to access organization resources with fine-grained personal access tokens">Review requests to access organization resources with fine-grained personal access tokens<a href="#review-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens" aria-label="Link to heading 'Review requests to access organization resources with fine-grained personal access tokens'" data-heading-content="Review requests to access organization resources with fine-grained personal access tokens" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/personal-access-token-requests
+</span></code></pre>
+<p>Approves or denies multiple pending requests to access organization resources via a fine-grained personal access token.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-1" title="Review requests to access organization resources with fine-grained personal access tokens / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>pat_request_ids</code></strong> (array of integers)<br>
+Unique identifiers of the requests for access via fine-grained personal access token. Must be formed of between 1 and 100 pat_request_id values.</p>
+</li>
+<li>
+<p><strong><code>action</code></strong> (string) (required)<br>
+Action to apply to the requests.<br>
+Can be one of: <code>approve</code>, <code>deny</code></p>
+</li>
+<li>
+<p><strong><code>reason</code></strong> (string or null)<br>
+Reason for approving or denying the requests. Max 1024 characters.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Review requests to access organization resources with fine-grained personal access tokens / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Review requests to access organization resources with fine-grained personal access tokens / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-denying-a-request">Example of denying a request<a href="#example-of-denying-a-request" aria-label="Link to heading 'Example of denying a request'" data-heading-content="Example of denying a request" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-token-requests \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "pat_request_ids": [
+</span><span style="color:#c0c5ce;">    42,
+</span><span style="color:#c0c5ce;">    73
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "action": "deny",
+</span><span style="color:#c0c5ce;">  "reason": "Access is too broad."
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>object</p>
+<h2 id="review-a-request-to-access-organization-resources-with-a-fine-grained-personal-access-token" title="Review a request to access organization resources with a fine-grained personal access token">Review a request to access organization resources with a fine-grained personal access token<a href="#review-a-request-to-access-organization-resources-with-a-fine-grained-personal-access-token" aria-label="Link to heading 'Review a request to access organization resources with a fine-grained personal access token'" data-heading-content="Review a request to access organization resources with a fine-grained personal access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/personal-access-token-requests/{pat_request_id}
+</span></code></pre>
+<p>Approves or denies a pending request to access organization resources via a fine-grained personal access token.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-2" title="Review a request to access organization resources with a fine-grained personal access token / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pat_request_id</code></strong> (integer) (required)<br>
+Unique identifier of the request for access via fine-grained personal access token.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>action</code></strong> (string) (required)<br>
+Action to apply to the request.<br>
+Can be one of: <code>approve</code>, <code>deny</code></p>
+</li>
+<li>
+<p><strong><code>reason</code></strong> (string or null)<br>
+Reason for approving or denying the request. Max 1024 characters.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Review a request to access organization resources with a fine-grained personal access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Review a request to access organization resources with a fine-grained personal access token / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-denying-a-request-1">Example of denying a request<a href="#example-of-denying-a-request-1" aria-label="Link to heading 'Example of denying a request'" data-heading-content="Example of denying a request" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-token-requests/PAT_REQUEST_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "action": "deny",
+</span><span style="color:#c0c5ce;">  "reason": "This request is denied because the access is too broad."
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-repositories-requested-to-be-accessed-by-a-fine-grained-personal-access-token" title="List repositories requested to be accessed by a fine-grained personal access token">List repositories requested to be accessed by a fine-grained personal access token<a href="#list-repositories-requested-to-be-accessed-by-a-fine-grained-personal-access-token" aria-label="Link to heading 'List repositories requested to be accessed by a fine-grained personal access token'" data-heading-content="List repositories requested to be accessed by a fine-grained personal access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories
+</span></code></pre>
+<p>Lists the repositories a fine-grained personal access token request is requesting access to.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-3" title="List repositories requested to be accessed by a fine-grained personal access token / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pat_request_id</code></strong> (integer) (required)<br>
+Unique identifier of the request for access via fine-grained personal access token.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="List repositories requested to be accessed by a fine-grained personal access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="List repositories requested to be accessed by a fine-grained personal access token / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-token-requests/PAT_REQUEST_ID/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Minimal Repository</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+<h2 id="list-fine-grained-personal-access-tokens-with-access-to-organization-resources" title="List fine-grained personal access tokens with access to organization resources">List fine-grained personal access tokens with access to organization resources<a href="#list-fine-grained-personal-access-tokens-with-access-to-organization-resources" aria-label="Link to heading 'List fine-grained personal access tokens with access to organization resources'" data-heading-content="List fine-grained personal access tokens with access to organization resources" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/personal-access-tokens
+</span></code></pre>
+<p>Lists approved fine-grained personal access tokens owned by organization members that can access organization resources.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-4" title="List fine-grained personal access tokens with access to organization resources / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property by which to sort the results.<br>
+Default: <code>created_at</code><br>
+Can be one of: <code>created_at</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (array)<br>
+A list of owner usernames to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>repository</code></strong> (string)<br>
+The name of the repository to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>permission</code></strong> (string)<br>
+The permission to use to filter the results.</p>
+</li>
+<li>
+<p><strong><code>last_used_before</code></strong> (string)<br>
+Only show fine-grained personal access tokens used before the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>last_used_after</code></strong> (string)<br>
+Only show fine-grained personal access tokens used after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>token_id</code></strong> (array)<br>
+The ID of the token</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List fine-grained personal access tokens with access to organization resources / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="List fine-grained personal access tokens with access to organization resources / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-tokens
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Organization Programmatic Access Grant</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>none</code>, <code>all</code>, <code>subset</code></li>
+<li><code>repositories_url</code>: required, string</li>
+<li><code>permissions</code>: required, object:
+<ul>
+<li><code>organization</code>: object, additional properties: string</li>
+<li><code>repository</code>: object, additional properties: string</li>
+<li><code>other</code>: object, additional properties: string</li>
+</ul>
+</li>
+<li><code>access_granted_at</code>: required, string</li>
+<li><code>token_id</code>: required, integer</li>
+<li><code>token_name</code>: required, string</li>
+<li><code>token_expired</code>: required, boolean</li>
+<li><code>token_expires_at</code>: required, string or null</li>
+<li><code>token_last_used_at</code>: required, string or null</li>
+</ul>
+<h2 id="update-the-access-to-organization-resources-via-fine-grained-personal-access-tokens" title="Update the access to organization resources via fine-grained personal access tokens">Update the access to organization resources via fine-grained personal access tokens<a href="#update-the-access-to-organization-resources-via-fine-grained-personal-access-tokens" aria-label="Link to heading 'Update the access to organization resources via fine-grained personal access tokens'" data-heading-content="Update the access to organization resources via fine-grained personal access tokens" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/personal-access-tokens
+</span></code></pre>
+<p>Updates the access organization members have to organization resources via fine-grained personal access tokens. Limited to revoking a token's existing access.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-5" title="Update the access to organization resources via fine-grained personal access tokens / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>action</code></strong> (string) (required)<br>
+Action to apply to the fine-grained personal access token.<br>
+Can be one of: <code>revoke</code></p>
+</li>
+<li>
+<p><strong><code>pat_ids</code></strong> (array of integers) (required)<br>
+The IDs of the fine-grained personal access tokens.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Update the access to organization resources via fine-grained personal access tokens / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Update the access to organization resources via fine-grained personal access tokens / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-revoking-a-fine-grained-personal-access-token">Example of revoking a fine-grained personal access token.<a href="#example-of-revoking-a-fine-grained-personal-access-token" aria-label="Link to heading 'Example of revoking a fine-grained personal access token.'" data-heading-content="Example of revoking a fine-grained personal access token." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-tokens \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "action": "revoke",
+</span><span style="color:#c0c5ce;">  "pat_ids": [
+</span><span style="color:#c0c5ce;">    1296269,
+</span><span style="color:#c0c5ce;">    1296280
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>Same response schema as <a href="#review-requests-to-access-organization-resources-with-fine-grained-personal-access-tokens">Review requests to access organization resources with fine-grained personal access tokens</a>.</p>
+<h2 id="update-the-access-a-fine-grained-personal-access-token-has-to-organization-resources" title="Update the access a fine-grained personal access token has to organization resources">Update the access a fine-grained personal access token has to organization resources<a href="#update-the-access-a-fine-grained-personal-access-token-has-to-organization-resources" aria-label="Link to heading 'Update the access a fine-grained personal access token has to organization resources'" data-heading-content="Update the access a fine-grained personal access token has to organization resources" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/personal-access-tokens/{pat_id}
+</span></code></pre>
+<p>Updates the access an organization member has to organization resources via a fine-grained personal access token. Limited to revoking the token's existing access. Limited to revoking a token's existing access.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-6" title="Update the access a fine-grained personal access token has to organization resources / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pat_id</code></strong> (integer) (required)<br>
+The unique identifier of the fine-grained personal access token.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>action</code></strong> (string) (required)<br>
+Action to apply to the fine-grained personal access token.<br>
+Can be one of: <code>revoke</code></li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Update the access a fine-grained personal access token has to organization resources / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Update the access a fine-grained personal access token has to organization resources / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-revoking-a-fine-grained-personal-access-token-1">Example of revoking a fine-grained personal access token.<a href="#example-of-revoking-a-fine-grained-personal-access-token-1" aria-label="Link to heading 'Example of revoking a fine-grained personal access token.'" data-heading-content="Example of revoking a fine-grained personal access token." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-tokens/PAT_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "action": "revoke"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-repositories-a-fine-grained-personal-access-token-has-access-to" title="List repositories a fine-grained personal access token has access to">List repositories a fine-grained personal access token has access to<a href="#list-repositories-a-fine-grained-personal-access-token-has-access-to" aria-label="Link to heading 'List repositories a fine-grained personal access token has access to'" data-heading-content="List repositories a fine-grained personal access token has access to" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories
+</span></code></pre>
+<p>Lists the repositories a fine-grained personal access token has access to.<br>
+Only GitHub Apps can use this endpoint.</p>
+<h3 id="parameters-7" title="List repositories a fine-grained personal access token has access to / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pat_id</code></strong> (integer) (required)<br>
+Unique identifier of the fine-grained personal access token.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="List repositories a fine-grained personal access token has access to / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="List repositories a fine-grained personal access token has access to / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/personal-access-tokens/PAT_ID/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-repositories-requested-to-be-accessed-by-a-fine-grained-personal-access-token">List repositories requested to be accessed by a fine-grained personal access token</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Git commits</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Git database</a> / </nav><h1 id="rest-api-endpoints-for-git-commits">REST API endpoints for Git commits<a href="#rest-api-endpoints-for-git-commits" aria-label="Link to heading 'REST API endpoints for Git commits'" data-heading-content="REST API endpoints for Git commits" class="anchor"></a></h1>
+<p>Use the REST API to interact with commit objects in your Git database on GitHub.</p>
+<h2 id="about-git-commits" title="About Git commits">About Git commits<a href="#about-git-commits" aria-label="Link to heading 'About Git commits'" data-heading-content="About Git commits" class="anchor"></a></h2>
+<p>A Git commit is a snapshot of the hierarchy (<a href="trees.html">Git tree</a>) and the contents of the files (<a href="blobs.html">Git blob</a>) in a Git repository. These endpoints allow you to read and write <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_git_commit_objects" class="external">commit objects</a> to your Git database on GitHub.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="create-a-commit" title="Create a commit">Create a commit<a href="#create-a-commit" aria-label="Link to heading 'Create a commit'" data-heading-content="Create a commit" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/git/commits
+</span></code></pre>
+<p>Creates a new Git commit object.<br>
+Signature verification object<br>
+The response will include a verification object that describes the result of verifying the commit's signature. The following fields are included in the verification object:</p>
+<p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in the table below<span data-escaped-char="">.</span>signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified<span data-escaped-char="">_</span>atstringThe date the signature was verified by GitHub.<br>
+These are the possible values for reason in the verification object:</p>
+<p>ValueDescriptionexpired<span data-escaped-char="">_</span>keyThe key that made the signature is expired.not<span data-escaped-char="">_</span>signing<span data-escaped-char="">_</span>keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify<span data-escaped-char="">_</span>errorThere was an error communicating with the signature verification service.gpgverify<span data-escaped-char="">_</span>unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown<span data-escaped-char="">_</span>signature<span data-escaped-char="">_</span>typeA non-PGP signature was found in the commit.no<span data-escaped-char="">_</span>userNo user was associated with the committer email address in the commit.unverified<span data-escaped-char="">_</span>emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad<span data-escaped-char="">_</span>emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown<span data-escaped-char="">_</span>keyThe key that made the signature has not been registered with any user's account.malformed<span data-escaped-char="">_</span>signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
+<h3 id="parameters" title="Create a commit / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>message</code></strong> (string) (required)<br>
+The commit message</p>
+</li>
+<li>
+<p><strong><code>tree</code></strong> (string) (required)<br>
+The SHA of the tree object this commit points to</p>
+</li>
+<li>
+<p><strong><code>parents</code></strong> (array of strings)<br>
+The full SHAs of the commits that were the parents of this commit. If omitted or empty, the commit will be written as a root commit. For a single parent, an array of one SHA should be provided; for a merge commit, an array of more than one should be provided.</p>
+</li>
+<li>
+<p><strong><code>author</code></strong> (object)<br>
+Information about the author of the commit. By default, the author will be the authenticated user and the current date. See the author and committer object below for details.</p>
+<ul>
+<li><strong><code>name</code></strong> (string) (required)<br>
+The name of the author (or committer) of the commit</li>
+<li><strong><code>email</code></strong> (string) (required)<br>
+The email of the author (or committer) of the commit</li>
+<li><strong><code>date</code></strong> (string)<br>
+Indicates when this commit was authored (or committed). This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>committer</code></strong> (object)<br>
+Information about the person who is making the commit. By default, committer will use the information set in author. See the author and committer object below for details.</p>
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+The name of the author (or committer) of the commit</li>
+<li><strong><code>email</code></strong> (string)<br>
+The email of the author (or committer) of the commit</li>
+<li><strong><code>date</code></strong> (string)<br>
+Indicates when this commit was authored (or committed). This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>signature</code></strong> (string)<br>
+The PGP signature of the commit. GitHub adds the signature to the gpgsig header of the created commit. For a commit signature to be verifiable by Git or GitHub, it must be an ASCII-armored detached PGP signature over the string commit as it would be written to the object database. To pass a signature parameter, you need to first manually create a valid PGP signature, which can be complicated. You may find it easier to use the command line to create signed commits.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Create a commit / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Create a commit / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/commits \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "message": "my commit message",
+</span><span style="color:#c0c5ce;">  "author": {
+</span><span style="color:#c0c5ce;">    "name": "Mona Octocat",
+</span><span style="color:#c0c5ce;">    "email": "octocat@github.com",
+</span><span style="color:#c0c5ce;">    "date": "2008-07-09T16:13:30+12:00"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "parents": [
+</span><span style="color:#c0c5ce;">    "7d1b31e74ee336d15cbd21741bc88a537ed063a0"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "tree": "827efc6d56897b048c772eb4087f854f46256132",
+</span><span style="color:#c0c5ce;">  "signature": "-----BEGIN PGP SIGNATURE-----\n\niQIzBAABAQAdFiEESn/54jMNIrGSE6Tp6cQjvhfv7nAFAlnT71cACgkQ6cQjvhfv\n7nCWwA//XVqBKWO0zF+bZl6pggvky3Oc2j1pNFuRWZ29LXpNuD5WUGXGG209B0hI\nDkmcGk19ZKUTnEUJV2Xd0R7AW01S/YSub7OYcgBkI7qUE13FVHN5ln1KvH2all2n\n2+JCV1HcJLEoTjqIFZSSu/sMdhkLQ9/NsmMAzpf/iIM0nQOyU4YRex9eD1bYj6nA\nOQPIDdAuaTQj1gFPHYLzM4zJnCqGdRlg0sOM/zC5apBNzIwlgREatOYQSCfCKV7k\nnrU34X8b9BzQaUx48Qa+Dmfn5KQ8dl27RNeWAqlkuWyv3pUauH9UeYW+KyuJeMkU\n+NyHgAsWFaCFl23kCHThbLStMZOYEnGagrd0hnm1TPS4GJkV4wfYMwnI4KuSlHKB\njHl3Js9vNzEUQipQJbgCgTiWvRJoK3ENwBTMVkKHaqT4x9U4Jk/XZB6Q8MA09ezJ\n3QgiTjTAGcum9E9QiJqMYdWQPWkaBIRRz5cET6HPB48YNXAAUsfmuYsGrnVLYbG+\nUpC6I97VybYHTy2O9XSGoaLeMI9CsFn38ycAxxbWagk5mhclNTP5mezIq6wKSwmr\nX11FW3n1J23fWZn5HJMBsRnUCgzqzX3871IqLYHqRJ/bpZ4h20RhTyPj5c/z7QXp\neSakNQMfbbMcljkha+ZMuVQX1K9aRlVqbmv3ZMWh+OijLYVU2bc=\n=5Io4\n-----END PGP SIGNATURE-----\n"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>author</code>: required, object:
+<ul>
+<li><code>date</code>: required, string, format: date-time</li>
+<li><code>email</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+</ul>
+</li>
+<li><code>committer</code>: required, object:
+<ul>
+<li><code>date</code>: required, string, format: date-time</li>
+<li><code>email</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+</ul>
+</li>
+<li><code>message</code>: required, string</li>
+<li><code>tree</code>: required, object:
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>parents</code>: required, array of objects:
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>verification</code>: required, object:
+<ul>
+<li><code>verified</code>: required, boolean</li>
+<li><code>reason</code>: required, string</li>
+<li><code>signature</code>: required, string or null</li>
+<li><code>payload</code>: required, string or null</li>
+<li><code>verified_at</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+</ul>
+<h2 id="get-a-commit-object" title="Get a commit object">Get a commit object<a href="#get-a-commit-object" aria-label="Link to heading 'Get a commit object'" data-heading-content="Get a commit object" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/commits/{commit_sha}
+</span></code></pre>
+<p>Gets a Git commit object.<br>
+To get the contents of a commit, see "Get a commit."<br>
+Signature verification object<br>
+The response will include a verification object that describes the result of verifying the commit's signature. The following fields are included in the verification object:</p>
+<p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in the table below<span data-escaped-char="">.</span>signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified<span data-escaped-char="">_</span>atstringThe date the signature was verified by GitHub.<br>
+These are the possible values for reason in the verification object:</p>
+<p>ValueDescriptionexpired<span data-escaped-char="">_</span>keyThe key that made the signature is expired.not<span data-escaped-char="">_</span>signing<span data-escaped-char="">_</span>keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify<span data-escaped-char="">_</span>errorThere was an error communicating with the signature verification service.gpgverify<span data-escaped-char="">_</span>unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown<span data-escaped-char="">_</span>signature<span data-escaped-char="">_</span>typeA non-PGP signature was found in the commit.no<span data-escaped-char="">_</span>userNo user was associated with the committer email address in the commit.unverified<span data-escaped-char="">_</span>emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad<span data-escaped-char="">_</span>emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown<span data-escaped-char="">_</span>keyThe key that made the signature has not been registered with any user's account.malformed<span data-escaped-char="">_</span>signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
+<h3 id="parameters-1" title="Get a commit object / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>commit_sha</code></strong> (string) (required)<br>
+The SHA of the commit.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a commit object / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a commit object / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/commits/COMMIT_SHA
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-commit">Create a commit</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

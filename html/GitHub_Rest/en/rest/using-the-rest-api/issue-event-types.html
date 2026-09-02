@@ -1,0 +1,3376 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Issue event types</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Using the REST API</a> / </nav><h1 id="issue-event-types">Issue event types<a href="#issue-event-types" aria-label="Link to heading 'Issue event types'" data-heading-content="Issue event types" class="anchor"></a></h1>
+<p>For the REST APIs for issue events and timeline events, learn about each event type, the triggering action on GitHub, and each event's unique properties.</p>
+<p>Issue events are triggered by activity in issues and pull requests and are available in the REST API for <a href="../issues/events.html">Issue events</a> and <a href="../issues/timeline.html">Timeline events</a>. Each event type specifies whether the event is available in the REST API for issue events or timeline events.</p>
+<p>GitHub's REST API considers every pull request to be an issue, but not every issue is a pull request. For this reason, the Issue Events and Timeline Events endpoints may return both issues and pull requests in the response. Pull requests have a <code>pull_request</code> property in the <code>issue</code> object. Because pull requests are issues, issue and pull request numbers do not overlap in a repository. For example, if you open your first issue in a repository, the number will be 1. If you then open a pull request, the number will be 2. Each event type specifies if the event occurs in pull request, issues, or both.</p>
+<h2 id="issue-event-object-common-properties" title="Issue event object common properties">Issue event object common properties<a href="#issue-event-object-common-properties" aria-label="Link to heading 'Issue event object common properties'" data-heading-content="Issue event object common properties" class="anchor"></a></h2>
+<p>Issue events all have the same object structure, except events that are only available in the REST API for timeline events. Some events also include additional properties that provide more context about the event resources. Refer to the specific event for details about any properties that differ from this object format.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="assigned" title="assigned">assigned<a href="#assigned" aria-label="Link to heading 'assigned'" data-heading-content="assigned" class="anchor"></a></h2>
+<p>The issue or pull request was assigned to a user.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-assigned" title="Properties for assigned">Properties for assigned<a href="#properties-for-assigned" aria-label="Link to heading 'Properties for assigned'" data-heading-content="Properties for assigned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">assignee</code></td>
+<td><code>object</code></td>
+<td>The person assigned to this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">assigner</code></td>
+<td><code>object</code></td>
+<td>The person who performed the assignment for this issue. This field is available in the REST API for issue events but not the REST API for timeline events.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="automatic_base_change_failed" title="automatic_base_change_failed">automatic<span data-escaped-char="">_</span>base<span data-escaped-char="">_</span>change<span data-escaped-char="">_</span>failed<a href="#automatic_base_change_failed" aria-label="Link to heading 'automatic_base_change_failed'" data-heading-content="automatic_base_change_failed" class="anchor"></a></h2>
+<p>GitHub unsuccessfully attempted to automatically change the base branch of the pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-automatic_base_change_failed" title="Properties for automatic_base_change_failed">Properties for automatic<span data-escaped-char="">_</span>base<span data-escaped-char="">_</span>change<span data-escaped-char="">_</span>failed<a href="#properties-for-automatic_base_change_failed" aria-label="Link to heading 'Properties for automatic_base_change_failed'" data-heading-content="Properties for automatic_base_change_failed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="automatic_base_change_succeeded" title="automatic_base_change_succeeded">automatic<span data-escaped-char="">_</span>base<span data-escaped-char="">_</span>change<span data-escaped-char="">_</span>succeeded<a href="#automatic_base_change_succeeded" aria-label="Link to heading 'automatic_base_change_succeeded'" data-heading-content="automatic_base_change_succeeded" class="anchor"></a></h2>
+<p>GitHub successfully attempted to automatically change the base branch of the pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-automatic_base_change_succeeded" title="Properties for automatic_base_change_succeeded">Properties for automatic<span data-escaped-char="">_</span>base<span data-escaped-char="">_</span>change<span data-escaped-char="">_</span>succeeded<a href="#properties-for-automatic_base_change_succeeded" aria-label="Link to heading 'Properties for automatic_base_change_succeeded'" data-heading-content="Properties for automatic_base_change_succeeded" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="base_ref_changed" title="base_ref_changed">base<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>changed<a href="#base_ref_changed" aria-label="Link to heading 'base_ref_changed'" data-heading-content="base_ref_changed" class="anchor"></a></h2>
+<p>The base reference branch of the pull request changed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-base_ref_changed" title="Properties for base_ref_changed">Properties for base<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>changed<a href="#properties-for-base_ref_changed" aria-label="Link to heading 'Properties for base_ref_changed'" data-heading-content="Properties for base_ref_changed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="closed" title="closed">closed<a href="#closed" aria-label="Link to heading 'closed'" data-heading-content="closed" class="anchor"></a></h2>
+<p>The issue or pull request was closed. When the <code>commit_id</code> is present, it identifies the commit that closed the issue using "closes / fixes" syntax. For more information about the syntax, see <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword" class="external">Linking a pull request to an issue</a>.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-closed" title="Properties for closed">Properties for closed<a href="#properties-for-closed" aria-label="Link to heading 'Properties for closed'" data-heading-content="Properties for closed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="commented" title="commented">commented<a href="#commented" aria-label="Link to heading 'commented'" data-heading-content="commented" class="anchor"></a></h2>
+<p>A comment was added to the issue or pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-commented" title="Properties for commented">Properties for commented<a href="#properties-for-commented" aria-label="Link to heading 'Properties for commented'" data-heading-content="Properties for commented" class="anchor"></a></h3>
+<p>This events properties do not use the same structure as the <a href="#issue-event-object-common-properties">issue event object common properties</a>. The following properties are returned for this event.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL to retrieve the issue comment.</td>
+</tr>
+<tr>
+<td><code class="keyword">html_url</code></td>
+<td><code>string</code></td>
+<td>The HTML URL of the issue comment.</td>
+</tr>
+<tr>
+<td><code class="keyword">issue_url</code></td>
+<td><code>string</code></td>
+<td>The HTML URL of the issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">user</code></td>
+<td><code>object</code></td>
+<td>The person who commented on the issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the comment was added.</td>
+</tr>
+<tr>
+<td><code class="keyword">updated_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the comment was updated or created, if the comment is never updated.</td>
+</tr>
+<tr>
+<td><code class="keyword">author_association</code></td>
+<td><code>string</code></td>
+<td>The permissions the user has in the issue's repository. For example, the value would be <code>"OWNER"</code> if the owner of repository created a comment.</td>
+</tr>
+<tr>
+<td><code class="keyword">body</code></td>
+<td><code>string</code></td>
+<td>The comment body text.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>The event value is <code>"commented"</code>.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="committed" title="committed">committed<a href="#committed" aria-label="Link to heading 'committed'" data-heading-content="committed" class="anchor"></a></h2>
+<p>A commit was added to the pull request's <code>HEAD</code> branch.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-committed" title="Properties for committed">Properties for committed<a href="#properties-for-committed" aria-label="Link to heading 'Properties for committed'" data-heading-content="Properties for committed" class="anchor"></a></h3>
+<p>This events properties do not use the same structure as the <a href="#issue-event-object-common-properties">issue event object common properties</a>. The following properties are returned for this event.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">sha</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit in the pull request.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL to retrieve the commit.</td>
+</tr>
+<tr>
+<td><code class="keyword">html_url</code></td>
+<td><code>string</code></td>
+<td>The HTML URL of the commit.</td>
+</tr>
+<tr>
+<td><code class="keyword">author</code></td>
+<td><code>object</code></td>
+<td>The person who authored the commit.</td>
+</tr>
+<tr>
+<td><code class="keyword">committer</code></td>
+<td><code>object</code></td>
+<td>The person who committed the commit on behalf of the author.</td>
+</tr>
+<tr>
+<td><code class="keyword">tree</code></td>
+<td><code>object</code></td>
+<td>The Git tree of the commit.</td>
+</tr>
+<tr>
+<td><code class="keyword">message</code></td>
+<td><code>string</code></td>
+<td>The commit message.</td>
+</tr>
+<tr>
+<td><code class="keyword">parents</code></td>
+<td><code>array of objects</code></td>
+<td>A list of parent commits.</td>
+</tr>
+<tr>
+<td><code class="keyword">verification</code></td>
+<td><code>object</code></td>
+<td>The result of verifying the commit's signature. For more information, see <a href="../git/commits.html#get-a-commit">REST API endpoints for Git commits</a>.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>The event value is <code>"committed"</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="connected" title="connected">connected<a href="#connected" aria-label="Link to heading 'connected'" data-heading-content="connected" class="anchor"></a></h2>
+<p>The issue or pull request was linked to another issue or pull request. For more information, see <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue" class="external">Linking a pull request to an issue</a>.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-connected" title="Properties for connected">Properties for connected<a href="#properties-for-connected" aria-label="Link to heading 'Properties for connected'" data-heading-content="Properties for connected" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="convert_to_draft" title="convert_to_draft">convert<span data-escaped-char="">_</span>to<span data-escaped-char="">_</span>draft<a href="#convert_to_draft" aria-label="Link to heading 'convert_to_draft'" data-heading-content="convert_to_draft" class="anchor"></a></h2>
+<p>The pull request was converted to draft mode.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-convert_to_draft" title="Properties for convert_to_draft">Properties for convert<span data-escaped-char="">_</span>to<span data-escaped-char="">_</span>draft<a href="#properties-for-convert_to_draft" aria-label="Link to heading 'Properties for convert_to_draft'" data-heading-content="Properties for convert_to_draft" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="converted_to_discussion" title="converted_to_discussion">converted<span data-escaped-char="">_</span>to<span data-escaped-char="">_</span>discussion<a href="#converted_to_discussion" aria-label="Link to heading 'converted_to_discussion'" data-heading-content="converted_to_discussion" class="anchor"></a></h2>
+<p>The issue was closed and converted to a discussion.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-converted_to_discussion" title="Properties for converted_to_discussion">Properties for converted<span data-escaped-char="">_</span>to<span data-escaped-char="">_</span>discussion<a href="#properties-for-converted_to_discussion" aria-label="Link to heading 'Properties for converted_to_discussion'" data-heading-content="Properties for converted_to_discussion" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cross-referenced" title="cross-referenced">cross-referenced<a href="#cross-referenced" aria-label="Link to heading 'cross-referenced'" data-heading-content="cross-referenced" class="anchor"></a></h2>
+<p>The issue or pull request was referenced from another issue or pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-cross-referenced" title="Properties for cross-referenced">Properties for cross-referenced<a href="#properties-for-cross-referenced" aria-label="Link to heading 'Properties for cross-referenced'" data-heading-content="Properties for cross-referenced" class="anchor"></a></h3>
+<p>This events properties do not use the same structure as the <a href="#issue-event-object-common-properties">issue event object common properties</a>. The following properties are returned for this event.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the cross-reference was added.</td>
+</tr>
+<tr>
+<td><code class="keyword">updated_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the cross-reference was updated or created, if the cross-reference is never updated.</td>
+</tr>
+<tr>
+<td><code class="keyword">source</code></td>
+<td><code>object</code></td>
+<td>The issue or pull request that added a cross-reference.</td>
+</tr>
+<tr>
+<td><code class="keyword">source[type]</code></td>
+<td><code>string</code></td>
+<td>This value will always be <code>"issue"</code> because pull requests are of type issue. Only cross-reference events triggered by issues or pull requests are returned in the REST API for timeline events. To determine if the issue that triggered the event is a pull request, you can check if the <code>source[issue][pull_request]</code> object exists.</td>
+</tr>
+<tr>
+<td><code class="keyword">source[issue]</code></td>
+<td><code>object</code></td>
+<td>The <code>issue</code> object that added the cross-reference.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>The event value is <code>"cross-referenced"</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="demilestoned" title="demilestoned">demilestoned<a href="#demilestoned" aria-label="Link to heading 'demilestoned'" data-heading-content="demilestoned" class="anchor"></a></h2>
+<p>The issue or pull request was removed from a milestone.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-demilestoned" title="Properties for demilestoned">Properties for demilestoned<a href="#properties-for-demilestoned" aria-label="Link to heading 'Properties for demilestoned'" data-heading-content="Properties for demilestoned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">milestone</code></td>
+<td><code>object</code></td>
+<td>The milestone object.</td>
+</tr>
+<tr>
+<td><code class="keyword">milestone[title]</code></td>
+<td><code>string</code></td>
+<td>The title of the milestone.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deployed" title="deployed">deployed<a href="#deployed" aria-label="Link to heading 'deployed'" data-heading-content="deployed" class="anchor"></a></h2>
+<p>The pull request was deployed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-deployed" title="Properties for deployed">Properties for deployed<a href="#properties-for-deployed" aria-label="Link to heading 'Properties for deployed'" data-heading-content="Properties for deployed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deployment_environment_changed" title="deployment_environment_changed">deployment<span data-escaped-char="">_</span>environment<span data-escaped-char="">_</span>changed<a href="#deployment_environment_changed" aria-label="Link to heading 'deployment_environment_changed'" data-heading-content="deployment_environment_changed" class="anchor"></a></h2>
+<p>The pull request deployment environment was changed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-deployment_environment_changed" title="Properties for deployment_environment_changed">Properties for deployment<span data-escaped-char="">_</span>environment<span data-escaped-char="">_</span>changed<a href="#properties-for-deployment_environment_changed" aria-label="Link to heading 'Properties for deployment_environment_changed'" data-heading-content="Properties for deployment_environment_changed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="disconnected" title="disconnected">disconnected<a href="#disconnected" aria-label="Link to heading 'disconnected'" data-heading-content="disconnected" class="anchor"></a></h2>
+<p>The issue or pull request was unlinked from another issue or pull request. For more information, see <a href="https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue" class="external">Linking a pull request to an issue</a>.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-disconnected" title="Properties for disconnected">Properties for disconnected<a href="#properties-for-disconnected" aria-label="Link to heading 'Properties for disconnected'" data-heading-content="Properties for disconnected" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="head_ref_deleted" title="head_ref_deleted">head<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>deleted<a href="#head_ref_deleted" aria-label="Link to heading 'head_ref_deleted'" data-heading-content="head_ref_deleted" class="anchor"></a></h2>
+<p>The pull request's <code>HEAD</code> branch was deleted.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-head_ref_deleted" title="Properties for head_ref_deleted">Properties for head<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>deleted<a href="#properties-for-head_ref_deleted" aria-label="Link to heading 'Properties for head_ref_deleted'" data-heading-content="Properties for head_ref_deleted" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="head_ref_restored" title="head_ref_restored">head<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>restored<a href="#head_ref_restored" aria-label="Link to heading 'head_ref_restored'" data-heading-content="head_ref_restored" class="anchor"></a></h2>
+<p>The pull request's <code>HEAD</code> branch was restored to the last known commit.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="head_ref_force_pushed" title="head_ref_force_pushed">head<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>force<span data-escaped-char="">_</span>pushed<a href="#head_ref_force_pushed" aria-label="Link to heading 'head_ref_force_pushed'" data-heading-content="head_ref_force_pushed" class="anchor"></a></h2>
+<p>The pull request's HEAD branch was force pushed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-head_ref_force_pushed" title="Properties for head_ref_force_pushed">Properties for head<span data-escaped-char="">_</span>ref<span data-escaped-char="">_</span>force<span data-escaped-char="">_</span>pushed<a href="#properties-for-head_ref_force_pushed" aria-label="Link to heading 'Properties for head_ref_force_pushed'" data-heading-content="Properties for head_ref_force_pushed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="labeled" title="labeled">labeled<a href="#labeled" aria-label="Link to heading 'labeled'" data-heading-content="labeled" class="anchor"></a></h2>
+<p>A label was added to the issue or pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-labeled" title="Properties for labeled">Properties for labeled<a href="#properties-for-labeled" aria-label="Link to heading 'Properties for labeled'" data-heading-content="Properties for labeled" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">label</code></td>
+<td><code>object</code></td>
+<td>The label added or removed from the issue</td>
+</tr>
+<tr>
+<td><code class="keyword">label[name]</code></td>
+<td><code>string</code></td>
+<td>The name of the label.</td>
+</tr>
+<tr>
+<td><code class="keyword">label[color]</code></td>
+<td><code>string</code></td>
+<td>The hex color code.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="locked" title="locked">locked<a href="#locked" aria-label="Link to heading 'locked'" data-heading-content="locked" class="anchor"></a></h2>
+<p>The issue or pull request was locked.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-locked" title="Properties for locked">Properties for locked<a href="#properties-for-locked" aria-label="Link to heading 'Properties for locked'" data-heading-content="Properties for locked" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">lock_reason</code></td>
+<td><code>string</code></td>
+<td>The reason an issue or pull request conversation was locked, if one was provided.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mentioned" title="mentioned">mentioned<a href="#mentioned" aria-label="Link to heading 'mentioned'" data-heading-content="mentioned" class="anchor"></a></h2>
+<p>The <code>actor</code> was <code>@mentioned</code> in an issue or pull request body.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-mentioned" title="Properties for mentioned">Properties for mentioned<a href="#properties-for-mentioned" aria-label="Link to heading 'Properties for mentioned'" data-heading-content="Properties for mentioned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="marked_as_duplicate" title="marked_as_duplicate">marked<span data-escaped-char="">_</span>as<span data-escaped-char="">_</span>duplicate<a href="#marked_as_duplicate" aria-label="Link to heading 'marked_as_duplicate'" data-heading-content="marked_as_duplicate" class="anchor"></a></h2>
+<p>A user with write permissions marked an issue as a duplicate of another issue, or a pull request as a duplicate of another pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-marked_as_duplicate" title="Properties for marked_as_duplicate">Properties for marked<span data-escaped-char="">_</span>as<span data-escaped-char="">_</span>duplicate<a href="#properties-for-marked_as_duplicate" aria-label="Link to heading 'Properties for marked_as_duplicate'" data-heading-content="Properties for marked_as_duplicate" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="merged" title="merged">merged<a href="#merged" aria-label="Link to heading 'merged'" data-heading-content="merged" class="anchor"></a></h2>
+<p>The pull request was merged. The <code>commit_id</code> attribute is the SHA1 of the <code>HEAD</code> commit that was merged. The <code>commit_repository</code> is always the same as the main repository.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-merged" title="Properties for merged">Properties for merged<a href="#properties-for-merged" aria-label="Link to heading 'Properties for merged'" data-heading-content="Properties for merged" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="milestoned" title="milestoned">milestoned<a href="#milestoned" aria-label="Link to heading 'milestoned'" data-heading-content="milestoned" class="anchor"></a></h2>
+<p>The issue or pull request was added to a milestone.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-milestoned" title="Properties for milestoned">Properties for milestoned<a href="#properties-for-milestoned" aria-label="Link to heading 'Properties for milestoned'" data-heading-content="Properties for milestoned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">milestone</code></td>
+<td><code>object</code></td>
+<td>The milestone object.</td>
+</tr>
+<tr>
+<td><code class="keyword">milestone[title]</code></td>
+<td><code>string</code></td>
+<td>The title of the milestone.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pinned" title="pinned">pinned<a href="#pinned" aria-label="Link to heading 'pinned'" data-heading-content="pinned" class="anchor"></a></h2>
+<p>The issue was pinned.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-pinned" title="Properties for pinned">Properties for pinned<a href="#properties-for-pinned" aria-label="Link to heading 'Properties for pinned'" data-heading-content="Properties for pinned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ready_for_review" title="ready_for_review">ready<span data-escaped-char="">_</span>for<span data-escaped-char="">_</span>review<a href="#ready_for_review" aria-label="Link to heading 'ready_for_review'" data-heading-content="ready_for_review" class="anchor"></a></h2>
+<p>A draft pull request was marked as ready for review.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-ready_for_review" title="Properties for ready_for_review">Properties for ready<span data-escaped-char="">_</span>for<span data-escaped-char="">_</span>review<a href="#properties-for-ready_for_review" aria-label="Link to heading 'Properties for ready_for_review'" data-heading-content="Properties for ready_for_review" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="referenced" title="referenced">referenced<a href="#referenced" aria-label="Link to heading 'referenced'" data-heading-content="referenced" class="anchor"></a></h2>
+<p>The issue was referenced from a commit message. The <code>commit_id</code> attribute is the commit SHA1 of where that happened and the commit<span data-escaped-char="">_</span>repository is where that commit was pushed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-referenced" title="Properties for referenced">Properties for referenced<a href="#properties-for-referenced" aria-label="Link to heading 'Properties for referenced'" data-heading-content="Properties for referenced" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="renamed" title="renamed">renamed<a href="#renamed" aria-label="Link to heading 'renamed'" data-heading-content="renamed" class="anchor"></a></h2>
+<p>The issue or pull request title was changed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-renamed" title="Properties for renamed">Properties for renamed<a href="#properties-for-renamed" aria-label="Link to heading 'Properties for renamed'" data-heading-content="Properties for renamed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">rename</code></td>
+<td><code>object</code></td>
+<td>The name details.</td>
+</tr>
+<tr>
+<td><code class="keyword">rename[from]</code></td>
+<td><code>string</code></td>
+<td>The previous name.</td>
+</tr>
+<tr>
+<td><code class="keyword">rename[to]</code></td>
+<td><code>string</code></td>
+<td>The new name.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reopened" title="reopened">reopened<a href="#reopened" aria-label="Link to heading 'reopened'" data-heading-content="reopened" class="anchor"></a></h2>
+<p>The issue or pull request was reopened.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-reopened" title="Properties for reopened">Properties for reopened<a href="#properties-for-reopened" aria-label="Link to heading 'Properties for reopened'" data-heading-content="Properties for reopened" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="review_dismissed" title="review_dismissed">review<span data-escaped-char="">_</span>dismissed<a href="#review_dismissed" aria-label="Link to heading 'review_dismissed'" data-heading-content="review_dismissed" class="anchor"></a></h2>
+<p>The pull request review was dismissed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-review_dismissed" title="Properties for review_dismissed">Properties for review<span data-escaped-char="">_</span>dismissed<a href="#properties-for-review_dismissed" aria-label="Link to heading 'Properties for review_dismissed'" data-heading-content="Properties for review_dismissed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">dismissed_review</code></td>
+<td><code>object</code></td>
+<td>The information for the dismissed review.</td>
+</tr>
+<tr>
+<td><code class="keyword">dismissed_review[state]</code></td>
+<td><code>string</code></td>
+<td>The state the pull request was in when it was dismissed. Can be one of: <code>commented</code>, <code>approved</code>, or <code>changes_requested</code>.</td>
+</tr>
+<tr>
+<td><code class="keyword">dismissed_review[review_id]</code></td>
+<td><code>string</code></td>
+<td>The unique identifier of the pull request's review.</td>
+</tr>
+<tr>
+<td><code class="keyword">dismissed_review[dismissal_message]</code></td>
+<td><code>string</code></td>
+<td>The message the user included when dismissing the review.</td>
+</tr>
+<tr>
+<td><code class="keyword">dismissed_review[dismissal_commit_id]</code></td>
+<td><code>string</code></td>
+<td>The unique identifier of the commit that dismissed the review if one exists.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="review_requested" title="review_requested">review<span data-escaped-char="">_</span>requested<a href="#review_requested" aria-label="Link to heading 'review_requested'" data-heading-content="review_requested" class="anchor"></a></h2>
+<p>A pull request review was requested.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-review_requested" title="Properties for review_requested">Properties for review<span data-escaped-char="">_</span>requested<a href="#properties-for-review_requested" aria-label="Link to heading 'Properties for review_requested'" data-heading-content="Properties for review_requested" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">requested_reviewer</code></td>
+<td><code>object</code></td>
+<td>The person requested to review the pull request.</td>
+</tr>
+<tr>
+<td><code class="keyword">review_requester</code></td>
+<td><code>object</code></td>
+<td>The person who requested a review.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="review_request_removed" title="review_request_removed">review<span data-escaped-char="">_</span>request<span data-escaped-char="">_</span>removed<a href="#review_request_removed" aria-label="Link to heading 'review_request_removed'" data-heading-content="review_request_removed" class="anchor"></a></h2>
+<p>A pull request review request was removed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-review_request_removed" title="Properties for review_request_removed">Properties for review<span data-escaped-char="">_</span>request<span data-escaped-char="">_</span>removed<a href="#properties-for-review_request_removed" aria-label="Link to heading 'Properties for review_request_removed'" data-heading-content="Properties for review_request_removed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">requested_reviewer</code></td>
+<td><code>object</code></td>
+<td>The person requested to review the pull request.</td>
+</tr>
+<tr>
+<td><code class="keyword">review_requester</code></td>
+<td><code>object</code></td>
+<td>The person who requested a review.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="reviewed" title="reviewed">reviewed<a href="#reviewed" aria-label="Link to heading 'reviewed'" data-heading-content="reviewed" class="anchor"></a></h2>
+<p>The pull request was reviewed.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-reviewed" title="Properties for reviewed">Properties for reviewed<a href="#properties-for-reviewed" aria-label="Link to heading 'Properties for reviewed'" data-heading-content="Properties for reviewed" class="anchor"></a></h3>
+<p>This events properties do not use the same structure as the <a href="#issue-event-object-common-properties">issue event object common properties</a>. The following properties are returned for this event.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">user</code></td>
+<td><code>object</code></td>
+<td>The person who commented on the issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">body</code></td>
+<td><code>string</code></td>
+<td>The review summary text.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the latest commit in the pull request at the time of the review.</td>
+</tr>
+<tr>
+<td><code class="keyword">submitted_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the review was submitted.</td>
+</tr>
+<tr>
+<td><code class="keyword">state</code></td>
+<td><code>string</code></td>
+<td>The state of the submitted review. Can be one of: <code>commented</code>, <code>changes_requested</code>, <code>approved</code> or <code>dismissed</code>.</td>
+</tr>
+<tr>
+<td><code class="keyword">html_url</code></td>
+<td><code>string</code></td>
+<td>The HTML URL of the review.</td>
+</tr>
+<tr>
+<td><code class="keyword">pull_request_url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL to retrieve the pull request.</td>
+</tr>
+<tr>
+<td><code class="keyword">author_association</code></td>
+<td><code>string</code></td>
+<td>The permissions the user has in the issue's repository. For example, the value would be <code>"OWNER"</code> if the owner of repository created a comment.</td>
+</tr>
+<tr>
+<td><code class="keyword">_links</code></td>
+<td><code>object</code></td>
+<td>The <code>html_url</code> and <code>pull_request_url</code>.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>The event value is <code>"reviewed"</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="subscribed" title="subscribed">subscribed<a href="#subscribed" aria-label="Link to heading 'subscribed'" data-heading-content="subscribed" class="anchor"></a></h2>
+<p>Someone subscribed to receive notifications for an issue or pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-subscribed" title="Properties for subscribed">Properties for subscribed<a href="#properties-for-subscribed" aria-label="Link to heading 'Properties for subscribed'" data-heading-content="Properties for subscribed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="transferred" title="transferred">transferred<a href="#transferred" aria-label="Link to heading 'transferred'" data-heading-content="transferred" class="anchor"></a></h2>
+<p>The issue was transferred to another repository.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-transferred" title="Properties for transferred">Properties for transferred<a href="#properties-for-transferred" aria-label="Link to heading 'Properties for transferred'" data-heading-content="Properties for transferred" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unassigned" title="unassigned">unassigned<a href="#unassigned" aria-label="Link to heading 'unassigned'" data-heading-content="unassigned" class="anchor"></a></h2>
+<p>A user was unassigned from the issue.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unassigned" title="Properties for unassigned">Properties for unassigned<a href="#properties-for-unassigned" aria-label="Link to heading 'Properties for unassigned'" data-heading-content="Properties for unassigned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">assignee</code></td>
+<td><code>object</code></td>
+<td>The person unassigned from this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">assigner</code></td>
+<td><code>object</code></td>
+<td>The person who performed the unassignment for this issue. This field is available in the REST API for issue events but not the REST API for timeline events.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unlabeled" title="unlabeled">unlabeled<a href="#unlabeled" aria-label="Link to heading 'unlabeled'" data-heading-content="unlabeled" class="anchor"></a></h2>
+<p>A label was removed from the issue.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unlabeled" title="Properties for unlabeled">Properties for unlabeled<a href="#properties-for-unlabeled" aria-label="Link to heading 'Properties for unlabeled'" data-heading-content="Properties for unlabeled" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">label</code></td>
+<td><code>object</code></td>
+<td>The label added or removed from the issue</td>
+</tr>
+<tr>
+<td><code class="keyword">label[name]</code></td>
+<td><code>string</code></td>
+<td>The name of the label.</td>
+</tr>
+<tr>
+<td><code class="keyword">label[color]</code></td>
+<td><code>string</code></td>
+<td>The hex color code.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unlocked" title="unlocked">unlocked<a href="#unlocked" aria-label="Link to heading 'unlocked'" data-heading-content="unlocked" class="anchor"></a></h2>
+<p>The issue was unlocked.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unlocked" title="Properties for unlocked">Properties for unlocked<a href="#properties-for-unlocked" aria-label="Link to heading 'Properties for unlocked'" data-heading-content="Properties for unlocked" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">lock_reason</code></td>
+<td><code>string</code></td>
+<td>The reason an issue or pull request conversation was locked, if one was provided.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unmarked_as_duplicate" title="unmarked_as_duplicate">unmarked<span data-escaped-char="">_</span>as<span data-escaped-char="">_</span>duplicate<a href="#unmarked_as_duplicate" aria-label="Link to heading 'unmarked_as_duplicate'" data-heading-content="unmarked_as_duplicate" class="anchor"></a></h2>
+<p>An issue that a user had previously marked as a duplicate of another issue is no longer considered a duplicate, or a pull request that a user had previously marked as a duplicate of another pull request is no longer considered a duplicate.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unmarked_as_duplicate" title="Properties for unmarked_as_duplicate">Properties for unmarked<span data-escaped-char="">_</span>as<span data-escaped-char="">_</span>duplicate<a href="#properties-for-unmarked_as_duplicate" aria-label="Link to heading 'Properties for unmarked_as_duplicate'" data-heading-content="Properties for unmarked_as_duplicate" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unpinned" title="unpinned">unpinned<a href="#unpinned" aria-label="Link to heading 'unpinned'" data-heading-content="unpinned" class="anchor"></a></h2>
+<p>The issue was unpinned.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unpinned" title="Properties for unpinned">Properties for unpinned<a href="#properties-for-unpinned" aria-label="Link to heading 'Properties for unpinned'" data-heading-content="Properties for unpinned" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unsubscribed" title="unsubscribed">unsubscribed<a href="#unsubscribed" aria-label="Link to heading 'unsubscribed'" data-heading-content="unsubscribed" class="anchor"></a></h2>
+<p>Someone unsubscribed from receiving notifications for an issue or pull request.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Not supported" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-unsubscribed" title="Properties for unsubscribed">Properties for unsubscribed<a href="#properties-for-unsubscribed" aria-label="Link to heading 'Properties for unsubscribed'" data-heading-content="Properties for unsubscribed" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="user_blocked" title="user_blocked">user<span data-escaped-char="">_</span>blocked<a href="#user_blocked" aria-label="Link to heading 'user_blocked'" data-heading-content="user_blocked" class="anchor"></a></h2>
+<p>An organization owner blocked a user from the organization. This was done <a href="https://docs.github.com/en/communities/maintaining-your-safety-on-github/blocking-a-user-from-your-organization#blocking-a-user-in-a-comment" class="external">through one of the blocked user's comments on the issue</a>.</p>
+<p>This event is available for the following issue types.</p>
+<div class="ghd-tool rowheaders">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>REST API for issue events</th>
+<th>REST API for timeline events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Issues</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+<tr>
+<td>Pull requests</td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+<td><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Supported" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="properties-for-user_blocked" title="Properties for user_blocked">Properties for user<span data-escaped-char="">_</span>blocked<a href="#properties-for-user_blocked" aria-label="Link to heading 'Properties for user_blocked'" data-heading-content="Properties for user_blocked" class="anchor"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">id</code></td>
+<td><code>integer</code></td>
+<td>The unique identifier of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">node_id</code></td>
+<td><code>string</code></td>
+<td>The <a href="https://docs.github.com/en/graphql/guides/using-global-node-ids" class="external">Global Node ID</a> of the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">url</code></td>
+<td><code>string</code></td>
+<td>The REST API URL for fetching the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">actor</code></td>
+<td><code>object</code></td>
+<td>The person who generated the event.</td>
+</tr>
+<tr>
+<td><code class="keyword">event</code></td>
+<td><code>string</code></td>
+<td>Identifies the actual type of event that occurred.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_id</code></td>
+<td><code>string</code></td>
+<td>The SHA of the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">commit_url</code></td>
+<td><code>string</code></td>
+<td>The GitHub REST API link to the commit that referenced this issue.</td>
+</tr>
+<tr>
+<td><code class="keyword">created_at</code></td>
+<td><code>string</code></td>
+<td>The timestamp indicating when the event occurred.</td>
+</tr>
+</tbody>
+</table>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

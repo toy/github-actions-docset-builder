@@ -1,0 +1,1000 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Using the GraphQL API for Discussions</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="using-the-graphql-api-for-discussions">Using the GraphQL API for Discussions<a href="#using-the-graphql-api-for-discussions" aria-label="Link to heading 'Using the GraphQL API for Discussions'" data-heading-content="Using the GraphQL API for Discussions" class="anchor"></a></h1>
+<p>Learn how to use the GitHub Discussions GraphQL API.</p>
+<p>The GitHub Discussions GraphQL API allows you to get, create, edit, and delete discussion posts. For more information about GitHub Discussions, see <a href="https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/about-discussions" class="external">About discussions</a>.</p>
+<p>This API is available for authenticated users, OAuth apps, and GitHub Apps. Access tokens require the <code>repo</code> scope for private repositories and the <code>public_repo</code> scope for public repositories. For more information, see <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">Scopes for OAuth apps</a>.</p>
+<h2 id="fields" title="Fields">Fields<a href="#fields" aria-label="Link to heading 'Fields'" data-heading-content="Fields" class="anchor"></a></h2>
+<h3 id="repositorydiscussions" title="Fields / Repository.discussions">Repository.discussions<a href="#repositorydiscussions" aria-label="Link to heading 'Repository.discussions'" data-heading-content="Repository.discussions" class="anchor"></a></h3>
+<p>List the discussions within a repository. If <code>categoryId</code> is specified, only results within that category will be returned. If <code>answered</code> is not specified, both answered and unanswered discussions will be returned.</p>
+<p><em>Signature:</em></p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">discussions(
+</span><span style="color:#c0c5ce;">  after: String,
+</span><span style="color:#c0c5ce;">  before: String,
+</span><span style="color:#c0c5ce;">  first: Int,
+</span><span style="color:#c0c5ce;">  last: Int,
+</span><span style="color:#c0c5ce;">  categoryId: ID = null,
+</span><span style="color:#c0c5ce;">  
+</span><span style="color:#c0c5ce;">  answered: Boolean = null,
+</span><span style="color:#c0c5ce;">  
+</span><span style="color:#c0c5ce;">  orderBy: DiscussionOrder = {field: UPDATED_AT, direction: DESC}
+</span><span style="color:#c0c5ce;">) : Discussion
+</span></code></pre>
+<h4 id="discussionorder">DiscussionOrder<a href="#discussionorder" aria-label="Link to heading 'DiscussionOrder'" data-heading-content="DiscussionOrder" class="anchor"></a></h4>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Ways in which discussions can be ordered.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">input DiscussionOrder {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The field by which to order discussions.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  field: DiscussionOrderField!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The direction in which to order discussions by the specified field.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  direction: OrderDirection!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Properties by which discussion connections can be ordered.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">enum DiscussionOrderField {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Order discussions by creation time.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  CREATED_AT
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Order discussions by most recent modification time.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  UPDATED_AT
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="repositorydiscussioncategories" title="Fields / Repository.discussionCategories">Repository.discussionCategories<a href="#repositorydiscussioncategories" aria-label="Link to heading 'Repository.discussionCategories'" data-heading-content="Repository.discussionCategories" class="anchor"></a></h3>
+<p>Return the available discussion categories defined within this repository. Each repository may have up to 25 categories. For more information about discussion categories, see <a href="https://docs.github.com/en/discussions/managing-discussions-for-your-community/managing-categories-for-discussions#about-categories-for-discussions" class="external">Managing categories for discussions</a>.</p>
+<p><em>Signature:</em></p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">discussionCategories(
+</span><span style="color:#c0c5ce;">  after: String,
+</span><span style="color:#c0c5ce;">  before: String,
+</span><span style="color:#c0c5ce;">  first: Int,
+</span><span style="color:#c0c5ce;">  last: Int,
+</span><span style="color:#c0c5ce;">) : DiscussionCategoryConnection!
+</span></code></pre>
+<h3 id="repositorydiscussion" title="Fields / Repository.discussion">Repository.discussion<a href="#repositorydiscussion" aria-label="Link to heading 'Repository.discussion'" data-heading-content="Repository.discussion" class="anchor"></a></h3>
+<p>Get a discussion. Returns <code>null</code> if discussion with the specified ID does not exist.</p>
+<p><em>Signature:</em></p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">discussion(number: Int!) : Discussion
+</span></code></pre>
+<h3 id="repositorypinneddiscussions" title="Fields / Repository.pinnedDiscussions">Repository.pinnedDiscussions<a href="#repositorypinneddiscussions" aria-label="Link to heading 'Repository.pinnedDiscussions'" data-heading-content="Repository.pinnedDiscussions" class="anchor"></a></h3>
+<p>Return discussions pinned to this repository, ordered by pin position.</p>
+<p><em>Signature:</em></p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">pinnedDiscussions(
+</span><span style="color:#c0c5ce;">  after: String,
+</span><span style="color:#c0c5ce;">  before: String,
+</span><span style="color:#c0c5ce;">  first: Int,
+</span><span style="color:#c0c5ce;">  last: Int,
+</span><span style="color:#c0c5ce;">) : PinnedDiscussionConnection!
+</span></code></pre>
+<h2 id="objects" title="Objects">Objects<a href="#objects" aria-label="Link to heading 'Objects'" data-heading-content="Objects" class="anchor"></a></h2>
+<p><strong>Note:</strong> For brevity, connection types are not expanded here. Each connection type mentioned in the schema follows the same pattern as other connections in the GraphQL API. For more information, see <a href="introduction-to-graphql.html#connection">Introduction to GraphQL</a>.</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  repository(owner: "github", name: "some-repo") {
+</span><span style="color:#c0c5ce;">    discussions(first: 10) {
+</span><span style="color:#c0c5ce;">      # type: DiscussionConnection
+</span><span style="color:#c0c5ce;">      totalCount # Int!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      pageInfo {
+</span><span style="color:#c0c5ce;">        # type: PageInfo (from the public schema)
+</span><span style="color:#c0c5ce;">        startCursor
+</span><span style="color:#c0c5ce;">        endCursor
+</span><span style="color:#c0c5ce;">        hasNextPage
+</span><span style="color:#c0c5ce;">        hasPreviousPage
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      edges {
+</span><span style="color:#c0c5ce;">        # type: DiscussionEdge
+</span><span style="color:#c0c5ce;">        cursor
+</span><span style="color:#c0c5ce;">        node {
+</span><span style="color:#c0c5ce;">          # type: Discussion
+</span><span style="color:#c0c5ce;">          id
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      nodes {
+</span><span style="color:#c0c5ce;">        # type: Discussion
+</span><span style="color:#c0c5ce;">        id
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="discussion" title="Objects / Discussion">Discussion<a href="#discussion" aria-label="Link to heading 'Discussion'" data-heading-content="Discussion" class="anchor"></a></h3>
+<details>
+<summary>Fields:</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">A discussion in a repository.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">type Discussion implements Comment &amp; Deletable &amp; Lockable &amp; Node &amp; Reactable &amp; RepositoryNode &amp; Subscribable &amp; Updatable {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Reason that the conversation was locked.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  activeLockReason: LockReason
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if this discussion has been answered
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  isAnswered: Boolean!
+</span><span style="color:#c0c5ce;">  
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The comment chosen as this discussion's answer, if any.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  answer: DiscussionComment
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The time when a user chose this discussion's answer, if answered.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  answerChosenAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The user who chose this discussion's answer, if answered.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  answerChosenBy: Actor
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The actor who authored the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  author: Actor
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Author's association with the subject of the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  authorAssociation: CommentAuthorAssociation!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The main text of the discussion post.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  body: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The body rendered to HTML.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  bodyHTML: HTML!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The body rendered to text.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  bodyText: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The category for this discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  category: DiscussionCategory!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The replies to the discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  comments(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">  ): DiscussionCommentConnection!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was created.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if this comment was created via an email reply.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdViaEmail: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the primary key from the database.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  databaseId: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The actor who edited the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  editor: Actor
+</span><span style="color:#c0c5ce;">  id: ID!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if this comment was edited and includes an edit with the creation data
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  includesCreatedEdit: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The moment the editor made the last edit
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  lastEditedAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  `true` if the object is locked
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  locked: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The number identifying this discussion within the repository.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  number: Int!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies when the comment was published at.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  publishedAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of reactions grouped by content left on the subject.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  reactionGroups: [ReactionGroup!]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of Reactions left on the Issue.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  reactions(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Allows filtering Reactions by emoji.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    content: ReactionContent
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Allows specifying the order in which reactions are returned.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    orderBy: ReactionOrder
+</span><span style="color:#c0c5ce;">  ): ReactionConnection!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The repository associated with this node.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  repository: Repository!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The path for this discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  resourcePath: URI!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The title of this discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  title: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was last updated.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  updatedAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The URL for this discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  url: URI!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of edits to this content.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  userContentEdits(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">  ): UserContentEditConnection
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the current viewer can delete this object.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanDelete: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Can user react to this subject
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanReact: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the viewer is able to change their subscription status for the repository.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanSubscribe: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the current viewer can update this object.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanUpdate: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Did the viewer author this comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerDidAuthor: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies if the viewer is watching, not watching, or ignoring the subscribable entity.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerSubscription: SubscriptionState
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h3 id="discussioncomment" title="Objects / DiscussionComment">DiscussionComment<a href="#discussioncomment" aria-label="Link to heading 'DiscussionComment'" data-heading-content="DiscussionComment" class="anchor"></a></h3>
+<details>
+<summary>Fields</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">A comment on a discussion.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">type DiscussionComment implements Comment &amp; Deletable &amp; Minimizable &amp; Node &amp; Reactable &amp; Updatable &amp; UpdatableComment {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The actor who authored the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  author: Actor
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Author's association with the subject of the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  authorAssociation: CommentAuthorAssociation!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The body as Markdown.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  body: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The body rendered to HTML.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  bodyHTML: HTML!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The body rendered to text.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  bodyText: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was created.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if this comment was created via an email reply.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdViaEmail: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the primary key from the database.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  databaseId: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The time when this replied-to comment was deleted
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  deletedAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The discussion this comment was created in
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  discussion: Discussion
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The actor who edited the comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  editor: Actor
+</span><span style="color:#c0c5ce;">  id: ID!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if this comment was edited and includes an edit with the creation data
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  includesCreatedEdit: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Has this comment been chosen as the answer of its discussion?
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  isAnswer: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Returns whether or not a comment has been minimized.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  isMinimized: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The moment the editor made the last edit
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  lastEditedAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Returns why the comment was minimized.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  minimizedReason: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies when the comment was published at.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  publishedAt: DateTime
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of reactions grouped by content left on the subject.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  reactionGroups: [ReactionGroup!]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of Reactions left on the Issue.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  reactions(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Allows filtering Reactions by emoji.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    content: ReactionContent
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Allows specifying the order in which reactions are returned.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    orderBy: ReactionOrder
+</span><span style="color:#c0c5ce;">  ): ReactionConnection!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The threaded replies to this comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  replies(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">  ): DiscussionCommentConnection!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The discussion comment this comment is a reply to
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  replyTo: DiscussionComment
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The path for this discussion comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  resourcePath: URI!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was last updated.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  updatedAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The URL for this discussion comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  url: URI!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A list of edits to this content.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  userContentEdits(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">  ): UserContentEditConnection
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the current viewer can delete this object.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanDelete: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Can the current user mark this comment as an answer?
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanMarkAsAnswer: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the current viewer can minimize this object.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanMinimize: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Can user react to this subject
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanReact: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Can the current user unmark this comment as an answer?
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanUnmarkAsAnswer: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Check if the current viewer can update this object.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCanUpdate: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Reasons why the current viewer can not update this comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerCannotUpdateReasons: [CommentCannotUpdateReason!]!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Did the viewer author this comment.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  viewerDidAuthor: Boolean!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h3 id="discussioncategory" title="Objects / DiscussionCategory">DiscussionCategory<a href="#discussioncategory" aria-label="Link to heading 'DiscussionCategory'" data-heading-content="DiscussionCategory" class="anchor"></a></h3>
+<details>
+<summary>Fields</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">A category for discussions in a repository.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">type DiscussionCategory implements Node &amp; RepositoryNode {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was created.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A description of this category.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  description: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  An emoji representing this category.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  emoji: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  This category's emoji rendered as HTML.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  emojiHTML: HTML!
+</span><span style="color:#c0c5ce;">  id: ID!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Whether or not discussions in this category support choosing an answer with the markDiscussionCommentAsAnswer mutation.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  isAnswerable: Boolean!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The name of this category.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  name: String!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The repository associated with this node.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  repository: Repository!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was last updated.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  updatedAt: DateTime!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h3 id="pinneddiscussion" title="Objects / PinnedDiscussion">PinnedDiscussion<a href="#pinneddiscussion" aria-label="Link to heading 'PinnedDiscussion'" data-heading-content="PinnedDiscussion" class="anchor"></a></h3>
+<details>
+<summary>Fields:</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">A Pinned discussion is a discussion pinned to a repository's index page.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">type PinnedDiscussion implements Node &amp; RepositoryNode {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was created.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  createdAt: DateTime!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the primary key from the database.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  databaseId: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The discussion that was pinned.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  discussion: Discussion!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Color stops of the chosen gradient
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  gradientStopColors: [String!]!
+</span><span style="color:#c0c5ce;">  id: ID!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Background texture pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  pattern: PinnedDiscussionPattern!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The actor that pinned this discussion.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  pinnedBy: Actor!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Preconfigured background gradient option
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  preconfiguredGradient: PinnedDiscussionGradient
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  The repository associated with this node.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  repository: Repository!
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Identifies the date and time when the object was last updated.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  updatedAt: DateTime!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h4 id="pinneddiscussionpattern">PinnedDiscussionPattern<a href="#pinneddiscussionpattern" aria-label="Link to heading 'PinnedDiscussionPattern'" data-heading-content="PinnedDiscussionPattern" class="anchor"></a></h4>
+<details>
+<summary>Values</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Preconfigured background patterns that may be used to style discussions pinned within a repository.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">enum PinnedDiscussionPattern {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  An upward-facing chevron pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  CHEVRON_UP
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A hollow dot pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  DOT
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A solid dot pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  DOT_FILL
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A heart pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  HEART_FILL
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A friendly octocat face pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  OCTOFACE
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A plus sign pattern
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  PLUS
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h4 id="pinneddiscussiongradient">PinnedDiscussionGradient<a href="#pinneddiscussiongradient" aria-label="Link to heading 'PinnedDiscussionGradient'" data-heading-content="PinnedDiscussionGradient" class="anchor"></a></h4>
+<details>
+<summary>Values</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Preconfigured gradients that may be used to style discussions pinned within a repository.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">enum PinnedDiscussionGradient {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A gradient of blue to mint
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  BLUE_MINT
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A gradient of blue to purple
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  BLUE_PURPLE
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A gradient of pink to blue
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  PINK_BLUE
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A gradient of purple to coral
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  PURPLE_CORAL
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  A gradient of red to orange
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  RED_ORANGE
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h2 id="interfaces" title="Interfaces">Interfaces<a href="#interfaces" aria-label="Link to heading 'Interfaces'" data-heading-content="Interfaces" class="anchor"></a></h2>
+<h3 id="repositorydiscussionauthor" title="Interfaces / RepositoryDiscussionAuthor">RepositoryDiscussionAuthor<a href="#repositorydiscussionauthor" aria-label="Link to heading 'RepositoryDiscussionAuthor'" data-heading-content="RepositoryDiscussionAuthor" class="anchor"></a></h3>
+<p>Implemented by the <code>User</code> and <code>Organization</code> types. <strong>Note:</strong> An <code>Organization</code> will only have discussions associated with it if it was converted from a <code>User</code>.</p>
+<details>
+<summary>Fields</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Represents an author of discussions in repositories.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">interface RepositoryDiscussionAuthor {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Discussions this user has started.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  repositoryDiscussions(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Filter discussions to only those that have been answered or not. Defaults to
+</span><span style="color:#c0c5ce;">    including both answered and unanswered discussions.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    answered: Boolean = null
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Ordering options for discussions returned from the connection.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    orderBy: DiscussionOrder = {field: CREATED_AT, direction: DESC}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Filter discussions to only those in a specific repository.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    repositoryId: ID
+</span><span style="color:#c0c5ce;">  ): DiscussionConnection!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h3 id="repositorydiscussioncommentauthor" title="Interfaces / RepositoryDiscussionCommentAuthor">RepositoryDiscussionCommentAuthor<a href="#repositorydiscussioncommentauthor" aria-label="Link to heading 'RepositoryDiscussionCommentAuthor'" data-heading-content="RepositoryDiscussionCommentAuthor" class="anchor"></a></h3>
+<p>Also implemented by the <code>User</code> and <code>Organization</code> types.</p>
+<details>
+<summary>Fields</summary>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">Represents an author of discussion comments in repositories.
+</span><span style="color:#c0c5ce;">"""
+</span><span style="color:#c0c5ce;">interface RepositoryDiscussionCommentAuthor {
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  Discussion comments this user has authored.
+</span><span style="color:#c0c5ce;">  """
+</span><span style="color:#c0c5ce;">  repositoryDiscussionComments(
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come after the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    after: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the elements in the list that come before the specified cursor.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    before: String
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the first _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    first: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Returns the last _n_ elements from the list.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    last: Int
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Filter discussion comments to only those that were marked as the answer
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    onlyAnswers: Boolean = false
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    Filter discussion comments to only those in a specific repository.
+</span><span style="color:#c0c5ce;">    """
+</span><span style="color:#c0c5ce;">    repositoryId: ID
+</span><span style="color:#c0c5ce;">  ): DiscussionCommentConnection!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</details>
+<h2 id="mutations" title="Mutations">Mutations<a href="#mutations" aria-label="Link to heading 'Mutations'" data-heading-content="Mutations" class="anchor"></a></h2>
+<p>These mutations follow the same implementation pattern that other mutations in the GraphQL API. Each mutation accepts a single argument of an <code>Input</code> type, named after the mutation, and returns a <code>Payload</code> type containing the fields specified.</p>
+<p>For example, this is a basic <code>createDiscussion</code> mutation that will create a new discussion:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">mutation {
+</span><span style="color:#c0c5ce;">  # input type: CreateDiscussionInput
+</span><span style="color:#c0c5ce;">  createDiscussion(input: {repositoryId: "1234", categoryId: "5678", body: "The body", title: "The title"}) {
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    # response type: CreateDiscussionPayload
+</span><span style="color:#c0c5ce;">    discussion {
+</span><span style="color:#c0c5ce;">      id
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="creatediscussion" title="Mutations / createDiscussion">createDiscussion<a href="#creatediscussion" aria-label="Link to heading 'createDiscussion'" data-heading-content="createDiscussion" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>body: String!</code> The body of the new discussion.</li>
+<li><code>title: String!</code> The title of the new discussion.</li>
+<li><code>repositoryId: ID!</code> The ID of a repository in which to create the discussion.</li>
+<li><code>categoryId: ID!</code> The ID of a <code>DiscussionCategory</code> within this repository.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>discussion: Discussion</code> The discussion that was created.</li>
+</ul>
+<h3 id="updatediscussion" title="Mutations / updateDiscussion">updateDiscussion<a href="#updatediscussion" aria-label="Link to heading 'updateDiscussion'" data-heading-content="updateDiscussion" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>discussionId: ID!</code> The node ID of the discussion to update.</li>
+<li><code>body: String</code> The new contents of the discussion body.</li>
+<li><code>title: String</code> The new discussion title.</li>
+<li><code>categoryId: ID</code> The node ID of a <code>DiscussionCategory</code> within the same repository to change this discussion to.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>discussion: Discussion</code> The discussion that was modified.</li>
+</ul>
+<h3 id="deletediscussion" title="Mutations / deleteDiscussion">deleteDiscussion<a href="#deletediscussion" aria-label="Link to heading 'deleteDiscussion'" data-heading-content="deleteDiscussion" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>id: ID!</code> The node ID of the discussion to delete.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>discussion: Discussion</code> The discussion that was deleted.</li>
+</ul>
+<h3 id="adddiscussioncomment" title="Mutations / addDiscussionComment">addDiscussionComment<a href="#adddiscussioncomment" aria-label="Link to heading 'addDiscussionComment'" data-heading-content="addDiscussionComment" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>body: String!</code> The contents of the comment.</li>
+<li><code>discussionId: ID!</code> The node ID of the discussion to comment on.</li>
+<li><code>replyToId: ID</code> The node ID of the discussion comment to reply to. If absent, the created comment will be a top-level comment.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>comment: DiscussionComment</code> The discussion comment that was created.</li>
+</ul>
+<h3 id="updatediscussioncomment" title="Mutations / updateDiscussionComment">updateDiscussionComment<a href="#updatediscussioncomment" aria-label="Link to heading 'updateDiscussionComment'" data-heading-content="updateDiscussionComment" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>body: String!</code> The new contents of the comment body.</li>
+<li><code>commentId: ID!</code> The node ID of the discussion comment to update.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>comment: DiscussionComment</code> The discussion comment that was updated.</li>
+</ul>
+<h3 id="deletediscussioncomment" title="Mutations / deleteDiscussionComment">deleteDiscussionComment<a href="#deletediscussioncomment" aria-label="Link to heading 'deleteDiscussionComment'" data-heading-content="deleteDiscussionComment" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>id: ID!</code> The node ID of the discussion comment to delete.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>comment: DiscussionComment</code> The discussion comment that was deleted.</li>
+</ul>
+<h3 id="markdiscussioncommentasanswer" title="Mutations / markDiscussionCommentAsAnswer">markDiscussionCommentAsAnswer<a href="#markdiscussioncommentasanswer" aria-label="Link to heading 'markDiscussionCommentAsAnswer'" data-heading-content="markDiscussionCommentAsAnswer" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>id: ID!</code> The node ID of the discussion comment to mark as an answer.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>discussion: Discussion</code> The discussion that includes the chosen comment.</li>
+</ul>
+<h3 id="unmarkdiscussioncommentasanswer" title="Mutations / unmarkDiscussionCommentAsAnswer">unmarkDiscussionCommentAsAnswer<a href="#unmarkdiscussioncommentasanswer" aria-label="Link to heading 'unmarkDiscussionCommentAsAnswer'" data-heading-content="unmarkDiscussionCommentAsAnswer" class="anchor"></a></h3>
+<p>Input fields:</p>
+<ul>
+<li><code>id: ID!</code> The node ID of the discussion comment to unmark as an answer.</li>
+<li><code>clientMutationId: String</code> A unique identifier for the client performing the mutation.</li>
+</ul>
+<p>Return type fields:</p>
+<ul>
+<li><code>clientMutationId: String</code> The unique identifier provided as an input.</li>
+<li><code>discussion: Discussion</code> The discussion that includes the unmarked comment.</li>
+</ul>
+<h2 id="search" title="Search">Search<a href="#search" aria-label="Link to heading 'Search'" data-heading-content="Search" class="anchor"></a></h2>
+<p>Discussion may be returned from the top-level <code>search</code> field. To search for discussion, specify <code>type</code> as <code>DISCUSSION</code>. The <code>SearchResultItemConnection</code> type has a <code>discussionCount</code> field to report the number of returned discussions, and the <code>Discussion</code> type is added to the <code>SearchResultItem</code> union. For more information, see <a href="../reference/search.html#query-searchresultitemconnection">Search</a> and <a href="https://docs.github.com/en/search-github/searching-on-github/searching-discussions" class="external">Searching discussions</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

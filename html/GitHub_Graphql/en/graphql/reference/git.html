@@ -1,0 +1,621 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Git</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Reference</a> / </nav><h1 id="git">Git<a href="#git" aria-label="Link to heading 'Git'" data-heading-content="Git" class="anchor"></a></h1>
+<p>Reference documentation for GraphQL schema types in the Git category.</p>
+<h2 id="blame---object" title="Blame - object">Blame - object<a href="#blame---object" aria-label="Link to heading 'Blame - object'" data-heading-content="Blame - object" class="anchor"></a></h2>
+<p>Represents a Git blame.</p>
+<h3 id="fields-for-blame" title="Blame - object / Fields for Blame">Fields for <code>Blame</code><a href="#fields-for-blame" aria-label="Link to heading 'Fields for Blame'" data-heading-content="Fields for Blame" class="anchor"></a></h3>
+<ul>
+<li><code>ranges</code> ([BlameRange!]!): The list of ranges from a Git blame.</li>
+</ul>
+<h2 id="blamerange---object" title="BlameRange - object">BlameRange - object<a href="#blamerange---object" aria-label="Link to heading 'BlameRange - object'" data-heading-content="BlameRange - object" class="anchor"></a></h2>
+<p>Represents a range of information from a Git blame.</p>
+<h3 id="fields-for-blamerange" title="BlameRange - object / Fields for BlameRange">Fields for <code>BlameRange</code><a href="#fields-for-blamerange" aria-label="Link to heading 'Fields for BlameRange'" data-heading-content="Fields for BlameRange" class="anchor"></a></h3>
+<ul>
+<li><code>age</code> (Int!): Identifies the recency of the change, from 1 (new) to 10 (old). This is<br>
+calculated as a 2-quantile and determines the length of distance between the<br>
+median age of all the changes in the file and the recency of the current<br>
+range's change.</li>
+<li><code>commit</code> (Commit!): Identifies the line author.</li>
+<li><code>endingLine</code> (Int!): The ending line for the range.</li>
+<li><code>startingLine</code> (Int!): The starting line for the range.</li>
+</ul>
+<h2 id="blob---object" title="Blob - object">Blob - object<a href="#blob---object" aria-label="Link to heading 'Blob - object'" data-heading-content="Blob - object" class="anchor"></a></h2>
+<p>Represents a Git blob.</p>
+<p><strong>Implements:</strong> GitObject, Node</p>
+<h3 id="fields-for-blob" title="Blob - object / Fields for Blob">Fields for <code>Blob</code><a href="#fields-for-blob" aria-label="Link to heading 'Fields for Blob'" data-heading-content="Fields for Blob" class="anchor"></a></h3>
+<ul>
+<li><code>abbreviatedOid</code> (String!): An abbreviated version of the Git object ID.</li>
+<li><code>byteSize</code> (Int!): Byte size of Blob object.</li>
+<li><code>commitResourcePath</code> (URI!): The HTTP path for this Git object.</li>
+<li><code>commitUrl</code> (URI!): The HTTP URL for this Git object.</li>
+<li><code>id</code> (ID!): The Node ID of the Blob object.</li>
+<li><code>isBinary</code> (Boolean): Indicates whether the Blob is binary or text. Returns null if unable to determine the encoding.</li>
+<li><code>isTruncated</code> (Boolean!): Indicates whether the contents is truncated.</li>
+<li><code>oid</code> (GitObjectID!): The Git object ID.</li>
+<li><code>repository</code> (Repository!): The Repository the Git object belongs to.</li>
+<li><code>text</code> (String): UTF8 text data or null if the Blob is binary.</li>
+</ul>
+<h2 id="committablebranch---input-object" title="CommittableBranch - input object">CommittableBranch - input object<a href="#committablebranch---input-object" aria-label="Link to heading 'CommittableBranch - input object'" data-heading-content="CommittableBranch - input object" class="anchor"></a></h2>
+<p>A git ref for a commit to be appended to.<br>
+The ref must be a branch, i.e. its fully qualified name must start<br>
+with refs/heads/ (although the input is not required to be fully<br>
+qualified).<br>
+The Ref may be specified by its global node ID or by the<br>
+repositoryNameWithOwner and branchName.<br>
+Examples<br>
+Specify a branch using a global node ID:<br>
+{ "id": "MDM6UmVmMTpyZWZzL2hlYWRzL21haW4=" }</p>
+<p>Specify a branch using repositoryNameWithOwner and branchName:<br>
+{<br>
+"repositoryNameWithOwner": "github/graphql-client",<br>
+"branchName": "main"<br>
+}.</p>
+<h3 id="input-fields-for-committablebranch" title="CommittableBranch - input object / Input fields for CommittableBranch">Input fields for <code>CommittableBranch</code><a href="#input-fields-for-committablebranch" aria-label="Link to heading 'Input fields for CommittableBranch'" data-heading-content="Input fields for CommittableBranch" class="anchor"></a></h3>
+<ul>
+<li><code>branchName</code> (String): The unqualified name of the branch to append the commit to.</li>
+<li><code>id</code> (ID): The Node ID of the Ref to be updated.</li>
+<li><code>repositoryNameWithOwner</code> (String): The nameWithOwner of the repository to commit to.</li>
+</ul>
+<h2 id="createref---mutation" title="createRef - mutation">createRef - mutation<a href="#createref---mutation" aria-label="Link to heading 'createRef - mutation'" data-heading-content="createRef - mutation" class="anchor"></a></h2>
+<p>Create a new Git Ref.</p>
+<h3 id="input-fields-for-createref" title="createRef - mutation / Input fields for createRef">Input fields for <code>createRef</code><a href="#input-fields-for-createref" aria-label="Link to heading 'Input fields for createRef'" data-heading-content="Input fields for createRef" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (CreateRefInput!):</li>
+</ul>
+<h3 id="return-fields-for-createref" title="createRef - mutation / Return fields for createRef">Return fields for <code>createRef</code><a href="#return-fields-for-createref" aria-label="Link to heading 'Return fields for createRef'" data-heading-content="Return fields for createRef" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>ref</code> (Ref): The newly created ref.</li>
+</ul>
+<h2 id="createrefinput---input-object" title="CreateRefInput - input object">CreateRefInput - input object<a href="#createrefinput---input-object" aria-label="Link to heading 'CreateRefInput - input object'" data-heading-content="CreateRefInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of CreateRef.</p>
+<h3 id="input-fields-for-createrefinput" title="CreateRefInput - input object / Input fields for CreateRefInput">Input fields for <code>CreateRefInput</code><a href="#input-fields-for-createrefinput" aria-label="Link to heading 'Input fields for CreateRefInput'" data-heading-content="Input fields for CreateRefInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>name</code> (String!): The fully qualified name of the new Ref (ie: refs/heads/my_new_branch).</li>
+<li><code>oid</code> (GitObjectID!): The GitObjectID that the new Ref shall target. Must point to a commit.</li>
+<li><code>repositoryId</code> (ID!): The Node ID of the Repository to create the Ref in.</li>
+</ul>
+<h2 id="deleteref---mutation" title="deleteRef - mutation">deleteRef - mutation<a href="#deleteref---mutation" aria-label="Link to heading 'deleteRef - mutation'" data-heading-content="deleteRef - mutation" class="anchor"></a></h2>
+<p>Delete a Git Ref.</p>
+<h3 id="input-fields-for-deleteref" title="deleteRef - mutation / Input fields for deleteRef">Input fields for <code>deleteRef</code><a href="#input-fields-for-deleteref" aria-label="Link to heading 'Input fields for deleteRef'" data-heading-content="Input fields for deleteRef" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (DeleteRefInput!):</li>
+</ul>
+<h3 id="return-fields-for-deleteref" title="deleteRef - mutation / Return fields for deleteRef">Return fields for <code>deleteRef</code><a href="#return-fields-for-deleteref" aria-label="Link to heading 'Return fields for deleteRef'" data-heading-content="Return fields for deleteRef" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+</ul>
+<h2 id="deleterefinput---input-object" title="DeleteRefInput - input object">DeleteRefInput - input object<a href="#deleterefinput---input-object" aria-label="Link to heading 'DeleteRefInput - input object'" data-heading-content="DeleteRefInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of DeleteRef.</p>
+<h3 id="input-fields-for-deleterefinput" title="DeleteRefInput - input object / Input fields for DeleteRefInput">Input fields for <code>DeleteRefInput</code><a href="#input-fields-for-deleterefinput" aria-label="Link to heading 'Input fields for DeleteRefInput'" data-heading-content="Input fields for DeleteRefInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>refId</code> (ID!): The Node ID of the Ref to be deleted.</li>
+</ul>
+<h2 id="fileaddition---input-object" title="FileAddition - input object">FileAddition - input object<a href="#fileaddition---input-object" aria-label="Link to heading 'FileAddition - input object'" data-heading-content="FileAddition - input object" class="anchor"></a></h2>
+<p>A command to add a file at the given path with the given contents as part of a<br>
+commit.  Any existing file at that that path will be replaced.</p>
+<h3 id="input-fields-for-fileaddition" title="FileAddition - input object / Input fields for FileAddition">Input fields for <code>FileAddition</code><a href="#input-fields-for-fileaddition" aria-label="Link to heading 'Input fields for FileAddition'" data-heading-content="Input fields for FileAddition" class="anchor"></a></h3>
+<ul>
+<li><code>contents</code> (Base64String!): The base64 encoded contents of the file.</li>
+<li><code>path</code> (String!): The path in the repository where the file will be located.</li>
+</ul>
+<h2 id="filechanges---input-object" title="FileChanges - input object">FileChanges - input object<a href="#filechanges---input-object" aria-label="Link to heading 'FileChanges - input object'" data-heading-content="FileChanges - input object" class="anchor"></a></h2>
+<p>A description of a set of changes to a file tree to be made as part of<br>
+a git commit, modeled as zero or more file additions and zero or more<br>
+file deletions.<br>
+Both fields are optional; omitting both will produce a commit with no<br>
+file changes.<br>
+deletions and additions describe changes to files identified<br>
+by their path in the git tree using unix-style path separators, i.e.<br>
+/.  The root of a git tree is an empty string, so paths are not<br>
+slash-prefixed.<br>
+path values must be unique across all additions and deletions<br>
+provided.  Any duplication will result in a validation error.<br>
+Encoding<br>
+File contents must be provided in full for each FileAddition.<br>
+The contents of a FileAddition must be encoded using RFC 4648<br>
+compliant base64, i.e. correct padding is required and no characters<br>
+outside the standard alphabet may be used.  Invalid base64<br>
+encoding will be rejected with a validation error.<br>
+The encoded contents may be binary.<br>
+For text files, no assumptions are made about the character encoding of<br>
+the file contents (after base64 decoding).  No charset transcoding or<br>
+line-ending normalization will be performed; it is the client's<br>
+responsibility to manage the character encoding of files they provide.<br>
+However, for maximum compatibility we recommend using UTF-8 encoding<br>
+and ensuring that all files in a repository use a consistent<br>
+line-ending convention (\n or \r\n), and that all files end<br>
+with a newline.<br>
+Modeling file changes<br>
+Each of the the five types of conceptual changes that can be made in a<br>
+git commit can be described using the FileChanges type as follows:</p>
+<p>New file addition: create file hello world\n at path docs/README.txt:<br>
+{<br>
+"additions" [<br>
+{<br>
+"path": "docs/README.txt",<br>
+"contents": base64encode("hello world\n")<br>
+}<br>
+]<br>
+}</p>
+<p>Existing file modification: change existing docs/README.txt to have new<br>
+content new content here\n:<br>
+{<br>
+"additions" [<br>
+{<br>
+"path": "docs/README.txt",<br>
+"contents": base64encode("new content here\n")<br>
+}<br>
+]<br>
+}</p>
+<p>Existing file deletion: remove existing file docs/README.txt.<br>
+Note that the path is required to exist -- specifying a<br>
+path that does not exist on the given branch will abort the<br>
+commit and return an error.<br>
+{<br>
+"deletions" [<br>
+{<br>
+"path": "docs/README.txt"<br>
+}<br>
+]<br>
+}</p>
+<p>File rename with no changes: rename docs/README.txt with<br>
+previous content hello world\n to the same content at<br>
+newdocs/README.txt:<br>
+{<br>
+"deletions" [<br>
+{<br>
+"path": "docs/README.txt",<br>
+}<br>
+],<br>
+"additions" [<br>
+{<br>
+"path": "newdocs/README.txt",<br>
+"contents": base64encode("hello world\n")<br>
+}<br>
+]<br>
+}</p>
+<p>File rename with changes: rename docs/README.txt with<br>
+previous content hello world\n to a file at path<br>
+newdocs/README.txt with content new contents\n:<br>
+{<br>
+"deletions" [<br>
+{<br>
+"path": "docs/README.txt",<br>
+}<br>
+],<br>
+"additions" [<br>
+{<br>
+"path": "newdocs/README.txt",<br>
+"contents": base64encode("new contents\n")<br>
+}<br>
+]<br>
+}.</p>
+<h3 id="input-fields-for-filechanges" title="FileChanges - input object / Input fields for FileChanges">Input fields for <code>FileChanges</code><a href="#input-fields-for-filechanges" aria-label="Link to heading 'Input fields for FileChanges'" data-heading-content="Input fields for FileChanges" class="anchor"></a></h3>
+<ul>
+<li><code>additions</code> ([FileAddition!]): File to add or change.</li>
+<li><code>deletions</code> ([FileDeletion!]): Files to delete.</li>
+</ul>
+<h2 id="filedeletion---input-object" title="FileDeletion - input object">FileDeletion - input object<a href="#filedeletion---input-object" aria-label="Link to heading 'FileDeletion - input object'" data-heading-content="FileDeletion - input object" class="anchor"></a></h2>
+<p>A command to delete the file at the given path as part of a commit.</p>
+<h3 id="input-fields-for-filedeletion" title="FileDeletion - input object / Input fields for FileDeletion">Input fields for <code>FileDeletion</code><a href="#input-fields-for-filedeletion" aria-label="Link to heading 'Input fields for FileDeletion'" data-heading-content="Input fields for FileDeletion" class="anchor"></a></h3>
+<ul>
+<li><code>path</code> (String!): The path to delete.</li>
+</ul>
+<h2 id="gitactor---object" title="GitActor - object">GitActor - object<a href="#gitactor---object" aria-label="Link to heading 'GitActor - object'" data-heading-content="GitActor - object" class="anchor"></a></h2>
+<p>Represents an actor in a Git commit (ie. an author or committer).</p>
+<h3 id="fields-for-gitactor" title="GitActor - object / Fields for GitActor">Fields for <code>GitActor</code><a href="#fields-for-gitactor" aria-label="Link to heading 'Fields for GitActor'" data-heading-content="Fields for GitActor" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>avatarUrl</code> (URI!): A URL pointing to the author's public avatar.</p>
+<ul>
+<li><code>size</code> (Int): The size of the resulting square image.</li>
+</ul>
+</li>
+<li>
+<p><code>date</code> (GitTimestamp): The timestamp of the Git action (authoring or committing).</p>
+</li>
+<li>
+<p><code>email</code> (String): The email in the Git commit.</p>
+</li>
+<li>
+<p><code>name</code> (String): The name in the Git commit.</p>
+</li>
+<li>
+<p><code>user</code> (User): The GitHub user corresponding to the email field. Null if no such user exists.</p>
+</li>
+</ul>
+<h2 id="gitactorconnection---object" title="GitActorConnection - object">GitActorConnection - object<a href="#gitactorconnection---object" aria-label="Link to heading 'GitActorConnection - object'" data-heading-content="GitActorConnection - object" class="anchor"></a></h2>
+<p>The connection type for GitActor.</p>
+<h3 id="fields-for-gitactorconnection" title="GitActorConnection - object / Fields for GitActorConnection">Fields for <code>GitActorConnection</code><a href="#fields-for-gitactorconnection" aria-label="Link to heading 'Fields for GitActorConnection'" data-heading-content="Fields for GitActorConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([GitActorEdge]): A list of edges.</li>
+<li><code>nodes</code> ([GitActor]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="gitactoredge---object" title="GitActorEdge - object">GitActorEdge - object<a href="#gitactoredge---object" aria-label="Link to heading 'GitActorEdge - object'" data-heading-content="GitActorEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-gitactoredge" title="GitActorEdge - object / Fields for GitActorEdge">Fields for <code>GitActorEdge</code><a href="#fields-for-gitactoredge" aria-label="Link to heading 'Fields for GitActorEdge'" data-heading-content="Fields for GitActorEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (GitActor): The item at the end of the edge.</li>
+</ul>
+<h2 id="gitobject---interface" title="GitObject - interface">GitObject - interface<a href="#gitobject---interface" aria-label="Link to heading 'GitObject - interface'" data-heading-content="GitObject - interface" class="anchor"></a></h2>
+<p>Represents a Git object.</p>
+<h3 id="fields-for-gitobject" title="GitObject - interface / Fields for GitObject">Fields for <code>GitObject</code><a href="#fields-for-gitobject" aria-label="Link to heading 'Fields for GitObject'" data-heading-content="Fields for GitObject" class="anchor"></a></h3>
+<ul>
+<li><code>abbreviatedOid</code> (String!): An abbreviated version of the Git object ID.</li>
+<li><code>commitResourcePath</code> (URI!): The HTTP path for this Git object.</li>
+<li><code>commitUrl</code> (URI!): The HTTP URL for this Git object.</li>
+<li><code>id</code> (ID!): The Node ID of the GitObject object.</li>
+<li><code>oid</code> (GitObjectID!): The Git object ID.</li>
+<li><code>repository</code> (Repository!): The Repository the Git object belongs to.</li>
+</ul>
+<h3 id="implemented-by" title="GitObject - interface / Implemented by">Implemented by<a href="#implemented-by" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>Commit</li>
+<li>Blob</li>
+<li>Tag</li>
+<li>Tree</li>
+</ul>
+<h2 id="gitsignature---interface" title="GitSignature - interface">GitSignature - interface<a href="#gitsignature---interface" aria-label="Link to heading 'GitSignature - interface'" data-heading-content="GitSignature - interface" class="anchor"></a></h2>
+<p>Information about a signature (GPG or S/MIME) on a Commit or Tag.</p>
+<h3 id="fields-for-gitsignature" title="GitSignature - interface / Fields for GitSignature">Fields for <code>GitSignature</code><a href="#fields-for-gitsignature" aria-label="Link to heading 'Fields for GitSignature'" data-heading-content="Fields for GitSignature" class="anchor"></a></h3>
+<ul>
+<li><code>email</code> (String!): Email used to sign this object.</li>
+<li><code>isValid</code> (Boolean!): True if the signature is valid and verified by GitHub.</li>
+<li><code>payload</code> (String!): Payload for GPG signing object. Raw ODB object without the signature header.</li>
+<li><code>signature</code> (String!): ASCII-armored signature header from object.</li>
+<li><code>signer</code> (User): GitHub user corresponding to the email signing this commit.</li>
+<li><code>state</code> (GitSignatureState!): The state of this signature. VALID if signature is valid and verified by<br>
+GitHub, otherwise represents reason why signature is considered invalid.</li>
+<li><code>verifiedAt</code> (DateTime): The date the signature was verified, if valid.</li>
+<li><code>wasSignedByGitHub</code> (Boolean!): True if the signature was made with GitHub's signing key.</li>
+</ul>
+<h3 id="implemented-by-1" title="GitSignature - interface / Implemented by">Implemented by<a href="#implemented-by-1" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>GpgSignature</li>
+<li>SmimeSignature</li>
+<li>SshSignature</li>
+<li>UnknownSignature</li>
+</ul>
+<h2 id="gitsignaturestate---enum" title="GitSignatureState - enum">GitSignatureState - enum<a href="#gitsignaturestate---enum" aria-label="Link to heading 'GitSignatureState - enum'" data-heading-content="GitSignatureState - enum" class="anchor"></a></h2>
+<p>The state of a Git signature.</p>
+<h3 id="values-for-gitsignaturestate" title="GitSignatureState - enum / Values for GitSignatureState">Values for <code>GitSignatureState</code><a href="#values-for-gitsignaturestate" aria-label="Link to heading 'Values for GitSignatureState'" data-heading-content="Values for GitSignatureState" class="anchor"></a></h3>
+<ul>
+<li><code>BAD_CERT</code>: The signing certificate or its chain could not be verified.</li>
+<li><code>BAD_EMAIL</code>: Invalid email used for signing.</li>
+<li><code>EXPIRED_KEY</code>: Signing key expired.</li>
+<li><code>GPGVERIFY_ERROR</code>: Internal error - the GPG verification service misbehaved.</li>
+<li><code>GPGVERIFY_UNAVAILABLE</code>: Internal error - the GPG verification service is unavailable at the moment.</li>
+<li><code>INVALID</code>: Invalid signature.</li>
+<li><code>MALFORMED_SIG</code>: Malformed signature.</li>
+<li><code>NOT_SIGNING_KEY</code>: The usage flags for the key that signed this don't allow signing.</li>
+<li><code>NO_USER</code>: Email used for signing not known to GitHub.</li>
+<li><code>OCSP_ERROR</code>: Valid signature, though certificate revocation check failed.</li>
+<li><code>OCSP_PENDING</code>: Valid signature, pending certificate revocation checking.</li>
+<li><code>OCSP_REVOKED</code>: One or more certificates in chain has been revoked.</li>
+<li><code>UNKNOWN_KEY</code>: Key used for signing not known to GitHub.</li>
+<li><code>UNKNOWN_SIG_TYPE</code>: Unknown signature type.</li>
+<li><code>UNSIGNED</code>: Unsigned.</li>
+<li><code>UNVERIFIED_EMAIL</code>: Email used for signing unverified on GitHub.</li>
+<li><code>VALID</code>: Valid signature and verified by GitHub.</li>
+</ul>
+<h2 id="gpgsignature---object" title="GpgSignature - object">GpgSignature - object<a href="#gpgsignature---object" aria-label="Link to heading 'GpgSignature - object'" data-heading-content="GpgSignature - object" class="anchor"></a></h2>
+<p>Represents a GPG signature on a Commit or Tag.</p>
+<p><strong>Implements:</strong> GitSignature</p>
+<h3 id="fields-for-gpgsignature" title="GpgSignature - object / Fields for GpgSignature">Fields for <code>GpgSignature</code><a href="#fields-for-gpgsignature" aria-label="Link to heading 'Fields for GpgSignature'" data-heading-content="Fields for GpgSignature" class="anchor"></a></h3>
+<ul>
+<li><code>email</code> (String!): Email used to sign this object.</li>
+<li><code>isValid</code> (Boolean!): True if the signature is valid and verified by GitHub.</li>
+<li><code>keyId</code> (String): Hex-encoded ID of the key that signed this object.</li>
+<li><code>payload</code> (String!): Payload for GPG signing object. Raw ODB object without the signature header.</li>
+<li><code>signature</code> (String!): ASCII-armored signature header from object.</li>
+<li><code>signer</code> (User): GitHub user corresponding to the email signing this commit.</li>
+<li><code>state</code> (GitSignatureState!): The state of this signature. VALID if signature is valid and verified by<br>
+GitHub, otherwise represents reason why signature is considered invalid.</li>
+<li><code>verifiedAt</code> (DateTime): The date the signature was verified, if valid.</li>
+<li><code>wasSignedByGitHub</code> (Boolean!): True if the signature was made with GitHub's signing key.</li>
+</ul>
+<h2 id="push---object" title="Push - object">Push - object<a href="#push---object" aria-label="Link to heading 'Push - object'" data-heading-content="Push - object" class="anchor"></a></h2>
+<p>A Git push.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-push" title="Push - object / Fields for Push">Fields for <code>Push</code><a href="#fields-for-push" aria-label="Link to heading 'Fields for Push'" data-heading-content="Fields for Push" class="anchor"></a></h3>
+<ul>
+<li><code>id</code> (ID!): The Node ID of the Push object.</li>
+<li><code>nextSha</code> (GitObjectID): The SHA after the push.</li>
+<li><code>permalink</code> (URI!): The permalink for this push.</li>
+<li><code>previousSha</code> (GitObjectID): The SHA before the push.</li>
+<li><code>pusher</code> (Actor!): The actor who pushed.</li>
+<li><code>repository</code> (Repository!): The repository that was pushed to.</li>
+</ul>
+<h2 id="ref---object" title="Ref - object">Ref - object<a href="#ref---object" aria-label="Link to heading 'Ref - object'" data-heading-content="Ref - object" class="anchor"></a></h2>
+<p>Represents a Git reference.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-ref" title="Ref - object / Fields for Ref">Fields for <code>Ref</code><a href="#fields-for-ref" aria-label="Link to heading 'Fields for Ref'" data-heading-content="Fields for Ref" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>associatedPullRequests</code> (PullRequestConnection!): A list of pull requests with this ref as the head ref.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>baseRefName</code> (String): The base ref name to filter the pull requests by.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>headRefName</code> (String): The head ref name to filter the pull requests by.</li>
+<li><code>labels</code> ([String!]): A list of label names to filter the pull requests by.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (IssueOrder): Ordering options for pull requests returned from the connection.</li>
+<li><code>states</code> ([PullRequestState!]): A list of states to filter the pull requests by.</li>
+</ul>
+</li>
+<li>
+<p><code>branchProtectionRule</code> (BranchProtectionRule): Branch protection rules for this ref.</p>
+</li>
+<li>
+<p><code>compare</code> (Comparison): Compares the current ref as a base ref to another head ref, if the comparison can be made.</p>
+<ul>
+<li><code>headRef</code> (String!): The head ref to compare against.</li>
+</ul>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the Ref object.</p>
+</li>
+<li>
+<p><code>name</code> (String!): The ref name.</p>
+</li>
+<li>
+<p><code>prefix</code> (String!): The ref's prefix, such as refs/heads/ or refs/tags/.</p>
+</li>
+<li>
+<p><code>refUpdateRule</code> (RefUpdateRule): Branch protection rules that are viewable by non-admins.</p>
+</li>
+<li>
+<p><code>repository</code> (Repository!): The repository the ref belongs to.</p>
+</li>
+<li>
+<p><code>rules</code> (RepositoryRuleConnection): A list of rules from active Repository and Organization rulesets that apply to this ref.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryRuleOrder): Ordering options for repository rules.</li>
+</ul>
+</li>
+<li>
+<p><code>target</code> (GitObject): The object the ref points to. Returns null when object does not exist.</p>
+</li>
+</ul>
+<h2 id="refconnection---object" title="RefConnection - object">RefConnection - object<a href="#refconnection---object" aria-label="Link to heading 'RefConnection - object'" data-heading-content="RefConnection - object" class="anchor"></a></h2>
+<p>The connection type for Ref.</p>
+<h3 id="fields-for-refconnection" title="RefConnection - object / Fields for RefConnection">Fields for <code>RefConnection</code><a href="#fields-for-refconnection" aria-label="Link to heading 'Fields for RefConnection'" data-heading-content="Fields for RefConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([RefEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Ref]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="refedge---object" title="RefEdge - object">RefEdge - object<a href="#refedge---object" aria-label="Link to heading 'RefEdge - object'" data-heading-content="RefEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-refedge" title="RefEdge - object / Fields for RefEdge">Fields for <code>RefEdge</code><a href="#fields-for-refedge" aria-label="Link to heading 'Fields for RefEdge'" data-heading-content="Fields for RefEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (Ref): The item at the end of the edge.</li>
+</ul>
+<h2 id="reforder---input-object" title="RefOrder - input object">RefOrder - input object<a href="#reforder---input-object" aria-label="Link to heading 'RefOrder - input object'" data-heading-content="RefOrder - input object" class="anchor"></a></h2>
+<p>Ways in which lists of git refs can be ordered upon return.</p>
+<h3 id="input-fields-for-reforder" title="RefOrder - input object / Input fields for RefOrder">Input fields for <code>RefOrder</code><a href="#input-fields-for-reforder" aria-label="Link to heading 'Input fields for RefOrder'" data-heading-content="Input fields for RefOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The direction in which to order refs by the specified field.</li>
+<li><code>field</code> (RefOrderField!): The field in which to order refs by.</li>
+</ul>
+<h2 id="reforderfield---enum" title="RefOrderField - enum">RefOrderField - enum<a href="#reforderfield---enum" aria-label="Link to heading 'RefOrderField - enum'" data-heading-content="RefOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which ref connections can be ordered.</p>
+<h3 id="values-for-reforderfield" title="RefOrderField - enum / Values for RefOrderField">Values for <code>RefOrderField</code><a href="#values-for-reforderfield" aria-label="Link to heading 'Values for RefOrderField'" data-heading-content="Values for RefOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>ALPHABETICAL</code>: Order refs by their alphanumeric name.</li>
+<li><code>TAG_COMMIT_DATE</code>: Order refs by underlying commit date if the ref prefix is refs/tags/.</li>
+</ul>
+<h2 id="refupdate---input-object" title="RefUpdate - input object">RefUpdate - input object<a href="#refupdate---input-object" aria-label="Link to heading 'RefUpdate - input object'" data-heading-content="RefUpdate - input object" class="anchor"></a></h2>
+<p>A ref update.</p>
+<h3 id="input-fields-for-refupdate" title="RefUpdate - input object / Input fields for RefUpdate">Input fields for <code>RefUpdate</code><a href="#input-fields-for-refupdate" aria-label="Link to heading 'Input fields for RefUpdate'" data-heading-content="Input fields for RefUpdate" class="anchor"></a></h3>
+<ul>
+<li><code>afterOid</code> (GitObjectID!): The value this ref should be updated to.</li>
+<li><code>beforeOid</code> (GitObjectID): The value this ref needs to point to before the update.</li>
+<li><code>force</code> (Boolean): Force a non fast-forward update.</li>
+<li><code>name</code> (GitRefname!): The fully qualified name of the ref to be update. For example refs/heads/branch-name.</li>
+</ul>
+<h2 id="refupdaterule---object" title="RefUpdateRule - object">RefUpdateRule - object<a href="#refupdaterule---object" aria-label="Link to heading 'RefUpdateRule - object'" data-heading-content="RefUpdateRule - object" class="anchor"></a></h2>
+<p>Branch protection rules that are enforced on the viewer.</p>
+<h3 id="fields-for-refupdaterule" title="RefUpdateRule - object / Fields for RefUpdateRule">Fields for <code>RefUpdateRule</code><a href="#fields-for-refupdaterule" aria-label="Link to heading 'Fields for RefUpdateRule'" data-heading-content="Fields for RefUpdateRule" class="anchor"></a></h3>
+<ul>
+<li><code>allowsDeletions</code> (Boolean!): Can this branch be deleted.</li>
+<li><code>allowsForcePushes</code> (Boolean!): Are force pushes allowed on this branch.</li>
+<li><code>blocksCreations</code> (Boolean!): Can matching branches be created.</li>
+<li><code>pattern</code> (String!): Identifies the protection rule pattern.</li>
+<li><code>requiredApprovingReviewCount</code> (Int): Number of approving reviews required to update matching branches.</li>
+<li><code>requiredStatusCheckContexts</code> ([String]): List of required status check contexts that must pass for commits to be accepted to matching branches.</li>
+<li><code>requiresCodeOwnerReviews</code> (Boolean!): Are reviews from code owners required to update matching branches.</li>
+<li><code>requiresConversationResolution</code> (Boolean!): Are conversations required to be resolved before merging.</li>
+<li><code>requiresLinearHistory</code> (Boolean!): Are merge commits prohibited from being pushed to this branch.</li>
+<li><code>requiresSignatures</code> (Boolean!): Are commits required to be signed.</li>
+<li><code>viewerAllowedToDismissReviews</code> (Boolean!): Is the viewer allowed to dismiss reviews.</li>
+<li><code>viewerCanPush</code> (Boolean!): Can the viewer push to the branch.</li>
+</ul>
+<h2 id="smimesignature---object" title="SmimeSignature - object">SmimeSignature - object<a href="#smimesignature---object" aria-label="Link to heading 'SmimeSignature - object'" data-heading-content="SmimeSignature - object" class="anchor"></a></h2>
+<p>Represents an S/MIME signature on a Commit or Tag.</p>
+<p><strong>Implements:</strong> GitSignature</p>
+<h3 id="fields-for-smimesignature" title="SmimeSignature - object / Fields for SmimeSignature">Fields for <code>SmimeSignature</code><a href="#fields-for-smimesignature" aria-label="Link to heading 'Fields for SmimeSignature'" data-heading-content="Fields for SmimeSignature" class="anchor"></a></h3>
+<ul>
+<li><code>email</code> (String!): Email used to sign this object.</li>
+<li><code>isValid</code> (Boolean!): True if the signature is valid and verified by GitHub.</li>
+<li><code>payload</code> (String!): Payload for GPG signing object. Raw ODB object without the signature header.</li>
+<li><code>signature</code> (String!): ASCII-armored signature header from object.</li>
+<li><code>signer</code> (User): GitHub user corresponding to the email signing this commit.</li>
+<li><code>state</code> (GitSignatureState!): The state of this signature. VALID if signature is valid and verified by<br>
+GitHub, otherwise represents reason why signature is considered invalid.</li>
+<li><code>verifiedAt</code> (DateTime): The date the signature was verified, if valid.</li>
+<li><code>wasSignedByGitHub</code> (Boolean!): True if the signature was made with GitHub's signing key.</li>
+</ul>
+<h2 id="sshsignature---object" title="SshSignature - object">SshSignature - object<a href="#sshsignature---object" aria-label="Link to heading 'SshSignature - object'" data-heading-content="SshSignature - object" class="anchor"></a></h2>
+<p>Represents an SSH signature on a Commit or Tag.</p>
+<p><strong>Implements:</strong> GitSignature</p>
+<h3 id="fields-for-sshsignature" title="SshSignature - object / Fields for SshSignature">Fields for <code>SshSignature</code><a href="#fields-for-sshsignature" aria-label="Link to heading 'Fields for SshSignature'" data-heading-content="Fields for SshSignature" class="anchor"></a></h3>
+<ul>
+<li><code>email</code> (String!): Email used to sign this object.</li>
+<li><code>isValid</code> (Boolean!): True if the signature is valid and verified by GitHub.</li>
+<li><code>keyFingerprint</code> (String): Hex-encoded fingerprint of the key that signed this object.</li>
+<li><code>payload</code> (String!): Payload for GPG signing object. Raw ODB object without the signature header.</li>
+<li><code>signature</code> (String!): ASCII-armored signature header from object.</li>
+<li><code>signer</code> (User): GitHub user corresponding to the email signing this commit.</li>
+<li><code>state</code> (GitSignatureState!): The state of this signature. VALID if signature is valid and verified by<br>
+GitHub, otherwise represents reason why signature is considered invalid.</li>
+<li><code>verifiedAt</code> (DateTime): The date the signature was verified, if valid.</li>
+<li><code>wasSignedByGitHub</code> (Boolean!): True if the signature was made with GitHub's signing key.</li>
+</ul>
+<h2 id="submodule---object" title="Submodule - object">Submodule - object<a href="#submodule---object" aria-label="Link to heading 'Submodule - object'" data-heading-content="Submodule - object" class="anchor"></a></h2>
+<p>A pointer to a repository at a specific revision embedded inside another repository.</p>
+<h3 id="fields-for-submodule" title="Submodule - object / Fields for Submodule">Fields for <code>Submodule</code><a href="#fields-for-submodule" aria-label="Link to heading 'Fields for Submodule'" data-heading-content="Fields for Submodule" class="anchor"></a></h3>
+<ul>
+<li><code>branch</code> (String): The branch of the upstream submodule for tracking updates.</li>
+<li><code>gitUrl</code> (URI!): The git URL of the submodule repository.</li>
+<li><code>name</code> (String!): The name of the submodule in .gitmodules.</li>
+<li><code>nameRaw</code> (Base64String!): The name of the submodule in .gitmodules (Base64-encoded).</li>
+<li><code>path</code> (String!): The path in the superproject that this submodule is located in.</li>
+<li><code>pathRaw</code> (Base64String!): The path in the superproject that this submodule is located in (Base64-encoded).</li>
+<li><code>subprojectCommitOid</code> (GitObjectID): The commit revision of the subproject repository being tracked by the submodule.</li>
+</ul>
+<h2 id="submoduleconnection---object" title="SubmoduleConnection - object">SubmoduleConnection - object<a href="#submoduleconnection---object" aria-label="Link to heading 'SubmoduleConnection - object'" data-heading-content="SubmoduleConnection - object" class="anchor"></a></h2>
+<p>The connection type for Submodule.</p>
+<h3 id="fields-for-submoduleconnection" title="SubmoduleConnection - object / Fields for SubmoduleConnection">Fields for <code>SubmoduleConnection</code><a href="#fields-for-submoduleconnection" aria-label="Link to heading 'Fields for SubmoduleConnection'" data-heading-content="Fields for SubmoduleConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([SubmoduleEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Submodule]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="submoduleedge---object" title="SubmoduleEdge - object">SubmoduleEdge - object<a href="#submoduleedge---object" aria-label="Link to heading 'SubmoduleEdge - object'" data-heading-content="SubmoduleEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-submoduleedge" title="SubmoduleEdge - object / Fields for SubmoduleEdge">Fields for <code>SubmoduleEdge</code><a href="#fields-for-submoduleedge" aria-label="Link to heading 'Fields for SubmoduleEdge'" data-heading-content="Fields for SubmoduleEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (Submodule): The item at the end of the edge.</li>
+</ul>
+<h2 id="tag---object" title="Tag - object">Tag - object<a href="#tag---object" aria-label="Link to heading 'Tag - object'" data-heading-content="Tag - object" class="anchor"></a></h2>
+<p>Represents a Git tag.</p>
+<p><strong>Implements:</strong> GitObject, Node</p>
+<h3 id="fields-for-tag" title="Tag - object / Fields for Tag">Fields for <code>Tag</code><a href="#fields-for-tag" aria-label="Link to heading 'Fields for Tag'" data-heading-content="Fields for Tag" class="anchor"></a></h3>
+<ul>
+<li><code>abbreviatedOid</code> (String!): An abbreviated version of the Git object ID.</li>
+<li><code>commitResourcePath</code> (URI!): The HTTP path for this Git object.</li>
+<li><code>commitUrl</code> (URI!): The HTTP URL for this Git object.</li>
+<li><code>id</code> (ID!): The Node ID of the Tag object.</li>
+<li><code>message</code> (String): The Git tag message.</li>
+<li><code>name</code> (String!): The Git tag name.</li>
+<li><code>oid</code> (GitObjectID!): The Git object ID.</li>
+<li><code>repository</code> (Repository!): The Repository the Git object belongs to.</li>
+<li><code>tagger</code> (GitActor): Details about the tag author.</li>
+<li><code>target</code> (GitObject!): The Git object the tag points to.</li>
+</ul>
+<h2 id="tree---object" title="Tree - object">Tree - object<a href="#tree---object" aria-label="Link to heading 'Tree - object'" data-heading-content="Tree - object" class="anchor"></a></h2>
+<p>Represents a Git tree.</p>
+<p><strong>Implements:</strong> GitObject, Node</p>
+<h3 id="fields-for-tree" title="Tree - object / Fields for Tree">Fields for <code>Tree</code><a href="#fields-for-tree" aria-label="Link to heading 'Fields for Tree'" data-heading-content="Fields for Tree" class="anchor"></a></h3>
+<ul>
+<li><code>abbreviatedOid</code> (String!): An abbreviated version of the Git object ID.</li>
+<li><code>commitResourcePath</code> (URI!): The HTTP path for this Git object.</li>
+<li><code>commitUrl</code> (URI!): The HTTP URL for this Git object.</li>
+<li><code>entries</code> ([TreeEntry!]): A list of tree entries.</li>
+<li><code>id</code> (ID!): The Node ID of the Tree object.</li>
+<li><code>oid</code> (GitObjectID!): The Git object ID.</li>
+<li><code>repository</code> (Repository!): The Repository the Git object belongs to.</li>
+</ul>
+<h2 id="treeentry---object" title="TreeEntry - object">TreeEntry - object<a href="#treeentry---object" aria-label="Link to heading 'TreeEntry - object'" data-heading-content="TreeEntry - object" class="anchor"></a></h2>
+<p>Represents a Git tree entry.</p>
+<h3 id="fields-for-treeentry" title="TreeEntry - object / Fields for TreeEntry">Fields for <code>TreeEntry</code><a href="#fields-for-treeentry" aria-label="Link to heading 'Fields for TreeEntry'" data-heading-content="Fields for TreeEntry" class="anchor"></a></h3>
+<ul>
+<li><code>extension</code> (String): The extension of the file.</li>
+<li><code>isGenerated</code> (Boolean!): Whether or not this tree entry is generated.</li>
+<li><code>language</code> (Language): The programming language this file is written in.</li>
+<li><code>lineCount</code> (Int): Number of lines in the file.</li>
+<li><code>mode</code> (Int!): Entry file mode.</li>
+<li><code>name</code> (String!): Entry file name.</li>
+<li><code>nameRaw</code> (Base64String!): Entry file name. (Base64-encoded).</li>
+<li><code>object</code> (GitObject): Entry file object.</li>
+<li><code>oid</code> (GitObjectID!): Entry file Git object ID.</li>
+<li><code>path</code> (String): The full path of the file.</li>
+<li><code>pathRaw</code> (Base64String): The full path of the file. (Base64-encoded).</li>
+<li><code>repository</code> (Repository!): The Repository the tree entry belongs to.</li>
+<li><code>size</code> (Int!): Entry byte size.</li>
+<li><code>submodule</code> (Submodule): If the TreeEntry is for a directory occupied by a submodule project, this returns the corresponding submodule.</li>
+<li><code>type</code> (String!): Entry file type.</li>
+</ul>
+<h2 id="unknownsignature---object" title="UnknownSignature - object">UnknownSignature - object<a href="#unknownsignature---object" aria-label="Link to heading 'UnknownSignature - object'" data-heading-content="UnknownSignature - object" class="anchor"></a></h2>
+<p>Represents an unknown signature on a Commit or Tag.</p>
+<p><strong>Implements:</strong> GitSignature</p>
+<h3 id="fields-for-unknownsignature" title="UnknownSignature - object / Fields for UnknownSignature">Fields for <code>UnknownSignature</code><a href="#fields-for-unknownsignature" aria-label="Link to heading 'Fields for UnknownSignature'" data-heading-content="Fields for UnknownSignature" class="anchor"></a></h3>
+<ul>
+<li><code>email</code> (String!): Email used to sign this object.</li>
+<li><code>isValid</code> (Boolean!): True if the signature is valid and verified by GitHub.</li>
+<li><code>payload</code> (String!): Payload for GPG signing object. Raw ODB object without the signature header.</li>
+<li><code>signature</code> (String!): ASCII-armored signature header from object.</li>
+<li><code>signer</code> (User): GitHub user corresponding to the email signing this commit.</li>
+<li><code>state</code> (GitSignatureState!): The state of this signature. VALID if signature is valid and verified by<br>
+GitHub, otherwise represents reason why signature is considered invalid.</li>
+<li><code>verifiedAt</code> (DateTime): The date the signature was verified, if valid.</li>
+<li><code>wasSignedByGitHub</code> (Boolean!): True if the signature was made with GitHub's signing key.</li>
+</ul>
+<h2 id="updateref---mutation" title="updateRef - mutation">updateRef - mutation<a href="#updateref---mutation" aria-label="Link to heading 'updateRef - mutation'" data-heading-content="updateRef - mutation" class="anchor"></a></h2>
+<p>Update a Git Ref.</p>
+<h3 id="input-fields-for-updateref" title="updateRef - mutation / Input fields for updateRef">Input fields for <code>updateRef</code><a href="#input-fields-for-updateref" aria-label="Link to heading 'Input fields for updateRef'" data-heading-content="Input fields for updateRef" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UpdateRefInput!):</li>
+</ul>
+<h3 id="return-fields-for-updateref" title="updateRef - mutation / Return fields for updateRef">Return fields for <code>updateRef</code><a href="#return-fields-for-updateref" aria-label="Link to heading 'Return fields for updateRef'" data-heading-content="Return fields for updateRef" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>ref</code> (Ref): The updated Ref.</li>
+</ul>
+<h2 id="updaterefinput---input-object" title="UpdateRefInput - input object">UpdateRefInput - input object<a href="#updaterefinput---input-object" aria-label="Link to heading 'UpdateRefInput - input object'" data-heading-content="UpdateRefInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UpdateRef.</p>
+<h3 id="input-fields-for-updaterefinput" title="UpdateRefInput - input object / Input fields for UpdateRefInput">Input fields for <code>UpdateRefInput</code><a href="#input-fields-for-updaterefinput" aria-label="Link to heading 'Input fields for UpdateRefInput'" data-heading-content="Input fields for UpdateRefInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>force</code> (Boolean): Permit updates of branch Refs that are not fast-forwards?.</li>
+<li><code>oid</code> (GitObjectID!): The GitObjectID that the Ref shall be updated to target.</li>
+<li><code>refId</code> (ID!): The Node ID of the Ref to be updated.</li>
+</ul>
+<h2 id="updaterefs---mutation" title="updateRefs - mutation">updateRefs - mutation<a href="#updaterefs---mutation" aria-label="Link to heading 'updateRefs - mutation'" data-heading-content="updateRefs - mutation" class="anchor"></a></h2>
+<p>Creates, updates and/or deletes multiple refs in a repository.<br>
+This mutation takes a list of RefUpdates and performs these updates<br>
+on the repository. All updates are performed atomically, meaning that<br>
+if one of them is rejected, no other ref will be modified.<br>
+RefUpdate.beforeOid specifies that the given reference needs to point<br>
+to the given value before performing any updates. A value of<br>
+0000000000000000000000000000000000000000 can be used to verify that<br>
+the references should not exist.<br>
+RefUpdate.afterOid specifies the value that the given reference<br>
+will point to after performing all updates. A value of<br>
+0000000000000000000000000000000000000000 can be used to delete a<br>
+reference.<br>
+If RefUpdate.force is set to true, a non-fast-forward updates<br>
+for the given reference will be allowed.</p>
+<h3 id="input-fields-for-updaterefs" title="updateRefs - mutation / Input fields for updateRefs">Input fields for <code>updateRefs</code><a href="#input-fields-for-updaterefs" aria-label="Link to heading 'Input fields for updateRefs'" data-heading-content="Input fields for updateRefs" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UpdateRefsInput!):</li>
+</ul>
+<h3 id="return-fields-for-updaterefs" title="updateRefs - mutation / Return fields for updateRefs">Return fields for <code>updateRefs</code><a href="#return-fields-for-updaterefs" aria-label="Link to heading 'Return fields for updateRefs'" data-heading-content="Return fields for updateRefs" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+</ul>
+<h2 id="updaterefsinput---input-object" title="UpdateRefsInput - input object">UpdateRefsInput - input object<a href="#updaterefsinput---input-object" aria-label="Link to heading 'UpdateRefsInput - input object'" data-heading-content="UpdateRefsInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UpdateRefs.</p>
+<h3 id="input-fields-for-updaterefsinput" title="UpdateRefsInput - input object / Input fields for UpdateRefsInput">Input fields for <code>UpdateRefsInput</code><a href="#input-fields-for-updaterefsinput" aria-label="Link to heading 'Input fields for UpdateRefsInput'" data-heading-content="Input fields for UpdateRefsInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>refUpdates</code> ([RefUpdate!]!): A list of ref updates.</li>
+<li><code>repositoryId</code> (ID!): The Node ID of the repository.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

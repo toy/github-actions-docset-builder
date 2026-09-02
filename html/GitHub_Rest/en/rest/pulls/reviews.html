@@ -1,0 +1,736 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for pull request reviews</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Pull requests</a> / </nav><h1 id="rest-api-endpoints-for-pull-request-reviews">REST API endpoints for pull request reviews<a href="#rest-api-endpoints-for-pull-request-reviews" aria-label="Link to heading 'REST API endpoints for pull request reviews'" data-heading-content="REST API endpoints for pull request reviews" class="anchor"></a></h1>
+<p>Use the REST API to interact with pull request reviews.</p>
+<h2 id="about-pull-request-reviews" title="About pull request reviews">About pull request reviews<a href="#about-pull-request-reviews" aria-label="Link to heading 'About pull request reviews'" data-heading-content="About pull request reviews" class="anchor"></a></h2>
+<p>Pull Request Reviews are groups of pull request review comments on a pull request, grouped together with a state and optional body comment.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-reviews-for-a-pull-request" title="List reviews for a pull request">List reviews for a pull request<a href="#list-reviews-for-a-pull-request" aria-label="Link to heading 'List reviews for a pull request'" data-heading-content="List reviews for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+</span></code></pre>
+<p>Lists all reviews for a specified pull request. The list of reviews returns in chronological order.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters" title="List reviews for a pull request / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List reviews for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - The list of reviews returns in chronological order.</li>
+</ul>
+<h3 id="code-examples" title="List reviews for a pull request / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Pull Request Review</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>body</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>pull_request_url</code>: required, string, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>html</code>: required, object:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+<li><code>pull_request</code>: required, object:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>submitted_at</code>: string, format: date-time</li>
+<li><code>commit_id</code>: required, string or null</li>
+<li><code>body_html</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>author_association</code>: required, string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+</ul>
+<h2 id="create-a-review-for-a-pull-request" title="Create a review for a pull request">Create a review for a pull request<a href="#create-a-review-for-a-pull-request" aria-label="Link to heading 'Create a review for a pull request'" data-heading-content="Create a review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+</span></code></pre>
+<p>Creates a review on a specified pull request.<br>
+This endpoint triggers notifications. Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "Rate limits for the API" and "Best practices for using the REST API."<br>
+Pull request reviews created in the PENDING state are not submitted and therefore do not include the submitted_at property in the response. To create a pending review for a pull request, leave the event parameter blank. For more information about submitting a PENDING review, see "Submit a review for a pull request."<br>
+Note</p>
+<p>To comment on a specific line in a file, you need to first determine the position of that line in the diff. To see a pull request diff, add the application/vnd.github.v3.diff media type to the Accept header of a call to the Get a pull request endpoint.</p>
+<p>The position value equals the number of lines down from the first "@@" hunk header in the file you want to add a comment. The line just below the "@@" line is position 1, the next line is position 2, and so on. The position in the diff continues to increase through lines of whitespace and additional hunks until the beginning of a new file.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-1" title="Create a review for a pull request / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>commit_id</code></strong> (string)<br>
+The SHA of the commit that needs a review. Not using the latest commit SHA may render your review comment outdated if a subsequent commit modifies the line you specify as the position. Defaults to the most recent commit in the pull request when you do not specify a value.</p>
+</li>
+<li>
+<p><strong><code>body</code></strong> (string)<br>
+Required when using REQUEST_CHANGES or COMMENT for the event parameter. The body text of the pull request review.</p>
+</li>
+<li>
+<p><strong><code>event</code></strong> (string)<br>
+The review action you want to perform. The review actions include: APPROVE, REQUEST_CHANGES, or COMMENT. By leaving this blank, you set the review action state to PENDING, which means you will need to submit the pull request review when you are ready.<br>
+Can be one of: <code>APPROVE</code>, <code>REQUEST_CHANGES</code>, <code>COMMENT</code></p>
+</li>
+<li>
+<p><strong><code>comments</code></strong> (array of objects)<br>
+Use the following table to specify the location, destination, and contents of the draft review comment.</p>
+<ul>
+<li><strong><code>path</code></strong> (string) (required)<br>
+The relative path to the file that necessitates a review comment.</li>
+<li><strong><code>position</code></strong> (integer)<br>
+The position in the diff where you want to add a review comment. Note this value is not the same as the line number in the file. The position value equals the number of lines down from the first "@@" hunk header in the file you want to add a comment. The line just below the "@@" line is position 1, the next line is position 2, and so on. The position in the diff continues to increase through lines of whitespace and additional hunks until the beginning of a new file.</li>
+<li><strong><code>body</code></strong> (string) (required)<br>
+Text of the review comment.</li>
+<li><strong><code>line</code></strong> (integer)</li>
+<li><strong><code>side</code></strong> (string)</li>
+<li><strong><code>start_line</code></strong> (integer)</li>
+<li><strong><code>start_side</code></strong> (string)</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a review for a pull request / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "commit_id": "ecdd80bb57125d7ba9641ffaa4d7d2c19d3f3091",
+</span><span style="color:#c0c5ce;">  "body": "This is close to perfect! Please address the suggested inline change.",
+</span><span style="color:#c0c5ce;">  "event": "REQUEST_CHANGES",
+</span><span style="color:#c0c5ce;">  "comments": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "path": "file.md",
+</span><span style="color:#c0c5ce;">      "position": 6,
+</span><span style="color:#c0c5ce;">      "body": "Please add more information here, and fix this typo."
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>body</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>pull_request_url</code>: required, string, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>html</code>: required, object:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+<li><code>pull_request</code>: required, object:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>submitted_at</code>: string, format: date-time</li>
+<li><code>commit_id</code>: required, string or null</li>
+<li><code>body_html</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>author_association</code>: required, string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+</ul>
+<h2 id="get-a-review-for-a-pull-request" title="Get a review for a pull request">Get a review for a pull request<a href="#get-a-review-for-a-pull-request" aria-label="Link to heading 'Get a review for a pull request'" data-heading-content="Get a review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+</span></code></pre>
+<p>Retrieves a pull request review by its ID.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-2" title="Get a review for a pull request / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a review for a pull request / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-review-for-a-pull-request">Create a review for a pull request</a>.</p>
+<h2 id="update-a-review-for-a-pull-request" title="Update a review for a pull request">Update a review for a pull request<a href="#update-a-review-for-a-pull-request" aria-label="Link to heading 'Update a review for a pull request'" data-heading-content="Update a review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+</span></code></pre>
+<p>Updates the contents of a specified review summary comment.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-3" title="Update a review for a pull request / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>body</code></strong> (string) (required)<br>
+The body text of the pull request review.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Update a review for a pull request / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "body": "This is close to perfect! Please address the suggested inline change. And add more about this."
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-review-for-a-pull-request">Create a review for a pull request</a>.</p>
+<h2 id="delete-a-pending-review-for-a-pull-request" title="Delete a pending review for a pull request">Delete a pending review for a pull request<a href="#delete-a-pending-review-for-a-pull-request" aria-label="Link to heading 'Delete a pending review for a pull request'" data-heading-content="Delete a pending review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+</span></code></pre>
+<p>Deletes a pull request review that has not been submitted. Submitted reviews cannot be deleted.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-4" title="Delete a pending review for a pull request / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a pending review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Delete a pending review for a pull request / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-review-for-a-pull-request">Create a review for a pull request</a>.</p>
+<h2 id="list-comments-for-a-pull-request-review" title="List comments for a pull request review">List comments for a pull request review<a href="#list-comments-for-a-pull-request-review" aria-label="Link to heading 'List comments for a pull request review'" data-heading-content="List comments for a pull request review" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
+</span></code></pre>
+<p>Lists comments for a specific pull request review.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-5" title="List comments for a pull request review / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List comments for a pull request review / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="List comments for a pull request review / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID/comments
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Legacy Review Comment</code>:</p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>pull_request_review_id</code>: required, integer or null, format: int64</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>diff_hunk</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>position</code>: required, integer or null</li>
+<li><code>original_position</code>: required, integer</li>
+<li><code>commit_id</code>: required, string</li>
+<li><code>original_commit_id</code>: required, string</li>
+<li><code>in_reply_to_id</code>: integer</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>body</code>: required, string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>pull_request_url</code>: required, string, format: uri</li>
+<li><code>author_association</code>: required, string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>self</code>: required, <code>Link</code>:
+<ul>
+<li><code>href</code>: required, string</li>
+</ul>
+</li>
+<li><code>html</code>: required, <code>Link</code> (see above)</li>
+<li><code>pull_request</code>: required, <code>Link</code> (see above)</li>
+</ul>
+</li>
+<li><code>body_text</code>: string</li>
+<li><code>body_html</code>: string</li>
+<li><code>reactions</code>: <code>Reaction Rollup</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>total_count</code>: required, integer</li>
+<li><code>+1</code>: required, integer</li>
+<li><code>-1</code>: required, integer</li>
+<li><code>laugh</code>: required, integer</li>
+<li><code>confused</code>: required, integer</li>
+<li><code>heart</code>: required, integer</li>
+<li><code>hooray</code>: required, integer</li>
+<li><code>eyes</code>: required, integer</li>
+<li><code>rocket</code>: required, integer</li>
+</ul>
+</li>
+<li><code>side</code>: string, enum: <code>LEFT</code>, <code>RIGHT</code>, default: <code>"RIGHT"</code></li>
+<li><code>start_side</code>: string or null, enum: <code>LEFT</code>, <code>RIGHT</code>, <code>null</code>, default: <code>"RIGHT"</code></li>
+<li><code>line</code>: integer</li>
+<li><code>original_line</code>: integer</li>
+<li><code>start_line</code>: integer or null</li>
+<li><code>original_start_line</code>: integer or null</li>
+<li><code>subject_type</code>: string, enum: <code>line</code>, <code>file</code></li>
+</ul>
+<h2 id="dismiss-a-review-for-a-pull-request" title="Dismiss a review for a pull request">Dismiss a review for a pull request<a href="#dismiss-a-review-for-a-pull-request" aria-label="Link to heading 'Dismiss a review for a pull request'" data-heading-content="Dismiss a review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
+</span></code></pre>
+<p>Dismisses a specified review on a pull request.<br>
+Note</p>
+<p>To dismiss a pull request review on a protected branch, you must be a repository administrator or be included in the list of people or teams who can dismiss pull request reviews.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-6" title="Dismiss a review for a pull request / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>message</code></strong> (string) (required)<br>
+The message for the pull request review dismissal</p>
+</li>
+<li>
+<p><strong><code>event</code></strong> (string)<br>
+Can be one of: <code>DISMISS</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Dismiss a review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Dismiss a review for a pull request / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID/dismissals \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "message": "You are dismissed",
+</span><span style="color:#c0c5ce;">  "event": "DISMISS"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-review-for-a-pull-request">Create a review for a pull request</a>.</p>
+<h2 id="submit-a-review-for-a-pull-request" title="Submit a review for a pull request">Submit a review for a pull request<a href="#submit-a-review-for-a-pull-request" aria-label="Link to heading 'Submit a review for a pull request'" data-heading-content="Submit a review for a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events
+</span></code></pre>
+<p>Submits a pending review for a pull request. For more information about creating a pending review for a pull request, see "Create a review for a pull request."<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github-commitcomment.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github-commitcomment.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github-commitcomment.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github-commitcomment.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-7" title="Submit a review for a pull request / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+<li>
+<p><strong><code>review_id</code></strong> (integer) (required)<br>
+The unique identifier of the review.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>body</code></strong> (string)<br>
+The body text of the pull request review</p>
+</li>
+<li>
+<p><strong><code>event</code></strong> (string) (required)<br>
+The review action you want to perform. The review actions include: APPROVE, REQUEST_CHANGES, or COMMENT. When you leave this blank, the API returns HTTP 422 (Unrecognizable entity) and sets the review action state to PENDING, which means you will need to re-submit the pull request review using a review action.<br>
+Can be one of: <code>APPROVE</code>, <code>REQUEST_CHANGES</code>, <code>COMMENT</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Submit a review for a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Submit a review for a pull request / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/reviews/REVIEW_ID/events \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "body": "Here is the body for the review.",
+</span><span style="color:#c0c5ce;">  "event": "REQUEST_CHANGES"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-review-for-a-pull-request">Create a review for a pull request</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

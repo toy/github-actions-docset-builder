@@ -1,0 +1,208 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for licenses</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Licenses</a> / </nav><h1 id="rest-api-endpoints-for-licenses">REST API endpoints for licenses<a href="#rest-api-endpoints-for-licenses" aria-label="Link to heading 'REST API endpoints for licenses'" data-heading-content="REST API endpoints for licenses" class="anchor"></a></h1>
+<p>Use the REST API to retrieve popular open source licenses and information about a particular project's license file.</p>
+<h2 id="about-licenses" title="About licenses">About licenses<a href="#about-licenses" aria-label="Link to heading 'About licenses'" data-heading-content="About licenses" class="anchor"></a></h2>
+<p>GitHub uses <a href="https://github.com/benbalter/licensee" class="external">the open source Ruby Gem Licensee</a> to attempt to identify the license for a project. Licensee matches the contents of a project's <code>LICENSE</code> file (if it exists) against a short list of known licenses. As a result, the API does not take into account the licenses of project dependencies or other means of documenting a project's license such as references to the license name in the documentation.</p>
+<p>If a license is matched, the license key and name returned conforms to the <a href="https://spdx.org/" class="external">SPDX specification</a>.</p>
+<p><strong>Note:</strong> These endpoints will also return a repository's license information:</p>
+<ul>
+<li><a href="../repos/repos.html#get-a-repository">Get a repository</a></li>
+<li><a href="../repos/repos.html#list-repositories-for-a-user">List repositories for a user</a></li>
+<li><a href="../repos/repos.html#list-organization-repositories">List organization repositories</a></li>
+<li><a href="../repos/forks.html#list-forks">List forks</a></li>
+<li><a href="../activity/watching.html#list-repositories-watched-by-a-user">List repositories watched by a user</a></li>
+<li><a href="../teams/teams.html#list-team-repositories">List team repositories</a></li>
+</ul>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>GitHub is a lot of things, but it’s not a law firm. As such, GitHub does not provide legal advice. Using the API or sending us an email about it does not constitute legal advice nor does it create an attorney-client relationship. If you have any questions about what you can and can't do with a particular license, you should consult with your own legal counsel before moving forward. In fact, you should always consult with your own lawyer before making any decisions that might have legal ramifications or that may impact your legal rights.</p>
+<p>GitHub created these endpoints to help users get information about open source licenses and the projects that use them. We hope it helps, but please keep in mind that we’re not lawyers (at least most of us aren't) and that we make mistakes like everyone else. For that reason, GitHub provides the API on an "as-is" basis and makes no warranties regarding any information or licenses provided on or through it, and disclaims liability for damages resulting from using the API.</p>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-all-commonly-used-licenses" title="Get all commonly used licenses">Get all commonly used licenses<a href="#get-all-commonly-used-licenses" aria-label="Link to heading 'Get all commonly used licenses'" data-heading-content="Get all commonly used licenses" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /licenses
+</span></code></pre>
+<p>Lists the most commonly used licenses on GitHub. For more information, see "Licensing a repository ."</p>
+<h3 id="parameters" title="Get all commonly used licenses / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>featured</code></strong> (boolean)</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get all commonly used licenses / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get all commonly used licenses / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/licenses
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>License Simple</code>:</p>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+<h2 id="get-a-license" title="Get a license">Get a license<a href="#get-a-license" aria-label="Link to heading 'Get a license'" data-heading-content="Get a license" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /licenses/{license}
+</span></code></pre>
+<p>Gets information about a specific license. For more information, see "Licensing a repository ."</p>
+<h3 id="parameters-1" title="Get a license / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>license</code></strong> (string) (required)</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a license / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a license / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/licenses/LICENSE
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string</li>
+<li><code>implementation</code>: required, string</li>
+<li><code>permissions</code>: required, array of string</li>
+<li><code>conditions</code>: required, array of string</li>
+<li><code>limitations</code>: required, array of string</li>
+<li><code>body</code>: required, string</li>
+<li><code>featured</code>: required, boolean</li>
+</ul>
+<h2 id="get-the-license-for-a-repository" title="Get the license for a repository">Get the license for a repository<a href="#get-the-license-for-a-repository" aria-label="Link to heading 'Get the license for a repository'" data-heading-content="Get the license for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/license
+</span></code></pre>
+<p>This method returns the contents of the repository's license file, if one is detected.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw contents of the license.<br>
+application/vnd.github.html+json: Returns the license contents in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.</p>
+<h3 id="parameters-2" title="Get the license for a repository / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The Git reference for the results you want to list. The ref for a branch can be formatted either as refs/heads/<branch name=""> or simply <branch name="">. To reference a pull request use refs/pull/<number>/merge.</number></branch></branch></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get the license for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get the license for a repository / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/license
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>encoding</code>: required, string</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

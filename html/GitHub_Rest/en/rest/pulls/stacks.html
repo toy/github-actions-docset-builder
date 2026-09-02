@@ -1,0 +1,325 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for stacked pull requests</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Pull requests</a> / </nav><h1 id="rest-api-endpoints-for-stacked-pull-requests">REST API endpoints for stacked pull requests<a href="#rest-api-endpoints-for-stacked-pull-requests" aria-label="Link to heading 'REST API endpoints for stacked pull requests'" data-heading-content="REST API endpoints for stacked pull requests" class="anchor"></a></h1>
+<p>Use the REST API to interact with stacked pull requests.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-pull-request-stacks" title="List pull request stacks">List pull request stacks<a href="#list-pull-request-stacks" aria-label="Link to heading 'List pull request stacks'" data-heading-content="List pull request stacks" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stacks
+</span></code></pre>
+<p>Lists pull request stacks in a repository.</p>
+<h3 id="parameters" title="List pull request stacks / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_request</code></strong> (integer)<br>
+Filter to the stack containing this repository pull request number.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List pull request stacks / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List pull request stacks / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stacks
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Pull Request Stack Minimal</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>number</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>ref</code>: required, string</li>
+</ul>
+</li>
+<li><code>open</code>: required, boolean</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>pull_requests</code>: required, array of objects:
+<ul>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code></li>
+<li><code>draft</code>: required, boolean</li>
+<li><code>merged_at</code>: required, string or null, format: date-time</li>
+<li><code>head</code>: required, object:
+<ul>
+<li><code>ref</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-pull-request-stack" title="Create a pull request stack">Create a pull request stack<a href="#create-a-pull-request-stack" aria-label="Link to heading 'Create a pull request stack'" data-heading-content="Create a pull request stack" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/stacks
+</span></code></pre>
+<p>Creates a stack from an ordered list of pull request numbers. Provide the pull<br>
+request numbers from the bottom of the stack to the top. Each pull request's<br>
+base ref must match the previous pull request's head ref.</p>
+<h3 id="parameters-1" title="Create a pull request stack / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>pull_requests</code></strong> (array of integers) (required)<br>
+An ordered list of pull request numbers forming the stack from bottom to top.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a pull request stack / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed. Returned when the request references pull requests that<br>
+don't exist in the repository, or when the pull requests can't form a<br>
+valid stack.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a pull request stack / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stacks \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "pull_requests": [
+</span><span style="color:#c0c5ce;">    101,
+</span><span style="color:#c0c5ce;">    102,
+</span><span style="color:#c0c5ce;">    103
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>number</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>base</code>: required, object:
+<ul>
+<li><code>ref</code>: required, string</li>
+</ul>
+</li>
+<li><code>open</code>: required, boolean</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>pull_requests</code>: required, array of object</li>
+</ul>
+<h2 id="get-a-pull-request-stack" title="Get a pull request stack">Get a pull request stack<a href="#get-a-pull-request-stack" aria-label="Link to heading 'Get a pull request stack'" data-heading-content="Get a pull request stack" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stacks/{stack_number}
+</span></code></pre>
+<p>Gets a pull request stack by providing its stack number.</p>
+<h3 id="parameters-2" title="Get a pull request stack / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>stack_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request stack.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a pull request stack / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a pull request stack / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stacks/STACK_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-pull-request-stack">Create a pull request stack</a>.</p>
+<h2 id="add-pull-requests-to-a-pull-request-stack" title="Add pull requests to a pull request stack">Add pull requests to a pull request stack<a href="#add-pull-requests-to-a-pull-request-stack" aria-label="Link to heading 'Add pull requests to a pull request stack'" data-heading-content="Add pull requests to a pull request stack" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/stacks/{stack_number}/add
+</span></code></pre>
+<p>Appends an ordered list of pull request numbers onto the top of an existing<br>
+stack. Provide only the pull requests you want to add, from the current top of<br>
+the stack upward. The first new pull request's base ref must match the current<br>
+top pull request's head ref.</p>
+<h3 id="parameters-3" title="Add pull requests to a pull request stack / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>stack_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request stack.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>pull_requests</code></strong> (array of integers) (required)<br>
+An ordered list of pull request numbers to append to the stack, from the current top upward.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Add pull requests to a pull request stack / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict. Returned when the stack is being modified by another request.</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed. Returned when the request references pull requests that<br>
+don't exist in the repository, or when the pull requests can't be appended<br>
+to the stack.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Add pull requests to a pull request stack / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stacks/STACK_NUMBER/add \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "pull_requests": [
+</span><span style="color:#c0c5ce;">    104,
+</span><span style="color:#c0c5ce;">    102
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-pull-request-stack">Create a pull request stack</a>.</p>
+<h2 id="remove-pull-requests-from-a-pull-request-stack" title="Remove pull requests from a pull request stack">Remove pull requests from a pull request stack<a href="#remove-pull-requests-from-a-pull-request-stack" aria-label="Link to heading 'Remove pull requests from a pull request stack'" data-heading-content="Remove pull requests from a pull request stack" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/stacks/{stack_number}/unstack
+</span></code></pre>
+<p>Removes the unmerged pull requests from a stack. Pull requests that cannot be<br>
+unstacked (for example, those that are queued for merge) are left in place. When pull requests remain in the stack, the updated<br>
+stack is returned with a 200. When no pull requests remain, the stack is<br>
+dissolved and a 204 is returned.</p>
+<h3 id="parameters-4" title="Remove pull requests from a pull request stack / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>stack_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request stack.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Remove pull requests from a pull request stack / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict. Returned when the stack is being modified by another request.</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed. Returned when the stack can't be unstacked because every<br>
+pull request in it is locked and cannot be removed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Remove pull requests from a pull request stack / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stacks/STACK_NUMBER/unstack
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-pull-request-stack">Create a pull request stack</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

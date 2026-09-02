@@ -1,0 +1,291 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Actions artifacts</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="rest-api-endpoints-for-github-actions-artifacts">REST API endpoints for GitHub Actions artifacts<a href="#rest-api-endpoints-for-github-actions-artifacts" aria-label="Link to heading 'REST API endpoints for GitHub Actions artifacts'" data-heading-content="REST API endpoints for GitHub Actions artifacts" class="anchor"></a></h1>
+<p>Use the REST API to interact with artifacts in GitHub Actions.</p>
+<h2 id="about-artifacts-in-github-actions" title="About artifacts in GitHub Actions">About artifacts in GitHub Actions<a href="#about-artifacts-in-github-actions" aria-label="Link to heading 'About artifacts in GitHub Actions'" data-heading-content="About artifacts in GitHub Actions" class="anchor"></a></h2>
+<p>You can use the REST API to download, delete, and retrieve information about workflow artifacts in GitHub Actions. Artifacts enable you to share data between jobs in a workflow and store data once that workflow has completed. For more information, see <a href="https://docs.github.com/en/actions/tutorials/store-and-share-data" class="external">Store and share data with workflow artifacts</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-artifacts-for-a-repository" title="List artifacts for a repository">List artifacts for a repository<a href="#list-artifacts-for-a-repository" aria-label="Link to heading 'List artifacts for a repository'" data-heading-content="List artifacts for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/artifacts
+</span></code></pre>
+<p>Lists all artifacts for a repository.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters" title="List artifacts for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name field of an artifact. When specified, only artifacts with this name will be returned.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List artifacts for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="List artifacts for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/artifacts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>artifacts</code>: required, array of <code>Artifact</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>size_in_bytes</code>: required, integer</li>
+<li><code>url</code>: required, string</li>
+<li><code>archive_download_url</code>: required, string</li>
+<li><code>expired</code>: required, boolean</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>expires_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>digest</code>: string or null</li>
+<li><code>workflow_run</code>: object or null:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>repository_id</code>: integer</li>
+<li><code>head_repository_id</code>: integer</li>
+<li><code>head_branch</code>: string</li>
+<li><code>head_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-an-artifact" title="Get an artifact">Get an artifact<a href="#get-an-artifact" aria-label="Link to heading 'Get an artifact'" data-heading-content="Get an artifact" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+</span></code></pre>
+<p>Gets a specific artifact for a workflow run.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Get an artifact / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>artifact_id</code></strong> (integer) (required)<br>
+The unique identifier of the artifact.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get an artifact / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-1" title="Get an artifact / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>size_in_bytes</code>: required, integer</li>
+<li><code>url</code>: required, string</li>
+<li><code>archive_download_url</code>: required, string</li>
+<li><code>expired</code>: required, boolean</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>expires_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>digest</code>: string or null</li>
+<li><code>workflow_run</code>: object or null:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>repository_id</code>: integer</li>
+<li><code>head_repository_id</code>: integer</li>
+<li><code>head_branch</code>: string</li>
+<li><code>head_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+<h2 id="delete-an-artifact" title="Delete an artifact">Delete an artifact<a href="#delete-an-artifact" aria-label="Link to heading 'Delete an artifact'" data-heading-content="Delete an artifact" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+</span></code></pre>
+<p>Deletes an artifact for a workflow run.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Delete an artifact / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>artifact_id</code></strong> (integer) (required)<br>
+The unique identifier of the artifact.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Delete an artifact / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-2" title="Delete an artifact / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="download-an-artifact" title="Download an artifact">Download an artifact<a href="#download-an-artifact" aria-label="Link to heading 'Download an artifact'" data-heading-content="Download an artifact" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+</span></code></pre>
+<p>Gets a redirect URL to download an archive for a repository. This URL expires after 1 minute. Look for Location: in<br>
+the response header to find the URL for the download. The :archive<span data-escaped-char="">_</span>format must be zip.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Download an artifact / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>artifact_id</code></strong> (integer) (required)<br>
+The unique identifier of the artifact.</p>
+</li>
+<li>
+<p><strong><code>archive_format</code></strong> (string) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Download an artifact / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>302</strong> - Found</p>
+</li>
+<li>
+<p><strong>410</strong> - Gone</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Download an artifact / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/artifacts/ARTIFACT_ID/ARCHIVE_FORMAT
+</span></code></pre>
+<p><strong>Response schema (Status: 302):</strong></p>
+<h2 id="list-workflow-run-artifacts" title="List workflow run artifacts">List workflow run artifacts<a href="#list-workflow-run-artifacts" aria-label="Link to heading 'List workflow run artifacts'" data-heading-content="List workflow run artifacts" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts
+</span></code></pre>
+<p>Lists artifacts for a workflow run.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters-4" title="List workflow run artifacts / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>run_id</code></strong> (integer) (required)<br>
+The unique identifier of the workflow run.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name field of an artifact. When specified, only artifacts with this name will be returned.</p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List workflow run artifacts / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="List workflow run artifacts / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runs/RUN_ID/artifacts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-artifacts-for-a-repository">List artifacts for a repository</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

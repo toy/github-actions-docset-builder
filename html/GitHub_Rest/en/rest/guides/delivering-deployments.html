@@ -1,0 +1,133 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Delivering deployments</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Guides</a> / </nav><h1 id="delivering-deployments">Delivering deployments<a href="#delivering-deployments" aria-label="Link to heading 'Delivering deployments'" data-heading-content="Delivering deployments" class="anchor"></a></h1>
+<p>Using the Deployments REST API, you can build custom tooling that interacts with your server and a third-party app.</p>
+<p>You can use the REST API to deploy your projects hosted on GitHub on a server that you own. For more information about the endpoints to manage deployments and statuses, see <a href="../deployments/index.html">REST API endpoints for deployments</a>. You can also use the REST API to coordinate your deployments the moment your code lands on the default branch. For more information, see <a href="building-a-ci-server.html">Building a CI server</a>.</p>
+<p>This guide will use the REST API to demonstrate a setup that you can use.<br>
+In our scenario, we will:</p>
+<ul>
+<li>Merge a pull request.</li>
+<li>When the CI is finished, we'll set the pull request's status accordingly.</li>
+<li>When the pull request is merged, we'll run our deployment to our server.</li>
+</ul>
+<p>Our CI system and host server will be figments of our imagination. They could be<br>
+Heroku, Amazon, or something else entirely. The crux of this guide will be setting up<br>
+and configuring the server managing the communication.</p>
+<p>If you haven't already, be sure to <a href="https://ngrok.com/" class="external">download <code>ngrok</code></a>, and learn how<br>
+to <a href="https://ngrok.com/docs/getting-started/" class="external">use it</a>. We find it to be a very useful tool for exposing local<br>
+applications to the internet.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Alternatively, you can use webhook forwarding to set up your local environment to receive webhooks. For more information, see <a href="https://docs.github.com/en/webhooks/testing-and-troubleshooting-webhooks/using-the-github-cli-to-forward-webhooks-for-testing" class="external">Using the GitHub CLI to forward webhooks for testing</a>.</p>
+</div>
+<p>Note: you can download the complete source code for this project<br>
+<a href="https://github.com/github/platform-samples/tree/master/api/ruby/delivering-deployments" class="external">from the platform-samples repo</a>.</p>
+<h2 id="writing-your-server" title="Writing your server">Writing your server<a href="#writing-your-server" aria-label="Link to heading 'Writing your server'" data-heading-content="Writing your server" class="anchor"></a></h2>
+<p>We'll write a quick Sinatra app to prove that our local connections are working.<br>
+Let's start with this:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">sinatra</span><span style="color:#c0c5ce;">'
+</span><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">json</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">post '</span><span style="color:#a3be8c;">/event_handler</span><span style="color:#c0c5ce;">' </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  payload = </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.parse(params[</span><span style="color:#a3be8c;">:payload</span><span style="color:#c0c5ce;">])
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">Well, it worked!</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>(If you're unfamiliar with how Sinatra works, we recommend <a href="http://www.sinatrarb.com/" class="external">reading the Sinatra guide</a>.)</p>
+<p>Start this server up. By default, Sinatra starts on port <code>4567</code>, so you'll want<br>
+to configure <code>ngrok</code> to start listening for that, too.</p>
+<p>In order for this server to work, we'll need to set a repository up with a webhook. The webhook should be configured to fire whenever a pull request is created, or merged.</p>
+<p>Go ahead and create a repository you're comfortable playing around in. Might we<br>
+suggest <a href="https://github.com/octocat/Spoon-Knife" class="external">@octocat's Spoon/Knife repository</a>?</p>
+<p>After that, you'll create a new webhook in your repository, feeding it the URL that <code>ngrok</code> gave you, and choosing <code>application/x-www-form-urlencoded</code> as the content type.</p>
+<p>Click <strong>Update webhook</strong>. You should see a body response of <code>Well, it worked!</code>.<br>
+Great! Click on <strong>Let me select individual events.</strong>, and select the following:</p>
+<ul>
+<li>Deployment</li>
+<li>Deployment status</li>
+<li>Pull Request</li>
+</ul>
+<p>These are the events GitHub will send to our server whenever the relevant action<br>
+occurs. We'll configure our server to <em>just</em> handle when pull requests are merged<br>
+right now:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">post '</span><span style="color:#a3be8c;">/event_handler</span><span style="color:#c0c5ce;">' </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">payload </span><span style="color:#c0c5ce;">= </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.parse(params[</span><span style="color:#a3be8c;">:payload</span><span style="color:#c0c5ce;">])
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">case</span><span style="color:#c0c5ce;"> request.env['</span><span style="color:#a3be8c;">HTTP_X_GITHUB_EVENT</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">when </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">action</span><span style="color:#c0c5ce;">"] == "</span><span style="color:#a3be8c;">closed</span><span style="color:#c0c5ce;">" &amp;&amp; @</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"]["</span><span style="color:#a3be8c;">merged</span><span style="color:#c0c5ce;">"]
+</span><span style="color:#c0c5ce;">      </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">A pull request was merged! A deployment should start now...</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">end
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">end
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>What's going on? Every event that GitHub sends out attached a <code>X-GitHub-Event</code><br>
+HTTP header. We'll only care about the PR events for now. When a pull request is<br>
+merged (its state is <code>closed</code>, and <code>merged</code> is <code>true</code>), we'll kick off a deployment.</p>
+<p>To test out this proof-of-concept, make some changes in a branch in your test<br>
+repository, open a pull request, and merge it. Your server should respond accordingly!</p>
+<h2 id="working-with-deployments" title="Working with deployments">Working with deployments<a href="#working-with-deployments" aria-label="Link to heading 'Working with deployments'" data-heading-content="Working with deployments" class="anchor"></a></h2>
+<p>With our server in place, the code being reviewed, and our pull request<br>
+merged, we want our project to be deployed.</p>
+<p>We'll start by modifying our event listener to process pull requests when they're<br>
+merged, and start paying attention to deployments:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">when </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">action</span><span style="color:#c0c5ce;">"] == "</span><span style="color:#a3be8c;">closed</span><span style="color:#c0c5ce;">" &amp;&amp; @</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"]["</span><span style="color:#a3be8c;">merged</span><span style="color:#c0c5ce;">"]
+</span><span style="color:#c0c5ce;">    start_deployment(@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"])
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">end
+</span><span style="color:#b48ead;">when </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">deployment</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  process_deployment(@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">)
+</span><span style="color:#b48ead;">when </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">deployment_status</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  update_deployment_status
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Based on the information from the pull request, we'll start by filling out the<br>
+<code>start_deployment</code> method:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">start_deployment</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">pull_request</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">  user = pull_request['</span><span style="color:#a3be8c;">user</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">login</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">  payload = </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.generate(</span><span style="color:#a3be8c;">:environment </span><span style="color:#c0c5ce;">=&gt; '</span><span style="color:#a3be8c;">production</span><span style="color:#c0c5ce;">', </span><span style="color:#a3be8c;">:deploy_user </span><span style="color:#c0c5ce;">=&gt; user)
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_deployment(pull_request['</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">repo</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'], pull_request['</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">sha</span><span style="color:#c0c5ce;">'], {</span><span style="color:#a3be8c;">:payload </span><span style="color:#c0c5ce;">=&gt; payload, </span><span style="color:#a3be8c;">:description </span><span style="color:#c0c5ce;">=&gt; "</span><span style="color:#a3be8c;">Deploying my sweet branch</span><span style="color:#c0c5ce;">"})
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Deployments can have some metadata attached to them, in the form of a <code>payload</code><br>
+and a <code>description</code>. Although these values are optional, it's helpful to use<br>
+for logging and representing information.</p>
+<p>When a new deployment is created, a completely separate event is triggered. That's<br>
+why we have a new <code>switch</code> case in the event handler for <code>deployment</code>. You can<br>
+use this information to be notified when a deployment has been triggered.</p>
+<p>Deployments can take a rather long time, so we'll want to listen for various events,<br>
+such as when the deployment was created, and what state it's in.</p>
+<p>Let's simulate a deployment that does some work, and notice the effect it has on<br>
+the output. First, let's complete our <code>process_deployment</code> method:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">process_deployment
+</span><span style="color:#c0c5ce;">  payload = </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.parse(@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">['</span><span style="color:#a3be8c;">payload</span><span style="color:#c0c5ce;">'])
+</span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># you can send this information to your chat room, monitor, pager, etc.
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">Processing '</span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">description</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">' for </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">payload[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">deploy_user</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> to </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">payload[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">environment</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">sleep </span><span style="color:#d08770;">2 </span><span style="color:#65737e;"># simulate work
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_deployment_status("</span><span style="color:#a3be8c;">repos/</span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">repository</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">][</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">/deployments/</span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">id</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#c0c5ce;">", '</span><span style="color:#a3be8c;">pending</span><span style="color:#c0c5ce;">')
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">sleep </span><span style="color:#d08770;">2 </span><span style="color:#65737e;"># simulate work
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_deployment_status("</span><span style="color:#a3be8c;">repos/</span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">repository</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">][</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">/deployments/</span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">id</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#c0c5ce;">", '</span><span style="color:#a3be8c;">success</span><span style="color:#c0c5ce;">')
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Finally, we'll simulate storing the status information as console output:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">update_deployment_status
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">Deployment status for </span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">id</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> is </span><span style="color:#ab7967;">#{</span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#a3be8c;">[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">state</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Let's break down what's going on. A new deployment is created by <code>start_deployment</code>,<br>
+which triggers the <code>deployment</code> event. From there, we call <code>process_deployment</code><br>
+to simulate work that's going on. During that processing, we also make a call to<br>
+<code>create_deployment_status</code>, which lets a receiver know what's going on, as we<br>
+switch the status to <code>pending</code>.</p>
+<p>After the deployment is finished, we set the status to <code>success</code>.</p>
+<h2 id="conclusion" title="Conclusion">Conclusion<a href="#conclusion" aria-label="Link to heading 'Conclusion'" data-heading-content="Conclusion" class="anchor"></a></h2>
+<p>At GitHub, we've used a version of <code>Heaven</code> to manage<br>
+our deployments for years. A common flow is essentially the same as the<br>
+server we've built above:</p>
+<ul>
+<li>Wait for a response on the state of the CI checks (success or failure)</li>
+<li>If the required checks succeed, merge the pull request</li>
+<li><code>Heaven</code> takes the merged code, and deploys it to staging and production servers</li>
+<li>In the meantime, <code>Heaven</code> also notifies everyone about the build, via <a href="https://github.com/github/hubot" class="external">Hubot</a> sitting in our chat rooms</li>
+</ul>
+<p>That's it! You don't need to build your own deployment setup to use this example.<br>
+You can always rely on <a href="https://github.com/integrations" class="external">GitHub integrations</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

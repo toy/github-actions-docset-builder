@@ -1,0 +1,87 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for dependency review</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Dependency graph</a> / </nav><h1 id="rest-api-endpoints-for-dependency-review">REST API endpoints for dependency review<a href="#rest-api-endpoints-for-dependency-review" aria-label="Link to heading 'REST API endpoints for dependency review'" data-heading-content="REST API endpoints for dependency review" class="anchor"></a></h1>
+<p>Use the REST API to interact with dependency changes.</p>
+<h2 id="about-dependency-review" title="About dependency review">About dependency review<a href="#about-dependency-review" aria-label="Link to heading 'About dependency review'" data-heading-content="About dependency review" class="anchor"></a></h2>
+<p>You can use the REST API to view dependency changes, and the security impact of these changes, before you add them to your environment. You can view the diff of dependencies between two commits of a repository, including vulnerability data for any version updates with known vulnerabilities. For more information about dependency review, see <a href="https://docs.github.com/en/code-security/concepts/supply-chain-security/dependency-review" class="external">Dependency review</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-a-diff-of-the-dependencies-between-commits" title="Get a diff of the dependencies between commits">Get a diff of the dependencies between commits<a href="#get-a-diff-of-the-dependencies-between-commits" aria-label="Link to heading 'Get a diff of the dependencies between commits'" data-heading-content="Get a diff of the dependencies between commits" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+</span></code></pre>
+<p>Gets the diff of the dependency changes between two commits of a repository, based on the changes to the dependency manifests made in those commits.</p>
+<h3 id="parameters" title="Get a diff of the dependencies between commits / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>basehead</code></strong> (string) (required)<br>
+The base and head Git revisions to compare. The Git revisions will be resolved to commit SHAs. Named revisions will be resolved to their corresponding HEAD commits, and an appropriate merge base will be determined. This parameter expects the format {base}...{head}.</p>
+</li>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The full path, relative to the repository root, of the dependency manifest file.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get a diff of the dependencies between commits / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Response for a private repository when GitHub Advanced Security is not enabled, or if used against a fork</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get a diff of the dependencies between commits / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependency-graph/compare/BASEHEAD
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>change_type</code>: required, string, enum: <code>added</code>, <code>removed</code></li>
+<li><code>manifest</code>: required, string</li>
+<li><code>ecosystem</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>version</code>: required, string</li>
+<li><code>package_url</code>: required, string or null</li>
+<li><code>license</code>: required, string or null</li>
+<li><code>source_repository_url</code>: required, string or null</li>
+<li><code>vulnerabilities</code>: required, array of objects:
+<ul>
+<li><code>severity</code>: required, string</li>
+<li><code>advisory_ghsa_id</code>: required, string</li>
+<li><code>advisory_summary</code>: required, string</li>
+<li><code>advisory_url</code>: required, string</li>
+</ul>
+</li>
+<li><code>scope</code>: required, string, enum: <code>unknown</code>, <code>runtime</code>, <code>development</code></li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

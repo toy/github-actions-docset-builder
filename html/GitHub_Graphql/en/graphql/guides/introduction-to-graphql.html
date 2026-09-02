@@ -1,0 +1,101 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Introduction to GraphQL</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="introduction-to-graphql">Introduction to GraphQL<a href="#introduction-to-graphql" aria-label="Link to heading 'Introduction to GraphQL'" data-heading-content="Introduction to GraphQL" class="anchor"></a></h1>
+<p>Learn useful terminology and concepts for using the GitHub GraphQL API.</p>
+<h2 id="graphql-terminology" title="GraphQL terminology">GraphQL terminology<a href="#graphql-terminology" aria-label="Link to heading 'GraphQL terminology'" data-heading-content="GraphQL terminology" class="anchor"></a></h2>
+<p>The GitHub GraphQL API represents an architectural and conceptual shift from the GitHub REST API. You will likely encounter some new terminology in the GraphQL API <a href="../index.html">reference docs</a>.</p>
+<h2 id="schema" title="Schema">Schema<a href="#schema" aria-label="Link to heading 'Schema'" data-heading-content="Schema" class="anchor"></a></h2>
+<p>A schema defines a GraphQL API's type system. It describes the complete set of possible data (objects, fields, relationships, everything) that a client can access. Calls from the client are <a href="https://graphql.org/learn/validation/" class="external">validated</a> and <a href="https://graphql.org/learn/execution/" class="external">executed</a> against the schema. A client can find information about the schema via <a href="#discovering-the-graphql-api">introspection</a>. A schema resides on the GraphQL API server. For more information, see <a href="#discovering-the-graphql-api">Discovering the GraphQL API</a>.</p>
+<h2 id="field" title="Field">Field<a href="#field" aria-label="Link to heading 'Field'" data-heading-content="Field" class="anchor"></a></h2>
+<p>A field is a unit of data you can retrieve from an object. As the <a href="https://graphql.org/learn/schema/" class="external">official GraphQL docs</a> say:<br>
+"The GraphQL query language is basically about selecting fields on objects."</p>
+<p>The <a href="https://spec.graphql.org/June2018/#sec-Language.Fields" class="external">official spec</a> also says about fields:</p>
+<blockquote>
+<p>All GraphQL operations must specify their selections down to fields which return scalar values to ensure an unambiguously shaped response.</p>
+</blockquote>
+<p>This means that if you try to return a field that is not a scalar, schema validation will throw an error. You must add nested subfields until all fields return scalars.</p>
+<h2 id="argument" title="Argument">Argument<a href="#argument" aria-label="Link to heading 'Argument'" data-heading-content="Argument" class="anchor"></a></h2>
+<p>An argument is a set of key-value pairs attached to a specific field. Some fields require an argument. <a href="forming-calls-with-graphql.html#about-mutations">Mutations</a> require an input object as an argument.</p>
+<h2 id="implementation" title="Implementation">Implementation<a href="#implementation" aria-label="Link to heading 'Implementation'" data-heading-content="Implementation" class="anchor"></a></h2>
+<p>A GraphQL schema may use the term <em>implements</em> to define how an object inherits from an interface.</p>
+<p>Here's a contrived example of a schema that defines interface <code>X</code> and object <code>Y</code>:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">interface X {
+</span><span style="color:#c0c5ce;">  some_field: String!
+</span><span style="color:#c0c5ce;">  other_field: String!
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">type Y implements X {
+</span><span style="color:#c0c5ce;">  some_field: String!
+</span><span style="color:#c0c5ce;">  other_field: String!
+</span><span style="color:#c0c5ce;">  new_field: String!
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>This means object <code>Y</code> requires the same fields/arguments/return types that interface <code>X</code> does, while adding new fields specific to object <code>Y</code>. (The <code>!</code> means the field is required.)</p>
+<p>In the reference docs, you'll find that:</p>
+<ul>
+<li>
+<p>Each object lists the interface(s) <em>from which it inherits</em> under <strong>Implements</strong>.</p>
+</li>
+<li>
+<p>Each interface lists the objects <em>that inherit from it</em> under <strong>Implementations</strong>.</p>
+</li>
+</ul>
+<h2 id="connection" title="Connection">Connection<a href="#connection" aria-label="Link to heading 'Connection'" data-heading-content="Connection" class="anchor"></a></h2>
+<p>Connections let you query related objects as part of the same call. With connections, you can use a single GraphQL call where you would have to use multiple calls to a REST API. For more information, see <a href="migrating-from-rest-to-graphql.html">Migrating from REST to GraphQL</a>.</p>
+<p>It's helpful to picture a graph: dots connected by lines. The dots are nodes, the lines are edges. A connection defines a relationship between nodes.</p>
+<h2 id="edge" title="Edge">Edge<a href="#edge" aria-label="Link to heading 'Edge'" data-heading-content="Edge" class="anchor"></a></h2>
+<p>Edges represent connections between nodes. When you query a connection, you traverse its edges to get to its nodes. Every <code>edges</code> field has a <code>node</code> field and a <code>cursor</code> field. Cursors are used for pagination. For more information, see <a href="using-pagination-in-the-graphql-api.html">Using pagination in the GraphQL API</a>.</p>
+<h2 id="node" title="Node">Node<a href="#node" aria-label="Link to heading 'Node'" data-heading-content="Node" class="anchor"></a></h2>
+<p><em>Node</em> is a generic term for an object. You can look up a node directly, or you can access related nodes via a connection. If you specify a <code>node</code> that does not return a scalar, you must include subfields until all fields return scalars. For information on accessing node IDs via the REST API and using them in GraphQL queries, see <a href="using-global-node-ids.html">Using global node IDs</a>.</p>
+<h2 id="discovering-the-graphql-api" title="Discovering the GraphQL API">Discovering the GraphQL API<a href="#discovering-the-graphql-api" aria-label="Link to heading 'Discovering the GraphQL API'" data-heading-content="Discovering the GraphQL API" class="anchor"></a></h2>
+<p>GraphQL is <a href="https://graphql.org/learn/introspection/" class="external">introspective</a>. This means you can query a GraphQL schema for details about itself.</p>
+<ul>
+<li>
+<p>Query <code>__schema</code> to list all types defined in the schema and get details about each:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  __schema {
+</span><span style="color:#c0c5ce;">    types {
+</span><span style="color:#c0c5ce;">      name
+</span><span style="color:#c0c5ce;">      kind
+</span><span style="color:#c0c5ce;">      description
+</span><span style="color:#c0c5ce;">      fields {
+</span><span style="color:#c0c5ce;">        name
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</li>
+<li>
+<p>Query <code>__type</code> to get details about any type:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  __type(name: "Repository") {
+</span><span style="color:#c0c5ce;">    name
+</span><span style="color:#c0c5ce;">    kind
+</span><span style="color:#c0c5ce;">    description
+</span><span style="color:#c0c5ce;">    fields {
+</span><span style="color:#c0c5ce;">      name
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</li>
+<li>
+<p>You can also run an <em>introspection query</em> of the schema via a <code>GET</code> request:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -H "Authorization: bearer TOKEN" https://api.github.com/graphql
+</span></code></pre>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>If you get the response <code>"message": "Bad credentials"</code> or <code>401 Unauthorized</code>, check that you are using a valid token. If you receive a <code>403</code> error with <code>Resource not accessible by personal access token</code>, ensure that your fine-grained personal access token is targeted to the correct resource owner. For example, it must target the organization that owns the repository you are trying to access.</p>
+</div>
+<p>The results are in JSON, so we recommend pretty-printing them for easier reading and searching. You can use a command-line tool like <a href="https://stedolan.github.io/jq/" class="external">jq</a> or pipe the results into <code>python -m json.tool</code> for this purpose.</p>
+<p>Alternatively, you can pass the <code>idl</code> media type to return the results in IDL format, which is a condensed version of the schema:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ curl -H "Authorization: bearer TOKEN" -H "Accept: application/vnd.github.v4.idl" \
+</span><span style="color:#c0c5ce;">https://api.github.com/graphql
+</span></code></pre>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>The introspection query is probably the only <code>GET</code> request you'll run in GraphQL. If you're passing a body, the GraphQL request method is <code>POST</code>, whether it's a query or a mutation.</p>
+</div>
+<p>For more information about performing queries, see <a href="forming-calls-with-graphql.html">Forming calls with GraphQL</a>.</p>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

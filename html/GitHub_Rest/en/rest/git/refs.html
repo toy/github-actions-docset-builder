@@ -1,0 +1,291 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Git references</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Git database</a> / </nav><h1 id="rest-api-endpoints-for-git-references">REST API endpoints for Git references<a href="#rest-api-endpoints-for-git-references" aria-label="Link to heading 'REST API endpoints for Git references'" data-heading-content="REST API endpoints for Git references" class="anchor"></a></h1>
+<p>Use the REST API to interact with references in your Git database on GitHub</p>
+<h2 id="about-git-references" title="About Git references">About Git references<a href="#about-git-references" aria-label="Link to heading 'About Git references'" data-heading-content="About Git references" class="anchor"></a></h2>
+<p>A Git reference (<code>git ref</code>) is a file that contains a Git commit SHA-1 hash. When referring to a Git commit, you can use the Git reference, which is an easy-to-remember name, rather than the hash. The Git reference can be rewritten to point to a new commit. A branch is a Git reference that stores the new Git commit hash. These endpoints allow you to read and write <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-References" class="external">references</a> to your Git database on GitHub.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-matching-references" title="List matching references">List matching references<a href="#list-matching-references" aria-label="Link to heading 'List matching references'" data-heading-content="List matching references" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/matching-refs/{ref}
+</span></code></pre>
+<p>Returns an array of references from your Git database that match the supplied name. The :ref in the URL must be formatted as heads/<branch name=""> for branches and tags/<tag name=""> for tags. If the :ref doesn't exist in the repository, but existing refs start with :ref, they will be returned as an array.<br>
+When you use this endpoint without providing a :ref, it will return an array of all the references from your Git database, including notes and stashes if they exist on the server. Anything in the namespace is returned, not just heads and tags.<br>
+Note</tag></branch></p>
+<p>You need to explicitly request a pull request to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "Checking mergeability of pull requests".</p>
+<p>If you request matching references for a branch named feature but the branch feature doesn't exist, the response can still include other matching head refs that start with the word feature, such as featureA and featureB.</p>
+<h3 id="parameters" title="List matching references / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The Git reference. For more information, see "Git References" in the Git documentation.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List matching references / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List matching references / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/matching-refs/REF
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Git Reference</code>:</p>
+<ul>
+<li><code>ref</code>: required, string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>object</code>: required, object:
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>sha</code>: required, string, minLength: 40, maxLength: 40</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-reference" title="Get a reference">Get a reference<a href="#get-a-reference" aria-label="Link to heading 'Get a reference'" data-heading-content="Get a reference" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/ref/{ref}
+</span></code></pre>
+<p>Returns a single reference from your Git database. The :ref in the URL must be formatted as heads/<branch name=""> for branches and tags/<tag name=""> for tags. If the :ref doesn't match an existing ref, a 404 is returned.<br>
+Note</tag></branch></p>
+<p>You need to explicitly request a pull request to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see "Checking mergeability of pull requests".</p>
+<h3 id="parameters-1" title="Get a reference / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The Git reference. For more information, see "Git References" in the Git documentation.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a reference / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/ref/REF
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>ref</code>: required, string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>object</code>: required, object:
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>sha</code>: required, string, minLength: 40, maxLength: 40</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-reference" title="Create a reference">Create a reference<a href="#create-a-reference" aria-label="Link to heading 'Create a reference'" data-heading-content="Create a reference" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/git/refs
+</span></code></pre>
+<p>Creates a reference for your repository. You are unable to create new references for empty repositories, even if the commit SHA-1 hash used exists. Empty repositories are repositories without branches.</p>
+<h3 id="parameters-2" title="Create a reference / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The name of the fully qualified reference (ie: refs/heads/master). If it doesn't start with 'refs' and have at least two slashes, it will be rejected.</p>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string) (required)<br>
+The SHA1 value for this reference.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Create a reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Create a reference / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/refs \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "ref": "refs/heads/featureA",
+</span><span style="color:#c0c5ce;">  "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#get-a-reference">Get a reference</a>.</p>
+<h2 id="update-a-reference" title="Update a reference">Update a reference<a href="#update-a-reference" aria-label="Link to heading 'Update a reference'" data-heading-content="Update a reference" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/git/refs/{ref}
+</span></code></pre>
+<p>Updates the provided reference to point to a new SHA. For more information, see "Git References" in the Git documentation.</p>
+<h3 id="parameters-3" title="Update a reference / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The Git reference. For more information, see "Git References" in the Git documentation.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>sha</code></strong> (string) (required)<br>
+The SHA1 value to set this reference to</p>
+</li>
+<li>
+<p><strong><code>force</code></strong> (boolean)<br>
+Indicates whether to force the update or to make sure the update is a fast-forward update. Leaving this out or setting it to false will make sure you're not overwriting work.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Update a reference / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/refs/REF \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
+</span><span style="color:#c0c5ce;">  "force": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-reference">Get a reference</a>.</p>
+<h2 id="delete-a-reference" title="Delete a reference">Delete a reference<a href="#delete-a-reference" aria-label="Link to heading 'Delete a reference'" data-heading-content="Delete a reference" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/git/refs/{ref}
+</span></code></pre>
+<p>Deletes the provided reference.</p>
+<h3 id="parameters-4" title="Delete a reference / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The Git reference. For more information, see "Git References" in the Git documentation.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, an attempt was made to delete the default branch, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Delete a reference / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/refs/REF
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Dependabot alerts</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Dependabot</a> / </nav><h1 id="rest-api-endpoints-for--data-variablesproductprodname_dependabot_alerts-">REST API endpoints for {% data variables.product.prodname<span data-escaped-char="">_</span>dependabot<span data-escaped-char="">_</span>alerts %}<a href="#rest-api-endpoints-for--data-variablesproductprodname_dependabot_alerts-" aria-label="Link to heading 'REST API endpoints for {% data variables.product.prodname_dependabot_alerts %}'" data-heading-content="REST API endpoints for {% data variables.product.prodname_dependabot_alerts %}" class="anchor"></a></h1>
+<p>Use the REST API to interact with Dependabot alerts for a repository.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>The ability to use the REST API to manage Dependabot alerts is currently in public preview and subject to change.</p>
+</div>
+<h2 id="about-dependabot-alerts" title="About Dependabot alerts">About Dependabot alerts<a href="#about-dependabot-alerts" aria-label="Link to heading 'About Dependabot alerts'" data-heading-content="About Dependabot alerts" class="anchor"></a></h2>
+<p>You can view Dependabot alerts for a repository and update individual alerts with the REST API. For more information, see <a href="https://docs.github.com/en/code-security/concepts/supply-chain-security/dependabot-alerts" class="external">Dependabot alerts</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-dependabot-alerts-for-an-enterprise" title="List Dependabot alerts for an enterprise">List Dependabot alerts for an enterprise<a href="#list-dependabot-alerts-for-an-enterprise" aria-label="Link to heading 'List Dependabot alerts for an enterprise'" data-heading-content="List Dependabot alerts for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/dependabot/alerts
+</span></code></pre>
+<p>Lists Dependabot alerts for repositories that are owned by the specified enterprise.<br>
+The authenticated user must be a member of the enterprise to use this endpoint.<br>
+Alerts are only returned for organizations in the enterprise for which you are an organization owner or a security manager. For more information about security managers, see "Managing security managers in your organization."<br>
+OAuth app tokens and personal access tokens (classic) need the repo or security<span data-escaped-char="">_</span>events scope to use this endpoint.</p>
+<h3 id="parameters" title="List Dependabot alerts for an enterprise / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>classification</code></strong> (string)<br>
+A comma-separated list of vulnerability classifications. If specified, only alerts for vulnerabilities with these classifications will be returned.<br>
+Can be: malware, general</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+A comma-separated list of states. If specified, only alerts with these states will be returned.<br>
+Can be: auto<span data-escaped-char="">_</span>dismissed, dismissed, fixed, open</p>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string)<br>
+A comma-separated list of severities. If specified, only alerts with these severities will be returned.<br>
+Can be: low, medium, high, critical</p>
+</li>
+<li>
+<p><strong><code>ecosystem</code></strong> (string)<br>
+A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.<br>
+Can be: composer, go, maven, npm, nuget, pip, pub, rubygems, rust</p>
+</li>
+<li>
+<p><strong><code>package</code></strong> (string)<br>
+A comma-separated list of package names. If specified, only alerts for these packages will be returned.</p>
+</li>
+<li>
+<p><strong><code>epss_percentage</code></strong> (string)<br>
+CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:</p>
+</li>
+</ul>
+<p>An exact number (n)<br>
+Comparators such as &gt;n, <span data-escaped-char="">&lt;</span>n, &gt;=n, &lt;=n<br>
+A range like n..n, where n is a number from 0.0 to 1.0</p>
+<p>Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.</p>
+<ul>
+<li>
+<p><strong><code>has</code></strong> (string)<br>
+Filters the list of alerts based on whether the alert has the given value. If specified, only alerts meeting this criterion will be returned.<br>
+Multiple has filters can be passed to filter for alerts that have all of the values. Currently, only patch is supported.</p>
+</li>
+<li>
+<p><strong><code>assignee</code></strong> (string)<br>
+Filter alerts by assignees.<br>
+Provide a comma-separated list of user handles (e.g., octocat or octocat,hubot) to return alerts assigned to any of the specified users.<br>
+Use <span data-escaped-char="">*</span> to list alerts with at least one assignee or none to list alerts with no assignees.</p>
+</li>
+<li>
+<p><strong><code>scope</code></strong> (string)<br>
+The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned.<br>
+Can be one of: <code>development</code>, <code>runtime</code></p>
+</li>
+<li>
+<p><strong><code>relationship</code></strong> (string)<br>
+A comma-separated list of relationships of the vulnerable dependency to your project. If specified, only alerts with these relationships will be returned.<br>
+Note</p>
+</li>
+</ul>
+<p>We are rolling out support for dependency relationship across ecosystems. This value will be "unknown" for all dependencies in unsupported ecosystems.</p>
+<ul>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property by which to sort the results.<br>
+created means when the alert was created.<br>
+updated means when the alert's state last changed.<br>
+epss<span data-escaped-char="">_</span>percentage sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>epss_percentage</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List Dependabot alerts for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List Dependabot alerts for an enterprise / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/dependabot/alerts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>number</code>: required, integer, read-only</li>
+<li><code>state</code>: required, string, enum: <code>auto_dismissed</code>, <code>dismissed</code>, <code>fixed</code>, <code>open</code>, read-only</li>
+<li><code>dependency</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>manifest_path</code>: string, read-only</li>
+<li><code>scope</code>: string or null, enum: <code>development</code>, <code>runtime</code>, <code>null</code>, read-only</li>
+<li><code>relationship</code>: string or null, enum: <code>unknown</code>, <code>direct</code>, <code>transitive</code>, <code>inconclusive</code>, <code>null</code>, read-only</li>
+</ul>
+</li>
+<li><code>security_advisory</code>: required, object, read-only:
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null, read-only</li>
+<li><code>summary</code>: required, string, read-only, maxLength: 1024</li>
+<li><code>description</code>: required, string, read-only</li>
+<li><code>vulnerabilities</code>: required, array of objects:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>classification</code>: string, enum: <code>general</code>, <code>malware</code>, read-only</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>epss</code>: object or null, read-only:
+<ul>
+<li><code>percentage</code>: number, minimum: 0, maximum: 100</li>
+<li><code>percentile</code>: number, minimum: 0, maximum: 100</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects:
+<ul>
+<li><code>cwe_id</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>identifiers</code>: required, array of objects:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code>, read-only</li>
+<li><code>value</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>references</code>: required, array of objects:
+<ul>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+</ul>
+</li>
+<li><code>published_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+</ul>
+</li>
+<li><code>security_vulnerability</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>created_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>dismissed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>dismissed_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>dismissed_reason</code>: required, string or null, enum: <code>fix_started</code>, <code>inaccurate</code>, <code>no_bandwidth</code>, <code>not_used</code>, <code>tolerable_risk</code>, <code>null</code></li>
+<li><code>dismissed_comment</code>: required, string or null, maxLength: 280</li>
+<li><code>fixed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>auto_dismissed_at</code>: string or null, format: date-time, read-only</li>
+<li><code>dismissal_request</code>: <code>Dependabot alert dismissal request</code>:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>status</code>: string, enum: <code>pending</code>, <code>approved</code>, <code>rejected</code>, <code>cancelled</code></li>
+<li><code>requester</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>login</code>: string</li>
+</ul>
+</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>url</code>: string, format: uri</li>
+</ul>
+</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>repository</code>: required, <code>Simple Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-dependabot-alerts-for-an-organization" title="List Dependabot alerts for an organization">List Dependabot alerts for an organization<a href="#list-dependabot-alerts-for-an-organization" aria-label="Link to heading 'List Dependabot alerts for an organization'" data-heading-content="List Dependabot alerts for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/dependabot/alerts
+</span></code></pre>
+<p>Lists Dependabot alerts for an organization.<br>
+The authenticated user must be an owner or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the security<span data-escaped-char="">_</span>events scope to use this endpoint. If this endpoint is only used with public repositories, the token can use the public<span data-escaped-char="">_</span>repo scope instead.</p>
+<h3 id="parameters-1" title="List Dependabot alerts for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>classification</code></strong> (string)<br>
+A comma-separated list of vulnerability classifications. If specified, only alerts for vulnerabilities with these classifications will be returned.<br>
+Can be: malware, general</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+A comma-separated list of states. If specified, only alerts with these states will be returned.<br>
+Can be: auto<span data-escaped-char="">_</span>dismissed, dismissed, fixed, open</p>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string)<br>
+A comma-separated list of severities. If specified, only alerts with these severities will be returned.<br>
+Can be: low, medium, high, critical</p>
+</li>
+<li>
+<p><strong><code>ecosystem</code></strong> (string)<br>
+A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.<br>
+Can be: composer, go, maven, npm, nuget, pip, pub, rubygems, rust</p>
+</li>
+<li>
+<p><strong><code>package</code></strong> (string)<br>
+A comma-separated list of package names. If specified, only alerts for these packages will be returned.</p>
+</li>
+<li>
+<p><strong><code>epss_percentage</code></strong> (string)<br>
+CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:</p>
+</li>
+</ul>
+<p>An exact number (n)<br>
+Comparators such as &gt;n, <span data-escaped-char="">&lt;</span>n, &gt;=n, &lt;=n<br>
+A range like n..n, where n is a number from 0.0 to 1.0</p>
+<p>Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.</p>
+<ul>
+<li>
+<p><strong><code>artifact_registry_url</code></strong> (string)<br>
+A comma-separated list of artifact registry URLs. If specified, only alerts for repositories with storage records matching these URLs will be returned.</p>
+</li>
+<li>
+<p><strong><code>artifact_registry</code></strong> (string)<br>
+A comma-separated list of Artifact Registry name strings. If specified, only alerts for repositories with storage records matching these registries will be returned.<br>
+Can be: jfrog-artifactory</p>
+</li>
+<li>
+<p><strong><code>has</code></strong> (string)<br>
+Filters the list of alerts based on whether the alert has the given value. If specified, only alerts meeting this criterion will be returned.<br>
+Multiple has filters can be passed to filter for alerts that have all of the values.</p>
+</li>
+<li>
+<p><strong><code>assignee</code></strong> (string)<br>
+Filter alerts by assignees.<br>
+Provide a comma-separated list of user handles (e.g., octocat or octocat,hubot) to return alerts assigned to any of the specified users.<br>
+Use <span data-escaped-char="">*</span> to list alerts with at least one assignee or none to list alerts with no assignees.</p>
+</li>
+<li>
+<p><strong><code>runtime_risk</code></strong> (string)<br>
+A comma-separated list of runtime risk strings. If specified, only alerts for repositories with deployment records matching these risks will be returned.<br>
+Can be: critical-resource, internet-exposed, sensitive-data, lateral-movement</p>
+</li>
+<li>
+<p><strong><code>scope</code></strong> (string)<br>
+The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned.<br>
+Can be one of: <code>development</code>, <code>runtime</code></p>
+</li>
+<li>
+<p><strong><code>relationship</code></strong> (string)<br>
+A comma-separated list of relationships of the vulnerable dependency to your project. If specified, only alerts with these relationships will be returned.<br>
+Note</p>
+</li>
+</ul>
+<p>We are rolling out support for dependency relationship across ecosystems. This value will be "unknown" for all dependencies in unsupported ecosystems.</p>
+<ul>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property by which to sort the results.<br>
+created means when the alert was created.<br>
+updated means when the alert's state last changed.<br>
+epss<span data-escaped-char="">_</span>percentage sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>epss_percentage</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List Dependabot alerts for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List Dependabot alerts for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/dependabot/alerts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-dependabot-alerts-for-an-enterprise">List Dependabot alerts for an enterprise</a>.</p>
+<h2 id="list-dependabot-alerts-for-a-repository" title="List Dependabot alerts for a repository">List Dependabot alerts for a repository<a href="#list-dependabot-alerts-for-a-repository" aria-label="Link to heading 'List Dependabot alerts for a repository'" data-heading-content="List Dependabot alerts for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependabot/alerts
+</span></code></pre>
+<p>OAuth app tokens and personal access tokens (classic) need the security<span data-escaped-char="">_</span>events scope to use this endpoint. If this endpoint is only used with public repositories, the token can use the public<span data-escaped-char="">_</span>repo scope instead.</p>
+<h3 id="parameters-2" title="List Dependabot alerts for a repository / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>classification</code></strong> (string)<br>
+A comma-separated list of vulnerability classifications. If specified, only alerts for vulnerabilities with these classifications will be returned.<br>
+Can be: malware, general</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+A comma-separated list of states. If specified, only alerts with these states will be returned.<br>
+Can be: auto<span data-escaped-char="">_</span>dismissed, dismissed, fixed, open</p>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string)<br>
+A comma-separated list of severities. If specified, only alerts with these severities will be returned.<br>
+Can be: low, medium, high, critical</p>
+</li>
+<li>
+<p><strong><code>ecosystem</code></strong> (string)<br>
+A comma-separated list of ecosystems. If specified, only alerts for these ecosystems will be returned.<br>
+Can be: composer, go, maven, npm, nuget, pip, pub, rubygems, rust</p>
+</li>
+<li>
+<p><strong><code>package</code></strong> (string)<br>
+A comma-separated list of package names. If specified, only alerts for these packages will be returned.</p>
+</li>
+<li>
+<p><strong><code>manifest</code></strong> (string)<br>
+A comma-separated list of full manifest paths. If specified, only alerts for these manifests will be returned.</p>
+</li>
+<li>
+<p><strong><code>epss_percentage</code></strong> (string)<br>
+CVE Exploit Prediction Scoring System (EPSS) percentage. Can be specified as:</p>
+</li>
+</ul>
+<p>An exact number (n)<br>
+Comparators such as &gt;n, <span data-escaped-char="">&lt;</span>n, &gt;=n, &lt;=n<br>
+A range like n..n, where n is a number from 0.0 to 1.0</p>
+<p>Filters the list of alerts based on EPSS percentages. If specified, only alerts with the provided EPSS percentages will be returned.</p>
+<ul>
+<li>
+<p><strong><code>has</code></strong> (string)<br>
+Filters the list of alerts based on whether the alert has the given value. If specified, only alerts meeting this criterion will be returned.<br>
+Multiple has filters can be passed to filter for alerts that have all of the values. Currently, only patch is supported.</p>
+</li>
+<li>
+<p><strong><code>assignee</code></strong> (string)<br>
+Filter alerts by assignees.<br>
+Provide a comma-separated list of user handles (e.g., octocat or octocat,hubot) to return alerts assigned to any of the specified users.<br>
+Use <span data-escaped-char="">*</span> to list alerts with at least one assignee or none to list alerts with no assignees.</p>
+</li>
+<li>
+<p><strong><code>scope</code></strong> (string)<br>
+The scope of the vulnerable dependency. If specified, only alerts with this scope will be returned.<br>
+Can be one of: <code>development</code>, <code>runtime</code></p>
+</li>
+<li>
+<p><strong><code>relationship</code></strong> (string)<br>
+A comma-separated list of relationships of the vulnerable dependency to your project. If specified, only alerts with these relationships will be returned.<br>
+Note</p>
+</li>
+</ul>
+<p>We are rolling out support for dependency relationship across ecosystems. This value will be "unknown" for all dependencies in unsupported ecosystems.</p>
+<ul>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property by which to sort the results.<br>
+created means when the alert was created.<br>
+updated means when the alert's state last changed.<br>
+epss<span data-escaped-char="">_</span>percentage sorts alerts by the Exploit Prediction Scoring System (EPSS) percentage.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>epss_percentage</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List Dependabot alerts for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List Dependabot alerts for a repository / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependabot/alerts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>number</code>: required, integer, read-only</li>
+<li><code>state</code>: required, string, enum: <code>auto_dismissed</code>, <code>dismissed</code>, <code>fixed</code>, <code>open</code>, read-only</li>
+<li><code>dependency</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>manifest_path</code>: string, read-only</li>
+<li><code>scope</code>: string or null, enum: <code>development</code>, <code>runtime</code>, <code>null</code>, read-only</li>
+<li><code>relationship</code>: string or null, enum: <code>unknown</code>, <code>direct</code>, <code>transitive</code>, <code>inconclusive</code>, <code>null</code>, read-only</li>
+</ul>
+</li>
+<li><code>security_advisory</code>: required, object, read-only:
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null, read-only</li>
+<li><code>summary</code>: required, string, read-only, maxLength: 1024</li>
+<li><code>description</code>: required, string, read-only</li>
+<li><code>vulnerabilities</code>: required, array of objects:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>classification</code>: string, enum: <code>general</code>, <code>malware</code>, read-only</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>epss</code>: object or null, read-only:
+<ul>
+<li><code>percentage</code>: number, minimum: 0, maximum: 100</li>
+<li><code>percentile</code>: number, minimum: 0, maximum: 100</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects:
+<ul>
+<li><code>cwe_id</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>identifiers</code>: required, array of objects:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code>, read-only</li>
+<li><code>value</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>references</code>: required, array of objects:
+<ul>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+</ul>
+</li>
+<li><code>published_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+</ul>
+</li>
+<li><code>security_vulnerability</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>created_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>dismissed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>dismissed_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>dismissed_reason</code>: required, string or null, enum: <code>fix_started</code>, <code>inaccurate</code>, <code>no_bandwidth</code>, <code>not_used</code>, <code>tolerable_risk</code>, <code>null</code></li>
+<li><code>dismissed_comment</code>: required, string or null, maxLength: 280</li>
+<li><code>fixed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>auto_dismissed_at</code>: string or null, format: date-time, read-only</li>
+<li><code>dismissal_request</code>: <code>Dependabot alert dismissal request</code>:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>status</code>: string, enum: <code>pending</code>, <code>approved</code>, <code>rejected</code>, <code>cancelled</code></li>
+<li><code>requester</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>login</code>: string</li>
+</ul>
+</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>url</code>: string, format: uri</li>
+</ul>
+</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+</ul>
+<h2 id="get-a-dependabot-alert" title="Get a Dependabot alert">Get a Dependabot alert<a href="#get-a-dependabot-alert" aria-label="Link to heading 'Get a Dependabot alert'" data-heading-content="Get a Dependabot alert" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+</span></code></pre>
+<p>OAuth app tokens and personal access tokens (classic) need the security<span data-escaped-char="">_</span>events scope to use this endpoint. If this endpoint is only used with public repositories, the token can use the public<span data-escaped-char="">_</span>repo scope instead.</p>
+<h3 id="parameters-3" title="Get a Dependabot alert / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>alert_number</code></strong> (integer) (required)<br>
+The number that identifies a Dependabot alert in its repository.<br>
+You can find this at the end of the URL for a Dependabot alert within GitHub,<br>
+or in number fields in the response from the<br>
+GET /repos/{owner}/{repo}/dependabot/alerts operation.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get a Dependabot alert / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get a Dependabot alert / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependabot/alerts/ALERT_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>number</code>: required, integer, read-only</li>
+<li><code>state</code>: required, string, enum: <code>auto_dismissed</code>, <code>dismissed</code>, <code>fixed</code>, <code>open</code>, read-only</li>
+<li><code>dependency</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>manifest_path</code>: string, read-only</li>
+<li><code>scope</code>: string or null, enum: <code>development</code>, <code>runtime</code>, <code>null</code>, read-only</li>
+<li><code>relationship</code>: string or null, enum: <code>unknown</code>, <code>direct</code>, <code>transitive</code>, <code>inconclusive</code>, <code>null</code>, read-only</li>
+</ul>
+</li>
+<li><code>security_advisory</code>: required, object, read-only:
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null, read-only</li>
+<li><code>summary</code>: required, string, read-only, maxLength: 1024</li>
+<li><code>description</code>: required, string, read-only</li>
+<li><code>vulnerabilities</code>: required, array of objects:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>classification</code>: string, enum: <code>general</code>, <code>malware</code>, read-only</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>epss</code>: object or null, read-only:
+<ul>
+<li><code>percentage</code>: number, minimum: 0, maximum: 100</li>
+<li><code>percentile</code>: number, minimum: 0, maximum: 100</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects:
+<ul>
+<li><code>cwe_id</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>identifiers</code>: required, array of objects:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code>, read-only</li>
+<li><code>value</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>references</code>: required, array of objects:
+<ul>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+</ul>
+</li>
+<li><code>published_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+</ul>
+</li>
+<li><code>security_vulnerability</code>: required, object, read-only:
+<ul>
+<li><code>package</code>: required, object, read-only:
+<ul>
+<li><code>ecosystem</code>: required, string, read-only</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>severity</code>: required, string, enum: <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code>, read-only</li>
+<li><code>vulnerable_version_range</code>: required, string, read-only</li>
+<li><code>first_patched_version</code>: required, object or null, read-only:
+<ul>
+<li><code>identifier</code>: required, string, read-only</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>created_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>dismissed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>dismissed_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>dismissed_reason</code>: required, string or null, enum: <code>fix_started</code>, <code>inaccurate</code>, <code>no_bandwidth</code>, <code>not_used</code>, <code>tolerable_risk</code>, <code>null</code></li>
+<li><code>dismissed_comment</code>: required, string or null, maxLength: 280</li>
+<li><code>fixed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>auto_dismissed_at</code>: string or null, format: date-time, read-only</li>
+<li><code>dismissal_request</code>: <code>Dependabot alert dismissal request</code>:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>status</code>: string, enum: <code>pending</code>, <code>approved</code>, <code>rejected</code>, <code>cancelled</code></li>
+<li><code>requester</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>login</code>: string</li>
+</ul>
+</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>url</code>: string, format: uri</li>
+</ul>
+</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+</ul>
+<h2 id="update-a-dependabot-alert" title="Update a Dependabot alert">Update a Dependabot alert<a href="#update-a-dependabot-alert" aria-label="Link to heading 'Update a Dependabot alert'" data-heading-content="Update a Dependabot alert" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+</span></code></pre>
+<p>The authenticated user must have access to security alerts for the repository to use this endpoint. For more information, see "Granting access to security alerts."<br>
+OAuth app tokens and personal access tokens (classic) need the security<span data-escaped-char="">_</span>events scope to use this endpoint. If this endpoint is only used with public repositories, the token can use the public<span data-escaped-char="">_</span>repo scope instead.</p>
+<h3 id="parameters-4" title="Update a Dependabot alert / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>alert_number</code></strong> (integer) (required)<br>
+The number that identifies a Dependabot alert in its repository.<br>
+You can find this at the end of the URL for a Dependabot alert within GitHub,<br>
+or in number fields in the response from the<br>
+GET /repos/{owner}/{repo}/dependabot/alerts operation.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+The state of the Dependabot alert.<br>
+A dismissed<span data-escaped-char="">_</span>reason must be provided when setting the state to dismissed.<br>
+Can be one of: <code>dismissed</code>, <code>open</code></p>
+</li>
+<li>
+<p><strong><code>dismissed_reason</code></strong> (string)<br>
+Required when state is dismissed. A reason for dismissing the alert.<br>
+Can be one of: <code>fix_started</code>, <code>inaccurate</code>, <code>no_bandwidth</code>, <code>not_used</code>, <code>tolerable_risk</code></p>
+</li>
+<li>
+<p><strong><code>dismissed_comment</code></strong> (string)<br>
+An optional comment associated with dismissing the alert.</p>
+</li>
+<li>
+<p><strong><code>assignees</code></strong> (array of strings)<br>
+Usernames to assign to this Dependabot Alert.<br>
+Pass one or more user logins to replace the set of assignees on this alert.<br>
+Send an empty array (<span data-escaped-char="">[</span>]) to clear all assignees from the alert.<br>
+To assign an AI agent, include the bot login (for example, copilot-swe-agent<span data-escaped-char="">[</span>bot]).</p>
+</li>
+<li>
+<p><strong><code>agent_assignment</code></strong> (object)<br>
+Parameters for AI agent assignment. Only used when an agent bot login is<br>
+included in assignees. Ignored when no agent is being assigned.</p>
+<ul>
+<li><strong><code>custom_instructions</code></strong> (string)<br>
+Custom instructions for the agent.</li>
+<li><strong><code>custom_agent</code></strong> (string)<br>
+A custom agent identifier.</li>
+<li><strong><code>model</code></strong> (string)<br>
+The model to use for the agent.</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Update a Dependabot alert / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Update a Dependabot alert / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependabot/alerts/ALERT_NUMBER \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "state": "dismissed",
+</span><span style="color:#c0c5ce;">  "dismissed_reason": "tolerable_risk",
+</span><span style="color:#c0c5ce;">  "dismissed_comment": "This alert is accurate but we use a sanitizer."
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-dependabot-alert">Get a Dependabot alert</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

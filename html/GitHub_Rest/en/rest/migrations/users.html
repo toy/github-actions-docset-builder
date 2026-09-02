@@ -1,0 +1,571 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for user migrations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Migrations</a> / </nav><h1 id="rest-api-endpoints-for-user-migrations">REST API endpoints for user migrations<a href="#rest-api-endpoints-for-user-migrations" aria-label="Link to heading 'REST API endpoints for user migrations'" data-heading-content="REST API endpoints for user migrations" class="anchor"></a></h1>
+<p>Use the REST API to review, backup, or migrate your user data stored on GitHub.</p>
+<h2 id="about-user-migrations" title="About user migrations">About user migrations<a href="#about-user-migrations" aria-label="Link to heading 'About user migrations'" data-heading-content="About user migrations" class="anchor"></a></h2>
+<p>These endpoints are only available to authenticated account owners. For more information, see <a href="../authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a>.</p>
+<p>You can use these endpoints to review, backup, or migrate your user data stored on GitHub.com. For a list of migration data that you can download, see <a href="#download-a-user-migration-archive">Download a user migration archive</a>.</p>
+<p>To download an archive, you'll need to start a user migration first. Once the status of the migration is <code>exported</code>, you can download the migration.</p>
+<p>Once you've created a migration archive, it will be available to download for seven days. But, you can delete the user migration archive sooner if you'd like. You can unlock your repository when the migration is <code>exported</code> to begin using your repository again or delete the repository if you no longer need the source data.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-user-migrations" title="List user migrations">List user migrations<a href="#list-user-migrations" aria-label="Link to heading 'List user migrations'" data-heading-content="List user migrations" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/migrations
+</span></code></pre>
+<p>Lists all migrations a user has started.</p>
+<h3 id="parameters" title="List user migrations / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List user migrations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List user migrations / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Migration</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>owner</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>guid</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>lock_repositories</code>: required, boolean</li>
+<li><code>exclude_metadata</code>: required, boolean</li>
+<li><code>exclude_git_data</code>: required, boolean</li>
+<li><code>exclude_attachments</code>: required, boolean</li>
+<li><code>exclude_releases</code>: required, boolean</li>
+<li><code>exclude_owner_projects</code>: required, boolean</li>
+<li><code>org_metadata_only</code>: required, boolean</li>
+<li><code>repositories</code>: required, array of <code>Simple Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>archive_url</code>: string, format: uri</li>
+<li><code>exclude</code>: array of string</li>
+</ul>
+<h2 id="start-a-user-migration" title="Start a user migration">Start a user migration<a href="#start-a-user-migration" aria-label="Link to heading 'Start a user migration'" data-heading-content="Start a user migration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/migrations
+</span></code></pre>
+<p>Initiates the generation of a user migration archive.</p>
+<h3 id="parameters-1" title="Start a user migration / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>lock_repositories</code></strong> (boolean)<br>
+Lock the repositories being migrated at the start of the migration</p>
+</li>
+<li>
+<p><strong><code>exclude_metadata</code></strong> (boolean)<br>
+Indicates whether metadata should be excluded and only git source should be included for the migration.</p>
+</li>
+<li>
+<p><strong><code>exclude_git_data</code></strong> (boolean)<br>
+Indicates whether the repository git data should be excluded from the migration.</p>
+</li>
+<li>
+<p><strong><code>exclude_attachments</code></strong> (boolean)<br>
+Do not include attachments in the migration</p>
+</li>
+<li>
+<p><strong><code>exclude_releases</code></strong> (boolean)<br>
+Do not include releases in the migration</p>
+</li>
+<li>
+<p><strong><code>exclude_owner_projects</code></strong> (boolean)<br>
+Indicates whether projects owned by the organization or users should be excluded.</p>
+</li>
+<li>
+<p><strong><code>org_metadata_only</code></strong> (boolean)<br>
+Indicates whether this should only include organization metadata (repositories array should be empty and will ignore other flags).<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>exclude</code></strong> (array of strings)<br>
+Exclude attributes from the API response to improve performance<br>
+Supported values are: repositories</p>
+</li>
+<li>
+<p><strong><code>repositories</code></strong> (array of strings) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Start a user migration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Start a user migration / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repositories": [
+</span><span style="color:#c0c5ce;">    "octocat/Hello-World"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "lock_repositories": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>owner</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>guid</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>lock_repositories</code>: required, boolean</li>
+<li><code>exclude_metadata</code>: required, boolean</li>
+<li><code>exclude_git_data</code>: required, boolean</li>
+<li><code>exclude_attachments</code>: required, boolean</li>
+<li><code>exclude_releases</code>: required, boolean</li>
+<li><code>exclude_owner_projects</code>: required, boolean</li>
+<li><code>org_metadata_only</code>: required, boolean</li>
+<li><code>repositories</code>: required, array of <code>Simple Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>archive_url</code>: string, format: uri</li>
+<li><code>exclude</code>: array of string</li>
+</ul>
+<h2 id="get-a-user-migration-status" title="Get a user migration status">Get a user migration status<a href="#get-a-user-migration-status" aria-label="Link to heading 'Get a user migration status'" data-heading-content="Get a user migration status" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/migrations/{migration_id}
+</span></code></pre>
+<p>Fetches a single user migration. The response includes the state of the migration, which can be one of the following values:</p>
+<p>pending - the migration hasn't started yet.<br>
+exporting - the migration is in progress.<br>
+exported - the migration finished successfully.<br>
+failed - the migration failed.</p>
+<p>Once the migration has been exported you can download the migration archive.</p>
+<h3 id="parameters-2" title="Get a user migration status / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>migration_id</code></strong> (integer) (required)<br>
+The unique identifier of the migration.</p>
+</li>
+<li>
+<p><strong><code>exclude</code></strong> (array)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a user migration status / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a user migration status / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations/MIGRATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#start-a-user-migration">Start a user migration</a>.</p>
+<h2 id="download-a-user-migration-archive" title="Download a user migration archive">Download a user migration archive<a href="#download-a-user-migration-archive" aria-label="Link to heading 'Download a user migration archive'" data-heading-content="Download a user migration archive" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/migrations/{migration_id}/archive
+</span></code></pre>
+<p>Fetches the URL to download the migration archive as a tar.gz file. Depending on the resources your repository uses, the migration archive can contain JSON files with data for these objects:</p>
+<p>attachments<br>
+bases<br>
+commit<span data-escaped-char="">_</span>comments<br>
+issue<span data-escaped-char="">_</span>comments<br>
+issue<span data-escaped-char="">_</span>events<br>
+issues<br>
+milestones<br>
+organizations<br>
+projects<br>
+protected<span data-escaped-char="">_</span>branches<br>
+pull<span data-escaped-char="">_</span>request<span data-escaped-char="">_</span>reviews<br>
+pull<span data-escaped-char="">_</span>requests<br>
+releases<br>
+repositories<br>
+review<span data-escaped-char="">_</span>comments<br>
+schema<br>
+users</p>
+<p>The archive will also contain an attachments directory that includes all attachment files uploaded to GitHub.com and a repositories directory that contains the repository's Git data.</p>
+<h3 id="parameters-3" title="Download a user migration archive / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>migration_id</code></strong> (integer) (required)<br>
+The unique identifier of the migration.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Download a user migration archive / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>302</strong> - Found</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h2 id="delete-a-user-migration-archive" title="Delete a user migration archive">Delete a user migration archive<a href="#delete-a-user-migration-archive" aria-label="Link to heading 'Delete a user migration archive'" data-heading-content="Delete a user migration archive" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/migrations/{migration_id}/archive
+</span></code></pre>
+<p>Deletes a previous migration archive. Downloadable migration archives are automatically deleted after seven days. Migration metadata, which is returned in the List user migrations and Get a user migration status endpoints, will continue to be available even after an archive is deleted.</p>
+<h3 id="parameters-4" title="Delete a user migration archive / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>migration_id</code></strong> (integer) (required)<br>
+The unique identifier of the migration.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a user migration archive / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete a user migration archive / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations/MIGRATION_ID/archive
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="unlock-a-user-repository" title="Unlock a user repository">Unlock a user repository<a href="#unlock-a-user-repository" aria-label="Link to heading 'Unlock a user repository'" data-heading-content="Unlock a user repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock
+</span></code></pre>
+<p>Unlocks a repository. You can lock repositories when you start a user migration. Once the migration is complete you can unlock each repository to begin using it again or delete the repository if you no longer need the source data. Returns a status of 404 Not Found if the repository is not locked.</p>
+<h3 id="parameters-5" title="Unlock a user repository / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>migration_id</code></strong> (integer) (required)<br>
+The unique identifier of the migration.</p>
+</li>
+<li>
+<p><strong><code>repo_name</code></strong> (string) (required)<br>
+repo<span data-escaped-char="">_</span>name parameter</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Unlock a user repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Unlock a user repository / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations/MIGRATION_ID/repos/REPO_NAME/lock
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-repositories-for-a-user-migration" title="List repositories for a user migration">List repositories for a user migration<a href="#list-repositories-for-a-user-migration" aria-label="Link to heading 'List repositories for a user migration'" data-heading-content="List repositories for a user migration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/migrations/{migration_id}/repositories
+</span></code></pre>
+<p>Lists all the repositories for this user migration.</p>
+<h3 id="parameters-6" title="List repositories for a user migration / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>migration_id</code></strong> (integer) (required)<br>
+The unique identifier of the migration.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="List repositories for a user migration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="List repositories for a user migration / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/migrations/MIGRATION_ID/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

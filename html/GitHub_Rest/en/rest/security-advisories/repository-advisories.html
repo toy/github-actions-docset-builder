@@ -1,0 +1,1500 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for repository security advisories</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Security advisories</a> / </nav><h1 id="rest-api-endpoints-for-repository-security-advisories">REST API endpoints for repository security advisories<a href="#rest-api-endpoints-for-repository-security-advisories" aria-label="Link to heading 'REST API endpoints for repository security advisories'" data-heading-content="REST API endpoints for repository security advisories" class="anchor"></a></h1>
+<p>Use the REST API to view and manage repository security advisories.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-repository-security-advisories-for-an-organization" title="List repository security advisories for an organization">List repository security advisories for an organization<a href="#list-repository-security-advisories-for-an-organization" aria-label="Link to heading 'List repository security advisories for an organization'" data-heading-content="List repository security advisories for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/security-advisories
+</span></code></pre>
+<p>Lists repository security advisories for an organization.<br>
+The authenticated user must be an owner or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:write scope to use this endpoint.</p>
+<h3 id="parameters" title="List repository security advisories for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property to sort the results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>published</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of advisories to return per page. For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Filter by the state of the repository advisories. Only advisories of this state will be returned.<br>
+Can be one of: <code>triage</code>, <code>draft</code>, <code>published</code>, <code>closed</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List repository security advisories for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List repository security advisories for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/security-advisories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>summary</code>: required, string, maxLength: 1024</li>
+<li><code>description</code>: required, string or null, maxLength: 65535</li>
+<li><code>severity</code>: required, string or null, enum: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>null</code></li>
+<li><code>author</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>publisher</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>identifiers</code>: required, array of objects:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code></li>
+<li><code>value</code>: required, string</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>published</code>, <code>closed</code>, <code>withdrawn</code>, <code>draft</code>, <code>triage</code></li>
+<li><code>created_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>published_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>closed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>submission</code>: required, object or null, read-only:
+<ul>
+<li><code>accepted</code>: required, boolean, read-only</li>
+</ul>
+</li>
+<li><code>vulnerabilities</code>: required, array of objects or null:
+<ul>
+<li><code>package</code>: required, object or null:
+<ul>
+<li><code>ecosystem</code>: required, string, enum: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><code>name</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>vulnerable_version_range</code>: required, string or null</li>
+<li><code>patched_versions</code>: required, string or null</li>
+<li><code>vulnerable_functions</code>: required, array of string or null</li>
+</ul>
+</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects or null:
+<ul>
+<li><code>cwe_id</code>: required, string</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>cwe_ids</code>: required, array of string or null</li>
+<li><code>credits</code>: required, array of objects or null:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>type</code>: string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+<li><code>credits_detailed</code>: required, array of objects or null:
+<ul>
+<li><code>user</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>type</code>: required, string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+<li><code>state</code>: required, string, enum: <code>accepted</code>, <code>declined</code>, <code>pending</code></li>
+</ul>
+</li>
+<li><code>collaborating_users</code>: required, array of <code>Simple User</code> or null (see above)</li>
+<li><code>collaborating_teams</code>: required, array of <code>Team</code> or null:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>private_fork</code>: required, all of:
+<ul>
+<li><strong>Simple Repository</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-repository-security-advisories" title="List repository security advisories">List repository security advisories<a href="#list-repository-security-advisories" aria-label="Link to heading 'List repository security advisories'" data-heading-content="List repository security advisories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/security-advisories
+</span></code></pre>
+<p>Lists security advisories in a repository.<br>
+The authenticated user can access unpublished security advisories from a repository if they are a security manager or administrator of that repository, or if they are a collaborator on any security advisory.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:read scope to to get a published security advisory in a private repository, or any unpublished security advisory that the authenticated user has access to.</p>
+<h3 id="parameters-1" title="List repository security advisories / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property to sort the results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>published</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of advisories to return per page. For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Filter by state of the repository advisories. Only advisories of this state will be returned.<br>
+Can be one of: <code>triage</code>, <code>draft</code>, <code>published</code>, <code>closed</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List repository security advisories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List repository security advisories / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-repository-security-advisories-for-an-organization">List repository security advisories for an organization</a>.</p>
+<h2 id="create-a-repository-security-advisory" title="Create a repository security advisory">Create a repository security advisory<a href="#create-a-repository-security-advisory" aria-label="Link to heading 'Create a repository security advisory'" data-heading-content="Create a repository security advisory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/security-advisories
+</span></code></pre>
+<p>Creates a new repository security advisory.<br>
+In order to create a draft repository security advisory, the authenticated user must be a security manager or administrator of that repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:write scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Create a repository security advisory / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>summary</code></strong> (string) (required)<br>
+A short summary of the advisory.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string) (required)<br>
+A detailed description of what the advisory impacts.</p>
+</li>
+<li>
+<p><strong><code>cve_id</code></strong> (string or null)<br>
+The Common Vulnerabilities and Exposures (CVE) ID.</p>
+</li>
+<li>
+<p><strong><code>vulnerabilities</code></strong> (array of objects) (required)<br>
+A product affected by the vulnerability detailed in a repository security advisory.</p>
+<ul>
+<li><strong><code>package</code></strong> (object) (required)<br>
+The name of the package affected by the vulnerability.
+<ul>
+<li><strong><code>ecosystem</code></strong> (string) (required)<br>
+The package's language or package management ecosystem.<br>
+Can be one of: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><strong><code>name</code></strong> (string or null)<br>
+The unique package name within its ecosystem.</li>
+</ul>
+</li>
+<li><strong><code>vulnerable_version_range</code></strong> (string or null)<br>
+The range of the package versions affected by the vulnerability.</li>
+<li><strong><code>patched_versions</code></strong> (string or null)<br>
+The package version(s) that resolve the vulnerability.</li>
+<li><strong><code>vulnerable_functions</code></strong> (array of strings or null)<br>
+The functions in the package that are affected.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>cwe_ids</code></strong> (array of strings or null)<br>
+A list of Common Weakness Enumeration (CWE) IDs.</p>
+</li>
+<li>
+<p><strong><code>credits</code></strong> (array of objects or null)<br>
+A list of users receiving credit for their participation in the security advisory.</p>
+<ul>
+<li><strong><code>login</code></strong> (string) (required)<br>
+The username of the user credited.</li>
+<li><strong><code>type</code></strong> (string) (required)<br>
+The type of credit the user is receiving.<br>
+Can be one of: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string or null)<br>
+The severity of the advisory. You must choose between setting this field or cvss_vector_string.<br>
+Can be one of: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>null</code></p>
+</li>
+<li>
+<p><strong><code>cvss_vector_string</code></strong> (string or null)<br>
+The CVSS vector that calculates the severity of the advisory. You must choose between setting this field or severity.</p>
+</li>
+<li>
+<p><strong><code>start_private_fork</code></strong> (boolean)<br>
+Whether to create a temporary private fork of the repository to collaborate on a fix.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Create a repository security advisory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Create a repository security advisory / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "summary": "A new important advisory",
+</span><span style="color:#c0c5ce;">  "description": "A more in-depth description of what the problem is.",
+</span><span style="color:#c0c5ce;">  "severity": "high",
+</span><span style="color:#c0c5ce;">  "cve_id": null,
+</span><span style="color:#c0c5ce;">  "vulnerabilities": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "package": {
+</span><span style="color:#c0c5ce;">        "name": "a-package",
+</span><span style="color:#c0c5ce;">        "ecosystem": "npm"
+</span><span style="color:#c0c5ce;">      },
+</span><span style="color:#c0c5ce;">      "vulnerable_version_range": "&lt; 1.0.0",
+</span><span style="color:#c0c5ce;">      "patched_versions": "1.0.0",
+</span><span style="color:#c0c5ce;">      "vulnerable_functions": [
+</span><span style="color:#c0c5ce;">        "important_function"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "cwe_ids": [
+</span><span style="color:#c0c5ce;">    "CWE-1101",
+</span><span style="color:#c0c5ce;">    "CWE-20"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "credits": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "login": "monalisa",
+</span><span style="color:#c0c5ce;">      "type": "reporter"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "login": "octocat",
+</span><span style="color:#c0c5ce;">      "type": "analyst"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>summary</code>: required, string, maxLength: 1024</li>
+<li><code>description</code>: required, string or null, maxLength: 65535</li>
+<li><code>severity</code>: required, string or null, enum: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>null</code></li>
+<li><code>author</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>publisher</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>identifiers</code>: required, array of objects:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code></li>
+<li><code>value</code>: required, string</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>published</code>, <code>closed</code>, <code>withdrawn</code>, <code>draft</code>, <code>triage</code></li>
+<li><code>created_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>published_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>closed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>submission</code>: required, object or null, read-only:
+<ul>
+<li><code>accepted</code>: required, boolean, read-only</li>
+</ul>
+</li>
+<li><code>vulnerabilities</code>: required, array of objects or null:
+<ul>
+<li><code>package</code>: required, object or null:
+<ul>
+<li><code>ecosystem</code>: required, string, enum: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><code>name</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>vulnerable_version_range</code>: required, string or null</li>
+<li><code>patched_versions</code>: required, string or null</li>
+<li><code>vulnerable_functions</code>: required, array of string or null</li>
+</ul>
+</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects or null:
+<ul>
+<li><code>cwe_id</code>: required, string</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>cwe_ids</code>: required, array of string or null</li>
+<li><code>credits</code>: required, array of objects or null:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>type</code>: string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+<li><code>credits_detailed</code>: required, array of objects or null:
+<ul>
+<li><code>user</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>type</code>: required, string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+<li><code>state</code>: required, string, enum: <code>accepted</code>, <code>declined</code>, <code>pending</code></li>
+</ul>
+</li>
+<li><code>collaborating_users</code>: required, array of <code>Simple User</code> or null (see above)</li>
+<li><code>collaborating_teams</code>: required, array of <code>Team</code> or null:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>private_fork</code>: required, all of:
+<ul>
+<li><strong>Simple Repository</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="privately-report-a-security-vulnerability" title="Privately report a security vulnerability">Privately report a security vulnerability<a href="#privately-report-a-security-vulnerability" aria-label="Link to heading 'Privately report a security vulnerability'" data-heading-content="Privately report a security vulnerability" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/security-advisories/reports
+</span></code></pre>
+<p>Report a security vulnerability to the maintainers of the repository.<br>
+See "Privately reporting a security vulnerability" for more information about private vulnerability reporting.</p>
+<h3 id="parameters-3" title="Privately report a security vulnerability / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>summary</code></strong> (string) (required)<br>
+A short summary of the advisory.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string) (required)<br>
+A detailed description of what the advisory impacts.</p>
+</li>
+<li>
+<p><strong><code>vulnerabilities</code></strong> (array of objects or null)<br>
+An array of products affected by the vulnerability detailed in a repository security advisory.</p>
+<ul>
+<li><strong><code>package</code></strong> (object) (required)<br>
+The name of the package affected by the vulnerability.
+<ul>
+<li><strong><code>ecosystem</code></strong> (string) (required)<br>
+The package's language or package management ecosystem.<br>
+Can be one of: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><strong><code>name</code></strong> (string or null)<br>
+The unique package name within its ecosystem.</li>
+</ul>
+</li>
+<li><strong><code>vulnerable_version_range</code></strong> (string or null)<br>
+The range of the package versions affected by the vulnerability.</li>
+<li><strong><code>patched_versions</code></strong> (string or null)<br>
+The package version(s) that resolve the vulnerability.</li>
+<li><strong><code>vulnerable_functions</code></strong> (array of strings or null)<br>
+The functions in the package that are affected.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>cwe_ids</code></strong> (array of strings or null)<br>
+A list of Common Weakness Enumeration (CWE) IDs.</p>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string or null)<br>
+The severity of the advisory. You must choose between setting this field or cvss_vector_string.<br>
+Can be one of: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>null</code></p>
+</li>
+<li>
+<p><strong><code>cvss_vector_string</code></strong> (string or null)<br>
+The CVSS vector that calculates the severity of the advisory. You must choose between setting this field or severity.</p>
+</li>
+<li>
+<p><strong><code>start_private_fork</code></strong> (boolean)<br>
+Whether to create a temporary private fork of the repository to collaborate on a fix.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Privately report a security vulnerability / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Privately report a security vulnerability / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/reports \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "summary": "A newly discovered vulnerability",
+</span><span style="color:#c0c5ce;">  "description": "A more in-depth description of what the problem is.",
+</span><span style="color:#c0c5ce;">  "severity": "high",
+</span><span style="color:#c0c5ce;">  "vulnerabilities": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "package": {
+</span><span style="color:#c0c5ce;">        "name": "a-package",
+</span><span style="color:#c0c5ce;">        "ecosystem": "npm"
+</span><span style="color:#c0c5ce;">      },
+</span><span style="color:#c0c5ce;">      "vulnerable_version_range": "&lt; 1.0.0",
+</span><span style="color:#c0c5ce;">      "patched_versions": "1.0.0",
+</span><span style="color:#c0c5ce;">      "vulnerable_functions": [
+</span><span style="color:#c0c5ce;">        "important_function"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "cwe_ids": [
+</span><span style="color:#c0c5ce;">    "CWE-123"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-security-advisory">Create a repository security advisory</a>.</p>
+<h2 id="get-a-repository-security-advisory" title="Get a repository security advisory">Get a repository security advisory<a href="#get-a-repository-security-advisory" aria-label="Link to heading 'Get a repository security advisory'" data-heading-content="Get a repository security advisory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/security-advisories/{ghsa_id}
+</span></code></pre>
+<p>Get a repository security advisory using its GitHub Security Advisory (GHSA) identifier.<br>
+Anyone can access any published security advisory on a public repository.<br>
+The authenticated user can access an unpublished security advisory from a repository if they are a security manager or administrator of that repository, or if they are a<br>
+collaborator on the security advisory.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:read scope to to get a published security advisory in a private repository, or any unpublished security advisory that the authenticated user has access to.</p>
+<h3 id="parameters-4" title="Get a repository security advisory / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ghsa_id</code></strong> (string) (required)<br>
+The GHSA (GitHub Security Advisory) identifier of the advisory.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get a repository security advisory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get a repository security advisory / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/GHSA_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-security-advisory">Create a repository security advisory</a>.</p>
+<h2 id="update-a-repository-security-advisory" title="Update a repository security advisory">Update a repository security advisory<a href="#update-a-repository-security-advisory" aria-label="Link to heading 'Update a repository security advisory'" data-heading-content="Update a repository security advisory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}
+</span></code></pre>
+<p>Update a repository security advisory using its GitHub Security Advisory (GHSA) identifier.<br>
+In order to update any security advisory, the authenticated user must be a security manager or administrator of that repository,<br>
+or a collaborator on the repository security advisory.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:write scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Update a repository security advisory / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ghsa_id</code></strong> (string) (required)<br>
+The GHSA (GitHub Security Advisory) identifier of the advisory.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>summary</code></strong> (string)<br>
+A short summary of the advisory.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A detailed description of what the advisory impacts.</p>
+</li>
+<li>
+<p><strong><code>cve_id</code></strong> (string or null)<br>
+The Common Vulnerabilities and Exposures (CVE) ID.</p>
+</li>
+<li>
+<p><strong><code>vulnerabilities</code></strong> (array of objects)<br>
+A product affected by the vulnerability detailed in a repository security advisory.</p>
+<ul>
+<li><strong><code>package</code></strong> (object) (required)<br>
+The name of the package affected by the vulnerability.
+<ul>
+<li><strong><code>ecosystem</code></strong> (string) (required)<br>
+The package's language or package management ecosystem.<br>
+Can be one of: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><strong><code>name</code></strong> (string or null)<br>
+The unique package name within its ecosystem.</li>
+</ul>
+</li>
+<li><strong><code>vulnerable_version_range</code></strong> (string or null)<br>
+The range of the package versions affected by the vulnerability.</li>
+<li><strong><code>patched_versions</code></strong> (string or null)<br>
+The package version(s) that resolve the vulnerability.</li>
+<li><strong><code>vulnerable_functions</code></strong> (array of strings or null)<br>
+The functions in the package that are affected.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>cwe_ids</code></strong> (array of strings or null)<br>
+A list of Common Weakness Enumeration (CWE) IDs.</p>
+</li>
+<li>
+<p><strong><code>credits</code></strong> (array of objects or null)<br>
+A list of users receiving credit for their participation in the security advisory.</p>
+<ul>
+<li><strong><code>login</code></strong> (string) (required)<br>
+The username of the user credited.</li>
+<li><strong><code>type</code></strong> (string) (required)<br>
+The type of credit the user is receiving.<br>
+Can be one of: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string or null)<br>
+The severity of the advisory. You must choose between setting this field or cvss_vector_string.<br>
+Can be one of: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>null</code></p>
+</li>
+<li>
+<p><strong><code>cvss_vector_string</code></strong> (string or null)<br>
+The CVSS vector that calculates the severity of the advisory. You must choose between setting this field or severity.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+The state of the advisory.<br>
+Can be one of: <code>published</code>, <code>closed</code>, <code>draft</code></p>
+</li>
+<li>
+<p><strong><code>collaborating_users</code></strong> (array of strings or null)<br>
+A list of usernames who have been granted write access to the advisory.</p>
+</li>
+<li>
+<p><strong><code>collaborating_teams</code></strong> (array of strings or null)<br>
+A list of team slugs which have been granted write access to the advisory.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Update a repository security advisory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Update a repository security advisory / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="updating-the-severity-and-state">Updating the severity and state.<a href="#updating-the-severity-and-state" aria-label="Link to heading 'Updating the severity and state.'" data-heading-content="Updating the severity and state." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/GHSA_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "severity": "critical",
+</span><span style="color:#c0c5ce;">  "state": "published"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-security-advisory">Create a repository security advisory</a>.</p>
+<h4 id="to-add-a-credit-to-an-advisory-send-the-whole-array-of-values">To add a credit to an advisory, send the whole array of values.<a href="#to-add-a-credit-to-an-advisory-send-the-whole-array-of-values" aria-label="Link to heading 'To add a credit to an advisory, send the whole array of values.'" data-heading-content="To add a credit to an advisory, send the whole array of values." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/GHSA_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "credits": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "login": "monauser",
+</span><span style="color:#c0c5ce;">      "type": "remediation_developer"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-security-advisory">Create a repository security advisory</a>.</p>
+<h2 id="request-a-cve-for-a-repository-security-advisory" title="Request a CVE for a repository security advisory">Request a CVE for a repository security advisory<a href="#request-a-cve-for-a-repository-security-advisory" aria-label="Link to heading 'Request a CVE for a repository security advisory'" data-heading-content="Request a CVE for a repository security advisory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve
+</span></code></pre>
+<p>If you want a CVE identification number for the security vulnerability in your project, and don't already have one, you can request a CVE identification number from GitHub. For more information see "Requesting a CVE identification number."<br>
+You may request a CVE for public repositories, but cannot do so for private repositories.<br>
+In order to request a CVE for a repository security advisory, the authenticated user must be a security manager or administrator of that repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo or repository_advisories:write scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Request a CVE for a repository security advisory / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ghsa_id</code></strong> (string) (required)<br>
+The GHSA (GitHub Security Advisory) identifier of the advisory.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Request a CVE for a repository security advisory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Request a CVE for a repository security advisory / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/GHSA_ID/cve
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>object</p>
+<h2 id="create-a-temporary-private-fork" title="Create a temporary private fork">Create a temporary private fork<a href="#create-a-temporary-private-fork" aria-label="Link to heading 'Create a temporary private fork'" data-heading-content="Create a temporary private fork" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks
+</span></code></pre>
+<p>Create a temporary private fork to collaborate on fixing a security vulnerability in your repository.<br>
+Note</p>
+<p>Forking a repository happens asynchronously. You may have to wait up to 5 minutes before you can access the fork.</p>
+<h3 id="parameters-7" title="Create a temporary private fork / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ghsa_id</code></strong> (string) (required)<br>
+The GHSA (GitHub Security Advisory) identifier of the advisory.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Create a temporary private fork / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Create a temporary private fork / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/security-advisories/GHSA_ID/forks
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean</li>
+<li><code>has_projects</code>: required, boolean</li>
+<li><code>has_wiki</code>: required, boolean</li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: required, boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean</li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: required, string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>allow_rebase_merge</code>: boolean</li>
+<li><code>template_repository</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Repository</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>temp_clone_token</code>: string or null</li>
+<li><code>allow_squash_merge</code>: boolean</li>
+<li><code>allow_auto_merge</code>: boolean</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>allow_merge_commit</code>: boolean</li>
+<li><code>allow_update_branch</code>: boolean</li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>subscribers_count</code>: required, integer</li>
+<li><code>network_count</code>: required, integer</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong> (see above)</li>
+</ul>
+</li>
+<li><code>organization</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>parent</code>: <code>Repository</code> (see above)</li>
+<li><code>source</code>: <code>Repository</code> (see above)</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>master_branch</code>: string</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>anonymous_access_enabled</code>: boolean, default: <code>true</code></li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct Simple</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

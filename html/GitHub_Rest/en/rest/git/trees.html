@@ -1,0 +1,176 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Git trees</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Git database</a> / </nav><h1 id="rest-api-endpoints-for-git-trees">REST API endpoints for Git trees<a href="#rest-api-endpoints-for-git-trees" aria-label="Link to heading 'REST API endpoints for Git trees'" data-heading-content="REST API endpoints for Git trees" class="anchor"></a></h1>
+<p>Use the REST API to interact with tree objects in your Git database on GitHub.</p>
+<h2 id="about-git-trees" title="About Git trees">About Git trees<a href="#about-git-trees" aria-label="Link to heading 'About Git trees'" data-heading-content="About Git trees" class="anchor"></a></h2>
+<p>A Git tree object creates the hierarchy between files in a Git repository. You can use the Git tree object to create the relationship between directories and the files they contain. These endpoints allow you to read and write <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_tree_objects" class="external">tree objects</a> to your Git database on GitHub.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="create-a-tree" title="Create a tree">Create a tree<a href="#create-a-tree" aria-label="Link to heading 'Create a tree'" data-heading-content="Create a tree" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/git/trees
+</span></code></pre>
+<p>The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint will overwrite the contents of the tree with the new path contents, and create a new tree structure.<br>
+If you use this endpoint to add, delete, or modify the file contents in a tree, you will need to commit the tree and then update a branch to point to the commit. For more information see "Create a commit" and "Update a reference."<br>
+Returns an error if you try to delete a file that does not exist.</p>
+<h3 id="parameters" title="Create a tree / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>tree</code></strong> (array of objects) (required)<br>
+Objects (of path, mode, type, and sha) specifying a tree structure.</p>
+<ul>
+<li><strong><code>path</code></strong> (string)<br>
+The file referenced in the tree.</li>
+<li><strong><code>mode</code></strong> (string)<br>
+The file mode; one of 100644 for file (blob), 100755 for executable (blob), 040000 for subdirectory (tree), 160000 for submodule (commit), or 120000 for a blob that specifies the path of a symlink.<br>
+Can be one of: <code>100644</code>, <code>100755</code>, <code>040000</code>, <code>160000</code>, <code>120000</code></li>
+<li><strong><code>type</code></strong> (string)<br>
+Either blob, tree, or commit.<br>
+Can be one of: <code>blob</code>, <code>tree</code>, <code>commit</code></li>
+<li><strong><code>sha</code></strong> (string or null)<br>
+The SHA1 checksum ID of the object in the tree. Also called tree.sha. If the value is null then the file will be deleted.<br>
+Note: Use either tree.sha or content to specify the contents of the entry. Using both tree.sha and content will return an error.</li>
+<li><strong><code>content</code></strong> (string)<br>
+The content you want this file to have. GitHub will write this blob out and use that SHA for this entry. Use either this, or tree.sha.<br>
+Note: Use either tree.sha or content to specify the contents of the entry. Using both tree.sha and content will return an error.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>base_tree</code></strong> (string)<br>
+The SHA1 of an existing Git tree object which will be used as the base for the new tree. If provided, a new Git tree object will be created from entries in the Git tree object pointed to by base_tree and entries defined in the tree parameter. Entries defined in the tree parameter will overwrite items from base_tree with the same path. If you're creating new changes on a branch, then normally you'd set base_tree to the SHA1 of the Git tree object of the current latest commit on the branch you're working on.<br>
+If not provided, GitHub will create a new Git tree object from only the entries defined in the tree parameter. If you create a new commit pointing to such a tree, then all files which were a part of the parent commit's tree and were not defined in the tree parameter will be listed as deleted by the new commit.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Create a tree / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Create a tree / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/trees \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "base_tree": "9fb037999f264ba9a7fc6274d15fa3ae2ab98312",
+</span><span style="color:#c0c5ce;">  "tree": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "path": "file.rb",
+</span><span style="color:#c0c5ce;">      "mode": "100644",
+</span><span style="color:#c0c5ce;">      "type": "blob",
+</span><span style="color:#c0c5ce;">      "sha": "44b4fc6d56897b048c772eb4087f854f46256132"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>truncated</code>: required, boolean</li>
+<li><code>tree</code>: required, array of objects:
+<ul>
+<li><code>path</code>: required, string</li>
+<li><code>mode</code>: required, string</li>
+<li><code>type</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>size</code>: integer</li>
+<li><code>url</code>: string</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-tree" title="Get a tree">Get a tree<a href="#get-a-tree" aria-label="Link to heading 'Get a tree'" data-heading-content="Get a tree" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/trees/{tree_sha}
+</span></code></pre>
+<p>Returns a single tree using the SHA1 value or ref name for that tree.<br>
+If truncated is true in the response then the number of items in the tree array exceeded our maximum limit. If you need to fetch more items, use the non-recursive method of fetching trees, and fetch one sub-tree at a time.<br>
+Note</p>
+<p>The limit for the tree array is 100,000 entries with a maximum size of 7 MB when using the recursive parameter.</p>
+<h3 id="parameters-1" title="Get a tree / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>tree_sha</code></strong> (string) (required)<br>
+The SHA1 value or ref (branch or tag) name of the tree.</p>
+</li>
+<li>
+<p><strong><code>recursive</code></strong> (string)<br>
+Setting this parameter to any value returns the objects or subtrees referenced by the tree specified in :tree_sha. For example, setting recursive to any of the following will enable returning objects or subtrees: 0, 1, "true", and "false". Omit this parameter to prevent recursively returning objects or subtrees.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a tree / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a tree / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/trees/TREE_SHA
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-tree">Create a tree</a>.</p>
+<h4 id="example-2-status-code-200">Example 2: Status Code 200<a href="#example-2-status-code-200" aria-label="Link to heading 'Example 2: Status Code 200'" data-heading-content="Example 2: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/trees/TREE_SHA
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-tree">Create a tree</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

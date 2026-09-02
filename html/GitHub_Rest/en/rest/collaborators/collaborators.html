@@ -1,0 +1,599 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for collaborators</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Collaborators</a> / </nav><h1 id="rest-api-endpoints-for-collaborators">REST API endpoints for collaborators<a href="#rest-api-endpoints-for-collaborators" aria-label="Link to heading 'REST API endpoints for collaborators'" data-heading-content="REST API endpoints for collaborators" class="anchor"></a></h1>
+<p>Use the REST API to manage collaborators for a repository.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-repository-collaborators" title="List repository collaborators">List repository collaborators<a href="#list-repository-collaborators" aria-label="Link to heading 'List repository collaborators'" data-heading-content="List repository collaborators" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/collaborators
+</span></code></pre>
+<p>For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.<br>
+The permissions hash returned in the response contains the base role permissions of the collaborator. The role_name is the highest role assigned to the collaborator after considering all sources of grants, including: repo, teams, organization, and enterprise.<br>
+There is presently not a way to differentiate between an organization level grant and a repository level grant from this endpoint response.<br>
+Team members will include the members of child teams.<br>
+The authenticated user must have write, maintain, or admin privileges on the repository to use this endpoint. For organization-owned repositories, the authenticated user needs to be a member of the organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org and repo scopes to use this endpoint.</p>
+<h3 id="parameters" title="List repository collaborators / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>affiliation</code></strong> (string)<br>
+Filter collaborators returned by their affiliation. outside means all outside collaborators of an organization-owned repository. direct means all collaborators with permissions to an organization-owned repository, regardless of organization membership status. all means all collaborators the authenticated user can see.<br>
+Default: <code>all</code><br>
+Can be one of: <code>outside</code>, <code>direct</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>permission</code></strong> (string)<br>
+Filter collaborators by the permissions they have on the repository. If not specified, all collaborators will be returned.<br>
+Can be one of: <code>pull</code>, <code>triage</code>, <code>push</code>, <code>maintain</code>, <code>admin</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List repository collaborators / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List repository collaborators / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/collaborators
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Collaborator</code>:</p>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>email</code>: string or null</li>
+<li><code>name</code>: string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: required, string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+<h2 id="check-if-a-user-is-a-repository-collaborator" title="Check if a user is a repository collaborator">Check if a user is a repository collaborator<a href="#check-if-a-user-is-a-repository-collaborator" aria-label="Link to heading 'Check if a user is a repository collaborator'" data-heading-content="Check if a user is a repository collaborator" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/collaborators/{username}
+</span></code></pre>
+<p>For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.<br>
+Team members will include the members of child teams.<br>
+The authenticated user must have push access to the repository to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org and repo scopes to use this endpoint.</p>
+<h3 id="parameters-1" title="Check if a user is a repository collaborator / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Check if a user is a repository collaborator / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Response if user is a collaborator</p>
+</li>
+<li>
+<p><strong>404</strong> - Not Found if user is not a collaborator</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Check if a user is a repository collaborator / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/collaborators/USERNAME
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="add-a-repository-collaborator" title="Add a repository collaborator">Add a repository collaborator<a href="#add-a-repository-collaborator" aria-label="Link to heading 'Add a repository collaborator'" data-heading-content="Add a repository collaborator" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/collaborators/{username}
+</span></code></pre>
+<p>Add a user to a repository with a specified level of access. If the repository is owned by an organization, this API does not add the user to the organization - a user that has repository access without being an organization member is called an "outside collaborator" (if they are not an Enterprise Managed User) or a "repository collaborator" if they are an Enterprise Managed User. These users are exempt from some organization policies - see "Adding outside collaborators to repositories" to learn more about these collaborator types.<br>
+This endpoint triggers notifications.<br>
+Adding an outside collaborator may be restricted by enterprise and organization administrators. For more information, see "Enforcing repository management policies in your enterprise" and "Setting permissions for adding outside collaborators" for organization settings.<br>
+For more information on permission levels, see "Repository permission levels for an organization". There are restrictions on which permissions can be granted to organization members when an organization base role is in place. In this case, the role being given must be equal to or higher than the org base permission. Otherwise, the request will fail with:<br>
+Cannot assign {member} permission of {role name}</p>
+<p>Note that, if you choose not to pass any parameters, you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."<br>
+The invitee will receive a notification that they have been invited to the repository, which they must accept or decline. They may do this via the notifications page, the email they receive, or by using the API.<br>
+For Enterprise Managed Users, this endpoint does not send invitations - these users are automatically added to organizations and repositories. Enterprise Managed Users can only be added to organizations and repositories within their enterprise.<br>
+Updating an existing collaborator's permission level<br>
+The endpoint can also be used to change the permissions of an existing collaborator without first removing and re-adding the collaborator. To change the permissions, use the same endpoint and pass a different permission parameter. The response will be a 204, with no other indication that the permission level changed.<br>
+Rate limits<br>
+You are limited to sending 50 invitations to a repository per 24 hour period. Note there is no limit if you are inviting organization members to an organization repository.</p>
+<h3 id="parameters-2" title="Add a repository collaborator / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>permission</code></strong> (string)<br>
+The permission to grant the collaborator. Only valid on organization-owned repositories. We accept the following permissions to be set: pull, triage, push, maintain, admin and you can also specify a custom repository role name, if the owning organization has defined any.<br>
+Default: <code>push</code></li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Add a repository collaborator / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response when a new invitation is created</p>
+</li>
+<li>
+<p><strong>204</strong> - Response when:</p>
+</li>
+</ul>
+<p>an existing collaborator is added as a collaborator<br>
+an organization member is added as an individual collaborator<br>
+an existing team member (whose team is also a repository collaborator) is added as an individual collaborator</p>
+<ul>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Response when:</p>
+</li>
+</ul>
+<p>validation failed, or the endpoint has been spammed<br>
+an Enterprise Managed User (EMU) account was invited to a repository in an enterprise with personal user accounts</p>
+<h3 id="code-examples-2" title="Add a repository collaborator / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="add-a-collaborator-with-triage-permissions">Add a collaborator with triage permissions<a href="#add-a-collaborator-with-triage-permissions" aria-label="Link to heading 'Add a collaborator with triage permissions'" data-heading-content="Add a collaborator with triage permissions" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/collaborators/USERNAME \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "permission": "triage"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>repository</code>: required, <code>Minimal Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+<li><code>invitee</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>inviter</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>permissions</code>: required, string, enum: <code>read</code>, <code>write</code>, <code>admin</code>, <code>triage</code>, <code>maintain</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>expired</code>: boolean</li>
+<li><code>url</code>: required, string</li>
+<li><code>html_url</code>: required, string</li>
+<li><code>node_id</code>: required, string</li>
+</ul>
+<h2 id="remove-a-repository-collaborator" title="Remove a repository collaborator">Remove a repository collaborator<a href="#remove-a-repository-collaborator" aria-label="Link to heading 'Remove a repository collaborator'" data-heading-content="Remove a repository collaborator" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/collaborators/{username}
+</span></code></pre>
+<p>Removes a collaborator from a repository.<br>
+To use this endpoint, the authenticated user must either be an administrator of the repository or target themselves for removal.<br>
+This endpoint also:</p>
+<p>Cancels any outstanding invitations sent by the collaborator<br>
+Unassigns the user from any issues<br>
+Removes access to organization projects if the user is not an organization member and is not a collaborator on any other organization repositories.<br>
+Unstars the repository<br>
+Updates access permissions to packages</p>
+<p>Removing a user as a collaborator has the following effects on forks:</p>
+<p>If the user had access to a fork through their membership to this repository, the user will also be removed from the fork.<br>
+If the user had their own fork of the repository, the fork will be deleted.<br>
+If the user still has read access to the repository, open pull requests by this user from a fork will be denied.</p>
+<p>Note</p>
+<p>A user can still have access to the repository through organization permissions like base repository permissions.</p>
+<p>Although the API responds immediately, the additional permission updates might take some extra time to complete in the background.<br>
+For more information on fork permissions, see "About permissions and visibility of forks".</p>
+<h3 id="parameters-3" title="Remove a repository collaborator / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Remove a repository collaborator / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content when collaborator was removed from the repository.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Remove a repository collaborator / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/collaborators/USERNAME
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-repository-permissions-for-a-user" title="Get repository permissions for a user">Get repository permissions for a user<a href="#get-repository-permissions-for-a-user" aria-label="Link to heading 'Get repository permissions for a user'" data-heading-content="Get repository permissions for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/collaborators/{username}/permission
+</span></code></pre>
+<p>Checks the repository permission and role of a collaborator.<br>
+The permission attribute provides the legacy base roles of admin, write, read, and none, where the<br>
+maintain role is mapped to write and the triage role is mapped to read.<br>
+The role_name attribute provides the name of the assigned role, including custom roles. The<br>
+permission can also be used to determine which base level of access the collaborator has to the repository.<br>
+The calculated permissions are the highest role assigned to the collaborator after considering all sources of grants, including: repo, teams, organization, and enterprise.<br>
+There is presently not a way to differentiate between an organization level grant and a repository level grant from this endpoint response.</p>
+<h3 id="parameters-4" title="Get repository permissions for a user / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get repository permissions for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - if user has admin permissions</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get repository permissions for a user / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/collaborators/USERNAME/permission
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>permission</code>: required, string</li>
+<li><code>role_name</code>: required, string</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Collaborator</strong>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>email</code>: string or null</li>
+<li><code>name</code>: string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: required, string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

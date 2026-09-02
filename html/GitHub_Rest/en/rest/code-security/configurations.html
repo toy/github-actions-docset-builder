@@ -1,0 +1,2023 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Configurations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Code security settings</a> / </nav><h1 id="configurations">Configurations<a href="#configurations" aria-label="Link to heading 'Configurations'" data-heading-content="Configurations" class="anchor"></a></h1>
+<p>Use the REST API to create and manage security configurations for your organization.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-code-security-configurations-for-an-enterprise" title="Get code security configurations for an enterprise">Get code security configurations for an enterprise<a href="#get-code-security-configurations-for-an-enterprise" aria-label="Link to heading 'Get code security configurations for an enterprise'" data-heading-content="Get code security configurations for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/code-security/configurations
+</span></code></pre>
+<p>Lists all code security configurations available in an enterprise.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:enterprise scope to use this endpoint.</p>
+<h3 id="parameters" title="Get code security configurations for an enterprise / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get code security configurations for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get code security configurations for an enterprise / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: string</li>
+<li><code>target_type</code>: string, enum: <code>global</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>description</code>: string or null</li>
+<li><code>advanced_security</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></li>
+<li><code>dependency_graph</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action_options</code>: object:
+<ul>
+<li><code>labeled_runners</code>: boolean</li>
+</ul>
+</li>
+<li><code>dependabot_alerts</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_security_updates</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_delegated_alert_dismissal</code>: string or null, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>code_scanning_options</code>: object or null:
+<ul>
+<li><code>allow_advanced</code>: boolean or null</li>
+</ul>
+</li>
+<li><code>code_scanning_default_setup</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>code_scanning_default_setup_options</code>: object or null:
+<ul>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+</ul>
+</li>
+<li><code>code_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_push_protection</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+<li><code>security_configuration_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>secret_scanning_validity_checks</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_non_provider_patterns</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_generic_secrets</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_extended_metadata</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>private_vulnerability_reporting</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>enforcement</code>: string, enum: <code>enforced</code>, <code>unenforced</code></li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="create-a-code-security-configuration-for-an-enterprise" title="Create a code security configuration for an enterprise">Create a code security configuration for an enterprise<a href="#create-a-code-security-configuration-for-an-enterprise" aria-label="Link to heading 'Create a code security configuration for an enterprise'" data-heading-content="Create a code security configuration for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /enterprises/{enterprise}/code-security/configurations
+</span></code></pre>
+<p>Creates a code security configuration in an enterprise.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a code security configuration for an enterprise / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the code security configuration. Must be unique within the enterprise.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the code security configuration</p>
+</li>
+<li>
+<p><strong><code>advanced_security</code></strong> (string)<br>
+The enablement status of GitHub Advanced Security features. enabled will enable both Code Security and Secret Protection features.<br>
+Warning</p>
+</li>
+</ul>
+<p>code_security and secret_protection are deprecated values for this field. Prefer the individual code_security and secret_protection fields to set the status of these features.<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></p>
+<ul>
+<li>
+<p><strong><code>code_security</code></strong> (string)<br>
+The enablement status of GitHub Code Security features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph</code></strong> (string)<br>
+The enablement status of Dependency Graph<br>
+Default: <code>enabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action</code></strong> (string)<br>
+The enablement status of Automatic dependency submission<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action_options</code></strong> (object)<br>
+Feature options for Automatic dependency submission</p>
+<ul>
+<li><strong><code>labeled_runners</code></strong> (boolean)<br>
+Whether to use runners labeled with 'dependency-submission' or standard GitHub runners.<br>
+Default: <code>false</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>dependabot_alerts</code></strong> (string)<br>
+The enablement status of Dependabot alerts<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_security_updates</code></strong> (string)<br>
+The enablement status of Dependabot security updates<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_options</code></strong> (object or null)<br>
+Security Configuration feature options for code scanning</p>
+<ul>
+<li><strong><code>allow_advanced</code></strong> (boolean or null)<br>
+Whether to allow repos which use advanced setup</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup</code></strong> (string)<br>
+The enablement status of code scanning default setup<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup_options</code></strong> (object or null)<br>
+Feature options for code scanning default setup</p>
+<ul>
+<li><strong><code>runner_type</code></strong> (string)<br>
+Whether to use labeled runners or standard GitHub runners.<br>
+Can be one of: <code>standard</code>, <code>labeled</code>, <code>not_set</code></li>
+<li><strong><code>runner_label</code></strong> (string or null)<br>
+The label of the runner to use for code scanning default setup when runner_type is 'labeled'.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of code scanning delegated alert dismissal<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_protection</code></strong> (string)<br>
+The enablement status of GitHub Secret Protection features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning</code></strong> (string)<br>
+The enablement status of secret scanning<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection</code></strong> (string)<br>
+The enablement status of secret scanning push protection<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_validity_checks</code></strong> (string)<br>
+The enablement status of secret scanning validity checks<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_non_provider_patterns</code></strong> (string)<br>
+The enablement status of secret scanning non provider patterns<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_generic_secrets</code></strong> (string)<br>
+The enablement status of Copilot secret scanning<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of secret scanning delegated alert dismissal<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_extended_metadata</code></strong> (string)<br>
+The enablement status of secret scanning extended metadata<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>private_vulnerability_reporting</code></strong> (string)<br>
+The enablement status of private vulnerability reporting<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string)<br>
+The enforcement status for a security configuration<br>
+Default: <code>enforced</code><br>
+Can be one of: <code>enforced</code>, <code>unenforced</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a code security configuration for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Successfully created code security configuration</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a code security configuration for an enterprise / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-a-code-security-configuration">Example for a code security configuration<a href="#example-for-a-code-security-configuration" aria-label="Link to heading 'Example for a code security configuration'" data-heading-content="Example for a code security configuration" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "High rish settings",
+</span><span style="color:#c0c5ce;">  "description": "This is a code security configuration for octo-enterprise",
+</span><span style="color:#c0c5ce;">  "advanced_security": "enabled",
+</span><span style="color:#c0c5ce;">  "dependabot_alerts": "enabled",
+</span><span style="color:#c0c5ce;">  "dependabot_security_updates": "not_set",
+</span><span style="color:#c0c5ce;">  "secret_scanning": "enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: string</li>
+<li><code>target_type</code>: string, enum: <code>global</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>description</code>: string or null</li>
+<li><code>advanced_security</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></li>
+<li><code>dependency_graph</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action_options</code>: object:
+<ul>
+<li><code>labeled_runners</code>: boolean</li>
+</ul>
+</li>
+<li><code>dependabot_alerts</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_security_updates</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_delegated_alert_dismissal</code>: string or null, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>code_scanning_options</code>: object or null:
+<ul>
+<li><code>allow_advanced</code>: boolean or null</li>
+</ul>
+</li>
+<li><code>code_scanning_default_setup</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>code_scanning_default_setup_options</code>: object or null:
+<ul>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+</ul>
+</li>
+<li><code>code_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_push_protection</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+<li><code>security_configuration_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>secret_scanning_validity_checks</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_non_provider_patterns</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_generic_secrets</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_extended_metadata</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>private_vulnerability_reporting</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>enforcement</code>: string, enum: <code>enforced</code>, <code>unenforced</code></li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="get-default-code-security-configurations-for-an-enterprise" title="Get default code security configurations for an enterprise">Get default code security configurations for an enterprise<a href="#get-default-code-security-configurations-for-an-enterprise" aria-label="Link to heading 'Get default code security configurations for an enterprise'" data-heading-content="Get default code security configurations for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/code-security/configurations/defaults
+</span></code></pre>
+<p>Lists the default code security configurations for an enterprise.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Get default code security configurations for an enterprise / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get default code security configurations for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2" title="Get default code security configurations for an enterprise / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/defaults
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>default_for_new_repos</code>: enum: <code>public</code>, <code>private_and_internal</code>, <code>all</code></li>
+<li><code>configuration</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: string</li>
+<li><code>target_type</code>: string, enum: <code>global</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>description</code>: string or null</li>
+<li><code>advanced_security</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></li>
+<li><code>dependency_graph</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action_options</code>: object:
+<ul>
+<li><code>labeled_runners</code>: boolean</li>
+</ul>
+</li>
+<li><code>dependabot_alerts</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_security_updates</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_delegated_alert_dismissal</code>: string or null, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>code_scanning_options</code>: object or null:
+<ul>
+<li><code>allow_advanced</code>: boolean or null</li>
+</ul>
+</li>
+<li><code>code_scanning_default_setup</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>code_scanning_default_setup_options</code>: object or null:
+<ul>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+</ul>
+</li>
+<li><code>code_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_push_protection</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+<li><code>security_configuration_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>secret_scanning_validity_checks</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_non_provider_patterns</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_generic_secrets</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_extended_metadata</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>private_vulnerability_reporting</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>enforcement</code>: string, enum: <code>enforced</code>, <code>unenforced</code></li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+</li>
+</ul>
+<h2 id="retrieve-a-code-security-configuration-of-an-enterprise" title="Retrieve a code security configuration of an enterprise">Retrieve a code security configuration of an enterprise<a href="#retrieve-a-code-security-configuration-of-an-enterprise" aria-label="Link to heading 'Retrieve a code security configuration of an enterprise'" data-heading-content="Retrieve a code security configuration of an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Gets a code security configuration available in an enterprise.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Retrieve a code security configuration of an enterprise / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Retrieve a code security configuration of an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Retrieve a code security configuration of an enterprise / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-code-security-configuration-for-an-enterprise">Create a code security configuration for an enterprise</a>.</p>
+<h2 id="update-a-custom-code-security-configuration-for-an-enterprise" title="Update a custom code security configuration for an enterprise">Update a custom code security configuration for an enterprise<a href="#update-a-custom-code-security-configuration-for-an-enterprise" aria-label="Link to heading 'Update a custom code security configuration for an enterprise'" data-heading-content="Update a custom code security configuration for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /enterprises/{enterprise}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Updates a code security configuration in an enterprise.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-4" title="Update a custom code security configuration for an enterprise / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the code security configuration. Must be unique across the enterprise.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the code security configuration</p>
+</li>
+<li>
+<p><strong><code>advanced_security</code></strong> (string)<br>
+The enablement status of GitHub Advanced Security features. enabled will enable both Code Security and Secret Protection features.<br>
+Warning</p>
+</li>
+</ul>
+<p>code_security and secret_protection are deprecated values for this field. Prefer the individual code_security and secret_protection fields to set the status of these features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></p>
+<ul>
+<li>
+<p><strong><code>code_security</code></strong> (string)<br>
+The enablement status of GitHub Code Security features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph</code></strong> (string)<br>
+The enablement status of Dependency Graph<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action</code></strong> (string)<br>
+The enablement status of Automatic dependency submission<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action_options</code></strong> (object)<br>
+Feature options for Automatic dependency submission</p>
+<ul>
+<li><strong><code>labeled_runners</code></strong> (boolean)<br>
+Whether to use runners labeled with 'dependency-submission' or standard GitHub runners.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>dependabot_alerts</code></strong> (string)<br>
+The enablement status of Dependabot alerts<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_security_updates</code></strong> (string)<br>
+The enablement status of Dependabot security updates<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup</code></strong> (string)<br>
+The enablement status of code scanning default setup<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup_options</code></strong> (object or null)<br>
+Feature options for code scanning default setup</p>
+<ul>
+<li><strong><code>runner_type</code></strong> (string)<br>
+Whether to use labeled runners or standard GitHub runners.<br>
+Can be one of: <code>standard</code>, <code>labeled</code>, <code>not_set</code></li>
+<li><strong><code>runner_label</code></strong> (string or null)<br>
+The label of the runner to use for code scanning default setup when runner_type is 'labeled'.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_options</code></strong> (object or null)<br>
+Security Configuration feature options for code scanning</p>
+<ul>
+<li><strong><code>allow_advanced</code></strong> (boolean or null)<br>
+Whether to allow repos which use advanced setup</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of code scanning delegated alert dismissal<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_protection</code></strong> (string)<br>
+The enablement status of GitHub Secret Protection features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning</code></strong> (string)<br>
+The enablement status of secret scanning<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection</code></strong> (string)<br>
+The enablement status of secret scanning push protection<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_validity_checks</code></strong> (string)<br>
+The enablement status of secret scanning validity checks<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_non_provider_patterns</code></strong> (string)<br>
+The enablement status of secret scanning non-provider patterns<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_generic_secrets</code></strong> (string)<br>
+The enablement status of Copilot secret scanning<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of secret scanning delegated alert dismissal<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_extended_metadata</code></strong> (string)<br>
+The enablement status of secret scanning extended metadata<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>private_vulnerability_reporting</code></strong> (string)<br>
+The enablement status of private vulnerability reporting<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string)<br>
+The enforcement status for a security configuration<br>
+Can be one of: <code>enforced</code>, <code>unenforced</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Update a custom code security configuration for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Update a custom code security configuration for an enterprise / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-updating-a-code-security-configuration">Example for updating a code security configuration<a href="#example-for-updating-a-code-security-configuration" aria-label="Link to heading 'Example for updating a code security configuration'" data-heading-content="Example for updating a code security configuration" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "octo-enterprise recommended settings v2",
+</span><span style="color:#c0c5ce;">  "secret_scanning": "disabled",
+</span><span style="color:#c0c5ce;">  "code_scanning_default_setup": "enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-code-security-configuration-for-an-enterprise">Create a code security configuration for an enterprise</a>.</p>
+<h2 id="delete-a-code-security-configuration-for-an-enterprise" title="Delete a code security configuration for an enterprise">Delete a code security configuration for an enterprise<a href="#delete-a-code-security-configuration-for-an-enterprise" aria-label="Link to heading 'Delete a code security configuration for an enterprise'" data-heading-content="Delete a code security configuration for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /enterprises/{enterprise}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Deletes a code security configuration from an enterprise.<br>
+Repositories attached to the configuration will retain their settings but will no longer be associated with<br>
+the configuration.<br>
+The authenticated user must be an administrator for the enterprise to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Delete a code security configuration for an enterprise / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Delete a code security configuration for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Delete a code security configuration for an enterprise / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="attach-an-enterprise-configuration-to-repositories" title="Attach an enterprise configuration to repositories">Attach an enterprise configuration to repositories<a href="#attach-an-enterprise-configuration-to-repositories" aria-label="Link to heading 'Attach an enterprise configuration to repositories'" data-heading-content="Attach an enterprise configuration to repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /enterprises/{enterprise}/code-security/configurations/{configuration_id}/attach
+</span></code></pre>
+<p>Attaches an enterprise code security configuration to repositories. If the repositories specified are already attached to a configuration, they will be re-attached to the provided configuration.<br>
+If insufficient GHAS licenses are available to attach the configuration to a repository, only free features will be enabled.<br>
+The authenticated user must be an administrator for the enterprise to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Attach an enterprise configuration to repositories / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>scope</code></strong> (string) (required)<br>
+The type of repositories to attach the configuration to.<br>
+Can be one of: <code>all</code>, <code>all_without_configurations</code></li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Attach an enterprise configuration to repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Attach an enterprise configuration to repositories / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-attaching-a-configuration-to-some-repositories">Example for attaching a configuration to some repositories<a href="#example-for-attaching-a-configuration-to-some-repositories" aria-label="Link to heading 'Example for attaching a configuration to some repositories'" data-heading-content="Example for attaching a configuration to some repositories" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID/attach \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "scope": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>object</p>
+<h2 id="set-a-code-security-configuration-as-a-default-for-an-enterprise" title="Set a code security configuration as a default for an enterprise">Set a code security configuration as a default for an enterprise<a href="#set-a-code-security-configuration-as-a-default-for-an-enterprise" aria-label="Link to heading 'Set a code security configuration as a default for an enterprise'" data-heading-content="Set a code security configuration as a default for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /enterprises/{enterprise}/code-security/configurations/{configuration_id}/defaults
+</span></code></pre>
+<p>Sets a code security configuration as a default to be applied to new repositories in your enterprise.<br>
+This configuration will be applied by default to the matching repository type when created, but only for organizations within the enterprise that do not already have a default code security configuration set.<br>
+The authenticated user must be an administrator for the enterprise to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Set a code security configuration as a default for an enterprise / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>default_for_new_repos</code></strong> (string)<br>
+Specify which types of repository this security configuration should be applied to by default.<br>
+Can be one of: <code>all</code>, <code>none</code>, <code>private_and_internal</code>, <code>public</code></li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Set a code security configuration as a default for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Default successfully changed.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Set a code security configuration as a default for an enterprise / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="set-this-configuration-to-be-enabled-by-default-on-all-new-repositories">Set this configuration to be enabled by default on all new repositories.<a href="#set-this-configuration-to-be-enabled-by-default-on-all-new-repositories" aria-label="Link to heading 'Set this configuration to be enabled by default on all new repositories.'" data-heading-content="Set this configuration to be enabled by default on all new repositories." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID/defaults \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "default_for_new_repos": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>default_for_new_repos</code>: string, enum: <code>all</code>, <code>none</code>, <code>private_and_internal</code>, <code>public</code></li>
+<li><code>configuration</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: string</li>
+<li><code>target_type</code>: string, enum: <code>global</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>description</code>: string or null</li>
+<li><code>advanced_security</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></li>
+<li><code>dependency_graph</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action_options</code>: object:
+<ul>
+<li><code>labeled_runners</code>: boolean</li>
+</ul>
+</li>
+<li><code>dependabot_alerts</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_security_updates</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_delegated_alert_dismissal</code>: string or null, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>code_scanning_options</code>: object or null:
+<ul>
+<li><code>allow_advanced</code>: boolean or null</li>
+</ul>
+</li>
+<li><code>code_scanning_default_setup</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>code_scanning_default_setup_options</code>: object or null:
+<ul>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+</ul>
+</li>
+<li><code>code_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_push_protection</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+<li><code>security_configuration_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>secret_scanning_validity_checks</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_non_provider_patterns</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_generic_secrets</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_extended_metadata</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>private_vulnerability_reporting</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>enforcement</code>: string, enum: <code>enforced</code>, <code>unenforced</code></li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-repositories-associated-with-an-enterprise-code-security-configuration" title="Get repositories associated with an enterprise code security configuration">Get repositories associated with an enterprise code security configuration<a href="#get-repositories-associated-with-an-enterprise-code-security-configuration" aria-label="Link to heading 'Get repositories associated with an enterprise code security configuration'" data-heading-content="Get repositories associated with an enterprise code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/code-security/configurations/{configuration_id}/repositories
+</span></code></pre>
+<p>Lists the repositories associated with an enterprise code security configuration in an organization.<br>
+The authenticated user must be an administrator of the enterprise in order to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-8" title="Get repositories associated with an enterprise code security configuration / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>status</code></strong> (string)<br>
+A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.<br>
+Can be: all, attached, attaching, removed, enforced, failed, updating, removed_by_enterprise<br>
+Default: <code>all</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Get repositories associated with an enterprise code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Get repositories associated with an enterprise code security configuration / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/code-security/configurations/CONFIGURATION_ID/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>status</code>: string, enum: <code>attached</code>, <code>attaching</code>, <code>detached</code>, <code>removed</code>, <code>enforced</code>, <code>failed</code>, <code>updating</code>, <code>removed_by_enterprise</code></li>
+<li><code>repository</code>: <code>Simple Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-code-security-configurations-for-an-organization" title="Get code security configurations for an organization">Get code security configurations for an organization<a href="#get-code-security-configurations-for-an-organization" aria-label="Link to heading 'Get code security configurations for an organization'" data-heading-content="Get code security configurations for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/code-security/configurations
+</span></code></pre>
+<p>Lists all code security configurations available in an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters-9" title="Get code security configurations for an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>target_type</code></strong> (string)<br>
+The target type of the code security configuration<br>
+Default: <code>all</code><br>
+Can be one of: <code>global</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Get code security configurations for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Get code security configurations for an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-code-security-configurations-for-an-enterprise">Get code security configurations for an enterprise</a>.</p>
+<h2 id="create-a-code-security-configuration" title="Create a code security configuration">Create a code security configuration<a href="#create-a-code-security-configuration" aria-label="Link to heading 'Create a code security configuration'" data-heading-content="Create a code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/code-security/configurations
+</span></code></pre>
+<p>Creates a code security configuration in an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-10" title="Create a code security configuration / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the code security configuration. Must be unique within the organization.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the code security configuration</p>
+</li>
+<li>
+<p><strong><code>advanced_security</code></strong> (string)<br>
+The enablement status of GitHub Advanced Security features. enabled will enable both Code Security and Secret Protection features.<br>
+Warning</p>
+</li>
+</ul>
+<p>code_security and secret_protection are deprecated values for this field. Prefer the individual code_security and secret_protection fields to set the status of these features.<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></p>
+<ul>
+<li>
+<p><strong><code>code_security</code></strong> (string)<br>
+The enablement status of GitHub Code Security features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph</code></strong> (string)<br>
+The enablement status of Dependency Graph<br>
+Default: <code>enabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action</code></strong> (string)<br>
+The enablement status of Automatic dependency submission<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action_options</code></strong> (object)<br>
+Feature options for Automatic dependency submission</p>
+<ul>
+<li><strong><code>labeled_runners</code></strong> (boolean)<br>
+Whether to use runners labeled with 'dependency-submission' or standard GitHub runners.<br>
+Default: <code>false</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>dependabot_alerts</code></strong> (string)<br>
+The enablement status of Dependabot alerts<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_security_updates</code></strong> (string)<br>
+The enablement status of Dependabot security updates<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of Dependabot delegated alert dismissal. Requires Dependabot alerts to be enabled.<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_options</code></strong> (object or null)<br>
+Security Configuration feature options for code scanning</p>
+<ul>
+<li><strong><code>allow_advanced</code></strong> (boolean or null)<br>
+Whether to allow repos which use advanced setup</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup</code></strong> (string)<br>
+The enablement status of code scanning default setup<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup_options</code></strong> (object or null)<br>
+Feature options for code scanning default setup</p>
+<ul>
+<li><strong><code>runner_type</code></strong> (string)<br>
+Whether to use labeled runners or standard GitHub runners.<br>
+Can be one of: <code>standard</code>, <code>labeled</code>, <code>not_set</code></li>
+<li><strong><code>runner_label</code></strong> (string or null)<br>
+The label of the runner to use for code scanning default setup when runner_type is 'labeled'.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of code scanning delegated alert dismissal<br>
+Default: <code>not_set</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_protection</code></strong> (string)<br>
+The enablement status of GitHub Secret Protection features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning</code></strong> (string)<br>
+The enablement status of secret scanning<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection</code></strong> (string)<br>
+The enablement status of secret scanning push protection<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_bypass</code></strong> (string)<br>
+The enablement status of secret scanning delegated bypass<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_bypass_options</code></strong> (object)<br>
+Feature options for secret scanning delegated bypass</p>
+<ul>
+<li><strong><code>reviewers</code></strong> (array of objects)<br>
+The bypass reviewers for secret scanning delegated bypass
+<ul>
+<li><strong><code>reviewer_id</code></strong> (integer) (required)<br>
+The ID of the team or role selected as a bypass reviewer</li>
+<li><strong><code>reviewer_type</code></strong> (string) (required)<br>
+The type of the bypass reviewer<br>
+Can be one of: <code>TEAM</code>, <code>ROLE</code></li>
+<li><strong><code>mode</code></strong> (string)<br>
+The bypass mode for the reviewer<br>
+Default: <code>ALWAYS</code><br>
+Can be one of: <code>ALWAYS</code>, <code>EXEMPT</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>secret_scanning_validity_checks</code></strong> (string)<br>
+The enablement status of secret scanning validity checks<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_non_provider_patterns</code></strong> (string)<br>
+The enablement status of secret scanning non provider patterns<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_generic_secrets</code></strong> (string)<br>
+The enablement status of Copilot secret scanning<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of secret scanning delegated alert dismissal<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_extended_metadata</code></strong> (string)<br>
+The enablement status of secret scanning extended metadata<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>private_vulnerability_reporting</code></strong> (string)<br>
+The enablement status of private vulnerability reporting<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string)<br>
+The enforcement status for a security configuration<br>
+Default: <code>enforced</code><br>
+Can be one of: <code>enforced</code>, <code>unenforced</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Create a code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>201</strong> - Successfully created code security configuration</li>
+</ul>
+<h3 id="code-examples-10" title="Create a code security configuration / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-a-code-security-configuration-1">Example for a code security configuration<a href="#example-for-a-code-security-configuration-1" aria-label="Link to heading 'Example for a code security configuration'" data-heading-content="Example for a code security configuration" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "octo-org recommended settings",
+</span><span style="color:#c0c5ce;">  "description": "This is a code security configuration for octo-org",
+</span><span style="color:#c0c5ce;">  "advanced_security": "enabled",
+</span><span style="color:#c0c5ce;">  "dependabot_alerts": "enabled",
+</span><span style="color:#c0c5ce;">  "dependabot_security_updates": "not_set",
+</span><span style="color:#c0c5ce;">  "secret_scanning": "enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-code-security-configuration-for-an-enterprise">Create a code security configuration for an enterprise</a>.</p>
+<h2 id="get-default-code-security-configurations" title="Get default code security configurations">Get default code security configurations<a href="#get-default-code-security-configurations" aria-label="Link to heading 'Get default code security configurations'" data-heading-content="Get default code security configurations" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/code-security/configurations/defaults
+</span></code></pre>
+<p>Lists the default code security configurations for an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters-11" title="Get default code security configurations / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Get default code security configurations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Get default code security configurations / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/defaults
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-default-code-security-configurations-for-an-enterprise">Get default code security configurations for an enterprise</a>.</p>
+<h2 id="detach-configurations-from-repositories" title="Detach configurations from repositories">Detach configurations from repositories<a href="#detach-configurations-from-repositories" aria-label="Link to heading 'Detach configurations from repositories'" data-heading-content="Detach configurations from repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/code-security/configurations/detach
+</span></code></pre>
+<p>Detach code security configuration(s) from a set of repositories.<br>
+Repositories will retain their settings but will no longer be associated with the configuration.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-12" title="Detach configurations from repositories / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_repository_ids</code></strong> (array of integers) (required)<br>
+An array of repository IDs to detach from configurations. Up to 250 IDs can be provided.</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Detach configurations from repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Detach configurations from repositories / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-detaching-repositories-from-configurations">Example for detaching repositories from configurations.<a href="#example-for-detaching-repositories-from-configurations" aria-label="Link to heading 'Example for detaching repositories from configurations.'" data-heading-content="Example for detaching repositories from configurations." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/detach \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_repository_ids": [
+</span><span style="color:#c0c5ce;">    32,
+</span><span style="color:#c0c5ce;">    91
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-a-code-security-configuration" title="Get a code security configuration">Get a code security configuration<a href="#get-a-code-security-configuration" aria-label="Link to heading 'Get a code security configuration'" data-heading-content="Get a code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Gets a code security configuration available in an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-13" title="Get a code security configuration / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Get a code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-13" title="Get a code security configuration / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-code-security-configuration-for-an-enterprise">Create a code security configuration for an enterprise</a>.</p>
+<h2 id="update-a-code-security-configuration" title="Update a code security configuration">Update a code security configuration<a href="#update-a-code-security-configuration" aria-label="Link to heading 'Update a code security configuration'" data-heading-content="Update a code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Updates a code security configuration in an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-14" title="Update a code security configuration / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-6">Body parameters<a href="#body-parameters-6" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the code security configuration. Must be unique within the organization.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the code security configuration</p>
+</li>
+<li>
+<p><strong><code>advanced_security</code></strong> (string)<br>
+The enablement status of GitHub Advanced Security features. enabled will enable both Code Security and Secret Protection features.<br>
+Warning</p>
+</li>
+</ul>
+<p>code_security and secret_protection are deprecated values for this field. Prefer the individual code_security and secret_protection fields to set the status of these features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></p>
+<ul>
+<li>
+<p><strong><code>code_security</code></strong> (string)<br>
+The enablement status of GitHub Code Security features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph</code></strong> (string)<br>
+The enablement status of Dependency Graph<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action</code></strong> (string)<br>
+The enablement status of Automatic dependency submission<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependency_graph_autosubmit_action_options</code></strong> (object)<br>
+Feature options for Automatic dependency submission</p>
+<ul>
+<li><strong><code>labeled_runners</code></strong> (boolean)<br>
+Whether to use runners labeled with 'dependency-submission' or standard GitHub runners.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>dependabot_alerts</code></strong> (string)<br>
+The enablement status of Dependabot alerts<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_security_updates</code></strong> (string)<br>
+The enablement status of Dependabot security updates<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>dependabot_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of Dependabot delegated alert dismissal. Requires Dependabot alerts to be enabled.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup</code></strong> (string)<br>
+The enablement status of code scanning default setup<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>code_scanning_default_setup_options</code></strong> (object or null)<br>
+Feature options for code scanning default setup</p>
+<ul>
+<li><strong><code>runner_type</code></strong> (string)<br>
+Whether to use labeled runners or standard GitHub runners.<br>
+Can be one of: <code>standard</code>, <code>labeled</code>, <code>not_set</code></li>
+<li><strong><code>runner_label</code></strong> (string or null)<br>
+The label of the runner to use for code scanning default setup when runner_type is 'labeled'.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_options</code></strong> (object or null)<br>
+Security Configuration feature options for code scanning</p>
+<ul>
+<li><strong><code>allow_advanced</code></strong> (boolean or null)<br>
+Whether to allow repos which use advanced setup</li>
+</ul>
+</li>
+<li>
+<p><strong><code>code_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of code scanning delegated alert dismissal<br>
+Default: <code>disabled</code><br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_protection</code></strong> (string)<br>
+The enablement status of GitHub Secret Protection features.<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning</code></strong> (string)<br>
+The enablement status of secret scanning<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection</code></strong> (string)<br>
+The enablement status of secret scanning push protection<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_bypass</code></strong> (string)<br>
+The enablement status of secret scanning delegated bypass<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_bypass_options</code></strong> (object)<br>
+Feature options for secret scanning delegated bypass</p>
+<ul>
+<li><strong><code>reviewers</code></strong> (array of objects)<br>
+The bypass reviewers for secret scanning delegated bypass
+<ul>
+<li><strong><code>reviewer_id</code></strong> (integer) (required)<br>
+The ID of the team or role selected as a bypass reviewer</li>
+<li><strong><code>reviewer_type</code></strong> (string) (required)<br>
+The type of the bypass reviewer<br>
+Can be one of: <code>TEAM</code>, <code>ROLE</code></li>
+<li><strong><code>mode</code></strong> (string)<br>
+The bypass mode for the reviewer<br>
+Default: <code>ALWAYS</code><br>
+Can be one of: <code>ALWAYS</code>, <code>EXEMPT</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>secret_scanning_validity_checks</code></strong> (string)<br>
+The enablement status of secret scanning validity checks<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_non_provider_patterns</code></strong> (string)<br>
+The enablement status of secret scanning non-provider patterns<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_generic_secrets</code></strong> (string)<br>
+The enablement status of Copilot secret scanning<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_delegated_alert_dismissal</code></strong> (string)<br>
+The enablement status of secret scanning delegated alert dismissal<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>secret_scanning_extended_metadata</code></strong> (string)<br>
+The enablement status of secret scanning extended metadata<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>private_vulnerability_reporting</code></strong> (string)<br>
+The enablement status of private vulnerability reporting<br>
+Can be one of: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string)<br>
+The enforcement status for a security configuration<br>
+Can be one of: <code>enforced</code>, <code>unenforced</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Update a code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Response when a configuration is updated</p>
+</li>
+<li>
+<p><strong>204</strong> - Response when no new updates are made</p>
+</li>
+</ul>
+<h3 id="code-examples-14" title="Update a code security configuration / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-updating-a-code-security-configuration-1">Example for updating a code security configuration<a href="#example-for-updating-a-code-security-configuration-1" aria-label="Link to heading 'Example for updating a code security configuration'" data-heading-content="Example for updating a code security configuration" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "octo-org recommended settings v2",
+</span><span style="color:#c0c5ce;">  "secret_scanning": "disabled",
+</span><span style="color:#c0c5ce;">  "code_scanning_default_setup": "enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-code-security-configuration-for-an-enterprise">Create a code security configuration for an enterprise</a>.</p>
+<h2 id="delete-a-code-security-configuration" title="Delete a code security configuration">Delete a code security configuration<a href="#delete-a-code-security-configuration" aria-label="Link to heading 'Delete a code security configuration'" data-heading-content="Delete a code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/code-security/configurations/{configuration_id}
+</span></code></pre>
+<p>Deletes the desired code security configuration from an organization.<br>
+Repositories attached to the configuration will retain their settings but will no longer be associated with<br>
+the configuration.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-15" title="Delete a code security configuration / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Delete a code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+</ul>
+<h3 id="code-examples-15" title="Delete a code security configuration / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="attach-a-configuration-to-repositories" title="Attach a configuration to repositories">Attach a configuration to repositories<a href="#attach-a-configuration-to-repositories" aria-label="Link to heading 'Attach a configuration to repositories'" data-heading-content="Attach a configuration to repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/code-security/configurations/{configuration_id}/attach
+</span></code></pre>
+<p>Attach a code security configuration to a set of repositories. If the repositories specified are already attached to a configuration, they will be re-attached to the provided configuration.<br>
+If insufficient GHAS licenses are available to attach the configuration to a repository, only free features will be enabled.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-16" title="Attach a configuration to repositories / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-7">Body parameters<a href="#body-parameters-7" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>scope</code></strong> (string) (required)<br>
+The type of repositories to attach the configuration to. selected means the configuration will be attached to only the repositories specified by selected_repository_ids<br>
+Can be one of: <code>all</code>, <code>all_without_configurations</code>, <code>public</code>, <code>private_or_internal</code>, <code>selected</code></p>
+</li>
+<li>
+<p><strong><code>selected_repository_ids</code></strong> (array of integers)<br>
+An array of repository IDs to attach the configuration to. You can only provide a list of repository ids when the scope is set to selected.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-16" title="Attach a configuration to repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>202</strong> - Accepted</li>
+</ul>
+<h3 id="code-examples-16" title="Attach a configuration to repositories / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-attaching-a-configuration-to-some-repositories-1">Example for attaching a configuration to some repositories<a href="#example-for-attaching-a-configuration-to-some-repositories-1" aria-label="Link to heading 'Example for attaching a configuration to some repositories'" data-heading-content="Example for attaching a configuration to some repositories" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID/attach \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "scope": "selected",
+</span><span style="color:#c0c5ce;">  "selected_repository_ids": [
+</span><span style="color:#c0c5ce;">    32,
+</span><span style="color:#c0c5ce;">    91
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>Same response schema as <a href="#attach-an-enterprise-configuration-to-repositories">Attach an enterprise configuration to repositories</a>.</p>
+<h2 id="set-a-code-security-configuration-as-a-default-for-an-organization" title="Set a code security configuration as a default for an organization">Set a code security configuration as a default for an organization<a href="#set-a-code-security-configuration-as-a-default-for-an-organization" aria-label="Link to heading 'Set a code security configuration as a default for an organization'" data-heading-content="Set a code security configuration as a default for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/code-security/configurations/{configuration_id}/defaults
+</span></code></pre>
+<p>Sets a code security configuration as a default to be applied to new repositories in your organization.<br>
+This configuration will be applied to the matching repository type (all, none, public, private and internal) by default when they are created.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-17" title="Set a code security configuration as a default for an organization / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-17">Path and query parameters<a href="#path-and-query-parameters-17" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-8">Body parameters<a href="#body-parameters-8" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>default_for_new_repos</code></strong> (string)<br>
+Specify which types of repository this security configuration should be applied to by default.<br>
+Can be one of: <code>all</code>, <code>none</code>, <code>private_and_internal</code>, <code>public</code></li>
+</ul>
+<h3 id="http-response-status-codes-17" title="Set a code security configuration as a default for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Default successfully changed.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-17" title="Set a code security configuration as a default for an organization / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="set-this-configuration-to-be-enabled-by-default-on-all-new-repositories-1">Set this configuration to be enabled by default on all new repositories.<a href="#set-this-configuration-to-be-enabled-by-default-on-all-new-repositories-1" aria-label="Link to heading 'Set this configuration to be enabled by default on all new repositories.'" data-heading-content="Set this configuration to be enabled by default on all new repositories." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID/defaults \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "default_for_new_repos": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#set-a-code-security-configuration-as-a-default-for-an-enterprise">Set a code security configuration as a default for an enterprise</a>.</p>
+<h2 id="get-repositories-associated-with-a-code-security-configuration" title="Get repositories associated with a code security configuration">Get repositories associated with a code security configuration<a href="#get-repositories-associated-with-a-code-security-configuration" aria-label="Link to heading 'Get repositories associated with a code security configuration'" data-heading-content="Get repositories associated with a code security configuration" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/code-security/configurations/{configuration_id}/repositories
+</span></code></pre>
+<p>Lists the repositories associated with a code security configuration in an organization.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters-18" title="Get repositories associated with a code security configuration / Parameters">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-18">Headers<a href="#headers-18" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-18">Path and query parameters<a href="#path-and-query-parameters-18" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>configuration_id</code></strong> (integer) (required)<br>
+The unique identifier of the code security configuration.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>status</code></strong> (string)<br>
+A comma-separated list of statuses. If specified, only repositories with these attachment statuses will be returned.<br>
+Can be: all, attached, attaching, detached, removed, enforced, failed, updating, removed_by_enterprise<br>
+Default: <code>all</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-18" title="Get repositories associated with a code security configuration / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-18" title="Get repositories associated with a code security configuration / Code examples">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/code-security/configurations/CONFIGURATION_ID/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-repositories-associated-with-an-enterprise-code-security-configuration">Get repositories associated with an enterprise code security configuration</a>.</p>
+<h2 id="get-the-code-security-configuration-associated-with-a-repository" title="Get the code security configuration associated with a repository">Get the code security configuration associated with a repository<a href="#get-the-code-security-configuration-associated-with-a-repository" aria-label="Link to heading 'Get the code security configuration associated with a repository'" data-heading-content="Get the code security configuration associated with a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/code-security-configuration
+</span></code></pre>
+<p>Get the code security configuration that manages a repository's code security settings.<br>
+The authenticated user must be an administrator or security manager for the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-19" title="Get the code security configuration associated with a repository / Parameters">Parameters<a href="#parameters-19" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-19">Headers<a href="#headers-19" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-19">Path and query parameters<a href="#path-and-query-parameters-19" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-19" title="Get the code security configuration associated with a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-19" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-19" title="Get the code security configuration associated with a repository / Code examples">Code examples<a href="#code-examples-19" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/code-security-configuration
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>status</code>: string, enum: <code>attached</code>, <code>attaching</code>, <code>detached</code>, <code>removed</code>, <code>enforced</code>, <code>failed</code>, <code>updating</code>, <code>removed_by_enterprise</code></li>
+<li><code>configuration</code>: object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: string</li>
+<li><code>target_type</code>: string, enum: <code>global</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>description</code>: string or null</li>
+<li><code>advanced_security</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>code_security</code>, <code>secret_protection</code></li>
+<li><code>dependency_graph</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependency_graph_autosubmit_action_options</code>: object:
+<ul>
+<li><code>labeled_runners</code>: boolean</li>
+</ul>
+</li>
+<li><code>dependabot_alerts</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_security_updates</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>dependabot_delegated_alert_dismissal</code>: string or null, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>code_scanning_options</code>: object or null:
+<ul>
+<li><code>allow_advanced</code>: boolean or null</li>
+</ul>
+</li>
+<li><code>code_scanning_default_setup</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>code_scanning_default_setup_options</code>: object or null:
+<ul>
+<li><code>runner_type</code>: string or null, enum: <code>standard</code>, <code>labeled</code>, <code>not_set</code>, <code>null</code></li>
+<li><code>runner_label</code>: string or null</li>
+</ul>
+</li>
+<li><code>code_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_push_protection</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+<li><code>security_configuration_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>secret_scanning_validity_checks</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_non_provider_patterns</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_generic_secrets</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>secret_scanning_extended_metadata</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>private_vulnerability_reporting</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>not_set</code></li>
+<li><code>enforcement</code>: string, enum: <code>enforced</code>, <code>unenforced</code></li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

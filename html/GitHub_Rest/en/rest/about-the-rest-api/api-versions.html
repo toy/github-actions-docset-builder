@@ -1,0 +1,78 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>API Versions</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">About the REST API</a> / </nav><h1 id="api-versions">API Versions<a href="#api-versions" aria-label="Link to heading 'API Versions'" data-heading-content="API Versions" class="anchor"></a></h1>
+<p>Learn how to specify which REST API version to use whenever you make a request to the REST API.</p>
+<h2 id="about-api-versioning" title="About API versioning">About API versioning<a href="#about-api-versioning" aria-label="Link to heading 'About API versioning'" data-heading-content="About API versioning" class="anchor"></a></h2>
+<p>The GitHub REST API is versioned. The API version name is based on the date when the API version was released. For example, the API version <code>2026-03-10</code> was released on Tue, 10 Mar 2026.</p>
+<p>Breaking changes are changes that can potentially break an integration. Breaking changes will be released in a new API version. We will provide advance notice before releasing breaking changes. Breaking changes include:</p>
+<ul>
+<li>Removing an entire operation</li>
+<li>Removing or renaming a parameter</li>
+<li>Removing or renaming a response field</li>
+<li>Adding a new required parameter</li>
+<li>Making a previously optional parameter required</li>
+<li>Changing the type of a parameter or response field</li>
+<li>Removing enum values</li>
+<li>Adding a new validation rule to an existing parameter</li>
+<li>Changing authentication or authorization requirements</li>
+</ul>
+<p>Any additive (non-breaking) changes will be available in all supported API versions. Additive changes are changes that should not break an integration. Additive changes include:</p>
+<ul>
+<li>Adding an operation</li>
+<li>Adding an optional parameter</li>
+<li>Adding an optional request header</li>
+<li>Adding a response field</li>
+<li>Adding a response header</li>
+<li>Adding enum values</li>
+</ul>
+<p>When a new REST API version is released, the previous API version will be supported for at least 24 more months following the release of the new API version.</p>
+<h2 id="specifying-an-api-version" title="Specifying an API version">Specifying an API version<a href="#specifying-an-api-version" aria-label="Link to heading 'Specifying an API version'" data-heading-content="Specifying an API version" class="anchor"></a></h2>
+<p>You should use the <code>X-GitHub-Api-Version</code> header to specify an API version. For example:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --header "X-GitHub-Api-Version:2026-03-10" https://api.github.com/zen
+</span></code></pre>
+<p>Requests without the <code>X-GitHub-Api-Version</code> header will default to use the <code>2022-11-28</code> version.</p>
+<p>If you specify an API version that is no longer supported, you will receive a <code>410 Gone</code> response.</p>
+<h2 id="upgrading-to-a-new-api-version" title="Upgrading to a new API version">Upgrading to a new API version<a href="#upgrading-to-a-new-api-version" aria-label="Link to heading 'Upgrading to a new API version'" data-heading-content="Upgrading to a new API version" class="anchor"></a></h2>
+<p>Before upgrading to a new REST API version, you should read the changelog of breaking changes for the new API version to understand what breaking changes are included and to learn more about how to upgrade to that specific API version. For more information, see <a href="breaking-changes.html">Breaking changes</a>.</p>
+<p>When you update your integration to specify the new API version in the <code>X-GitHub-Api-Version</code> header, you'll also need to make any changes required for your integration to work with the new API version.</p>
+<p>Once your integration is updated, test your integration to verify that it works with the new API version.</p>
+<h2 id="api-version-closing-down" title="API version closing down">API version closing down<a href="#api-version-closing-down" aria-label="Link to heading 'API version closing down'" data-heading-content="API version closing down" class="anchor"></a></h2>
+<p>API versions are supported for 24 months after a newer API version is released.</p>
+<p>While a version is within its support window but approaching  closing down, GitHub includes the following headers in API responses to help you prepare for migration:</p>
+<ul>
+<li><code>Deprecation</code> — The date when the API version will be closing down, formatted as an HTTP date per <a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.1" class="external">RFC 7231</a>. For example: <code>Wed, 27 Nov 2019 14:34:29 GMT</code>. <!-- markdownlint-disable-line GHD046 --></li>
+<li><code>Sunset</code> — The date when the API version will be completely removed (retired), after which requests will return a <code>410 Gone</code> response. Follows <a href="https://tools.ietf.org/html/rfc8594" class="external">RFC 8594</a>. For example: <code>Fri, 27 Nov 2020 14:34:29 GMT</code>. <!-- markdownlint-disable-line GHD046 --></li>
+</ul>
+<p>After the support window ends:</p>
+<ul>
+<li>Requests that specify a closing down API version receive a <code>410 Gone</code> response.</li>
+<li>Requests that do not specify an API version default to the next oldest supported version, not the closing down version. If you rely on unversioned requests, you may observe behavioral changes as older versions are removed from support.</li>
+</ul>
+<p>For more information on migrating to a newer API version, see <a href="breaking-changes.html">Breaking changes</a>.</p>
+<h2 id="exceptions-to-standard-versioning" title="Exceptions to standard versioning">Exceptions to standard versioning<a href="#exceptions-to-standard-versioning" aria-label="Link to heading 'Exceptions to standard versioning'" data-heading-content="Exceptions to standard versioning" class="anchor"></a></h2>
+<p>In rare cases, GitHub may make changes outside the normal API versioning cadence. These are exceptional interventions that do not alter the standard versioning guarantees for most integrators.</p>
+<h3 id="security-availability-and-reliability-issues" title="Exceptions to standard versioning / Security, availability, and reliability issues">Security, availability, and reliability issues<a href="#security-availability-and-reliability-issues" aria-label="Link to heading 'Security, availability, and reliability issues'" data-heading-content="Security, availability, and reliability issues" class="anchor"></a></h3>
+<p>Critical security vulnerabilities, data exposure risks, or severe reliability issues may require changes outside the normal release schedule. GitHub may release an unscheduled API version, backport fixes to supported versions, or in rare cases, introduce a breaking change to an existing version to protect users and platform integrity.</p>
+<p>GitHub will communicate such changes through release notes, changelogs, and direct communication explaining what changed and why. Where feasible, advance notice will be provided. Immediate action may be taken without advance notice when required.</p>
+<h3 id="low-usage-services" title="Exceptions to standard versioning / Low-usage services">Low-usage services<a href="#low-usage-services" aria-label="Link to heading 'Low-usage services'" data-heading-content="Low-usage services" class="anchor"></a></h3>
+<p>For certain services with very low usage, GitHub may deprecate functionality outside the standard versioning process. In these cases, GitHub will communicate the intent and reach out to affected integrators directly.</p>
+<h2 id="supported-api-versions" title="Supported API versions">Supported API versions<a href="#supported-api-versions" aria-label="Link to heading 'Supported API versions'" data-heading-content="Supported API versions" class="anchor"></a></h2>
+<p>The following REST API versions are currently supported.</p>
+<table>
+<thead>
+<tr>
+<th>API version</th>
+<th>End of support date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="keyword">2026-03-10</code></td>
+<td>Not yet scheduled</td>
+</tr>
+<tr>
+<td><code class="keyword">2022-11-28</code></td>
+<td>March 10, 2028</td>
+</tr>
+</tbody>
+</table>
+<p>You can also make an API request to get all of the supported API versions. For more information, see <a href="../meta/meta.html#get-all-api-versions">REST API endpoints for meta data</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

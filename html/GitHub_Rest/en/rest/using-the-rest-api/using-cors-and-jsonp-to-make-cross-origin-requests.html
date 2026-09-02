@@ -1,0 +1,89 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Using CORS and JSONP to make cross-origin requests</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Using the REST API</a> / </nav><h1 id="using-cors-and-jsonp-to-make-cross-origin-requests">Using CORS and JSONP to make cross-origin requests<a href="#using-cors-and-jsonp-to-make-cross-origin-requests" aria-label="Link to heading 'Using CORS and JSONP to make cross-origin requests'" data-heading-content="Using CORS and JSONP to make cross-origin requests" class="anchor"></a></h1>
+<p>You can make API requests across domains using cross-origin resource sharing (CORS) and JSONP callbacks.</p>
+<h2 id="about-cross-origin-requests" title="About cross-origin requests">About cross-origin requests<a href="#about-cross-origin-requests" aria-label="Link to heading 'About cross-origin requests'" data-heading-content="About cross-origin requests" class="anchor"></a></h2>
+<p>A cross-origin request is a request made to a different domain than the one originating the request. For security reasons, most web browsers block cross-origin requests. However, you can use cross-origin resource sharing (CORS) and JSONP callbacks to make cross-origin requests.</p>
+<h2 id="cross-origin-resource-sharing-cors" title="Cross-origin resource sharing (CORS)">Cross-origin resource sharing (CORS)<a href="#cross-origin-resource-sharing-cors" aria-label="Link to heading 'Cross-origin resource sharing (CORS)'" data-heading-content="Cross-origin resource sharing (CORS)" class="anchor"></a></h2>
+<p>The REST API supports cross-origin resource sharing (CORS) for AJAX requests from any origin. For more information, see the <a href="http://www.w3.org/TR/cors/" class="external">CORS W3C Recommendation</a> and the <a href="https://code.google.com/archive/p/html5security/wikis/CrossOriginRequestSecurity.wiki" class="external">HTML 5 Security Guide</a></p>
+<p>Here's a sample request sent from a browser hitting<br>
+<code>http://example.com</code>:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ curl -I https://api.github.com -H "Origin: http://example.com"
+</span><span style="color:#c0c5ce;">HTTP/2 302
+</span><span style="color:#c0c5ce;">Access-Control-Allow-Origin: *
+</span><span style="color:#c0c5ce;">Access-Control-Expose-Headers: ETag, Link, x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+</span></code></pre>
+<p>This is what the CORS preflight request looks like:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ curl -I https://api.github.com -H "Origin: http://example.com" -X OPTIONS
+</span><span style="color:#c0c5ce;">HTTP/2 204
+</span><span style="color:#c0c5ce;">Access-Control-Allow-Origin: *
+</span><span style="color:#c0c5ce;">Access-Control-Allow-Headers: Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With
+</span><span style="color:#c0c5ce;">Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE
+</span><span style="color:#c0c5ce;">Access-Control-Expose-Headers: ETag, Link, x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+</span><span style="color:#c0c5ce;">Access-Control-Max-Age: 86400
+</span></code></pre>
+<h2 id="json-p-callbacks" title="JSON-P callbacks">JSON-P callbacks<a href="#json-p-callbacks" aria-label="Link to heading 'JSON-P callbacks'" data-heading-content="JSON-P callbacks" class="anchor"></a></h2>
+<p>You can send a <code>?callback</code> parameter to any GET call to have the results<br>
+wrapped in a JSON function. This is typically used when browsers want to embed GitHub content in web pages and avoid cross-domain problems. The response includes the same data output as the regular API, plus the relevant HTTP Header information.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ curl https://api.github.com?callback=foo
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">&gt; /**/foo({
+</span><span style="color:#c0c5ce;">&gt;   "meta": {
+</span><span style="color:#c0c5ce;">&gt;     "status": 200,
+</span><span style="color:#c0c5ce;">&gt;     "x-ratelimit-limit": "5000",
+</span><span style="color:#c0c5ce;">&gt;     "x-ratelimit-remaining": "4966",
+</span><span style="color:#c0c5ce;">&gt;     "x-ratelimit-reset": "1372700873",
+</span><span style="color:#c0c5ce;">&gt;     "link": [ // pagination headers and other links
+</span><span style="color:#c0c5ce;">&gt;       ["https://api.github.com?page=2", {"rel": "next"}]
+</span><span style="color:#c0c5ce;">&gt;     ]
+</span><span style="color:#c0c5ce;">&gt;   },
+</span><span style="color:#c0c5ce;">&gt;   "data": {
+</span><span style="color:#c0c5ce;">&gt;     // the data
+</span><span style="color:#c0c5ce;">&gt;   }
+</span><span style="color:#c0c5ce;">&gt; })
+</span></code></pre>
+<p>You can write a JavaScript handler to process the callback. Here's a minimal example you can try:</p>
+<pre lang="html" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">&lt;</span><span style="color:#bf616a;">html</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#bf616a;">head</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#bf616a;">script </span><span style="color:#d08770;">type</span><span style="color:#c0c5ce;">="</span><span style="color:#a3be8c;">text/javascript</span><span style="color:#c0c5ce;">"&gt;
+</span><span style="color:#b48ead;">function </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">(response) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">meta </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.meta;
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">data </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.data;
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">meta</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">var </span><span style="color:#bf616a;">script </span><span style="color:#c0c5ce;">= document.</span><span style="color:#96b5b4;">createElement</span><span style="color:#c0c5ce;">('</span><span style="color:#a3be8c;">script</span><span style="color:#c0c5ce;">');
+</span><span style="color:#bf616a;">script</span><span style="color:#c0c5ce;">.src = '</span><span style="color:#a3be8c;">https://api.github.com?callback=foo</span><span style="color:#c0c5ce;">';
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">document.</span><span style="color:#96b5b4;">getElementsByTagName</span><span style="color:#c0c5ce;">('</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">')[</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">].</span><span style="color:#96b5b4;">appendChild</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">script</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">&lt;/</span><span style="color:#bf616a;">script</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">&lt;/</span><span style="color:#bf616a;">head</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#bf616a;">body</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">  &lt;</span><span style="color:#bf616a;">p</span><span style="color:#c0c5ce;">&gt;Open up your browser's console.&lt;/</span><span style="color:#bf616a;">p</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">&lt;/</span><span style="color:#bf616a;">body</span><span style="color:#c0c5ce;">&gt;
+</span><span style="color:#c0c5ce;">&lt;/</span><span style="color:#bf616a;">html</span><span style="color:#c0c5ce;">&gt;
+</span></code></pre>
+<p>All of the headers have the same string value as the HTTP headers, except <code>link</code>. The <code>link</code> header is pre-parsed for you and comes through as an array of <code>[url, options]</code> tuples.</p>
+<p>For example, a link that looks like this:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">link: &lt;url1&gt;; rel="next", &lt;url2&gt;; rel="foo"; bar="baz"
+</span></code></pre>
+<p>will look like this in the Callback output:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">link</span><span style="color:#c0c5ce;">": [
+</span><span style="color:#c0c5ce;">    [
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">url1</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      {
+</span><span style="color:#c0c5ce;">        "</span><span style="color:#a3be8c;">rel</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">next</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    [
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">url2</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      {
+</span><span style="color:#c0c5ce;">        "</span><span style="color:#a3be8c;">rel</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">foo</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">        "</span><span style="color:#a3be8c;">bar</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">baz</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

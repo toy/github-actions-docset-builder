@@ -1,0 +1,192 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for software bill of materials (SBOM)</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Dependency graph</a> / </nav><h1 id="rest-api-endpoints-for-software-bill-of-materials-sbom">REST API endpoints for software bill of materials (SBOM)<a href="#rest-api-endpoints-for-software-bill-of-materials-sbom" aria-label="Link to heading 'REST API endpoints for software bill of materials (SBOM)'" data-heading-content="REST API endpoints for software bill of materials (SBOM)" class="anchor"></a></h1>
+<p>Use the REST API to export the software bill of materials (SBOM) for a repository.</p>
+<p>If you have at least read access to the repository, you can export the dependency graph for the repository as an SPDX-compatible, Software Bill of Materials (SBOM), via the GitHub UI or GitHub REST API. For more information, see <a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/establish-provenance-and-integrity/export-dependencies-as-sbom" class="external">Exporting a software bill of materials for your repository</a>.</p>
+<p>This article gives details about the REST API endpoint.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="export-a-software-bill-of-materials-sbom-for-a-repository" title="Export a software bill of materials (SBOM) for a repository.">Export a software bill of materials (SBOM) for a repository.<a href="#export-a-software-bill-of-materials-sbom-for-a-repository" aria-label="Link to heading 'Export a software bill of materials (SBOM) for a repository.'" data-heading-content="Export a software bill of materials (SBOM) for a repository." class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependency-graph/sbom
+</span></code></pre>
+<p>Warning</p>
+<p>Closing down notice: This operation is closing down and will not be accessible after November 13, 2026. Please migrate to the asynchronous flow. Use "Request generation of a software bill of materials (SBOM) for a repository" to trigger the report, then "Fetch a software bill of materials (SBOM) for a repository" to retrieve it. For more information, see the changelog.</p>
+<p>Exports the software bill of materials (SBOM) for a repository in SPDX JSON format.</p>
+<h3 id="parameters" title="Export a software bill of materials (SBOM) for a repository. / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Export a software bill of materials (SBOM) for a repository. / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Export a software bill of materials (SBOM) for a repository. / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependency-graph/sbom
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>sbom</code>: required, object:
+<ul>
+<li><code>SPDXID</code>: required, string</li>
+<li><code>spdxVersion</code>: required, string</li>
+<li><code>comment</code>: string</li>
+<li><code>creationInfo</code>: required, object:
+<ul>
+<li><code>created</code>: required, string</li>
+<li><code>creators</code>: required, array of string</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>dataLicense</code>: required, string</li>
+<li><code>documentNamespace</code>: required, string</li>
+<li><code>packages</code>: required, array of objects:
+<ul>
+<li><code>SPDXID</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>versionInfo</code>: string</li>
+<li><code>downloadLocation</code>: string</li>
+<li><code>filesAnalyzed</code>: boolean</li>
+<li><code>licenseConcluded</code>: string</li>
+<li><code>licenseDeclared</code>: string</li>
+<li><code>supplier</code>: string</li>
+<li><code>copyrightText</code>: string</li>
+<li><code>externalRefs</code>: array of objects:
+<ul>
+<li><code>referenceCategory</code>: required, string</li>
+<li><code>referenceLocator</code>: required, string</li>
+<li><code>referenceType</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>relationships</code>: array of objects:
+<ul>
+<li><code>relationshipType</code>: string</li>
+<li><code>spdxElementId</code>: string</li>
+<li><code>relatedSpdxElement</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="fetch-a-software-bill-of-materials-sbom-for-a-repository" title="Fetch a software bill of materials (SBOM) for a repository.">Fetch a software bill of materials (SBOM) for a repository.<a href="#fetch-a-software-bill-of-materials-sbom-for-a-repository" aria-label="Link to heading 'Fetch a software bill of materials (SBOM) for a repository.'" data-heading-content="Fetch a software bill of materials (SBOM) for a repository." class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependency-graph/sbom/fetch-report/{sbom_uuid}
+</span></code></pre>
+<p>Fetches a previously generated software bill of materials (SBOM) for a repository.<br>
+When the SBOM is ready, the response is a 302 redirect to a temporary download URL for the SBOM in SPDX JSON format.<br>
+The generated SBOM report may be retained for up to one week from the original request.<br>
+The temporary download URL returned by this endpoint expires separately, and its expiry is set when the fetch request is made.</p>
+<h3 id="parameters-1" title="Fetch a software bill of materials (SBOM) for a repository. / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>sbom_uuid</code></strong> (string) (required)<br>
+The unique identifier of the SBOM export.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Fetch a software bill of materials (SBOM) for a repository. / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - SBOM is still being processed, no content is returned.</p>
+</li>
+<li>
+<p><strong>302</strong> - Redirects to a temporary download URL for the completed SBOM.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Fetch a software bill of materials (SBOM) for a repository. / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependency-graph/sbom/fetch-report/SBOM_UUID
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<h2 id="request-generation-of-a-software-bill-of-materials-sbom-for-a-repository" title="Request generation of a software bill of materials (SBOM) for a repository.">Request generation of a software bill of materials (SBOM) for a repository.<a href="#request-generation-of-a-software-bill-of-materials-sbom-for-a-repository" aria-label="Link to heading 'Request generation of a software bill of materials (SBOM) for a repository.'" data-heading-content="Request generation of a software bill of materials (SBOM) for a repository." class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/dependency-graph/sbom/generate-report
+</span></code></pre>
+<p>Triggers a job to generate a software bill of materials (SBOM) for a repository in SPDX JSON format.</p>
+<h3 id="parameters-2" title="Request generation of a software bill of materials (SBOM) for a repository. / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Request generation of a software bill of materials (SBOM) for a repository. / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Request generation of a software bill of materials (SBOM) for a repository. / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependency-graph/sbom/generate-report
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>sbom_url</code>: string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

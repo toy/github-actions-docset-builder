@@ -1,0 +1,91 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Markdown</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Markdown</a> / </nav><h1 id="rest-api-endpoints-for-markdown">REST API endpoints for Markdown<a href="#rest-api-endpoints-for-markdown" aria-label="Link to heading 'REST API endpoints for Markdown'" data-heading-content="REST API endpoints for Markdown" class="anchor"></a></h1>
+<p>Use the REST API to render a markdown document as an HTML page or as raw text.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="render-a-markdown-document" title="Render a Markdown document">Render a Markdown document<a href="#render-a-markdown-document" aria-label="Link to heading 'Render a Markdown document'" data-heading-content="Render a Markdown document" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /markdown
+</span></code></pre>
+<p>Depending on what is rendered in the Markdown, you may need to provide additional token scopes for labels, such as issues:read or pull_requests:read.</p>
+<h3 id="parameters" title="Render a Markdown document / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>text</code></strong> (string) (required)<br>
+The Markdown text to render in HTML.</p>
+</li>
+<li>
+<p><strong><code>mode</code></strong> (string)<br>
+The rendering mode.<br>
+Default: <code>markdown</code><br>
+Can be one of: <code>markdown</code>, <code>gfm</code></p>
+</li>
+<li>
+<p><strong><code>context</code></strong> (string)<br>
+The repository context to use when creating references in gfm mode.  For example, setting context to octo-org/octo-repo will change the text #42 into an HTML link to issue 42 in the octo-org/octo-repo repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Render a Markdown document / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Render a Markdown document / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="rendering-markdown">Rendering markdown<a href="#rendering-markdown" aria-label="Link to heading 'Rendering markdown'" data-heading-content="Rendering markdown" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/markdown \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "text": "Hello **world**"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>string</p>
+<h2 id="render-a-markdown-document-in-raw-mode" title="Render a Markdown document in raw mode">Render a Markdown document in raw mode<a href="#render-a-markdown-document-in-raw-mode" aria-label="Link to heading 'Render a Markdown document in raw mode'" data-heading-content="Render a Markdown document in raw mode" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /markdown/raw
+</span></code></pre>
+<p>You must send Markdown as plain text (using a Content-Type header of text/plain or text/x-markdown) to this endpoint, rather than using JSON format. In raw mode, GitHub Flavored Markdown is not supported and Markdown will be rendered in plain format like a README.md file. Markdown content must be 400 KB or less.</p>
+<h3 id="http-response-status-codes-1" title="Render a Markdown document in raw mode / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Render a Markdown document in raw mode / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/markdown/raw \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "text": "Hello **world**"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#render-a-markdown-document">Render a Markdown document</a>.</p>
+<h4 id="rendering-markdown-1">Rendering markdown<a href="#rendering-markdown-1" aria-label="Link to heading 'Rendering markdown'" data-heading-content="Rendering markdown" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/markdown/raw \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "text": "Hello **world**"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#render-a-markdown-document">Render a Markdown document</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

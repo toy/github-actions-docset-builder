@@ -1,0 +1,1166 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for organizations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Organizations</a> / </nav><h1 id="rest-api-endpoints-for-organizations">REST API endpoints for organizations<a href="#rest-api-endpoints-for-organizations" aria-label="Link to heading 'REST API endpoints for organizations'" data-heading-content="REST API endpoints for organizations" class="anchor"></a></h1>
+<p>Use the REST API to interact with organizations.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-organizations" title="List organizations">List organizations<a href="#list-organizations" aria-label="Link to heading 'List organizations'" data-heading-content="List organizations" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /organizations
+</span></code></pre>
+<p>Lists all organizations, in the order that they were created.<br>
+Note</p>
+<p>Pagination is powered exclusively by the since parameter. Use the Link header to get the URL for the next page of organizations.</p>
+<h3 id="parameters" title="List organizations / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>since</code></strong> (integer)<br>
+An organization ID. Only return organizations with an ID greater than this ID.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List organizations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List organizations / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/organizations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Organization Simple</code>:</p>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+</ul>
+<h2 id="get-an-organization" title="Get an organization">Get an organization<a href="#get-an-organization" aria-label="Link to heading 'Get an organization'" data-heading-content="Get an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}
+</span></code></pre>
+<p>Gets information about an organization.<br>
+When the value of two_factor_requirement_enabled is true, the organization requires all members, billing managers, outside collaborators, guest collaborators, repository collaborators, or everyone with access to any repository within the organization to enable two-factor authentication.<br>
+To see the full details about an organization, the authenticated user must be an organization owner.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to see the full details about an organization.<br>
+To see information about an organization's GitHub plan, GitHub Apps need the Organization plan permission.</p>
+<h3 id="parameters-1" title="Get an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>name</code>: string</li>
+<li><code>company</code>: string or null</li>
+<li><code>blog</code>: string or null, format: uri</li>
+<li><code>location</code>: string or null</li>
+<li><code>email</code>: string or null, format: email</li>
+<li><code>twitter_username</code>: string or null</li>
+<li><code>is_verified</code>: boolean</li>
+<li><code>has_organization_projects</code>: required, boolean</li>
+<li><code>has_repository_projects</code>: required, boolean</li>
+<li><code>public_repos</code>: required, integer</li>
+<li><code>public_gists</code>: required, integer</li>
+<li><code>followers</code>: required, integer</li>
+<li><code>following</code>: required, integer</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>total_private_repos</code>: integer</li>
+<li><code>owned_private_repos</code>: integer</li>
+<li><code>private_gists</code>: integer or null</li>
+<li><code>disk_usage</code>: integer or null</li>
+<li><code>collaborators</code>: integer or null</li>
+<li><code>billing_email</code>: string or null, format: email</li>
+<li><code>plan</code>: object:
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>space</code>: required, integer</li>
+<li><code>private_repos</code>: required, integer</li>
+<li><code>filled_seats</code>: integer</li>
+<li><code>seats</code>: integer</li>
+</ul>
+</li>
+<li><code>default_repository_permission</code>: string or null</li>
+<li><code>default_repository_branch</code>: string or null</li>
+<li><code>members_can_create_repositories</code>: boolean or null</li>
+<li><code>two_factor_requirement_enabled</code>: boolean or null</li>
+<li><code>members_allowed_repository_creation_type</code>: string</li>
+<li><code>members_can_create_public_repositories</code>: boolean</li>
+<li><code>members_can_create_private_repositories</code>: boolean</li>
+<li><code>members_can_create_internal_repositories</code>: boolean</li>
+<li><code>members_can_create_pages</code>: boolean</li>
+<li><code>members_can_create_public_pages</code>: boolean</li>
+<li><code>members_can_create_private_pages</code>: boolean</li>
+<li><code>members_can_delete_repositories</code>: boolean</li>
+<li><code>members_can_change_repo_visibility</code>: boolean</li>
+<li><code>members_can_invite_outside_collaborators</code>: boolean</li>
+<li><code>members_can_delete_issues</code>: boolean</li>
+<li><code>display_commenter_full_name_setting_enabled</code>: boolean</li>
+<li><code>readers_can_create_discussions</code>: boolean</li>
+<li><code>members_can_create_teams</code>: boolean</li>
+<li><code>members_can_view_dependency_insights</code>: boolean</li>
+<li><code>members_can_fork_private_repositories</code>: boolean or null</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>advanced_security_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>dependabot_alerts_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>dependabot_security_updates_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>dependency_graph_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>secret_scanning_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>secret_scanning_push_protection_enabled_for_new_repositories</code>: boolean, deprecated</li>
+<li><code>secret_scanning_push_protection_custom_link</code>: string or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>archived_at</code>: required, string or null, format: date-time</li>
+<li><code>deploy_keys_enabled_for_repositories</code>: boolean</li>
+</ul>
+<h2 id="update-an-organization" title="Update an organization">Update an organization<a href="#update-an-organization" aria-label="Link to heading 'Update an organization'" data-heading-content="Update an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}
+</span></code></pre>
+<p>Warning</p>
+<p>Closing down notice: GitHub will replace and discontinue members_allowed_repository_creation_type in favor of more granular permissions. The new input parameters are members_can_create_public_repositories, members_can_create_private_repositories for all organizations and members_can_create_internal_repositories for organizations associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. For more information, see the blog post.</p>
+<p>Warning</p>
+<p>Closing down notice: Code security product enablement for new repositories through the organization API is closing down. Please use code security configurations to set defaults instead. For more information on setting a default security configuration, see the changelog.</p>
+<p>Updates the organization's profile and member privileges.<br>
+The authenticated user must be an organization owner to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org or repo scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Update an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>billing_email</code></strong> (string)<br>
+Billing email address. This address is not publicized.</p>
+</li>
+<li>
+<p><strong><code>company</code></strong> (string)<br>
+The company name.</p>
+</li>
+<li>
+<p><strong><code>email</code></strong> (string)<br>
+The publicly visible email address.</p>
+</li>
+<li>
+<p><strong><code>twitter_username</code></strong> (string)<br>
+The Twitter username of the company.</p>
+</li>
+<li>
+<p><strong><code>location</code></strong> (string)<br>
+The location.</p>
+</li>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The shorthand name of the company.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+The description of the company. The maximum size is 160 characters.</p>
+</li>
+<li>
+<p><strong><code>has_organization_projects</code></strong> (boolean)<br>
+Whether an organization can use organization projects.</p>
+</li>
+<li>
+<p><strong><code>has_repository_projects</code></strong> (boolean)<br>
+Whether repositories that belong to the organization can use repository projects.</p>
+</li>
+<li>
+<p><strong><code>default_repository_permission</code></strong> (string)<br>
+Default permission level members have for organization repositories.<br>
+Default: <code>read</code><br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code>, <code>none</code></p>
+</li>
+<li>
+<p><strong><code>members_can_create_repositories</code></strong> (boolean)<br>
+Whether of non-admin organization members can create repositories. Note: A parameter can override this parameter. See members_allowed_repository_creation_type in this table for details.<br>
+Default: <code>true</code></p>
+</li>
+<li>
+<p><strong><code>members_can_create_internal_repositories</code></strong> (boolean)<br>
+Whether organization members can create internal repositories, which are visible to all enterprise members. You can only allow members to create internal repositories if your organization is associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.</p>
+</li>
+<li>
+<p><strong><code>members_can_create_private_repositories</code></strong> (boolean)<br>
+Whether organization members can create private repositories, which are visible to organization members with permission. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.</p>
+</li>
+<li>
+<p><strong><code>members_can_create_public_repositories</code></strong> (boolean)<br>
+Whether organization members can create public repositories, which are visible to anyone. For more information, see "Restricting repository creation in your organization" in the GitHub Help documentation.</p>
+</li>
+<li>
+<p><strong><code>members_allowed_repository_creation_type</code></strong> (string)<br>
+Specifies which types of repositories non-admin organization members can create. private is only available to repositories that are part of an organization on GitHub Enterprise Cloud.<br>
+Note: This parameter is closing down and will be removed in the future. Its return value ignores internal repositories. Using this parameter overrides values set in members_can_create_repositories. See the parameter deprecation notice in the operation description for details.<br>
+Can be one of: <code>all</code>, <code>private</code>, <code>none</code></p>
+</li>
+<li>
+<p><strong><code>members_can_create_pages</code></strong> (boolean)<br>
+Whether organization members can create GitHub Pages sites. Existing published sites will not be impacted.<br>
+Default: <code>true</code></p>
+</li>
+<li>
+<p><strong><code>members_can_create_public_pages</code></strong> (boolean)<br>
+Whether organization members can create public GitHub Pages sites. Existing published sites will not be impacted.<br>
+Default: <code>true</code></p>
+</li>
+<li>
+<p><strong><code>members_can_create_private_pages</code></strong> (boolean)<br>
+Whether organization members can create private GitHub Pages sites. Existing published sites will not be impacted.<br>
+Default: <code>true</code></p>
+</li>
+<li>
+<p><strong><code>members_can_fork_private_repositories</code></strong> (boolean)<br>
+Whether organization members can fork private organization repositories.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>web_commit_signoff_required</code></strong> (boolean)<br>
+Whether contributors to organization repositories are required to sign off on commits they make through GitHub's web interface.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>blog</code></strong> (string)</p>
+</li>
+<li>
+<p><strong><code>advanced_security_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether GitHub Advanced Security is automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>dependabot_alerts_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether Dependabot alerts are automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>dependabot_security_updates_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether Dependabot security updates are automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>dependency_graph_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether dependency graph is automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>secret_scanning_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether secret scanning is automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection_enabled_for_new_repositories</code></strong> (boolean)<br>
+Endpoint closing down notice. Please use code security configurations instead.<br>
+Whether secret scanning push protection is automatically enabled for new repositories and repositories transferred to this organization.<br>
+To use this parameter, you must have admin permissions for the repository or be an owner or security manager for the organization that owns the repository. For more information, see "Managing security managers in your organization."<br>
+You can check which security and analysis features are currently enabled by using a GET /orgs/{org} request.</p>
+</li>
+<li>
+<p><strong><code>secret_scanning_push_protection_custom_link</code></strong> (string)<br>
+If secret_scanning_push_protection_custom_link_enabled is true, the URL that will be displayed to contributors who are blocked from pushing a secret.</p>
+</li>
+<li>
+<p><strong><code>deploy_keys_enabled_for_repositories</code></strong> (boolean)<br>
+Controls whether or not deploy keys may be added and used for repositories in the organization.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Update an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Update an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "billing_email": "mona@github.com",
+</span><span style="color:#c0c5ce;">  "company": "GitHub",
+</span><span style="color:#c0c5ce;">  "email": "mona@github.com",
+</span><span style="color:#c0c5ce;">  "twitter_username": "github",
+</span><span style="color:#c0c5ce;">  "location": "San Francisco",
+</span><span style="color:#c0c5ce;">  "name": "github",
+</span><span style="color:#c0c5ce;">  "description": "GitHub, the company.",
+</span><span style="color:#c0c5ce;">  "default_repository_permission": "read",
+</span><span style="color:#c0c5ce;">  "members_can_create_repositories": true,
+</span><span style="color:#c0c5ce;">  "members_allowed_repository_creation_type": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-an-organization">Get an organization</a>.</p>
+<h2 id="delete-an-organization" title="Delete an organization">Delete an organization<a href="#delete-an-organization" aria-label="Link to heading 'Delete an organization'" data-heading-content="Delete an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}
+</span></code></pre>
+<p>Deletes an organization and all its repositories.<br>
+The organization login will be unavailable for 90 days after deletion.<br>
+Please review the Terms of Service regarding account deletion before using this endpoint:<br>
+<a href="https://docs.github.com/site-policy/github-terms/github-terms-of-service" class="external">https://docs.github.com/site-policy/github-terms/github-terms-of-service</a></p>
+<h3 id="parameters-3" title="Delete an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>451</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>object</p>
+<h2 id="list-app-installations-for-an-organization" title="List app installations for an organization">List app installations for an organization<a href="#list-app-installations-for-an-organization" aria-label="Link to heading 'List app installations for an organization'" data-heading-content="List app installations for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/installations
+</span></code></pre>
+<p>Lists all GitHub Apps in an organization. The installation count includes<br>
+all GitHub Apps installed on repositories in the organization.<br>
+The authenticated user must be an organization owner to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:read scope to use this endpoint.</p>
+<h3 id="parameters-4" title="List app installations for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List app installations for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="List app installations for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/installations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>installations</code>: required, array of <code>Installation</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>account</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>access_tokens_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>app_id</code>: required, integer</li>
+<li><code>client_id</code>: string</li>
+<li><code>target_id</code>: required, integer</li>
+<li><code>target_type</code>: required, string</li>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>app_slug</code>: required, string</li>
+<li><code>suspended_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>suspended_at</code>: required, string or null, format: date-time</li>
+<li><code>contact_email</code>: string or null</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-immutable-releases-settings-for-an-organization" title="Get immutable releases settings for an organization">Get immutable releases settings for an organization<a href="#get-immutable-releases-settings-for-an-organization" aria-label="Link to heading 'Get immutable releases settings for an organization'" data-heading-content="Get immutable releases settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/settings/immutable-releases
+</span></code></pre>
+<p>Gets the immutable releases policy for repositories in an organization.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Get immutable releases settings for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Get immutable releases settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - Immutable releases settings response</li>
+</ul>
+<h3 id="code-examples-5" title="Get immutable releases settings for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>enforced_repositories</code>: required, string, enum: <code>all</code>, <code>none</code>, <code>selected</code></li>
+<li><code>selected_repositories_url</code>: string</li>
+</ul>
+<h2 id="set-immutable-releases-settings-for-an-organization" title="Set immutable releases settings for an organization">Set immutable releases settings for an organization<a href="#set-immutable-releases-settings-for-an-organization" aria-label="Link to heading 'Set immutable releases settings for an organization'" data-heading-content="Set immutable releases settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/settings/immutable-releases
+</span></code></pre>
+<p>Sets the immutable releases policy for repositories in an organization.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Set immutable releases settings for an organization / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enforced_repositories</code></strong> (string) (required)<br>
+The policy that controls how immutable releases are enforced in the organization.<br>
+Can be one of: <code>all</code>, <code>none</code>, <code>selected</code></p>
+</li>
+<li>
+<p><strong><code>selected_repository_ids</code></strong> (array of integers)<br>
+An array of repository ids for which immutable releases enforcement should be applied. You can only provide a list of repository ids when the enforced_repositories is set to selected. You can add and remove individual repositories using the Enable a selected repository for immutable releases in an organization and Disable a selected repository for immutable releases in an organization endpoints.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Set immutable releases settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-6" title="Set immutable releases settings for an organization / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "enforced_repositories": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-selected-repositories-for-immutable-releases-enforcement" title="List selected repositories for immutable releases enforcement">List selected repositories for immutable releases enforcement<a href="#list-selected-repositories-for-immutable-releases-enforcement" aria-label="Link to heading 'List selected repositories for immutable releases enforcement'" data-heading-content="List selected repositories for immutable releases enforcement" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/settings/immutable-releases/repositories
+</span></code></pre>
+<p>List all of the repositories that have been selected for immutable releases enforcement in an organization.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-7" title="List selected repositories for immutable releases enforcement / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="List selected repositories for immutable releases enforcement / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-7" title="List selected repositories for immutable releases enforcement / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>repositories</code>: required, array of <code>Minimal Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+</ul>
+<h2 id="set-selected-repositories-for-immutable-releases-enforcement" title="Set selected repositories for immutable releases enforcement">Set selected repositories for immutable releases enforcement<a href="#set-selected-repositories-for-immutable-releases-enforcement" aria-label="Link to heading 'Set selected repositories for immutable releases enforcement'" data-heading-content="Set selected repositories for immutable releases enforcement" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/settings/immutable-releases/repositories
+</span></code></pre>
+<p>Replaces all repositories that have been selected for immutable releases enforcement in an organization. To use this endpoint, the organization immutable releases policy for enforced_repositories must be configured to selected.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-8" title="Set selected repositories for immutable releases enforcement / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_repository_ids</code></strong> (array of integers) (required)<br>
+An array of repository ids for which immutable releases enforcement should be applied. You can only provide a list of repository ids when the enforced_repositories is set to selected. You can add and remove individual repositories using the Enable a selected repository for immutable releases in an organization and Disable a selected repository for immutable releases in an organization endpoints.</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Set selected repositories for immutable releases enforcement / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-8" title="Set selected repositories for immutable releases enforcement / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases/repositories \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_repository_ids": [
+</span><span style="color:#c0c5ce;">    64780797
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="enable-a-selected-repository-for-immutable-releases-in-an-organization" title="Enable a selected repository for immutable releases in an organization">Enable a selected repository for immutable releases in an organization<a href="#enable-a-selected-repository-for-immutable-releases-in-an-organization" aria-label="Link to heading 'Enable a selected repository for immutable releases in an organization'" data-heading-content="Enable a selected repository for immutable releases in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/settings/immutable-releases/repositories/{repository_id}
+</span></code></pre>
+<p>Adds a repository to the list of selected repositories that are enforced for immutable releases in an organization. To use this endpoint, the organization immutable releases policy for enforced_repositories must be configured to selected.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-9" title="Enable a selected repository for immutable releases in an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Enable a selected repository for immutable releases in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-9" title="Enable a selected repository for immutable releases in an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="disable-a-selected-repository-for-immutable-releases-in-an-organization" title="Disable a selected repository for immutable releases in an organization">Disable a selected repository for immutable releases in an organization<a href="#disable-a-selected-repository-for-immutable-releases-in-an-organization" aria-label="Link to heading 'Disable a selected repository for immutable releases in an organization'" data-heading-content="Disable a selected repository for immutable releases in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/settings/immutable-releases/repositories/{repository_id}
+</span></code></pre>
+<p>Removes a repository from the list of selected repositories that are enforced for immutable releases in an organization. To use this endpoint, the organization immutable releases policy for enforced_repositories must be configured to selected.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-10" title="Disable a selected repository for immutable releases in an organization / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Disable a selected repository for immutable releases in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-10" title="Disable a selected repository for immutable releases in an organization / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/immutable-releases/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="enable-or-disable-a-security-feature-for-an-organization" title="Enable or disable a security feature for an organization">Enable or disable a security feature for an organization<a href="#enable-or-disable-a-security-feature-for-an-organization" aria-label="Link to heading 'Enable or disable a security feature for an organization'" data-heading-content="Enable or disable a security feature for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/{security_product}/{enablement}
+</span></code></pre>
+<p>Warning</p>
+<p>Closing down notice: The ability to enable or disable a security feature for all eligible repositories in an organization is closing down. Please use code security configurations instead. For more information, see the changelog.</p>
+<p>Enables or disables the specified security feature for all eligible repositories in an organization. For more information, see "Managing security managers in your organization."<br>
+The authenticated user must be an organization owner or be member of a team with the security manager role to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org, write:org, or repo scopes to use this endpoint.</p>
+<h3 id="parameters-11" title="Enable or disable a security feature for an organization / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>security_product</code></strong> (string) (required)<br>
+The security feature to enable or disable.<br>
+Can be one of: <code>dependency_graph</code>, <code>dependabot_alerts</code>, <code>dependabot_security_updates</code>, <code>advanced_security</code>, <code>code_scanning_default_setup</code>, <code>secret_scanning</code>, <code>secret_scanning_push_protection</code></p>
+</li>
+<li>
+<p><strong><code>enablement</code></strong> (string) (required)<br>
+The action to take.<br>
+enable_all means to enable the specified security feature for all repositories in the organization.<br>
+disable_all means to disable the specified security feature for all repositories in the organization.<br>
+Can be one of: <code>enable_all</code>, <code>disable_all</code></p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>query_suite</code></strong> (string)<br>
+CodeQL query suite to be used. If you specify the query_suite parameter, the default setup will be configured with this query suite only on all repositories that didn't have default setup already configured. It will not change the query suite on repositories that already have default setup configured.<br>
+If you don't specify any query_suite in your request, the preferred query suite of the organization will be applied.<br>
+Can be one of: <code>default</code>, <code>extended</code></li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Enable or disable a security feature for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Action started</p>
+</li>
+<li>
+<p><strong>422</strong> - The action could not be taken due to an in progress enablement, or a policy is preventing enablement</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Enable or disable a security feature for an organization / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/SECURITY_PRODUCT/ENABLEMENT
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-organizations-for-the-authenticated-user" title="List organizations for the authenticated user">List organizations for the authenticated user<a href="#list-organizations-for-the-authenticated-user" aria-label="Link to heading 'List organizations for the authenticated user'" data-heading-content="List organizations for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/orgs
+</span></code></pre>
+<p>List organizations for the authenticated user.<br>
+For OAuth app tokens and personal access tokens (classic), this endpoint only lists organizations that your authorization allows you to operate on in some way (e.g., you can list teams with read:org scope, you can publicize your organization membership with user scope, etc.). Therefore, this API requires at least user or read:org scope for OAuth app tokens and personal access tokens (classic). Requests with insufficient scope will receive a 403 Forbidden response.<br>
+Note</p>
+<p>Requests using a fine-grained access token will receive a 200 Success response with an empty list.</p>
+<h3 id="parameters-12" title="List organizations for the authenticated user / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="List organizations for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="List organizations for the authenticated user / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/orgs
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-organizations">List organizations</a>.</p>
+<h2 id="list-organizations-for-a-user" title="List organizations for a user">List organizations for a user<a href="#list-organizations-for-a-user" aria-label="Link to heading 'List organizations for a user'" data-heading-content="List organizations for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/orgs
+</span></code></pre>
+<p>List public organization memberships for the specified user.<br>
+This method only lists public memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the List organizations for the authenticated user API instead.</p>
+<h3 id="parameters-13" title="List organizations for a user / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="List organizations for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-13" title="List organizations for a user / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/orgs
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-organizations">List organizations</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

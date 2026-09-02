@@ -1,0 +1,674 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Breaking changes</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">About the REST API</a> / </nav><h1 id="breaking-changes">Breaking changes<a href="#breaking-changes" aria-label="Link to heading 'Breaking changes'" data-heading-content="Breaking changes" class="anchor"></a></h1>
+<p>Learn about breaking changes that were introduced in each REST API version.</p>
+<h2 id="about-breaking-changes-in-the-rest-api" title="About breaking changes in the REST API">About breaking changes in the REST API<a href="#about-breaking-changes-in-the-rest-api" aria-label="Link to heading 'About breaking changes in the REST API'" data-heading-content="About breaking changes in the REST API" class="anchor"></a></h2>
+<p>The GitHub REST API is versioned. The API version name is based on the date when the API version was released. For example, the API version <code>2026-03-10</code> was released on Tue, 10 Mar 2026.</p>
+<p>Breaking changes are changes that can potentially break an integration. Breaking changes will be released in a new API version. We will provide advance notice before releasing breaking changes. Breaking changes include:</p>
+<ul>
+<li>Removing an entire operation</li>
+<li>Removing or renaming a parameter</li>
+<li>Removing or renaming a response field</li>
+<li>Adding a new required parameter</li>
+<li>Making a previously optional parameter required</li>
+<li>Changing the type of a parameter or response field</li>
+<li>Removing enum values</li>
+<li>Adding a new validation rule to an existing parameter</li>
+<li>Changing authentication or authorization requirements</li>
+</ul>
+<p>Any additive (non-breaking) changes will be available in all supported API versions. Additive changes are changes that should not break an integration. Additive changes include:</p>
+<ul>
+<li>Adding an operation</li>
+<li>Adding an optional parameter</li>
+<li>Adding an optional request header</li>
+<li>Adding a response field</li>
+<li>Adding a response header</li>
+<li>Adding enum values</li>
+</ul>
+<p>When a new REST API version is released, the previous API version will be supported for at least 24 more months following the release of the new API version.</p>
+<p>For more information about API versions, see <a href="api-versions.html">API Versions</a>.</p>
+<h2 id="upgrading-to-a-new-api-version" title="Upgrading to a new API version">Upgrading to a new API version<a href="#upgrading-to-a-new-api-version" aria-label="Link to heading 'Upgrading to a new API version'" data-heading-content="Upgrading to a new API version" class="anchor"></a></h2>
+<p>Before upgrading to a new REST API version, you should read the section on this page that corresponds to the new API version to understand what breaking changes are included and to learn more about how to upgrade to that API version.</p>
+<p>When you update your integration to specify the new API version in the <code>X-GitHub-Api-Version</code> header, you'll also need to make any changes required for your integration to work with the new API version.</p>
+<p>Once your integration is updated, test your integration to verify that it works with the new API version.</p>
+<!-- markdownlint-disable liquid-quoted-conditional-arg search-replace GHD046 -->
+<h2 id="version-2026-03-10" title="Version 2026-03-10">Version 2026-03-10<a href="#version-2026-03-10" aria-label="Link to heading 'Version 2026-03-10'" data-heading-content="Version 2026-03-10" class="anchor"></a></h2>
+<ul>
+<li>
+<p><strong>Remove deprecated <code>rate</code> property from rate limit endpoint</strong><br>
+The <code>rate</code> property has been deprecated since 2021 and duplicates information<br>
+available in the <code>resources.core</code> property. To migrate, update your integration<br>
+to read rate limit information from <code>resources.core</code> instead of <code>rate</code>.</p>
+<p>See <a href="https://docs.github.com/rest/rate-limit" class="external">https://docs.github.com/rest/rate-limit</a> for updated documentation.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /rate_limit</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove deprecated <code>permission</code> property from request when a team is created</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>POST /orgs/{org}/teams</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Updates the "Get repository content" API, so that, when listing the contents of a directory, submodules have the <code>type</code> "submodule" instead of the <code>type</code> "file"</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /repos/{owner}/{repo}/contents/{path}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change Content-Type of SARIF response</strong><br>
+When trying to receive the SARIF upload by setting the <code>Accept</code> header to <code>application/sarif+json</code> the response <code>Content-Type</code> would incorrectly be set to <code>application/json+sarif</code>.<br>
+This change corrects this so the response <code>Content-Type</code> in this case becomes <code>application/sarif+json</code>.</p>
+<p>For more information, see "<a href="https://docs.github.com/rest/code-scanning/code-scanning#get-a-code-scanning-analysis-for-a-repository" class="external">Get a code scanning analysis for a repository</a>" in the REST API documentation.</p>
+</li>
+<li>
+<p><strong>Remove deprecated <code>use_squash_pr_title_as_default</code> property from repo settings endpoints</strong><br>
+This property has been replaced by <code>squash_merge_commit_title</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>GET /events</code></li>
+<li><code>GET /installation/repositories</code></li>
+<li><code>GET /issues</code></li>
+<li><code>GET /networks/{owner}/{repo}/events</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories</code></li>
+<li><code>GET /orgs/{org}/events</code></li>
+<li><code>GET /orgs/{org}/issues</code></li>
+<li><code>GET /orgs/{org}/migrations</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events/{event_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/parent</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/timeline</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>GET /search/issues</code></li>
+<li><code>GET /teams/{team_id}/repos/{owner}/{repo}</code></li>
+<li><code>GET /user/installations/{installation_id}/repositories</code></li>
+<li><code>GET /user/issues</code></li>
+<li><code>GET /user/migrations</code></li>
+<li><code>GET /user/migrations/{migration_id}</code></li>
+<li><code>GET /user/repos</code></li>
+<li><code>GET /user/starred</code></li>
+<li><code>GET /users/{username}/events</code></li>
+<li><code>GET /users/{username}/events/orgs/{org}</code></li>
+<li><code>GET /users/{username}/events/public</code></li>
+<li><code>GET /users/{username}/received_events</code></li>
+<li><code>GET /users/{username}/received_events/public</code></li>
+<li><code>GET /users/{username}/starred</code></li>
+<li><code>PATCH /repos/{owner}/{repo}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>POST /app/installations/{installation_id}/access_tokens</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/registration-token</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/remove-token</code></li>
+<li><code>POST /orgs/{org}/actions/runners/registration-token</code></li>
+<li><code>POST /orgs/{org}/actions/runners/remove-token</code></li>
+<li><code>POST /orgs/{org}/migrations</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/items</code></li>
+<li><code>POST /orgs/{org}/repos</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/registration-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/remove-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/forks</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks</code></li>
+<li><code>POST /repos/{template_owner}/{template_repo}/generate</code></li>
+<li><code>POST /user/codespaces/{codespace_name}/publish</code></li>
+<li><code>POST /user/migrations</code></li>
+<li><code>POST /user/repos</code></li>
+<li><code>POST /user/{user_id}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /users/{username}/projectsV2/{project_number}/items</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove <code>authorizations_url</code> from the API root (<code>GET /</code>)</strong><br>
+The OAuth Authorization API has been <a href="https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/" class="external">deprecated since 2020</a>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Deprecate support for the <code>beta</code> media type</strong><br>
+This media type was officially deprecated in 2014. However, there are still remnants<br>
+of its use that modify response payloads. The following response properties are<br>
+deprecated as a result:</p>
+<ul>
+<li><code>emails</code> response as a flat array of strings instead of email objects</li>
+<li><code>pull_request</code> response property with <code>null</code> default values</li>
+<li><code>user</code> response property, replaced by <code>owner</code></li>
+<li><code>master_branch</code> response property, replaced by <code>default_branch</code></li>
+</ul>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>GET /events</code></li>
+<li><code>GET /gists</code></li>
+<li><code>GET /gists/public</code></li>
+<li><code>GET /gists/starred</code></li>
+<li><code>GET /installation/repositories</code></li>
+<li><code>GET /issues</code></li>
+<li><code>GET /networks/{owner}/{repo}/events</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories</code></li>
+<li><code>GET /orgs/{org}/events</code></li>
+<li><code>GET /orgs/{org}/issues</code></li>
+<li><code>GET /orgs/{org}/migrations</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events/{event_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/parent</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/timeline</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>GET /search/issues</code></li>
+<li><code>GET /teams/{team_id}/repos/{owner}/{repo}</code></li>
+<li><code>GET /user/installations/{installation_id}/repositories</code></li>
+<li><code>GET /user/issues</code></li>
+<li><code>GET /user/migrations</code></li>
+<li><code>GET /user/migrations/{migration_id}</code></li>
+<li><code>GET /user/repos</code></li>
+<li><code>GET /user/starred</code></li>
+<li><code>GET /users/{username}/events</code></li>
+<li><code>GET /users/{username}/events/orgs/{org}</code></li>
+<li><code>GET /users/{username}/events/public</code></li>
+<li><code>GET /users/{username}/gists</code></li>
+<li><code>GET /users/{username}/received_events</code></li>
+<li><code>GET /users/{username}/received_events/public</code></li>
+<li><code>GET /users/{username}/starred</code></li>
+<li><code>PATCH /repos/{owner}/{repo}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>POST /app/installations/{installation_id}/access_tokens</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/registration-token</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/remove-token</code></li>
+<li><code>POST /gists/{gist_id}/forks</code></li>
+<li><code>POST /orgs/{org}/actions/runners/registration-token</code></li>
+<li><code>POST /orgs/{org}/actions/runners/remove-token</code></li>
+<li><code>POST /orgs/{org}/migrations</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/items</code></li>
+<li><code>POST /orgs/{org}/repos</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/registration-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/remove-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/forks</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks</code></li>
+<li><code>POST /repos/{template_owner}/{template_repo}/generate</code></li>
+<li><code>POST /user/codespaces/{codespace_name}/publish</code></li>
+<li><code>POST /user/migrations</code></li>
+<li><code>POST /user/repos</code></li>
+<li><code>POST /user/{user_id}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /users/{username}/projectsV2/{project_number}/items</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>This changeset removes the underspecified fields <code>history</code> and <code>forks</code> from the base-gist object</strong><br>
+These properties were unintentionally added when we converted JSON schemas to OpenAPI. The<br>
+properties appear in resources such as "gist revisions" and "update gist" but should not<br>
+be implemented in the base gist object.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /gists</code></li>
+<li><code>GET /gists/public</code></li>
+<li><code>GET /gists/starred</code></li>
+<li><code>GET /gists/{gist_id}</code></li>
+<li><code>GET /gists/{gist_id}/forks</code></li>
+<li><code>GET /gists/{gist_id}/{sha}</code></li>
+<li><code>GET /users/{username}/gists</code></li>
+<li><code>PATCH /gists/{gist_id}</code></li>
+<li><code>POST /gists</code></li>
+<li><code>POST /gists/{gist_id}/forks</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change success status code from <code>204</code> to <code>202</code> for deleting an installation</strong><br>
+The installation deletion is being moved to the background</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /app/installations/{installation_id}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove <code>secret_scanning_push_protection_custom_link_enabled</code> from the organization request and response</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /orgs/{org}</code></li>
+<li><code>PATCH /orgs/{org}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove <code>javascript</code> and <code>typescript</code> values from the <code>languages</code> enum in code scanning default setup responses, in favor of <code>javascript-typescript</code></strong><br>
+JavaScript and TypeScript are analyzed together by CodeQL, so having separate enum values was misleading and inconsistent with how the analysis actually works. This breaking change removes the individual "javascript" and "typescript" values in favor of the combined "javascript-typescript" value that accurately represents the unified analysis.</p>
+<p>For more information, see "<a href="https://docs.github.com/rest/code-scanning/code-scanning#get-a-code-scanning-default-setup-configuration" class="external">Get a code scanning default setup configuration</a>" in the REST API documentation and the related <a href="https://github.com/github/codeql-action/blob/main/CHANGELOG.md#2218---19-sep-2023" class="external"><code>codeql-action</code> CHANGELOG</a>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /repos/{owner}/{repo}/code-scanning/default-setup</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove deprecated <code>has_downloads</code> property from Repository response</strong><br>
+<code>has_downloads</code> has been deprecated for 10+ years</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>GET /events</code></li>
+<li><code>GET /installation/repositories</code></li>
+<li><code>GET /issues</code></li>
+<li><code>GET /networks/{owner}/{repo}/events</code></li>
+<li><code>GET /notifications</code></li>
+<li><code>GET /notifications/threads/{thread_id}</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/secrets/{secret_name}/repositories</code></li>
+<li><code>GET /orgs/{org}/actions/variables/{name}/repositories</code></li>
+<li><code>GET /orgs/{org}/codespaces</code></li>
+<li><code>GET /orgs/{org}/codespaces/secrets/{secret_name}/repositories</code></li>
+<li><code>GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories</code></li>
+<li><code>GET /orgs/{org}/docker/conflicts</code></li>
+<li><code>GET /orgs/{org}/events</code></li>
+<li><code>GET /orgs/{org}/issues</code></li>
+<li><code>GET /orgs/{org}/members/{username}/codespaces</code></li>
+<li><code>GET /orgs/{org}/migrations</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}/repositories</code></li>
+<li><code>GET /orgs/{org}/packages</code></li>
+<li><code>GET /orgs/{org}/packages/{package_type}/{package_name}</code></li>
+<li><code>GET /orgs/{org}/personal-access-token-requests/{pat_request_id}/repositories</code></li>
+<li><code>GET /orgs/{org}/personal-access-tokens/{pat_id}/repositories</code></li>
+<li><code>GET /orgs/{org}/repos</code></li>
+<li><code>GET /orgs/{org}/settings/immutable-releases/repositories</code></li>
+<li><code>GET /orgs/{org}/teams/{team_slug}/repos</code></li>
+<li><code>GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}</code></li>
+<li><code>GET /repos/{owner}/{repo}</code></li>
+<li><code>GET /repos/{owner}/{repo}/actions/runs</code></li>
+<li><code>GET /repos/{owner}/{repo}/actions/runs/{run_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs</code></li>
+<li><code>GET /repos/{owner}/{repo}/check-suites/{check_suite_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/codespaces</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{ref}/check-suites</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{ref}/status</code></li>
+<li><code>GET /repos/{owner}/{repo}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/forks</code></li>
+<li><code>GET /repos/{owner}/{repo}/invitations</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events/{event_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/parent</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/timeline</code></li>
+<li><code>GET /repos/{owner}/{repo}/notifications</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>GET /repositories</code></li>
+<li><code>GET /search/code</code></li>
+<li><code>GET /search/commits</code></li>
+<li><code>GET /search/issues</code></li>
+<li><code>GET /teams/{team_id}/repos</code></li>
+<li><code>GET /teams/{team_id}/repos/{owner}/{repo}</code></li>
+<li><code>GET /user/codespaces</code></li>
+<li><code>GET /user/codespaces/secrets/{secret_name}/repositories</code></li>
+<li><code>GET /user/codespaces/{codespace_name}</code></li>
+<li><code>GET /user/docker/conflicts</code></li>
+<li><code>GET /user/installations/{installation_id}/repositories</code></li>
+<li><code>GET /user/issues</code></li>
+<li><code>GET /user/migrations</code></li>
+<li><code>GET /user/migrations/{migration_id}</code></li>
+<li><code>GET /user/migrations/{migration_id}/repositories</code></li>
+<li><code>GET /user/packages</code></li>
+<li><code>GET /user/packages/{package_type}/{package_name}</code></li>
+<li><code>GET /user/repos</code></li>
+<li><code>GET /user/repository_invitations</code></li>
+<li><code>GET /user/starred</code></li>
+<li><code>GET /user/subscriptions</code></li>
+<li><code>GET /users/{username}/docker/conflicts</code></li>
+<li><code>GET /users/{username}/events</code></li>
+<li><code>GET /users/{username}/events/orgs/{org}</code></li>
+<li><code>GET /users/{username}/events/public</code></li>
+<li><code>GET /users/{username}/packages</code></li>
+<li><code>GET /users/{username}/packages/{package_type}/{package_name}</code></li>
+<li><code>GET /users/{username}/received_events</code></li>
+<li><code>GET /users/{username}/received_events/public</code></li>
+<li><code>GET /users/{username}/repos</code></li>
+<li><code>GET /users/{username}/starred</code></li>
+<li><code>GET /users/{username}/subscriptions</code></li>
+<li><code>PATCH /repos/{owner}/{repo}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/check-suites/preferences</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/invitations/{invitation_id}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>PATCH /user/codespaces/{codespace_name}</code></li>
+<li><code>POST /app/installations/{installation_id}/access_tokens</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/registration-token</code></li>
+<li><code>POST /enterprises/{enterprise}/actions/runners/remove-token</code></li>
+<li><code>POST /orgs/{org}/actions/runners/registration-token</code></li>
+<li><code>POST /orgs/{org}/actions/runners/remove-token</code></li>
+<li><code>POST /orgs/{org}/members/{username}/codespaces/{codespace_name}/stop</code></li>
+<li><code>POST /orgs/{org}/migrations</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/items</code></li>
+<li><code>POST /orgs/{org}/repos</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/registration-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/actions/runners/remove-token</code></li>
+<li><code>POST /repos/{owner}/{repo}/check-suites</code></li>
+<li><code>POST /repos/{owner}/{repo}/codespaces</code></li>
+<li><code>POST /repos/{owner}/{repo}/forks</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>POST /repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks</code></li>
+<li><code>POST /repos/{owner}/{repo}/transfer</code></li>
+<li><code>POST /repos/{template_owner}/{template_repo}/generate</code></li>
+<li><code>POST /user/codespaces</code></li>
+<li><code>POST /user/codespaces/{codespace_name}/publish</code></li>
+<li><code>POST /user/codespaces/{codespace_name}/start</code></li>
+<li><code>POST /user/codespaces/{codespace_name}/stop</code></li>
+<li><code>POST /user/migrations</code></li>
+<li><code>POST /user/repos</code></li>
+<li><code>POST /user/{user_id}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /users/{username}/projectsV2/{project_number}/items</code></li>
+<li><code>PUT /repos/{owner}/{repo}/collaborators/{username}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change create repository response from <code>422</code> to <code>451</code> when blocked by trade controls</strong><br>
+Repository creation requests where the creator or owner is subject to trade control regulations<br>
+now return <code>451 Unavailable For Legal Reasons</code> instead of <code>422 Unprocessable Entity</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>POST /orgs/{org}/repos</code></li>
+<li><code>POST /user/repos</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change delete organization response from <code>403</code> to <code>451</code> when blocked by trade controls</strong><br>
+Organization deletion requests blocked by trade controls now return <code>451 Unavailable For Legal Reasons</code> instead of <code>403 Forbidden</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /orgs/{org}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change remove organization member response from <code>403</code> to <code>451</code> when blocked by trade controls</strong><br>
+Requests to remove a member from a trade-controlled organization now return <code>451 Unavailable For Legal Reasons</code> instead of <code>403 Forbidden</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /orgs/{org}/members/{username}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change update organization membership response from <code>403</code> to <code>451</code> when blocked by trade controls</strong><br>
+Membership update requests for trade-controlled organizations now return <code>451 Unavailable For Legal Reasons</code> instead of <code>403 Forbidden</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>PUT /orgs/{org}/memberships/{username}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change accept repository invitation response from <code>403</code> to <code>451</code> when blocked by trade controls</strong><br>
+Repository invitation acceptance blocked by trade controls now returns <code>451 Unavailable For Legal Reasons</code> instead of <code>403 Forbidden</code>.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>PATCH /user/repository_invitations/{invitation_id}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove deprecated <code>hub_url</code> property from API root response</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Deprecate <code>cvss</code> property in favor of <code>cvss_severities</code> for advisory APIs</strong><br>
+The <code>cvss_severities</code> property will supplant the existing <code>cvss</code> property and contain <code>cvss_v3</code> and <code>cvss_v4</code> properties if they exist on the advisory.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /advisories</code></li>
+<li><code>GET /advisories/{ghsa_id}</code></li>
+<li><code>GET /enterprises/{enterprise}/dependabot/alerts</code></li>
+<li><code>GET /orgs/{org}/dependabot/alerts</code></li>
+<li><code>GET /orgs/{org}/security-advisories</code></li>
+<li><code>GET /repos/{owner}/{repo}/dependabot/alerts</code></li>
+<li><code>GET /repos/{owner}/{repo}/dependabot/alerts/{alert_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/security-advisories</code></li>
+<li><code>GET /repos/{owner}/{repo}/security-advisories/{ghsa_id}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/dependabot/alerts/{alert_number}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/security-advisories/{ghsa_id}</code></li>
+<li><code>POST /repos/{owner}/{repo}/security-advisories</code></li>
+<li><code>POST /repos/{owner}/{repo}/security-advisories/reports</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove repository detail fields from migration resource responses</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /orgs/{org}/migrations</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}</code></li>
+<li><code>GET /orgs/{org}/migrations/{migration_id}/repositories</code></li>
+<li><code>GET /user/migrations</code></li>
+<li><code>GET /user/migrations/{migration_id}</code></li>
+<li><code>GET /user/migrations/{migration_id}/repositories</code></li>
+<li><code>POST /orgs/{org}/migrations</code></li>
+<li><code>POST /user/migrations</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove deprecated <code>/hub</code> endpoint</strong></p>
+</li>
+<li>
+<p><strong>Remove <code>merge_commit_sha</code> field from pull request responses</strong><br>
+The <code>merge_commit_sha</code> property is removed from pull request payloads across all endpoints that return pull request objects.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>GET /events</code></li>
+<li><code>GET /networks/{owner}/{repo}/events</code></li>
+<li><code>GET /orgs/{org}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>GET /users/{username}/events</code></li>
+<li><code>GET /users/{username}/events/orgs/{org}</code></li>
+<li><code>GET /users/{username}/events/public</code></li>
+<li><code>GET /users/{username}/received_events</code></li>
+<li><code>GET /users/{username}/received_events/public</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/items</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>POST /user/{user_id}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /users/{username}/projectsV2/{project_number}/items</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change workflow dispatch response from <code>204</code> to <code>200</code> with workflow run details</strong><br>
+Removes the <code>return_run_details</code> parameter. The endpoint now always returns <code>200</code> with the workflow run details in the response body.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove deprecated singular "assignee" field from Issue and Pull Request endpoints</strong><br>
+The singular <code>assignee</code> field has been marked as "closing down" for years and<br>
+duplicates information available in the <code>assignees</code> array. To migrate, update<br>
+your integration to:</p>
+<ul>
+<li>Use the <code>assignees</code> array parameter instead of the singular <code>assignee</code><br>
+parameter when creating or updating Issues.</li>
+<li>Read assignee information from the <code>assignees</code> array instead of the singular<br>
+<code>assignee</code> property in Issue and Pull Request responses.</li>
+</ul>
+<p>See <a href="https://docs.github.com/rest/issues/issues" class="external">https://docs.github.com/rest/issues/issues</a> for updated documentation.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/issues/{issue_number}/sub_issue</code></li>
+<li><code>DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>GET /events</code></li>
+<li><code>GET /issues</code></li>
+<li><code>GET /networks/{owner}/{repo}/events</code></li>
+<li><code>GET /orgs/{org}/events</code></li>
+<li><code>GET /orgs/{org}/issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/events/{event_id}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocking</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/parent</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>GET /repos/{owner}/{repo}/issues/{issue_number}/timeline</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls</code></li>
+<li><code>GET /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>GET /search/issues</code></li>
+<li><code>GET /user/issues</code></li>
+<li><code>GET /users/{username}/events</code></li>
+<li><code>GET /users/{username}/events/orgs/{org}</code></li>
+<li><code>GET /users/{username}/events/public</code></li>
+<li><code>GET /users/{username}/received_events</code></li>
+<li><code>GET /users/{username}/received_events/public</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority</code></li>
+<li><code>PATCH /repos/{owner}/{repo}/pulls/{pull_number}</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /orgs/{org}/projectsV2/{project_number}/items</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/assignees</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by</code></li>
+<li><code>POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls</code></li>
+<li><code>POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers</code></li>
+<li><code>POST /user/{user_id}/projectsV2/{project_number}/drafts</code></li>
+<li><code>POST /users/{username}/projectsV2/{project_number}/items</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Change <code>selected_repository_ids</code> parameter to only accept integers for Dependabot org secrets</strong></p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>PUT /orgs/{org}/dependabot/secrets/{secret_name}</code></li>
+</ul>
+</details>
+</li>
+<li>
+<p><strong>Remove the <code>bundle</code> property from attestation list responses</strong><br>
+The <code>bundle</code> field is removed from repo, org, and user attestation list and bulk-list responses. Use <code>bundle_url</code> to retrieve the attestation bundle.</p>
+<details>
+<summary><strong>Affected endpoints</strong></summary>
+<ul>
+<li><code>GET /orgs/{org}/attestations/{subject_digest}</code></li>
+<li><code>GET /repos/{owner}/{repo}/attestations/{subject_digest}</code></li>
+<li><code>GET /users/{username}/attestations/{subject_digest}</code></li>
+<li><code>POST /orgs/{org}/attestations/bulk-list</code></li>
+<li><code>POST /users/{username}/attestations/bulk-list</code></li>
+</ul>
+</details>
+</li>
+</ul>
+<h2 id="version-2022-11-28" title="Version 2022-11-28">Version 2022-11-28<a href="#version-2022-11-28" aria-label="Link to heading 'Version 2022-11-28'" data-heading-content="Version 2022-11-28" class="anchor"></a></h2>
+<p>Version <code>2022-11-28</code> is the first version of the GitHub Free, Pro &amp; Team REST API after date-based versioning was introduced. This version does not include any breaking changes.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub App installations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Apps</a> / </nav><h1 id="rest-api-endpoints-for-github-app-installations">REST API endpoints for GitHub App installations<a href="#rest-api-endpoints-for-github-app-installations" aria-label="Link to heading 'REST API endpoints for GitHub App installations'" data-heading-content="REST API endpoints for GitHub App installations" class="anchor"></a></h1>
+<p>Use the REST API to get information about GitHub App installations and perform actions within those installations.</p>
+<h2 id="about-github-app-installations" title="About GitHub App installations">About GitHub App installations<a href="#about-github-app-installations" aria-label="Link to heading 'About GitHub App installations'" data-heading-content="About GitHub App installations" class="anchor"></a></h2>
+<p>A GitHub App installation refers to the installation of the app on an organization or user account. For information on how to authenticate as an installation and limit access to specific repositories, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation" class="external">Authenticating as a GitHub App installation</a>.</p>
+<p>To list all GitHub App installations for an organization, see <a href="../orgs/orgs.html#list-app-installations-for-an-organization">REST API endpoints for organizations</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-repositories-accessible-to-the-app-installation" title="List repositories accessible to the app installation">List repositories accessible to the app installation<a href="#list-repositories-accessible-to-the-app-installation" aria-label="Link to heading 'List repositories accessible to the app installation'" data-heading-content="List repositories accessible to the app installation" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /installation/repositories
+</span></code></pre>
+<p>List repositories that an app installation can access.</p>
+<h3 id="parameters" title="List repositories accessible to the app installation / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List repositories accessible to the app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List repositories accessible to the app installation / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/installation/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>repositories</code>: required, array of object</li>
+<li><code>repository_selection</code>: string</li>
+</ul>
+<h2 id="revoke-an-installation-access-token" title="Revoke an installation access token">Revoke an installation access token<a href="#revoke-an-installation-access-token" aria-label="Link to heading 'Revoke an installation access token'" data-heading-content="Revoke an installation access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /installation/token
+</span></code></pre>
+<p>Revokes the installation token you're using to authenticate as an installation and access this endpoint.<br>
+Once an installation token is revoked, the token is invalidated and cannot be used. Other endpoints that require the revoked installation token must have a new installation token to work. You can create a new token using the "Create an installation access token for an app" endpoint.</p>
+<h3 id="http-response-status-codes-1" title="Revoke an installation access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-1" title="Revoke an installation access token / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/installation/token
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-app-installations-accessible-to-the-user-access-token" title="List app installations accessible to the user access token">List app installations accessible to the user access token<a href="#list-app-installations-accessible-to-the-user-access-token" aria-label="Link to heading 'List app installations accessible to the user access token'" data-heading-content="List app installations accessible to the user access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/installations
+</span></code></pre>
+<p>Lists installations of your GitHub App that the authenticated user has explicit permission (:read, :write, or :admin) to access.<br>
+The authenticated user has explicit permission to access repositories they own, repositories where they are a collaborator, and repositories that they can access through an organization membership.<br>
+You can find the permissions for the installation under the permissions key.</p>
+<h3 id="parameters-1" title="List app installations accessible to the user access token / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List app installations accessible to the user access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - You can find the permissions for the installation under the permissions key.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List app installations accessible to the user access token / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/installations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>installations</code>: required, array of <code>Installation</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>account</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>access_tokens_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>app_id</code>: required, integer</li>
+<li><code>client_id</code>: string</li>
+<li><code>target_id</code>: required, integer</li>
+<li><code>target_type</code>: required, string</li>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>app_slug</code>: required, string</li>
+<li><code>suspended_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>suspended_at</code>: required, string or null, format: date-time</li>
+<li><code>contact_email</code>: string or null</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-repositories-accessible-to-the-user-access-token" title="List repositories accessible to the user access token">List repositories accessible to the user access token<a href="#list-repositories-accessible-to-the-user-access-token" aria-label="Link to heading 'List repositories accessible to the user access token'" data-heading-content="List repositories accessible to the user access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/installations/{installation_id}/repositories
+</span></code></pre>
+<p>List repositories that the authenticated user has explicit permission (:read, :write, or :admin) to access for an installation.<br>
+The authenticated user has explicit permission to access repositories they own, repositories where they are a collaborator, and repositories that they can access through an organization membership.<br>
+The access the user has to each repository is included in the hash under the permissions key.</p>
+<h3 id="parameters-2" title="List repositories accessible to the user access token / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="List repositories accessible to the user access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - The access the user has to each repository is included in the hash under the permissions key.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="List repositories accessible to the user access token / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/installations/1/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>repository_selection</code>: string</li>
+<li><code>repositories</code>: required, array of object</li>
+</ul>
+<h2 id="add-a-repository-to-an-app-installation" title="Add a repository to an app installation">Add a repository to an app installation<a href="#add-a-repository-to-an-app-installation" aria-label="Link to heading 'Add a repository to an app installation'" data-heading-content="Add a repository to an app installation" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /user/installations/{installation_id}/repositories/{repository_id}
+</span></code></pre>
+<p>Add a single repository to an installation. The authenticated user must have admin access to the repository.<br>
+This endpoint only works for PATs (classic) with the repo scope.</p>
+<h3 id="parameters-3" title="Add a repository to an app installation / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Add a repository to an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Add a repository to an app installation / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/installations/1/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="remove-a-repository-from-an-app-installation" title="Remove a repository from an app installation">Remove a repository from an app installation<a href="#remove-a-repository-from-an-app-installation" aria-label="Link to heading 'Remove a repository from an app installation'" data-heading-content="Remove a repository from an app installation" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/installations/{installation_id}/repositories/{repository_id}
+</span></code></pre>
+<p>Remove a single repository from an installation. The authenticated user must have admin access to the repository. The installation must have the repository<span data-escaped-char="">_</span>selection of selected.<br>
+This endpoint only works for PATs (classic) with the repo scope.</p>
+<h3 id="parameters-4" title="Remove a repository from an app installation / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Remove a repository from an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Returned when the application is installed on all repositories in the organization, or if this request would remove the last repository that the application has access to in the organization.</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Remove a repository from an app installation / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/installations/1/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

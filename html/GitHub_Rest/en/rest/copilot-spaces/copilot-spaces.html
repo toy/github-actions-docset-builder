@@ -1,0 +1,926 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Copilot Spaces</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Copilot Spaces</a> / </nav><h1 id="rest-api-endpoints-for-copilot-spaces">REST API endpoints for Copilot Spaces<a href="#rest-api-endpoints-for-copilot-spaces" aria-label="Link to heading 'REST API endpoints for Copilot Spaces'" data-heading-content="REST API endpoints for Copilot Spaces" class="anchor"></a></h1>
+<p>Use the REST API to manage Copilot Spaces and related resources.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-organization-copilot-spaces" title="List organization Copilot Spaces">List organization Copilot Spaces<a href="#list-organization-copilot-spaces" aria-label="Link to heading 'List organization Copilot Spaces'" data-heading-content="List organization Copilot Spaces" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/copilot-spaces
+</span></code></pre>
+<p>Lists Copilot Spaces owned by an organization. The authenticated user must have read access to the organization's Copilot Spaces.<br>
+Only Spaces that are readable by the authenticated user are returned. This includes public Spaces and internal Spaces if the user is a member of the organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.<br>
+Fine-grained tokens and GitHub App user access tokens must have been granted access to the organization that owns the space. They must also have been granted access to every repository referenced by resources in a space; spaces with inaccessible resources are omitted from the response.</p>
+<h3 id="parameters" title="List organization Copilot Spaces / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100).<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List organization Copilot Spaces / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List organization Copilot Spaces / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot-spaces
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>spaces</code>: required, array of <code>Space</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>number</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: string or null</li>
+<li><code>general_instructions</code>: string or null, maxLength: 4000</li>
+<li><code>base_role</code>: required, string, enum: <code>reader</code>, <code>writer</code>, <code>admin</code>, <code>no_access</code></li>
+<li><code>owner</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Organization Simple</strong>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>api_url</code>: required, string, format: uri</li>
+<li><code>resources_attributes</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+<li><code>resource_type</code>: string, enum: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><code>copilot_chat_attachment_id</code>: integer or null, format: int64</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>metadata</code>: object:
+<ul>
+<li><code>repository_id</code>: integer</li>
+<li><code>file_path</code>: string</li>
+<li><code>text</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>number</code>: integer</li>
+<li><code>copilot_chat_attachment_id</code>: integer</li>
+<li><code>media_type</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>height</code>: integer</li>
+<li><code>width</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-an-organization-copilot-space" title="Create an organization Copilot Space">Create an organization Copilot Space<a href="#create-an-organization-copilot-space" aria-label="Link to heading 'Create an organization Copilot Space'" data-heading-content="Create an organization Copilot Space" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/copilot-spaces
+</span></code></pre>
+<p>Creates a new Copilot Space owned by an organization. The authenticated user must have permissions to create spaces in the organization.<br>
+Organization members with appropriate permissions can create Copilot Spaces to be shared within their organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.<br>
+Fine-grained tokens and GitHub App user access tokens must have been granted access to the organization that owns the space. They must also have been granted access to every repository referenced by the submitted resources.</p>
+<h3 id="parameters-1" title="Create an organization Copilot Space / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>general_instructions</code></strong> (string)<br>
+General instructions for the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>base_role</code></strong> (string)<br>
+The base role that determines default permissions for organization members.</p>
+</li>
+</ul>
+<p>no_access: No default access (default)<br>
+reader: Organization members can read the space<br>
+writer: Organization members can read and edit the space<br>
+admin: Organization members have full admin access to the space<br>
+Default: <code>no_access</code><br>
+Can be one of: <code>reader</code>, <code>writer</code>, <code>admin</code>, <code>no_access</code></p>
+<ul>
+<li><strong><code>resources_attributes</code></strong> (array of objects)<br>
+Resources to attach to the space.
+<ul>
+<li><strong><code>resource_type</code></strong> (string)<br>
+The type of resource.<br>
+Can be one of: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><strong><code>metadata</code></strong> (object)<br>
+Metadata specific to the resource type.
+<ul>
+<li><strong><code>repository_id</code></strong> (integer)<br>
+Repository ID for repository or file resources.</li>
+<li><strong><code>file_path</code></strong> (string)<br>
+File path for file resources.</li>
+<li><strong><code>text</code></strong> (string)<br>
+Text content for free text resources.</li>
+<li><strong><code>name</code></strong> (string)<br>
+Name for the resource.</li>
+<li><strong><code>number</code></strong> (integer)<br>
+Issue or PR number.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create an organization Copilot Space / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create an organization Copilot Space / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot-spaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Team Planning Space",
+</span><span style="color:#c0c5ce;">  "description": "Organization space for team planning and coordination",
+</span><span style="color:#c0c5ce;">  "general_instructions": "Help the team with planning and coordination tasks",
+</span><span style="color:#c0c5ce;">  "resources_attributes": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "github_file",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "repository_id": 123456,
+</span><span style="color:#c0c5ce;">        "file_path": "docs/planning.md"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "free_text",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "name": "Team Guidelines",
+</span><span style="color:#c0c5ce;">        "text": "Our team follows agile methodology and holds daily standups"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>number</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: string or null</li>
+<li><code>general_instructions</code>: string or null, maxLength: 4000</li>
+<li><code>base_role</code>: required, string, enum: <code>reader</code>, <code>writer</code>, <code>admin</code>, <code>no_access</code></li>
+<li><code>owner</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Organization Simple</strong>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>api_url</code>: required, string, format: uri</li>
+<li><code>resources_attributes</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+<li><code>resource_type</code>: string, enum: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><code>copilot_chat_attachment_id</code>: integer or null, format: int64</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>metadata</code>: object:
+<ul>
+<li><code>repository_id</code>: integer</li>
+<li><code>file_path</code>: string</li>
+<li><code>text</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>number</code>: integer</li>
+<li><code>copilot_chat_attachment_id</code>: integer</li>
+<li><code>media_type</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>height</code>: integer</li>
+<li><code>width</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-an-organization-copilot-space" title="Get an organization Copilot Space">Get an organization Copilot Space<a href="#get-an-organization-copilot-space" aria-label="Link to heading 'Get an organization Copilot Space'" data-heading-content="Get an organization Copilot Space" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Gets details about a specific Copilot Space owned by an organization. The authenticated user must have read access to the Space.<br>
+Internal Spaces require the authenticated user to be a member of the organization or have been granted read permissions.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.<br>
+Fine-grained tokens and GitHub App user access tokens must have been granted access to the organization that owns the space. They must also have been granted access to every repository referenced by resources in the space.</p>
+<h3 id="parameters-2" title="Get an organization Copilot Space / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get an organization Copilot Space / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get an organization Copilot Space / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot-spaces/SPACE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-organization-copilot-space">Create an organization Copilot Space</a>.</p>
+<h2 id="set-an-organization-copilot-space" title="Set an organization Copilot Space">Set an organization Copilot Space<a href="#set-an-organization-copilot-space" aria-label="Link to heading 'Set an organization Copilot Space'" data-heading-content="Set an organization Copilot Space" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Updates a Copilot Space owned by an organization. The authenticated user must have permissions to update spaces in the organization.<br>
+Organization members with appropriate permissions can update Copilot Spaces owned by their organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org scope to use this endpoint.<br>
+Fine-grained tokens and GitHub App user access tokens must have been granted access to the organization that owns the space. They must also have been granted access to every repository referenced by resources in the space, including any being added or updated.</p>
+<h3 id="parameters-3" title="Set an organization Copilot Space / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>general_instructions</code></strong> (string)<br>
+General instructions for the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>base_role</code></strong> (string)<br>
+The base role that determines default permissions for organization members. Changing this field requires admin permissions.</p>
+</li>
+</ul>
+<p>no_access: No default access (default)<br>
+reader: Organization members can read the space<br>
+writer: Organization members can read and edit the space<br>
+admin: Organization members have full admin access to the space<br>
+Can be one of: <code>reader</code>, <code>writer</code>, <code>admin</code>, <code>no_access</code></p>
+<ul>
+<li><strong><code>resources_attributes</code></strong> (array of objects)<br>
+Resources to attach to the space.
+<ul>
+<li><strong><code>resource_type</code></strong> (string)<br>
+The type of resource.<br>
+Can be one of: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><strong><code>metadata</code></strong> (object)<br>
+Metadata specific to the resource type.
+<ul>
+<li><strong><code>repository_id</code></strong> (integer)<br>
+Repository ID for repository or file resources.</li>
+<li><strong><code>file_path</code></strong> (string)<br>
+File path for file resources.</li>
+<li><strong><code>text</code></strong> (string)<br>
+Text content for free text resources.</li>
+<li><strong><code>name</code></strong> (string)<br>
+Name for the resource.</li>
+<li><strong><code>number</code></strong> (integer)<br>
+Issue or PR number.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Set an organization Copilot Space / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Set an organization Copilot Space / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot-spaces/SPACE_NUMBER \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Updated Team Planning Space",
+</span><span style="color:#c0c5ce;">  "description": "Updated organization space for team planning and coordination",
+</span><span style="color:#c0c5ce;">  "general_instructions": "Updated instructions to help the team with planning and coordination tasks",
+</span><span style="color:#c0c5ce;">  "resources_attributes": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "github_file",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "repository_id": 123456,
+</span><span style="color:#c0c5ce;">        "file_path": "docs/updated-planning.md"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "id": 789,
+</span><span style="color:#c0c5ce;">      "_destroy": true
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "id": 456,
+</span><span style="color:#c0c5ce;">      "resource_type": "free_text",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "name": "Updated Team Guidelines",
+</span><span style="color:#c0c5ce;">        "text": "Our updated team follows agile methodology and holds daily standups"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-organization-copilot-space">Create an organization Copilot Space</a>.</p>
+<h2 id="delete-an-organization-copilot-space" title="Delete an organization Copilot Space">Delete an organization Copilot Space<a href="#delete-an-organization-copilot-space" aria-label="Link to heading 'Delete an organization Copilot Space'" data-heading-content="Delete an organization Copilot Space" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Deletes a Copilot Space owned by an organization. The authenticated user must have permissions to delete spaces in the organization.<br>
+Warning: This action is permanent and cannot be undone. Deleting a Copilot Space will remove all associated resources and configurations.<br>
+Organization members with appropriate permissions can delete Copilot Spaces owned by their organization.<br>
+OAuth app tokens and personal access tokens (classic) need both the read:org and repo scopes to use this endpoint.<br>
+Fine-grained tokens and GitHub App user access tokens must have been granted access to the organization that owns the space. They must also have been granted access to every repository referenced by resources in the space.</p>
+<h3 id="parameters-4" title="Delete an organization Copilot Space / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete an organization Copilot Space / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - The Copilot Space has been successfully deleted.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Delete an organization Copilot Space / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot-spaces/SPACE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-copilot-spaces-for-a-user" title="List Copilot Spaces for a user">List Copilot Spaces for a user<a href="#list-copilot-spaces-for-a-user" aria-label="Link to heading 'List Copilot Spaces for a user'" data-heading-content="List Copilot Spaces for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/copilot-spaces
+</span></code></pre>
+<p>Lists Copilot Spaces owned by a user. The authenticated user must have read access to the user's Copilot Spaces.<br>
+Only Spaces that are readable by the authenticated user are returned. This includes the user's own spaces, and public user spaces when accessing another user's spaces.<br>
+OAuth app tokens and personal access tokens (classic) need the read:user scope to use this endpoint.</p>
+<h3 id="parameters-5" title="List Copilot Spaces for a user / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100).<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor.</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List Copilot Spaces for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="List Copilot Spaces for a user / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/copilot-spaces
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-organization-copilot-spaces">List organization Copilot Spaces</a>.</p>
+<h2 id="create-a-copilot-space-for-a-user" title="Create a Copilot Space for a user">Create a Copilot Space for a user<a href="#create-a-copilot-space-for-a-user" aria-label="Link to heading 'Create a Copilot Space for a user'" data-heading-content="Create a Copilot Space for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /users/{username}/copilot-spaces
+</span></code></pre>
+<p>Creates a new Copilot Space owned by a user. Only the authenticated user can create spaces for their own account.<br>
+Users can create personal Copilot Spaces for their individual use.<br>
+OAuth app tokens and personal access tokens (classic) need the read:user scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Create a Copilot Space for a user / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>general_instructions</code></strong> (string)<br>
+General instructions for the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>base_role</code></strong> (string)<br>
+The base role that determines default permissions for the space.</p>
+</li>
+</ul>
+<p>no_access: No default access (default)<br>
+reader: Makes the space publicly readable<br>
+Note: User spaces do not support writer or admin base roles.<br>
+Default: <code>no_access</code><br>
+Can be one of: <code>reader</code>, <code>no_access</code></p>
+<ul>
+<li><strong><code>resources_attributes</code></strong> (array of objects)<br>
+Resources to attach to the space.
+<ul>
+<li><strong><code>resource_type</code></strong> (string)<br>
+The type of resource.<br>
+Can be one of: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><strong><code>metadata</code></strong> (object)<br>
+Metadata specific to the resource type.
+<ul>
+<li><strong><code>repository_id</code></strong> (integer)<br>
+Repository ID for repository or file resources.</li>
+<li><strong><code>file_path</code></strong> (string)<br>
+File path for file resources.</li>
+<li><strong><code>text</code></strong> (string)<br>
+Text content for free text resources.</li>
+<li><strong><code>name</code></strong> (string)<br>
+Name for the resource.</li>
+<li><strong><code>number</code></strong> (integer)<br>
+Issue or PR number.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Create a Copilot Space for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Create a Copilot Space for a user / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/copilot-spaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "My Development Space",
+</span><span style="color:#c0c5ce;">  "description": "Personal space for development assistance",
+</span><span style="color:#c0c5ce;">  "general_instructions": "Help me with React development patterns and best practices",
+</span><span style="color:#c0c5ce;">  "resources_attributes": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "github_file",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "repository_id": 789012,
+</span><span style="color:#c0c5ce;">        "file_path": "src/components/App.js"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "free_text",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "name": "Development Notes",
+</span><span style="color:#c0c5ce;">        "text": "Focus on clean code principles and modern React patterns"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-an-organization-copilot-space">Create an organization Copilot Space</a>.</p>
+<h2 id="get-a-copilot-space-for-a-user" title="Get a Copilot Space for a user">Get a Copilot Space for a user<a href="#get-a-copilot-space-for-a-user" aria-label="Link to heading 'Get a Copilot Space for a user'" data-heading-content="Get a Copilot Space for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Gets details about a specific Copilot Space owned by a user. The authenticated user must have read access to the Space.<br>
+Private user spaces require the authenticated user to be the owner of the space.<br>
+Public user spaces are accessible to any authenticated user.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Get a Copilot Space for a user / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Get a Copilot Space for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Get a Copilot Space for a user / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/copilot-spaces/SPACE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-organization-copilot-space">Create an organization Copilot Space</a>.</p>
+<h2 id="set-a-copilot-space-for-a-user" title="Set a Copilot Space for a user">Set a Copilot Space for a user<a href="#set-a-copilot-space-for-a-user" aria-label="Link to heading 'Set a Copilot Space for a user'" data-heading-content="Set a Copilot Space for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /users/{username}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Updates a Copilot Space owned by a user. Only the authenticated user can update spaces for their own account.<br>
+Users can update their personal Copilot Spaces.<br>
+OAuth app tokens and personal access tokens (classic) need the read:user scope to use this endpoint.</p>
+<h3 id="parameters-8" title="Set a Copilot Space for a user / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A description of the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>general_instructions</code></strong> (string)<br>
+General instructions for the Copilot Space.</p>
+</li>
+<li>
+<p><strong><code>base_role</code></strong> (string)<br>
+The base role that determines default permissions for the space. Changing this field requires admin permissions.</p>
+</li>
+</ul>
+<p>no_access: No default access (default)<br>
+reader: Makes the space publicly readable<br>
+Note: User spaces do not support writer or admin base roles.<br>
+Can be one of: <code>reader</code>, <code>no_access</code></p>
+<ul>
+<li><strong><code>resources_attributes</code></strong> (array of objects)<br>
+Resources to attach to the space.
+<ul>
+<li><strong><code>resource_type</code></strong> (string)<br>
+The type of resource.<br>
+Can be one of: <code>repository</code>, <code>github_file</code>, <code>free_text</code>, <code>github_issue</code>, <code>github_pull_request</code>, <code>media_content</code>, <code>uploaded_text_file</code></li>
+<li><strong><code>metadata</code></strong> (object)<br>
+Metadata specific to the resource type.
+<ul>
+<li><strong><code>repository_id</code></strong> (integer)<br>
+Repository ID for repository or file resources.</li>
+<li><strong><code>file_path</code></strong> (string)<br>
+File path for file resources.</li>
+<li><strong><code>text</code></strong> (string)<br>
+Text content for free text resources.</li>
+<li><strong><code>name</code></strong> (string)<br>
+Name for the resource.</li>
+<li><strong><code>number</code></strong> (integer)<br>
+Issue or PR number.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Set a Copilot Space for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Set a Copilot Space for a user / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/copilot-spaces/SPACE_NUMBER \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Updated Development Space",
+</span><span style="color:#c0c5ce;">  "description": "Updated personal space for development assistance",
+</span><span style="color:#c0c5ce;">  "general_instructions": "Updated instructions to help me with React development patterns and best practices",
+</span><span style="color:#c0c5ce;">  "resources_attributes": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "resource_type": "github_file",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "repository_id": 789012,
+</span><span style="color:#c0c5ce;">        "file_path": "src/components/UpdatedApp.js"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "id": 123,
+</span><span style="color:#c0c5ce;">      "_destroy": true
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "id": 456,
+</span><span style="color:#c0c5ce;">      "resource_type": "free_text",
+</span><span style="color:#c0c5ce;">      "metadata": {
+</span><span style="color:#c0c5ce;">        "name": "Updated Development Notes",
+</span><span style="color:#c0c5ce;">        "text": "Updated focus on clean code principles and modern React patterns"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-organization-copilot-space">Create an organization Copilot Space</a>.</p>
+<h2 id="delete-a-copilot-space-for-a-user" title="Delete a Copilot Space for a user">Delete a Copilot Space for a user<a href="#delete-a-copilot-space-for-a-user" aria-label="Link to heading 'Delete a Copilot Space for a user'" data-heading-content="Delete a Copilot Space for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /users/{username}/copilot-spaces/{space_number}
+</span></code></pre>
+<p>Deletes a Copilot Space owned by a user. The authenticated user must be the owner of the space.<br>
+Warning: This action is permanent and cannot be undone. Deleting a space will remove all associated resources and configurations.<br>
+OAuth app tokens and personal access tokens (classic) need the user scope to use this endpoint.</p>
+<h3 id="parameters-9" title="Delete a Copilot Space for a user / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>space_number</code></strong> (integer) (required)<br>
+The unique identifier of the Copilot Space.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Delete a Copilot Space for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - The Copilot Space has been successfully deleted.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Delete a Copilot Space for a user / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/copilot-spaces/SPACE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

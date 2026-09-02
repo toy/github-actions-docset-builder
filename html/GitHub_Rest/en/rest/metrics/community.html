@@ -1,0 +1,121 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for community metrics</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Metrics</a> / </nav><h1 id="rest-api-endpoints-for-community-metrics">REST API endpoints for community metrics<a href="#rest-api-endpoints-for-community-metrics" aria-label="Link to heading 'REST API endpoints for community metrics'" data-heading-content="REST API endpoints for community metrics" class="anchor"></a></h1>
+<p>Use the REST API to retrieve information about your community profile.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-community-profile-metrics" title="Get community profile metrics">Get community profile metrics<a href="#get-community-profile-metrics" aria-label="Link to heading 'Get community profile metrics'" data-heading-content="Get community profile metrics" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/community/profile
+</span></code></pre>
+<p>Returns all community profile metrics for a repository. The repository cannot be a fork.<br>
+The returned metrics include an overall health score, the repository description, the presence of documentation, the<br>
+detected code of conduct, the detected license, and the presence of ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE,<br>
+README, and CONTRIBUTING files.<br>
+The health_percentage score is defined as a percentage of how many of<br>
+the recommended community health files are present. For more information, see<br>
+"About community profiles for public repositories."<br>
+content_reports_enabled is only returned for organization-owned repositories.</p>
+<h3 id="parameters" title="Get community profile metrics / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get community profile metrics / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get community profile metrics / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/community/profile
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>health_percentage</code>: required, integer</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>documentation</code>: required, string or null</li>
+<li><code>files</code>: required, object:
+<ul>
+<li><code>code_of_conduct</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Code Of Conduct Simple</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>code_of_conduct_file</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Community Health File</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>contributing</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Community Health File</strong> (see above)</li>
+</ul>
+</li>
+<li><code>readme</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Community Health File</strong> (see above)</li>
+</ul>
+</li>
+<li><code>issue_template</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Community Health File</strong> (see above)</li>
+</ul>
+</li>
+<li><code>pull_request_template</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Community Health File</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>content_reports_enabled</code>: boolean</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

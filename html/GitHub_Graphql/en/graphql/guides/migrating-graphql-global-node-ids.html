@@ -1,0 +1,42 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Migrating GraphQL global node IDs</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="migrating-graphql-global-node-ids">Migrating GraphQL global node IDs<a href="#migrating-graphql-global-node-ids" aria-label="Link to heading 'Migrating GraphQL global node IDs'" data-heading-content="Migrating GraphQL global node IDs" class="anchor"></a></h1>
+<p>Learn about the two global node ID formats and how to migrate from the legacy format to the new format.</p>
+<h2 id="background" title="Background">Background<a href="#background" aria-label="Link to heading 'Background'" data-heading-content="Background" class="anchor"></a></h2>
+<p>The GitHub GraphQL API currently supports two types of global node ID formats. The legacy format will be closing down and replaced with a new format. This guide shows you how to migrate to the new format, if necessary.</p>
+<p>By migrating to the new format, you ensure that the response times of your requests remain consistent and small. You also ensure that your application continues to work once the legacy IDs are closing down.</p>
+<p>To learn more about why the legacy global node ID format will be closing down, see <a href="https://github.blog/2021-02-10-new-global-id-format-coming-to-graphql" class="external">New global ID format coming to GraphQL</a>.</p>
+<h2 id="determining-if-you-need-to-take-action" title="Determining if you need to take action">Determining if you need to take action<a href="#determining-if-you-need-to-take-action" aria-label="Link to heading 'Determining if you need to take action'" data-heading-content="Determining if you need to take action" class="anchor"></a></h2>
+<p>You only need to follow the migration steps if you store references to GraphQL global node IDs. These IDs correspond to the <code>id</code> field for any object in the schema. If you don't store any global node IDs, then you can continue to interact with the API with no change.</p>
+<p>Additionally, if you currently decode the legacy IDs to extract type information (for example, if you use the first two characters of <code>PR_kwDOAHz1OX4uYAah</code> to determine if the object is a pull request), your service will break since the format of the IDs has changed. You should migrate your service to treat these IDs as opaque strings. These IDs will be unique, therefore you can rely on them directly as references.</p>
+<h2 id="migrating-to-the-new-global-ids" title="Migrating to the new global IDs">Migrating to the new global IDs<a href="#migrating-to-the-new-global-ids" aria-label="Link to heading 'Migrating to the new global IDs'" data-heading-content="Migrating to the new global IDs" class="anchor"></a></h2>
+<p>To facilitate migration to the new ID format, you can use the <code>X-Github-Next-Global-ID</code> header in your GraphQL API requests. The value of the <code>X-Github-Next-Global-ID</code> header can be <code>1</code> or <code>0</code>. Setting the value to <code>1</code> will force the response payload to always use the new ID format for any object that you requested the <code>id</code> field for. Setting the value to <code>0</code> will revert to default behavior, which is to show the legacy ID or new ID depending on the object creation date.</p>
+<p>Here is an example request using a <code>curl</code> command:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ curl \
+</span><span style="color:#c0c5ce;">  -H "Authorization: Bearer $GITHUB_TOKEN" \
+</span><span style="color:#c0c5ce;">  -H "X-Github-Next-Global-ID: 1" \
+</span><span style="color:#c0c5ce;">  https://api.github.com/graphql \
+</span><span style="color:#c0c5ce;">  -d '{ "query": "{ node(id: \"MDQ6VXNlcjM0MDczMDM=\") { id } }" }'
+</span></code></pre>
+<p>Even though the legacy ID <code>MDQ6VXNlcjM0MDczMDM=</code> was used in the query, the response will contain the new ID format:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{"</span><span style="color:#a3be8c;">data</span><span style="color:#c0c5ce;">":{"</span><span style="color:#a3be8c;">node</span><span style="color:#c0c5ce;">":{"</span><span style="color:#a3be8c;">id</span><span style="color:#c0c5ce;">":"</span><span style="color:#a3be8c;">U_kgDOADP9xw</span><span style="color:#c0c5ce;">"}}}
+</span></code></pre>
+<p>With the <code>X-Github-Next-Global-ID</code> header, you can find the new ID format for legacy IDs that you reference in your application. You can then update those references with the ID received in the response. You should update all references to legacy IDs and use the new ID format for any subsequent requests to the API.<br>
+To perform bulk operations, you can use aliases to submit multiple node queries in one API call. For more information, see <a href="https://graphql.org/learn/queries/#aliases" class="external">the GraphQL docs</a>.</p>
+<p>You can also get the new ID for a collection of items. For example, if you wanted to get the new ID for the last 10 repositories in your organization, you could use a query like this:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  organization(login: "github") {
+</span><span style="color:#c0c5ce;">    repositories(last: 10) {
+</span><span style="color:#c0c5ce;">      edges {
+</span><span style="color:#c0c5ce;">        cursor
+</span><span style="color:#c0c5ce;">        node {
+</span><span style="color:#c0c5ce;">          name
+</span><span style="color:#c0c5ce;">          id
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>Note that setting <code>X-Github-Next-Global-ID</code> to <code>1</code> will affect the return value of every <code>id</code> field in your query. This means that even when you submit a non-<code>node</code> query, you will get back the new format ID if you requested the <code>id</code> field.</p>
+<h2 id="sharing-feedback" title="Sharing feedback">Sharing feedback<a href="#sharing-feedback" aria-label="Link to heading 'Sharing feedback'" data-heading-content="Sharing feedback" class="anchor"></a></h2>
+<p>If you have any concerns about the rollout of this change impacting your app, please contact us through the <a href="https://support.github.com" class="external">GitHub Support portal</a> and include information such as your app name so that we can better assist you.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

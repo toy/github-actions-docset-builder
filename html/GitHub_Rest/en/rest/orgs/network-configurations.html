@@ -1,0 +1,305 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for network configurations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Organizations</a> / </nav><h1 id="rest-api-endpoints-for-network-configurations">REST API endpoints for network configurations<a href="#rest-api-endpoints-for-network-configurations" aria-label="Link to heading 'REST API endpoints for network configurations'" data-heading-content="REST API endpoints for network configurations" class="anchor"></a></h1>
+<p>REST API endpoints for network configurations</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-hosted-compute-network-configurations-for-an-organization" title="List hosted compute network configurations for an organization">List hosted compute network configurations for an organization<a href="#list-hosted-compute-network-configurations-for-an-organization" aria-label="Link to heading 'List hosted compute network configurations for an organization'" data-heading-content="List hosted compute network configurations for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/settings/network-configurations
+</span></code></pre>
+<p>Lists all hosted compute network configurations configured in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters" title="List hosted compute network configurations for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List hosted compute network configurations for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="List hosted compute network configurations for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-configurations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>network_configurations</code>: required, array of <code>Hosted compute network configuration</code>:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>compute_service</code>: string, enum: <code>none</code>, <code>actions</code>, <code>codespaces</code></li>
+<li><code>network_settings_ids</code>: array of string</li>
+<li><code>failover_network_settings_ids</code>: array of string</li>
+<li><code>failover_network_enabled</code>: boolean</li>
+<li><code>created_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-hosted-compute-network-configuration-for-an-organization" title="Create a hosted compute network configuration for an organization">Create a hosted compute network configuration for an organization<a href="#create-a-hosted-compute-network-configuration-for-an-organization" aria-label="Link to heading 'Create a hosted compute network configuration for an organization'" data-heading-content="Create a hosted compute network configuration for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/settings/network-configurations
+</span></code></pre>
+<p>Creates a hosted compute network configuration for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the write:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a hosted compute network configuration for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+Name of the network configuration. Must be between 1 and 100 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'.</p>
+</li>
+<li>
+<p><strong><code>compute_service</code></strong> (string)<br>
+The hosted compute service to use for the network configuration.<br>
+Can be one of: <code>none</code>, <code>actions</code></p>
+</li>
+<li>
+<p><strong><code>network_settings_ids</code></strong> (array of strings) (required)<br>
+A list of identifiers of the network settings resources to use for the network configuration. Exactly one resource identifier must be specified in the list.</p>
+</li>
+<li>
+<p><strong><code>failover_network_settings_ids</code></strong> (array of strings)<br>
+A list of identifiers of the failover network settings resources to use for the network configuration. Exactly one resource identifier must be specified in the list.</p>
+</li>
+<li>
+<p><strong><code>failover_network_enabled</code></strong> (boolean)<br>
+Indicates whether the failover network resource is enabled.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a hosted compute network configuration for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>201</strong> - Created</li>
+</ul>
+<h3 id="code-examples-1" title="Create a hosted compute network configuration for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-configurations \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "my-network-configuration",
+</span><span style="color:#c0c5ce;">  "network_settings_ids": [
+</span><span style="color:#c0c5ce;">    "23456789ABDCEF1"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "compute_service": "actions"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>compute_service</code>: string, enum: <code>none</code>, <code>actions</code>, <code>codespaces</code></li>
+<li><code>network_settings_ids</code>: array of string</li>
+<li><code>failover_network_settings_ids</code>: array of string</li>
+<li><code>failover_network_enabled</code>: boolean</li>
+<li><code>created_on</code>: required, string or null, format: date-time</li>
+</ul>
+<h2 id="get-a-hosted-compute-network-configuration-for-an-organization" title="Get a hosted compute network configuration for an organization">Get a hosted compute network configuration for an organization<a href="#get-a-hosted-compute-network-configuration-for-an-organization" aria-label="Link to heading 'Get a hosted compute network configuration for an organization'" data-heading-content="Get a hosted compute network configuration for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/settings/network-configurations/{network_configuration_id}
+</span></code></pre>
+<p>Gets a hosted compute network configuration configured in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Get a hosted compute network configuration for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>network_configuration_id</code></strong> (string) (required)<br>
+Unique identifier of the hosted compute network configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a hosted compute network configuration for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2" title="Get a hosted compute network configuration for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-configurations/NETWORK_CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-hosted-compute-network-configuration-for-an-organization">Create a hosted compute network configuration for an organization</a>.</p>
+<h2 id="update-a-hosted-compute-network-configuration-for-an-organization" title="Update a hosted compute network configuration for an organization">Update a hosted compute network configuration for an organization<a href="#update-a-hosted-compute-network-configuration-for-an-organization" aria-label="Link to heading 'Update a hosted compute network configuration for an organization'" data-heading-content="Update a hosted compute network configuration for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/settings/network-configurations/{network_configuration_id}
+</span></code></pre>
+<p>Updates a hosted compute network configuration for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the write:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Update a hosted compute network configuration for an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>network_configuration_id</code></strong> (string) (required)<br>
+Unique identifier of the hosted compute network configuration.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+Name of the network configuration. Must be between 1 and 100 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'.</p>
+</li>
+<li>
+<p><strong><code>compute_service</code></strong> (string)<br>
+The hosted compute service to use for the network configuration.<br>
+Can be one of: <code>none</code>, <code>actions</code></p>
+</li>
+<li>
+<p><strong><code>network_settings_ids</code></strong> (array of strings)<br>
+A list of identifiers of the network settings resources to use for the network configuration. Exactly one resource identifier must be specified in the list.</p>
+</li>
+<li>
+<p><strong><code>failover_network_settings_ids</code></strong> (array of strings)<br>
+A list of identifiers of the failover network settings resources to use for the network configuration. Exactly one resource identifier must be specified in the list.</p>
+</li>
+<li>
+<p><strong><code>failover_network_enabled</code></strong> (boolean)<br>
+Indicates whether the failover network resource is enabled.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a hosted compute network configuration for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-3" title="Update a hosted compute network configuration for an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-configurations/NETWORK_CONFIGURATION_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "my-network-configuration",
+</span><span style="color:#c0c5ce;">  "network_settings_ids": [
+</span><span style="color:#c0c5ce;">    "23456789ABDCEF1"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "compute_service": "actions"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-hosted-compute-network-configuration-for-an-organization">Create a hosted compute network configuration for an organization</a>.</p>
+<h2 id="delete-a-hosted-compute-network-configuration-from-an-organization" title="Delete a hosted compute network configuration from an organization">Delete a hosted compute network configuration from an organization<a href="#delete-a-hosted-compute-network-configuration-from-an-organization" aria-label="Link to heading 'Delete a hosted compute network configuration from an organization'" data-heading-content="Delete a hosted compute network configuration from an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/settings/network-configurations/{network_configuration_id}
+</span></code></pre>
+<p>Deletes a hosted compute network configuration from an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the write:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters-4" title="Delete a hosted compute network configuration from an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>network_configuration_id</code></strong> (string) (required)<br>
+Unique identifier of the hosted compute network configuration.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a hosted compute network configuration from an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-4" title="Delete a hosted compute network configuration from an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-configurations/NETWORK_CONFIGURATION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-a-hosted-compute-network-settings-resource-for-an-organization" title="Get a hosted compute network settings resource for an organization">Get a hosted compute network settings resource for an organization<a href="#get-a-hosted-compute-network-settings-resource-for-an-organization" aria-label="Link to heading 'Get a hosted compute network settings resource for an organization'" data-heading-content="Get a hosted compute network settings resource for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/settings/network-settings/{network_settings_id}
+</span></code></pre>
+<p>Gets a hosted compute network settings resource configured for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the read:network_configurations scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Get a hosted compute network settings resource for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>network_settings_id</code></strong> (string) (required)<br>
+Unique identifier of the hosted compute network settings.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Get a hosted compute network settings resource for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-5" title="Get a hosted compute network settings resource for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/settings/network-settings/NETWORK_SETTINGS_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>network_configuration_id</code>: string</li>
+<li><code>name</code>: required, string</li>
+<li><code>subnet_id</code>: required, string</li>
+<li><code>region</code>: required, string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

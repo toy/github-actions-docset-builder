@@ -1,0 +1,783 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>GitHub-hosted runners</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="github-hosted-runners">GitHub-hosted runners<a href="#github-hosted-runners" aria-label="Link to heading 'GitHub-hosted runners'" data-heading-content="GitHub-hosted runners" class="anchor"></a></h1>
+<p>Use the REST API to interact with GitHub-hosted runners in GitHub Actions.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-github-hosted-runners-for-an-organization" title="List GitHub-hosted runners for an organization">List GitHub-hosted runners for an organization<a href="#list-github-hosted-runners-for-an-organization" aria-label="Link to heading 'List GitHub-hosted runners for an organization'" data-heading-content="List GitHub-hosted runners for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners
+</span></code></pre>
+<p>Lists all GitHub-hosted runners configured in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the manage_runner:org scope to use this endpoint.</p>
+<h3 id="parameters" title="List GitHub-hosted runners for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List GitHub-hosted runners for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="List GitHub-hosted runners for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>runners</code>: required, array of <code>GitHub-hosted hosted runner</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>runner_group_id</code>: integer</li>
+<li><code>image_details</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub-hosted runner image details.</strong>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>size_gb</code>: required, integer</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>source</code>: required, string, enum: <code>github</code>, <code>partner</code>, <code>custom</code></li>
+<li><code>version</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>machine_size_details</code>: required, <code>Github-owned VM details.</code>:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>cpu_cores</code>: required, integer</li>
+<li><code>memory_gb</code>: required, integer</li>
+<li><code>storage_gb</code>: required, integer</li>
+</ul>
+</li>
+<li><code>status</code>: required, string, enum: <code>Ready</code>, <code>Provisioning</code>, <code>Shutdown</code>, <code>Deleting</code>, <code>Stuck</code></li>
+<li><code>platform</code>: required, string</li>
+<li><code>maximum_runners</code>: integer, default: <code>10</code></li>
+<li><code>public_ip_enabled</code>: required, boolean</li>
+<li><code>public_ips</code>: array of <code>Public IP for a GitHub-hosted larger runners.</code>:
+<ul>
+<li><code>enabled</code>: boolean</li>
+<li><code>prefix</code>: string</li>
+<li><code>length</code>: integer</li>
+</ul>
+</li>
+<li><code>last_active_on</code>: string or null, format: date-time</li>
+<li><code>image_gen</code>: boolean</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-github-hosted-runner-for-an-organization" title="Create a GitHub-hosted runner for an organization">Create a GitHub-hosted runner for an organization<a href="#create-a-github-hosted-runner-for-an-organization" aria-label="Link to heading 'Create a GitHub-hosted runner for an organization'" data-heading-content="Create a GitHub-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/hosted-runners
+</span></code></pre>
+<p>Creates a GitHub-hosted runner for an organization.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a GitHub-hosted runner for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+Name of the runner. Must be between 1 and 64 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'.</p>
+</li>
+<li>
+<p><strong><code>image</code></strong> (object) (required)<br>
+The image of runner. To list all available images, use GET /actions/hosted-runners/images/github-owned or GET /actions/hosted-runners/images/partner.</p>
+<ul>
+<li><strong><code>id</code></strong> (string)<br>
+The unique identifier of the runner image.</li>
+<li><strong><code>source</code></strong> (string)<br>
+The source of the runner image.<br>
+Can be one of: <code>github</code>, <code>partner</code>, <code>custom</code></li>
+<li><strong><code>version</code></strong> (string or null)<br>
+The version of the runner image to deploy. This is relevant only for runners using custom images.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>size</code></strong> (string) (required)<br>
+The machine size of the runner. To list available sizes, use GET actions/hosted-runners/machine-sizes</p>
+</li>
+<li>
+<p><strong><code>runner_group_id</code></strong> (integer) (required)<br>
+The existing runner group to add this runner to.</p>
+</li>
+<li>
+<p><strong><code>maximum_runners</code></strong> (integer)<br>
+The maximum amount of runners to scale up to. Runners will not auto-scale above this number. Use this setting to limit your cost.</p>
+</li>
+<li>
+<p><strong><code>enable_static_ip</code></strong> (boolean)<br>
+Whether this runner should be created with a static public IP. Note limit on account. To list limits on account, use GET actions/hosted-runners/limits</p>
+</li>
+<li>
+<p><strong><code>image_gen</code></strong> (boolean)<br>
+Whether this runner should be used to generate custom images.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a GitHub-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>201</strong> - Created</li>
+</ul>
+<h3 id="code-examples-1" title="Create a GitHub-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "My Hosted runner",
+</span><span style="color:#c0c5ce;">  "image": {
+</span><span style="color:#c0c5ce;">    "id": "ubuntu-latest",
+</span><span style="color:#c0c5ce;">    "source": "github"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "runner_group_id": 1,
+</span><span style="color:#c0c5ce;">  "size": "4-core",
+</span><span style="color:#c0c5ce;">  "maximum_runners": 50,
+</span><span style="color:#c0c5ce;">  "enable_static_ip": false
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>runner_group_id</code>: integer</li>
+<li><code>image_details</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub-hosted runner image details.</strong>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>size_gb</code>: required, integer</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>source</code>: required, string, enum: <code>github</code>, <code>partner</code>, <code>custom</code></li>
+<li><code>version</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>machine_size_details</code>: required, <code>Github-owned VM details.</code>:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>cpu_cores</code>: required, integer</li>
+<li><code>memory_gb</code>: required, integer</li>
+<li><code>storage_gb</code>: required, integer</li>
+</ul>
+</li>
+<li><code>status</code>: required, string, enum: <code>Ready</code>, <code>Provisioning</code>, <code>Shutdown</code>, <code>Deleting</code>, <code>Stuck</code></li>
+<li><code>platform</code>: required, string</li>
+<li><code>maximum_runners</code>: integer, default: <code>10</code></li>
+<li><code>public_ip_enabled</code>: required, boolean</li>
+<li><code>public_ips</code>: array of <code>Public IP for a GitHub-hosted larger runners.</code>:
+<ul>
+<li><code>enabled</code>: boolean</li>
+<li><code>prefix</code>: string</li>
+<li><code>length</code>: integer</li>
+</ul>
+</li>
+<li><code>last_active_on</code>: string or null, format: date-time</li>
+<li><code>image_gen</code>: boolean</li>
+</ul>
+<h2 id="list-custom-images-for-an-organization" title="List custom images for an organization">List custom images for an organization<a href="#list-custom-images-for-an-organization" aria-label="Link to heading 'List custom images for an organization'" data-heading-content="List custom images for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/custom
+</span></code></pre>
+<p>List custom images for an organization.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-2" title="List custom images for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List custom images for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2" title="List custom images for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>images</code>: required, array of <code>GitHub-hosted runner custom image details</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>platform</code>: required, string</li>
+<li><code>total_versions_size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>source</code>: required, string</li>
+<li><code>versions_count</code>: required, integer</li>
+<li><code>latest_version</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-custom-image-definition-for-github-actions-hosted-runners" title="Get a custom image definition for GitHub Actions Hosted Runners">Get a custom image definition for GitHub Actions Hosted Runners<a href="#get-a-custom-image-definition-for-github-actions-hosted-runners" aria-label="Link to heading 'Get a custom image definition for GitHub Actions Hosted Runners'" data-heading-content="Get a custom image definition for GitHub Actions Hosted Runners" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/custom/{image_definition_id}
+</span></code></pre>
+<p>Get a custom image definition for GitHub Actions Hosted Runners.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Get a custom image definition for GitHub Actions Hosted Runners / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>image_definition_id</code></strong> (integer) (required)<br>
+Image definition ID of custom image</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get a custom image definition for GitHub Actions Hosted Runners / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-3" title="Get a custom image definition for GitHub Actions Hosted Runners / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom/IMAGE_DEFINITION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>platform</code>: required, string</li>
+<li><code>total_versions_size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>source</code>: required, string</li>
+<li><code>versions_count</code>: required, integer</li>
+<li><code>latest_version</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+</ul>
+<h2 id="delete-a-custom-image-from-the-organization" title="Delete a custom image from the organization">Delete a custom image from the organization<a href="#delete-a-custom-image-from-the-organization" aria-label="Link to heading 'Delete a custom image from the organization'" data-heading-content="Delete a custom image from the organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/hosted-runners/images/custom/{image_definition_id}
+</span></code></pre>
+<p>Delete a custom image from the organization.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-4" title="Delete a custom image from the organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>image_definition_id</code></strong> (integer) (required)<br>
+Image definition ID of custom image</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a custom image from the organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-4" title="Delete a custom image from the organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom/IMAGE_DEFINITION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-image-versions-of-a-custom-image-for-an-organization" title="List image versions of a custom image for an organization">List image versions of a custom image for an organization<a href="#list-image-versions-of-a-custom-image-for-an-organization" aria-label="Link to heading 'List image versions of a custom image for an organization'" data-heading-content="List image versions of a custom image for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/custom/{image_definition_id}/versions
+</span></code></pre>
+<p>List image versions of a custom image for an organization.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-5" title="List image versions of a custom image for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>image_definition_id</code></strong> (integer) (required)<br>
+Image definition ID of custom image</p>
+</li>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List image versions of a custom image for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-5" title="List image versions of a custom image for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom/IMAGE_DEFINITION_ID/versions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>image_versions</code>: required, array of <code>GitHub-hosted runner custom image version details.</code>:
+<ul>
+<li><code>version</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>size_gb</code>: required, integer</li>
+<li><code>created_on</code>: required, string</li>
+<li><code>state_details</code>: required, string</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-an-image-version-of-a-custom-image-for-github-actions-hosted-runners" title="Get an image version of a custom image for GitHub Actions Hosted Runners">Get an image version of a custom image for GitHub Actions Hosted Runners<a href="#get-an-image-version-of-a-custom-image-for-github-actions-hosted-runners" aria-label="Link to heading 'Get an image version of a custom image for GitHub Actions Hosted Runners'" data-heading-content="Get an image version of a custom image for GitHub Actions Hosted Runners" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/custom/{image_definition_id}/versions/{version}
+</span></code></pre>
+<p>Get an image version of a custom image for GitHub Actions Hosted Runners.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Get an image version of a custom image for GitHub Actions Hosted Runners / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>image_definition_id</code></strong> (integer) (required)<br>
+Image definition ID of custom image</p>
+</li>
+<li>
+<p><strong><code>version</code></strong> (string) (required)<br>
+Version of a custom image</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get an image version of a custom image for GitHub Actions Hosted Runners / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-6" title="Get an image version of a custom image for GitHub Actions Hosted Runners / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom/IMAGE_DEFINITION_ID/versions/VERSION
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>version</code>: required, string</li>
+<li><code>state</code>: required, string</li>
+<li><code>size_gb</code>: required, integer</li>
+<li><code>created_on</code>: required, string</li>
+<li><code>state_details</code>: required, string</li>
+</ul>
+<h2 id="delete-an-image-version-of-custom-image-from-the-organization" title="Delete an image version of custom image from the organization">Delete an image version of custom image from the organization<a href="#delete-an-image-version-of-custom-image-from-the-organization" aria-label="Link to heading 'Delete an image version of custom image from the organization'" data-heading-content="Delete an image version of custom image from the organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/hosted-runners/images/custom/{image_definition_id}/versions/{version}
+</span></code></pre>
+<p>Delete an image version of custom image from the organization.<br>
+OAuth tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Delete an image version of custom image from the organization / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>image_definition_id</code></strong> (integer) (required)<br>
+Image definition ID of custom image</p>
+</li>
+<li>
+<p><strong><code>version</code></strong> (string) (required)<br>
+Version of a custom image</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Delete an image version of custom image from the organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-7" title="Delete an image version of custom image from the organization / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/custom/IMAGE_DEFINITION_ID/versions/VERSION
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-owned-images-for-github-hosted-runners-in-an-organization" title="Get GitHub-owned images for GitHub-hosted runners in an organization">Get GitHub-owned images for GitHub-hosted runners in an organization<a href="#get-github-owned-images-for-github-hosted-runners-in-an-organization" aria-label="Link to heading 'Get GitHub-owned images for GitHub-hosted runners in an organization'" data-heading-content="Get GitHub-owned images for GitHub-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/github-owned
+</span></code></pre>
+<p>Get the list of GitHub-owned images available for GitHub-hosted runners for an organization.</p>
+<h3 id="parameters-8" title="Get GitHub-owned images for GitHub-hosted runners in an organization / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Get GitHub-owned images for GitHub-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-8" title="Get GitHub-owned images for GitHub-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/github-owned
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>images</code>: required, array of <code>GitHub-hosted runner image details.</code>:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>platform</code>: required, string</li>
+<li><code>size_gb</code>: required, integer</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>source</code>: required, string, enum: <code>github</code>, <code>partner</code>, <code>custom</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="get-partner-images-for-github-hosted-runners-in-an-organization" title="Get partner images for GitHub-hosted runners in an organization">Get partner images for GitHub-hosted runners in an organization<a href="#get-partner-images-for-github-hosted-runners-in-an-organization" aria-label="Link to heading 'Get partner images for GitHub-hosted runners in an organization'" data-heading-content="Get partner images for GitHub-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/images/partner
+</span></code></pre>
+<p>Get the list of partner images available for GitHub-hosted runners for an organization.</p>
+<h3 id="parameters-9" title="Get partner images for GitHub-hosted runners in an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Get partner images for GitHub-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-9" title="Get partner images for GitHub-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/images/partner
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-github-owned-images-for-github-hosted-runners-in-an-organization">Get GitHub-owned images for GitHub-hosted runners in an organization</a>.</p>
+<h2 id="get-limits-on-github-hosted-runners-for-an-organization" title="Get limits on GitHub-hosted runners for an organization">Get limits on GitHub-hosted runners for an organization<a href="#get-limits-on-github-hosted-runners-for-an-organization" aria-label="Link to heading 'Get limits on GitHub-hosted runners for an organization'" data-heading-content="Get limits on GitHub-hosted runners for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/limits
+</span></code></pre>
+<p>Get the GitHub-hosted runners limits for an organization.</p>
+<h3 id="parameters-10" title="Get limits on GitHub-hosted runners for an organization / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Get limits on GitHub-hosted runners for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-10" title="Get limits on GitHub-hosted runners for an organization / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/limits
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>public_ips</code>: required, <code>Static public IP Limits for GitHub-hosted Hosted Runners.</code>:
+<ul>
+<li><code>maximum</code>: required, integer</li>
+<li><code>current_usage</code>: required, integer</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-github-hosted-runners-machine-specs-for-an-organization" title="Get GitHub-hosted runners machine specs for an organization">Get GitHub-hosted runners machine specs for an organization<a href="#get-github-hosted-runners-machine-specs-for-an-organization" aria-label="Link to heading 'Get GitHub-hosted runners machine specs for an organization'" data-heading-content="Get GitHub-hosted runners machine specs for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/machine-sizes
+</span></code></pre>
+<p>Get the list of machine specs available for GitHub-hosted runners for an organization.</p>
+<h3 id="parameters-11" title="Get GitHub-hosted runners machine specs for an organization / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Get GitHub-hosted runners machine specs for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-11" title="Get GitHub-hosted runners machine specs for an organization / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/machine-sizes
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>machine_specs</code>: required, array of <code>Github-owned VM details.</code>:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>cpu_cores</code>: required, integer</li>
+<li><code>memory_gb</code>: required, integer</li>
+<li><code>storage_gb</code>: required, integer</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-platforms-for-github-hosted-runners-in-an-organization" title="Get platforms for GitHub-hosted runners in an organization">Get platforms for GitHub-hosted runners in an organization<a href="#get-platforms-for-github-hosted-runners-in-an-organization" aria-label="Link to heading 'Get platforms for GitHub-hosted runners in an organization'" data-heading-content="Get platforms for GitHub-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/platforms
+</span></code></pre>
+<p>Get the list of platforms available for GitHub-hosted runners for an organization.</p>
+<h3 id="parameters-12" title="Get platforms for GitHub-hosted runners in an organization / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get platforms for GitHub-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-12" title="Get platforms for GitHub-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/platforms
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>platforms</code>: required, array of string</li>
+</ul>
+<h2 id="get-a-github-hosted-runner-for-an-organization" title="Get a GitHub-hosted runner for an organization">Get a GitHub-hosted runner for an organization<a href="#get-a-github-hosted-runner-for-an-organization" aria-label="Link to heading 'Get a GitHub-hosted runner for an organization'" data-heading-content="Get a GitHub-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/hosted-runners/{hosted_runner_id}
+</span></code></pre>
+<p>Gets a GitHub-hosted runner configured in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-13" title="Get a GitHub-hosted runner for an organization / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>hosted_runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the GitHub-hosted runner.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Get a GitHub-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-13" title="Get a GitHub-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/HOSTED_RUNNER_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-github-hosted-runner-for-an-organization">Create a GitHub-hosted runner for an organization</a>.</p>
+<h2 id="update-a-github-hosted-runner-for-an-organization" title="Update a GitHub-hosted runner for an organization">Update a GitHub-hosted runner for an organization<a href="#update-a-github-hosted-runner-for-an-organization" aria-label="Link to heading 'Update a GitHub-hosted runner for an organization'" data-heading-content="Update a GitHub-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/actions/hosted-runners/{hosted_runner_id}
+</span></code></pre>
+<p>Updates a GitHub-hosted runner for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the manage_runners:org scope to use this endpoint.</p>
+<h3 id="parameters-14" title="Update a GitHub-hosted runner for an organization / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>hosted_runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the GitHub-hosted runner.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+Name of the runner. Must be between 1 and 64 characters and may only contain upper and lowercase letters a-z, numbers 0-9, '.', '-', and '_'.</p>
+</li>
+<li>
+<p><strong><code>runner_group_id</code></strong> (integer)<br>
+The existing runner group to add this runner to.</p>
+</li>
+<li>
+<p><strong><code>maximum_runners</code></strong> (integer)<br>
+The maximum amount of runners to scale up to. Runners will not auto-scale above this number. Use this setting to limit your cost.</p>
+</li>
+<li>
+<p><strong><code>enable_static_ip</code></strong> (boolean)<br>
+Whether this runner should be updated with a static public IP. Note limit on account. To list limits on account, use GET actions/hosted-runners/limits</p>
+</li>
+<li>
+<p><strong><code>size</code></strong> (string)<br>
+The machine size of the runner. To list available sizes, use GET actions/hosted-runners/machine-sizes</p>
+</li>
+<li>
+<p><strong><code>image_source</code></strong> (string)<br>
+The source type of the runner image to use. Must match the source of the image specified by image_id. Can be one of github, partner, or custom.<br>
+Can be one of: <code>github</code>, <code>partner</code>, <code>custom</code></p>
+</li>
+<li>
+<p><strong><code>image_id</code></strong> (string)<br>
+The unique identifier of the runner image. To list available images, use GET /actions/hosted-runners/images/github-owned, GET /actions/hosted-runners/images/partner, or GET /actions/hosted-runners/images/custom.</p>
+</li>
+<li>
+<p><strong><code>image_version</code></strong> (string or null)<br>
+The version of the runner image to deploy. This is relevant only for runners using custom images.</p>
+</li>
+<li>
+<p><strong><code>image_gen</code></strong> (boolean)<br>
+Whether to enable image generation for this runner pool. When enabled, the runner pool is used to build and publish custom runner images.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Update a GitHub-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-14" title="Update a GitHub-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/HOSTED_RUNNER_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "My larger runner",
+</span><span style="color:#c0c5ce;">  "runner_group_id": 1,
+</span><span style="color:#c0c5ce;">  "maximum_runners": 50,
+</span><span style="color:#c0c5ce;">  "enable_static_ip": false
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-github-hosted-runner-for-an-organization">Create a GitHub-hosted runner for an organization</a>.</p>
+<h2 id="delete-a-github-hosted-runner-for-an-organization" title="Delete a GitHub-hosted runner for an organization">Delete a GitHub-hosted runner for an organization<a href="#delete-a-github-hosted-runner-for-an-organization" aria-label="Link to heading 'Delete a GitHub-hosted runner for an organization'" data-heading-content="Delete a GitHub-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/hosted-runners/{hosted_runner_id}
+</span></code></pre>
+<p>Deletes a GitHub-hosted runner for an organization.</p>
+<h3 id="parameters-15" title="Delete a GitHub-hosted runner for an organization / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>hosted_runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the GitHub-hosted runner.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Delete a GitHub-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>202</strong> - Accepted</li>
+</ul>
+<h3 id="code-examples-15" title="Delete a GitHub-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/hosted-runners/HOSTED_RUNNER_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>Same response schema as <a href="#create-a-github-hosted-runner-for-an-organization">Create a GitHub-hosted runner for an organization</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

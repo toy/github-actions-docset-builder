@@ -1,0 +1,396 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Project views</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Projects</a> / </nav><h1 id="rest-api-endpoints-for-project-views">REST API endpoints for Project views<a href="#rest-api-endpoints-for-project-views" aria-label="Link to heading 'REST API endpoints for Project views'" data-heading-content="REST API endpoints for Project views" class="anchor"></a></h1>
+<p>Use the REST API to manage Project views</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="create-a-view-for-an-organization-owned-project" title="Create a view for an organization-owned project">Create a view for an organization-owned project<a href="#create-a-view-for-an-organization-owned-project" aria-label="Link to heading 'Create a view for an organization-owned project'" data-heading-content="Create a view for an organization-owned project" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/projectsV2/{project_number}/views
+</span></code></pre>
+<p>Create a new view in an organization-owned project. Views allow you to customize how items in a project are displayed and filtered.</p>
+<h3 id="parameters" title="Create a view for an organization-owned project / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>project_number</code></strong> (integer) (required)<br>
+The project's number.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the view.</p>
+</li>
+<li>
+<p><strong><code>layout</code></strong> (string) (required)<br>
+The layout of the view.<br>
+Can be one of: <code>table</code>, <code>board</code>, <code>roadmap</code></p>
+</li>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+The filter query for the view. See Filtering projects for more information.</p>
+</li>
+<li>
+<p><strong><code>visible_fields</code></strong> (array of integers)<br>
+visible_fields is not applicable to roadmap layout views.<br>
+For table and board layouts, this represents the field IDs that should be visible in the view. If not provided, the default visible fields will be used.</p>
+</li>
+<li>
+<p><strong><code>sort_by</code></strong> (array of arrays)<br>
+Sorting configuration for the view. Each element is a two-element array of [field_id, direction] where direction is "asc" or "desc". Supports multiple sort criteria applied in order.</p>
+</li>
+<li>
+<p><strong><code>group_by</code></strong> (array of integers)<br>
+The field IDs to group items by (horizontal grouping). Supports a single field. The field must support grouping; fields such as Title, Reviewers, Linked pull requests, Sub-issues progress, Tracked by, and Tracks cannot be grouped on.</p>
+</li>
+<li>
+<p><strong><code>vertical_group_by</code></strong> (array of integers)<br>
+The field IDs to use as columns in board layout (vertical grouping). Supports a single field. The field must support grouping; fields such as Title, Reviewers, Linked pull requests, Sub-issues progress, Tracked by, and Tracks cannot be grouped on.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Create a view for an organization-owned project / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response for creating a view in an organization-owned project.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Create a view for an organization-owned project / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="create-a-table-view">Create a table view<a href="#create-a-table-view" aria-label="Link to heading 'Create a table view'" data-heading-content="Create a table view" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "All Issues",
+</span><span style="color:#c0c5ce;">  "layout": "table",
+</span><span style="color:#c0c5ce;">  "filter": "is:issue",
+</span><span style="color:#c0c5ce;">  "visible_fields": [
+</span><span style="color:#c0c5ce;">    123,
+</span><span style="color:#c0c5ce;">    456,
+</span><span style="color:#c0c5ce;">    789
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>number</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>layout</code>: required, string, enum: <code>table</code>, <code>board</code>, <code>roadmap</code></li>
+<li><code>node_id</code>: required, string</li>
+<li><code>project_url</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>creator</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>filter</code>: string or null</li>
+<li><code>visible_fields</code>: required, array of integer</li>
+<li><code>sort_by</code>: required, array of array, minItems: 2, maxItems: 2</li>
+<li><code>group_by</code>: required, array of integer</li>
+<li><code>vertical_group_by</code>: required, array of integer</li>
+</ul>
+<h4 id="create-a-board-view-with-filter">Create a board view with filter<a href="#create-a-board-view-with-filter" aria-label="Link to heading 'Create a board view with filter'" data-heading-content="Create a board view with filter" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Sprint Board",
+</span><span style="color:#c0c5ce;">  "layout": "board",
+</span><span style="color:#c0c5ce;">  "filter": "is:issue is:open label:sprint",
+</span><span style="color:#c0c5ce;">  "visible_fields": [
+</span><span style="color:#c0c5ce;">    123,
+</span><span style="color:#c0c5ce;">    456,
+</span><span style="color:#c0c5ce;">    789
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>number</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>layout</code>: required, string, enum: <code>table</code>, <code>board</code>, <code>roadmap</code></li>
+<li><code>node_id</code>: required, string</li>
+<li><code>project_url</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>creator</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>filter</code>: string or null</li>
+<li><code>visible_fields</code>: required, array of integer</li>
+<li><code>sort_by</code>: required, array of array, minItems: 2, maxItems: 2</li>
+<li><code>group_by</code>: required, array of integer</li>
+<li><code>vertical_group_by</code>: required, array of integer</li>
+</ul>
+<h4 id="create-a-roadmap-view">Create a roadmap view<a href="#create-a-roadmap-view" aria-label="Link to heading 'Create a roadmap view'" data-heading-content="Create a roadmap view" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Product Roadmap",
+</span><span style="color:#c0c5ce;">  "layout": "roadmap"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>number</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>layout</code>: required, string, enum: <code>table</code>, <code>board</code>, <code>roadmap</code></li>
+<li><code>node_id</code>: required, string</li>
+<li><code>project_url</code>: required, string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>creator</code>: required, all of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>filter</code>: string or null</li>
+<li><code>visible_fields</code>: required, array of integer</li>
+<li><code>sort_by</code>: required, array of array, minItems: 2, maxItems: 2</li>
+<li><code>group_by</code>: required, array of integer</li>
+<li><code>vertical_group_by</code>: required, array of integer</li>
+</ul>
+<h2 id="create-a-view-for-a-user-owned-project" title="Create a view for a user-owned project">Create a view for a user-owned project<a href="#create-a-view-for-a-user-owned-project" aria-label="Link to heading 'Create a view for a user-owned project'" data-heading-content="Create a view for a user-owned project" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /users/{user_id}/projectsV2/{project_number}/views
+</span></code></pre>
+<p>Create a new view in a user-owned project. Views allow you to customize how items in a project are displayed and filtered.</p>
+<h3 id="parameters-1" title="Create a view for a user-owned project / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>user_id</code></strong> (string) (required)<br>
+The unique identifier of the user.</p>
+</li>
+<li>
+<p><strong><code>project_number</code></strong> (integer) (required)<br>
+The project's number.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the view.</p>
+</li>
+<li>
+<p><strong><code>layout</code></strong> (string) (required)<br>
+The layout of the view.<br>
+Can be one of: <code>table</code>, <code>board</code>, <code>roadmap</code></p>
+</li>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+The filter query for the view. See Filtering projects for more information.</p>
+</li>
+<li>
+<p><strong><code>visible_fields</code></strong> (array of integers)<br>
+visible_fields is not applicable to roadmap layout views.<br>
+For table and board layouts, this represents the field IDs that should be visible in the view. If not provided, the default visible fields will be used.</p>
+</li>
+<li>
+<p><strong><code>sort_by</code></strong> (array of arrays)<br>
+Sorting configuration for the view. Each element is a two-element array of [field_id, direction] where direction is "asc" or "desc". Supports multiple sort criteria applied in order.</p>
+</li>
+<li>
+<p><strong><code>group_by</code></strong> (array of integers)<br>
+The field IDs to group items by (horizontal grouping). Supports a single field. The field must support grouping; fields such as Title, Reviewers, Linked pull requests, Sub-issues progress, Tracked by, and Tracks cannot be grouped on.</p>
+</li>
+<li>
+<p><strong><code>vertical_group_by</code></strong> (array of integers)<br>
+The field IDs to use as columns in board layout (vertical grouping). Supports a single field. The field must support grouping; fields such as Title, Reviewers, Linked pull requests, Sub-issues progress, Tracked by, and Tracks cannot be grouped on.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a view for a user-owned project / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response for creating a view in a user-owned project.</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a view for a user-owned project / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="create-a-table-view-1">Create a table view<a href="#create-a-table-view-1" aria-label="Link to heading 'Create a table view'" data-heading-content="Create a table view" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USER_ID/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "All Issues",
+</span><span style="color:#c0c5ce;">  "layout": "table",
+</span><span style="color:#c0c5ce;">  "filter": "is:issue",
+</span><span style="color:#c0c5ce;">  "visible_fields": [
+</span><span style="color:#c0c5ce;">    123,
+</span><span style="color:#c0c5ce;">    456,
+</span><span style="color:#c0c5ce;">    789
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-view-for-an-organization-owned-project">Create a view for an organization-owned project</a>.</p>
+<h4 id="create-a-board-view-with-filter-1">Create a board view with filter<a href="#create-a-board-view-with-filter-1" aria-label="Link to heading 'Create a board view with filter'" data-heading-content="Create a board view with filter" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USER_ID/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Sprint Board",
+</span><span style="color:#c0c5ce;">  "layout": "board",
+</span><span style="color:#c0c5ce;">  "filter": "is:issue is:open label:sprint",
+</span><span style="color:#c0c5ce;">  "visible_fields": [
+</span><span style="color:#c0c5ce;">    123,
+</span><span style="color:#c0c5ce;">    456,
+</span><span style="color:#c0c5ce;">    789
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-view-for-an-organization-owned-project">Create a view for an organization-owned project</a>.</p>
+<h4 id="create-a-roadmap-view-1">Create a roadmap view<a href="#create-a-roadmap-view-1" aria-label="Link to heading 'Create a roadmap view'" data-heading-content="Create a roadmap view" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USER_ID/projectsV2/PROJECT_NUMBER/views \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Product Roadmap",
+</span><span style="color:#c0c5ce;">  "layout": "roadmap"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-view-for-an-organization-owned-project">Create a view for an organization-owned project</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

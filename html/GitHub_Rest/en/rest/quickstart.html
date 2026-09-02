@@ -1,0 +1,322 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Quickstart for GitHub REST API</title><link rel="stylesheet" href="../../assets/style.css"></head><body class="markdown-body"><nav><a href="index.html">REST API</a> / </nav><h1 id="quickstart-for-github-rest-api">Quickstart for GitHub REST API<a href="#quickstart-for-github-rest-api" aria-label="Link to heading 'Quickstart for GitHub REST API'" data-heading-content="Quickstart for GitHub REST API" class="anchor"></a></h1>
+<p>Learn how to get started with the GitHub REST API.</p>
+<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<p>This article describes how to quickly get started with the GitHub REST API using GitHub CLI, <code>curl</code>, or JavaScript. For a more detailed guide, see <a href="using-the-rest-api/getting-started-with-the-rest-api.html">Getting started with the REST API</a>.</p>
+<div class="ghd-tool cli">
+<h2 id="using-github-cli-in-the-command-line" title="Using GitHub CLI in the command line">Using GitHub CLI in the command line<a href="#using-github-cli-in-the-command-line" aria-label="Link to heading 'Using GitHub CLI in the command line'" data-heading-content="Using GitHub CLI in the command line" class="anchor"></a></h2>
+<p>GitHub CLI is the easiest way to use the GitHub REST API from the command line.</p>
+<ol>
+<li>
+<p>Install GitHub CLI on macOS, Windows, or Linux. For more information, see <a href="https://github.com/cli/cli?ref_product=cli&amp;ref_type=engagement&amp;ref_style=text#installation" class="external">Installation</a> in the GitHub CLI repository.</p>
+</li>
+<li>
+<p>To authenticate to GitHub, run the following command from your terminal.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh auth login
+</span></code></pre>
+</li>
+<li>
+<p>Select where you want to authenticate to:</p>
+<ul>
+<li>If you access GitHub at GitHub.com, select <strong>GitHub.com</strong>.</li>
+<li>If you access GitHub at a different domain, select <strong>Other</strong>, then enter your hostname (for example: <code>octocorp.ghe.com</code>).</li>
+</ul>
+</li>
+<li>
+<p>Follow the rest of the on-screen prompts.</p>
+<p>GitHub CLI automatically stores your Git credentials for you when you choose HTTPS as your preferred protocol for Git operations and answer "yes" to the prompt asking if you would like to authenticate to Git with your GitHub credentials. This can be useful as it allows you to use Git commands like <code>git push</code> and <code>git pull</code> without needing to set up a separate credential manager or use SSH.</p>
+</li>
+<li>
+<p>Make a request using the GitHub CLI <code>api</code> subcommand, followed by the path. Use the <code>--method</code> or <code>-X</code> flag to specify the method. For more information, see the <a href="https://cli.github.com/manual/gh_api" class="external">GitHub CLI <code>api</code> documentation</a>.</p>
+<p>This example makes a request to the "Get Octocat" endpoint, which uses the method <code>GET</code> and the path <code>/octocat</code>. For the full reference documentation for this endpoint, see <a href="meta/meta.html#get-octocat">REST API endpoints for meta data</a>.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api /octocat --method GET
+</span></code></pre>
+</li>
+</ol>
+<h2 id="using-github-cli-in-github-actions" title="Using GitHub CLI in GitHub Actions">Using GitHub CLI in GitHub Actions<a href="#using-github-cli-in-github-actions" aria-label="Link to heading 'Using GitHub CLI in GitHub Actions'" data-heading-content="Using GitHub CLI in GitHub Actions" class="anchor"></a></h2>
+<p>You can also use GitHub CLI in your GitHub Actions workflows. For more information, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-github-cli" class="external">Using GitHub CLI in workflows</a>.</p>
+<h3 id="authenticating-with-an-access-token" title="Using GitHub CLI in GitHub Actions / Authenticating with an access token">Authenticating with an access token<a href="#authenticating-with-an-access-token" aria-label="Link to heading 'Authenticating with an access token'" data-heading-content="Authenticating with an access token" class="anchor"></a></h3>
+<p>Instead of using the <code>gh auth login</code> command, pass an access token as an environment variable called <code>GH_TOKEN</code>. GitHub recommends that you use the built-in <code>GITHUB_TOKEN</code> instead of creating a token. If this is not possible, store your token as a secret and replace <code>GITHUB_TOKEN</code> in the example below with the name of your secret. For more information about <code>GITHUB_TOKEN</code>, see <a href="https://docs.github.com/en/actions/tutorials/authenticate-with-github_token" class="external">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+<p>The following example workflow uses the <a href="issues/issues.html#list-repository-issues">List repository issues</a> endpoint, and requests a list of issues in the <code>octocat/Spoon-Knife</code> repository.</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">use_api</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">issues</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">GH_TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.GITHUB_TOKEN }}
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          gh api https://api.github.com/repos/octocat/Spoon-Knife/issues
+</span></code></pre>
+<h3 id="authenticating-with-a-github-app" title="Using GitHub CLI in GitHub Actions / Authenticating with a GitHub App">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
+<p>If you are authenticating with a GitHub App, you can create an installation access token within your workflow:</p>
+<ol>
+<li>
+<p>Store your GitHub App's client ID as a configuration variable. In the following example, replace <code>APP_CLIENT_ID</code> with the name of the configuration variable. You can find your client ID on the settings page for your app or through the API. For more information, see <a href="apps/apps.html#get-an-app">REST API endpoints for GitHub Apps</a>. For more information about configuration variables, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-variables#defining-configuration-variables-for-multiple-workflows" class="external">Store information in variables</a>.</p>
+</li>
+<li>
+<p>Generate a private key for your app. Store the contents of the resulting file as a secret. (Store the entire contents of the file, including <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.) In the following example, replace <code>APP_PRIVATE_KEY</code> with the name of the secret. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps" class="external">Managing private keys for GitHub Apps</a>. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+</li>
+<li>
+<p>Add a step to generate a token, and use that token instead of <code>GITHUB_TOKEN</code>. Note that this token will expire after 60 minutes. For example:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">track_pr</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Generate token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">generate-token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/create-github-app-token@v3
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">client-id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ vars.APP_CLIENT_ID }}
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">private-key</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.APP_PRIVATE_KEY }}
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Use API
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">GH_TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.generate-token.outputs.token }}
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          gh api https://api.github.com/repos/octocat/Spoon-Knife/issues
+</span></code></pre>
+</li>
+</ol>
+</div>
+<div class="ghd-tool javascript">
+<h2 id="using-octokitjs" title="Using Octokit.js">Using Octokit.js<a href="#using-octokitjs" aria-label="Link to heading 'Using Octokit.js'" data-heading-content="Using Octokit.js" class="anchor"></a></h2>
+<p>You can use Octokit.js to interact with the GitHub REST API in your JavaScript scripts. For more information, see <a href="guides/scripting-with-the-rest-api-and-javascript.html">Scripting with the REST API and JavaScript</a>.</p>
+<ol>
+<li>
+<p>Create an access token. For example, create a personal access token or a GitHub App user access token. You will use this token to authenticate your request, so you should give it any scopes or permissions that are required to access that endpoint. For more information, see <a href="authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a> or <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-with-a-github-app-on-behalf-of-a-user" class="external">Identifying and authorizing users for GitHub Apps</a>.</p>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>Treat your access token like a password.</p>
+<p>To keep your token secure, you can store your token as a secret and run your script through GitHub Actions. For more information, see the <a href="#using-octokitjs-in-github-actions">Using Octokit.js in GitHub Actions</a> section.</p>
+</div>
+<p>You can also store your token as a Codespaces secret and run your script in Codespaces. For more information, see <a href="https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces" class="external">Managing encrypted secrets for your codespaces</a>.</p>
+<blockquote>
+<p>If these options are not possible, consider using another CLI service to store your token securely.</p>
+</blockquote>
+</li>
+<li>
+<p>Install <code>octokit</code>. For example, <code>npm install octokit</code>. For other ways to install or load <code>octokit</code>, see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js README</a>.</p>
+</li>
+<li>
+<p>Import <code>octokit</code> in your script. For example, <code>import { Octokit } from "octokit";</code>. For other ways to import <code>octokit</code>, see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js README</a>.</p>
+</li>
+<li>
+<p>Create an instance of <code>Octokit</code> with your token. Replace <code>YOUR-TOKEN</code> with your token.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: '</span><span style="color:#a3be8c;">YOUR-TOKEN</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+</li>
+<li>
+<p>Use <code>octokit.request</code> to execute your request. Send the HTTP method and path as the first argument. Specify any path, query, and body parameters in an object as the second argument. For more information about parameters, see <a href="using-the-rest-api/getting-started-with-the-rest-api.html#parameters">Getting started with the REST API</a>.</p>
+<p>For example, in the following request the HTTP method is <code>GET</code>, the path is <code>/repos/{owner}/{repo}/issues</code>, and the parameters are <code>owner: "octocat"</code> and <code>repo: "Spoon-Knife"</code>.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">Spoon-Knife</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+</li>
+</ol>
+<h2 id="using-octokitjs-in-github-actions" title="Using Octokit.js in GitHub Actions">Using Octokit.js in GitHub Actions<a href="#using-octokitjs-in-github-actions" aria-label="Link to heading 'Using Octokit.js in GitHub Actions'" data-heading-content="Using Octokit.js in GitHub Actions" class="anchor"></a></h2>
+<p>You can also execute your JavaScript scripts in your GitHub Actions workflows. For more information, see <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsrun" class="external">Workflow syntax for GitHub Actions</a>.</p>
+<h3 id="authenticating-with-an-access-token-1" title="Using Octokit.js in GitHub Actions / Authenticating with an access token">Authenticating with an access token<a href="#authenticating-with-an-access-token-1" aria-label="Link to heading 'Authenticating with an access token'" data-heading-content="Authenticating with an access token" class="anchor"></a></h3>
+<p>GitHub recommends that you use the built-in <code>GITHUB_TOKEN</code> instead of creating a token. If this is not possible, store your token as a secret and replace <code>GITHUB_TOKEN</code> in the example below with the name of your secret. For more information about <code>GITHUB_TOKEN</code>, see <a href="https://docs.github.com/en/actions/tutorials/authenticate-with-github_token" class="external">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+<p>The following example workflow:</p>
+<ol>
+<li>Checks out the repository content</li>
+<li>Sets up Node.js</li>
+<li>Installs <code>octokit</code></li>
+<li>Stores the value of <code>GITHUB_TOKEN</code> as an environment variable called <code>TOKEN</code> and runs <code>.github/actions-scripts/use-the-api.mjs</code>, which can access that environment variable as <code>process.env.TOKEN</code></li>
+</ol>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">use_api_via_script</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">issues</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Check out repo content
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Setup Node
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">16.17.0</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">cache</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install dependencies
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install octokit
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run script
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          node .github/actions-scripts/use-the-api.mjs
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.GITHUB_TOKEN }}
+</span></code></pre>
+<p>The following is an example JavaScript script with the file path <code>.github/actions-scripts/use-the-api.mjs</code>.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">Octokit </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: process.env.TOKEN
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">result </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">      owner: "</span><span style="color:#a3be8c;">octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      repo: "</span><span style="color:#a3be8c;">Spoon-Knife</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">titleAndAuthor </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">result</span><span style="color:#c0c5ce;">.data.</span><span style="color:#8fa1b3;">map</span><span style="color:#c0c5ce;">(issue </span><span style="color:#b48ead;">=&gt; </span><span style="color:#c0c5ce;">{title: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title, </span><span style="color:#bf616a;">authorID</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.user.id})
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">titleAndAuthor</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.status}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="authenticating-with-a-github-app-1" title="Using Octokit.js in GitHub Actions / Authenticating with a GitHub App">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app-1" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
+<p>If you are authenticating with a GitHub App, you can create an installation access token within your workflow:</p>
+<ol>
+<li>
+<p>Store your GitHub App's client ID as a configuration variable. In the following example, replace <code>APP_CLIENT_ID</code> with the name of the configuration variable. You can find your client ID on the settings page for your app or through the App API. For more information, see <a href="apps/apps.html#get-an-app">REST API endpoints for GitHub Apps</a>. For more information about configuration variables, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-variables#defining-configuration-variables-for-multiple-workflows" class="external">Store information in variables</a>.</p>
+</li>
+<li>
+<p>Generate a private key for your app. Store the contents of the resulting file as a secret. (Store the entire contents of the file, including <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.) In the following example, replace <code>APP_PRIVATE_KEY</code> with the name of the secret. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps" class="external">Managing private keys for GitHub Apps</a>. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+</li>
+<li>
+<p>Add a step to generate a token, and use that token instead of <code>GITHUB_TOKEN</code>. Note that this token will expire after 60 minutes. For example:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">use_api_via_script</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Check out repo content
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Setup Node
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/setup-node@v7
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: '</span><span style="color:#a3be8c;">16.17.0</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">cache</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Install dependencies
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install octokit
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Generate token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">generate-token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/create-github-app-token@v3
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">client-id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ vars.APP_CLIENT_ID }}
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">private-key</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.APP_PRIVATE_KEY }}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run script
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          node .github/actions-scripts/use-the-api.mjs
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.generate-token.outputs.token }}
+</span><span style="color:#c0c5ce;">
+</span></code></pre>
+</li>
+</ol>
+</div>
+<div class="ghd-tool curl">
+<h2 id="using-curl-in-the-command-line" title="Using curl in the command line">Using <code>curl</code> in the command line<a href="#using-curl-in-the-command-line" aria-label="Link to heading 'Using curl in the command line'" data-heading-content="Using curl in the command line" class="anchor"></a></h2>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>If you want to make API requests from the command line, GitHub recommends that you use GitHub CLI, which simplifies authentication and requests. For more information about getting started with the REST API using GitHub CLI, see the GitHub CLI version of this article.</p>
+</div>
+<ol>
+<li>
+<p>Install <code>curl</code> if it isn't already installed on your machine. To check if <code>curl</code> is installed, execute <code>curl --version</code> in the command line. If the output provides information about the version of <code>curl</code>, that means <code>curl</code> is installed. If you get a message similar to <code>command not found: curl</code>, you need to download and install <code>curl</code>. For more information, see <a href="https://curl.se/download.html" class="external">the curl project download page</a>.</p>
+</li>
+<li>
+<p>Create an access token. For example, create a personal access token or a GitHub App user access token. You will use this token to authenticate your request, so you should give it any scopes or permissions that are required to access the endpoint. For more information, see <a href="authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a>.</p>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>Treat your access token like a password.</p>
+<p>To keep your token secure, you can store your token as a Codespaces secret and use the command line through Codespaces. For more information, see <a href="https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces" class="external">Managing encrypted secrets for your codespaces</a>.</p>
+</div>
+<blockquote>
+<p>You can also use GitHub CLI instead of <code>curl</code>. GitHub CLI will take care of authentication for you. For more information, see the GitHub CLI version of this page.</p>
+<p>If these options are not possible, consider using another CLI service to store your token securely.</p>
+</blockquote>
+</li>
+<li>
+<p>Use the <code>curl</code> command to make your request. Pass your token in an <code>Authorization</code> header. Replace <code>YOUR-TOKEN</code> with your token.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --request GET \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/repos/octocat/Spoon-Knife/issues" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "Authorization: Bearer YOUR-TOKEN"
+</span></code></pre>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>In most cases, you can use <code>Authorization: Bearer</code> or <code>Authorization: token</code> to pass a token. However, if you are passing a JSON web token (JWT), you must use <code>Authorization: Bearer</code>.</p>
+</div>
+</li>
+</ol>
+<h2 id="using-curl-commands-in-github-actions" title="Using curl commands in GitHub Actions">Using <code>curl</code> commands in GitHub Actions<a href="#using-curl-commands-in-github-actions" aria-label="Link to heading 'Using curl commands in GitHub Actions'" data-heading-content="Using curl commands in GitHub Actions" class="anchor"></a></h2>
+<p>You can also use <code>curl</code> commands in your GitHub Actions workflows.</p>
+<h3 id="authenticating-with-an-access-token-2" title="Using curl commands in GitHub Actions / Authenticating with an access token">Authenticating with an access token<a href="#authenticating-with-an-access-token-2" aria-label="Link to heading 'Authenticating with an access token'" data-heading-content="Authenticating with an access token" class="anchor"></a></h3>
+<p>GitHub recommends that you use the built-in <code>GITHUB_TOKEN</code> instead of creating a token. If this is not possible, store your token as a secret and replace <code>GITHUB_TOKEN</code> in the example below with the name of your secret. For more information about <code>GITHUB_TOKEN</code>, see <a href="https://docs.github.com/en/actions/tutorials/authenticate-with-github_token" class="external">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">use_api</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">issues</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">GH_TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.GITHUB_TOKEN }}
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          curl --request GET \
+</span><span style="color:#a3be8c;">          --url "https://api.github.com/repos/octocat/Spoon-Knife/issues" \
+</span><span style="color:#a3be8c;">          --header "Accept: application/vnd.github+json" \
+</span><span style="color:#a3be8c;">          --header "Authorization: Bearer $GH_TOKEN"
+</span></code></pre>
+<h3 id="authenticating-with-a-github-app-2" title="Using curl commands in GitHub Actions / Authenticating with a GitHub App">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app-2" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
+<p>If you are authenticating with a GitHub App, you can create an installation access token within your workflow:</p>
+<ol>
+<li>
+<p>Store your GitHub App's client ID as a configuration variable. In the following example, replace <code>APP_CLIENT_ID</code> with the name of the configuration variable. You can find your client ID on the settings page for your app or through the App API. For more information, see <a href="apps/apps.html#get-an-app">REST API endpoints for GitHub Apps</a>. For more information about configuration variables, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-variables#defining-configuration-variables-for-multiple-workflows" class="external">Store information in variables</a>.</p>
+</li>
+<li>
+<p>Generate a private key for your app. Store the contents of the resulting file as a secret. (Store the entire contents of the file, including <code>-----BEGIN RSA PRIVATE KEY-----</code> and <code>-----END RSA PRIVATE KEY-----</code>.) In the following example, replace <code>APP_PRIVATE_KEY</code> with the name of the secret. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps" class="external">Managing private keys for GitHub Apps</a>. For more information about storing secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+</li>
+<li>
+<p>Add a step to generate a token, and use that token instead of <code>GITHUB_TOKEN</code>. Note that this token will expire after 60 minutes. For example:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
+</span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">use_api</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Generate token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">generate-token
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/create-github-app-token@v3
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">client-id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ vars.APP_CLIENT_ID }}
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">private-key</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.APP_PRIVATE_KEY }}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Use API
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">GH_TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.generate-token.outputs.token }}
+</span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">          curl --request GET \
+</span><span style="color:#a3be8c;">          --url "https://api.github.com/repos/octocat/Spoon-Knife/issues" \
+</span><span style="color:#a3be8c;">          --header "Accept: application/vnd.github+json" \
+</span><span style="color:#a3be8c;">          --header "Authorization: Bearer $GH_TOKEN"
+</span><span style="color:#a3be8c;">
+</span></code></pre>
+</li>
+</ol>
+</div>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<p>For a more detailed guide, see <a href="using-the-rest-api/getting-started-with-the-rest-api.html">Getting started with the REST API</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

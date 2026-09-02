@@ -1,0 +1,837 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Actions cache</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="rest-api-endpoints-for-github-actions-cache">REST API endpoints for GitHub Actions cache<a href="#rest-api-endpoints-for-github-actions-cache" aria-label="Link to heading 'REST API endpoints for GitHub Actions cache'" data-heading-content="REST API endpoints for GitHub Actions cache" class="anchor"></a></h1>
+<p>Use the REST API to interact with the cache for repositories in GitHub Actions.</p>
+<h2 id="about-the-cache-in-github-actions" title="About the cache in GitHub Actions">About the cache in GitHub Actions<a href="#about-the-cache-in-github-actions" aria-label="Link to heading 'About the cache in GitHub Actions'" data-heading-content="About the cache in GitHub Actions" class="anchor"></a></h2>
+<p>You can use the REST API to query and manage the cache for repositories in GitHub Actions. You can also install a GitHub CLI extension to manage your caches from the command line. For more information, see <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching" class="external">Dependency caching reference</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-github-actions-cache-retention-limit-for-an-enterprise" title="Get GitHub Actions cache retention limit for an enterprise">Get GitHub Actions cache retention limit for an enterprise<a href="#get-github-actions-cache-retention-limit-for-an-enterprise" aria-label="Link to heading 'Get GitHub Actions cache retention limit for an enterprise'" data-heading-content="Get GitHub Actions cache retention limit for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/actions/cache/retention-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache retention limit for an enterprise. All organizations and repositories under this<br>
+enterprise may not set a higher cache retention limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters" title="Get GitHub Actions cache retention limit for an enterprise / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get GitHub Actions cache retention limit for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get GitHub Actions cache retention limit for an enterprise / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/actions/cache/retention-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>max_cache_retention_days</code>: integer</li>
+</ul>
+<h2 id="set-github-actions-cache-retention-limit-for-an-enterprise" title="Set GitHub Actions cache retention limit for an enterprise">Set GitHub Actions cache retention limit for an enterprise<a href="#set-github-actions-cache-retention-limit-for-an-enterprise" aria-label="Link to heading 'Set GitHub Actions cache retention limit for an enterprise'" data-heading-content="Set GitHub Actions cache retention limit for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /enterprises/{enterprise}/actions/cache/retention-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache retention limit for an enterprise. All organizations and repositories under this<br>
+enterprise may not set a higher cache retention limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Set GitHub Actions cache retention limit for an enterprise / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_retention_days</code></strong> (integer)<br>
+For repositories &amp; organizations in an enterprise, the maximum duration, in days, for which caches in a repository may be retained.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Set GitHub Actions cache retention limit for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Set GitHub Actions cache retention limit for an enterprise / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/actions/cache/retention-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_retention_days": 80
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-storage-limit-for-an-enterprise" title="Get GitHub Actions cache storage limit for an enterprise">Get GitHub Actions cache storage limit for an enterprise<a href="#get-github-actions-cache-storage-limit-for-an-enterprise" aria-label="Link to heading 'Get GitHub Actions cache storage limit for an enterprise'" data-heading-content="Get GitHub Actions cache storage limit for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/actions/cache/storage-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache storage limit for an enterprise. All organizations and repositories under this<br>
+enterprise may not set a higher cache storage limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Get GitHub Actions cache storage limit for an enterprise / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get GitHub Actions cache storage limit for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get GitHub Actions cache storage limit for an enterprise / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/actions/cache/storage-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>max_cache_size_gb</code>: integer</li>
+</ul>
+<h2 id="set-github-actions-cache-storage-limit-for-an-enterprise" title="Set GitHub Actions cache storage limit for an enterprise">Set GitHub Actions cache storage limit for an enterprise<a href="#set-github-actions-cache-storage-limit-for-an-enterprise" aria-label="Link to heading 'Set GitHub Actions cache storage limit for an enterprise'" data-heading-content="Set GitHub Actions cache storage limit for an enterprise" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /enterprises/{enterprise}/actions/cache/storage-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache storage limit for an enterprise. All organizations and repositories under this<br>
+enterprise may not set a higher cache storage limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:enterprise scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Set GitHub Actions cache storage limit for an enterprise / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enterprise</code></strong> (string) (required)<br>
+The slug version of the enterprise name.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_size_gb</code></strong> (integer)<br>
+For repositories &amp; organizations in an enterprise, the maximum size limit for the sum of all caches in a repository, in gigabytes.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Set GitHub Actions cache storage limit for an enterprise / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Set GitHub Actions cache storage limit for an enterprise / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/enterprises/ENTERPRISE/actions/cache/storage-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_size_gb": 150
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-retention-limit-for-an-organization" title="Get GitHub Actions cache retention limit for an organization">Get GitHub Actions cache retention limit for an organization<a href="#get-github-actions-cache-retention-limit-for-an-organization" aria-label="Link to heading 'Get GitHub Actions cache retention limit for an organization'" data-heading-content="Get GitHub Actions cache retention limit for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /organizations/{org}/actions/cache/retention-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache retention limit for an organization. All repositories under this<br>
+organization may not set a higher cache retention limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:organization scope to use this endpoint.</p>
+<h3 id="parameters-4" title="Get GitHub Actions cache retention limit for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get GitHub Actions cache retention limit for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get GitHub Actions cache retention limit for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/organizations/ORG/actions/cache/retention-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-github-actions-cache-retention-limit-for-an-enterprise">Get GitHub Actions cache retention limit for an enterprise</a>.</p>
+<h2 id="set-github-actions-cache-retention-limit-for-an-organization" title="Set GitHub Actions cache retention limit for an organization">Set GitHub Actions cache retention limit for an organization<a href="#set-github-actions-cache-retention-limit-for-an-organization" aria-label="Link to heading 'Set GitHub Actions cache retention limit for an organization'" data-heading-content="Set GitHub Actions cache retention limit for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /organizations/{org}/actions/cache/retention-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache retention limit for an organization. All repositories under this<br>
+organization may not set a higher cache retention limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:organization scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Set GitHub Actions cache retention limit for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_retention_days</code></strong> (integer)<br>
+For repositories in this organization, the maximum duration, in days, for which caches in a repository may be retained.</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Set GitHub Actions cache retention limit for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Set GitHub Actions cache retention limit for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/organizations/ORG/actions/cache/retention-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_retention_days": 80
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-storage-limit-for-an-organization" title="Get GitHub Actions cache storage limit for an organization">Get GitHub Actions cache storage limit for an organization<a href="#get-github-actions-cache-storage-limit-for-an-organization" aria-label="Link to heading 'Get GitHub Actions cache storage limit for an organization'" data-heading-content="Get GitHub Actions cache storage limit for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /organizations/{org}/actions/cache/storage-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache storage limit for an organization. All repositories under this<br>
+organization may not set a higher cache storage limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:organization scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Get GitHub Actions cache storage limit for an organization / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get GitHub Actions cache storage limit for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Get GitHub Actions cache storage limit for an organization / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/organizations/ORG/actions/cache/storage-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-github-actions-cache-storage-limit-for-an-enterprise">Get GitHub Actions cache storage limit for an enterprise</a>.</p>
+<h2 id="set-github-actions-cache-storage-limit-for-an-organization" title="Set GitHub Actions cache storage limit for an organization">Set GitHub Actions cache storage limit for an organization<a href="#set-github-actions-cache-storage-limit-for-an-organization" aria-label="Link to heading 'Set GitHub Actions cache storage limit for an organization'" data-heading-content="Set GitHub Actions cache storage limit for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /organizations/{org}/actions/cache/storage-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache storage limit for an organization. All organizations and repositories under this<br>
+organization may not set a higher cache storage limit.<br>
+OAuth tokens and personal access tokens (classic) need the admin:organization scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Set GitHub Actions cache storage limit for an organization / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_size_gb</code></strong> (integer)<br>
+For repositories in the organization, the maximum size limit for the sum of all caches in a repository, in gigabytes.</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Set GitHub Actions cache storage limit for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Set GitHub Actions cache storage limit for an organization / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/organizations/ORG/actions/cache/storage-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_size_gb": 150
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-usage-for-an-organization" title="Get GitHub Actions cache usage for an organization">Get GitHub Actions cache usage for an organization<a href="#get-github-actions-cache-usage-for-an-organization" aria-label="Link to heading 'Get GitHub Actions cache usage for an organization'" data-heading-content="Get GitHub Actions cache usage for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/cache/usage
+</span></code></pre>
+<p>Gets the total GitHub Actions cache usage for an organization.<br>
+The data fetched using this API is refreshed approximately every 5 minutes, so values returned from this endpoint may take at least 5 minutes to get updated.<br>
+OAuth tokens and personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters-8" title="Get GitHub Actions cache usage for an organization / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Get GitHub Actions cache usage for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-8" title="Get GitHub Actions cache usage for an organization / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/cache/usage
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_active_caches_count</code>: required, integer</li>
+<li><code>total_active_caches_size_in_bytes</code>: required, integer</li>
+</ul>
+<h2 id="list-repositories-with-github-actions-cache-usage-for-an-organization" title="List repositories with GitHub Actions cache usage for an organization">List repositories with GitHub Actions cache usage for an organization<a href="#list-repositories-with-github-actions-cache-usage-for-an-organization" aria-label="Link to heading 'List repositories with GitHub Actions cache usage for an organization'" data-heading-content="List repositories with GitHub Actions cache usage for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/cache/usage-by-repository
+</span></code></pre>
+<p>Lists repositories and their GitHub Actions cache usage for an organization.<br>
+The data fetched using this API is refreshed approximately every 5 minutes, so values returned from this endpoint may take at least 5 minutes to get updated.<br>
+OAuth tokens and personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters-9" title="List repositories with GitHub Actions cache usage for an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="List repositories with GitHub Actions cache usage for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-9" title="List repositories with GitHub Actions cache usage for an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/cache/usage-by-repository
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>repository_cache_usages</code>: required, array of <code>Actions Cache Usage by repository</code>:
+<ul>
+<li><code>full_name</code>: required, string</li>
+<li><code>active_caches_size_in_bytes</code>: required, integer</li>
+<li><code>active_caches_count</code>: required, integer</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-github-actions-cache-retention-limit-for-a-repository" title="Get GitHub Actions cache retention limit for a repository">Get GitHub Actions cache retention limit for a repository<a href="#get-github-actions-cache-retention-limit-for-a-repository" aria-label="Link to heading 'Get GitHub Actions cache retention limit for a repository'" data-heading-content="Get GitHub Actions cache retention limit for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/cache/retention-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache retention limit for a repository. This determines how long caches will be retained for, if<br>
+not manually removed or evicted due to size constraints.<br>
+OAuth tokens and personal access tokens (classic) need the admin:repository scope to use this endpoint.</p>
+<h3 id="parameters-10" title="Get GitHub Actions cache retention limit for a repository / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Get GitHub Actions cache retention limit for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Get GitHub Actions cache retention limit for a repository / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/cache/retention-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-github-actions-cache-retention-limit-for-an-enterprise">Get GitHub Actions cache retention limit for an enterprise</a>.</p>
+<h2 id="set-github-actions-cache-retention-limit-for-a-repository" title="Set GitHub Actions cache retention limit for a repository">Set GitHub Actions cache retention limit for a repository<a href="#set-github-actions-cache-retention-limit-for-a-repository" aria-label="Link to heading 'Set GitHub Actions cache retention limit for a repository'" data-heading-content="Set GitHub Actions cache retention limit for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/cache/retention-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache retention limit for a repository. This determines how long caches will be retained for, if<br>
+not manually removed or evicted due to size constraints.<br>
+OAuth tokens and personal access tokens (classic) need the admin:repository scope to use this endpoint.</p>
+<h3 id="parameters-11" title="Set GitHub Actions cache retention limit for a repository / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_retention_days</code></strong> (integer)<br>
+The maximum number of days to keep caches in this repository.</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Set GitHub Actions cache retention limit for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Set GitHub Actions cache retention limit for a repository / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/cache/retention-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_retention_days": 80
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-storage-limit-for-a-repository" title="Get GitHub Actions cache storage limit for a repository">Get GitHub Actions cache storage limit for a repository<a href="#get-github-actions-cache-storage-limit-for-a-repository" aria-label="Link to heading 'Get GitHub Actions cache storage limit for a repository'" data-heading-content="Get GitHub Actions cache storage limit for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/cache/storage-limit
+</span></code></pre>
+<p>Gets GitHub Actions cache storage limit for a repository. This determines the maximum size of caches that can be<br>
+stored before eviction occurs.<br>
+OAuth tokens and personal access tokens (classic) need the admin:repository scope to use this endpoint.</p>
+<h3 id="parameters-12" title="Get GitHub Actions cache storage limit for a repository / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get GitHub Actions cache storage limit for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Get GitHub Actions cache storage limit for a repository / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/cache/storage-limit
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-github-actions-cache-storage-limit-for-an-enterprise">Get GitHub Actions cache storage limit for an enterprise</a>.</p>
+<h2 id="set-github-actions-cache-storage-limit-for-a-repository" title="Set GitHub Actions cache storage limit for a repository">Set GitHub Actions cache storage limit for a repository<a href="#set-github-actions-cache-storage-limit-for-a-repository" aria-label="Link to heading 'Set GitHub Actions cache storage limit for a repository'" data-heading-content="Set GitHub Actions cache storage limit for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/cache/storage-limit
+</span></code></pre>
+<p>Sets GitHub Actions cache storage limit for a repository. This determines the maximum size of caches that can be<br>
+stored before eviction occurs.<br>
+OAuth tokens and personal access tokens (classic) need the admin:repository scope to use this endpoint.</p>
+<h3 id="parameters-13" title="Set GitHub Actions cache storage limit for a repository / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>max_cache_size_gb</code></strong> (integer)<br>
+The maximum total cache size for this repository, in gigabytes.</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Set GitHub Actions cache storage limit for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-13" title="Set GitHub Actions cache storage limit for a repository / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/cache/storage-limit \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "max_cache_size_gb": 150
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-cache-usage-for-a-repository" title="Get GitHub Actions cache usage for a repository">Get GitHub Actions cache usage for a repository<a href="#get-github-actions-cache-usage-for-a-repository" aria-label="Link to heading 'Get GitHub Actions cache usage for a repository'" data-heading-content="Get GitHub Actions cache usage for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/cache/usage
+</span></code></pre>
+<p>Gets GitHub Actions cache usage for a repository.<br>
+The data fetched using this API is refreshed approximately every 5 minutes, so values returned from this endpoint may take at least 5 minutes to get updated.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-14" title="Get GitHub Actions cache usage for a repository / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Get GitHub Actions cache usage for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-14" title="Get GitHub Actions cache usage for a repository / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/cache/usage
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>full_name</code>: required, string</li>
+<li><code>active_caches_size_in_bytes</code>: required, integer</li>
+<li><code>active_caches_count</code>: required, integer</li>
+</ul>
+<h2 id="list-github-actions-caches-for-a-repository" title="List GitHub Actions caches for a repository">List GitHub Actions caches for a repository<a href="#list-github-actions-caches-for-a-repository" aria-label="Link to heading 'List GitHub Actions caches for a repository'" data-heading-content="List GitHub Actions caches for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/caches
+</span></code></pre>
+<p>Lists the GitHub Actions caches for a repository.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-15" title="List GitHub Actions caches for a repository / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The full Git reference for narrowing down the cache. The ref for a branch should be formatted as refs/heads/<branch name="">. To reference a pull request use refs/pull/<number>/merge.</number></branch></p>
+</li>
+<li>
+<p><strong><code>key</code></strong> (string)<br>
+An explicit key or prefix for identifying the cache</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property to sort the results by. created<span data-escaped-char="">_</span>at means when the cache was created. last<span data-escaped-char="">_</span>accessed<span data-escaped-char="">_</span>at means when the cache was last accessed. size<span data-escaped-char="">_</span>in<span data-escaped-char="">_</span>bytes is the size of the cache in bytes.<br>
+Default: <code>last_accessed_at</code><br>
+Can be one of: <code>created_at</code>, <code>last_accessed_at</code>, <code>size_in_bytes</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-15" title="List GitHub Actions caches for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-15" title="List GitHub Actions caches for a repository / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/caches
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>actions_caches</code>: required, array of objects:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>ref</code>: string</li>
+<li><code>key</code>: string</li>
+<li><code>version</code>: string</li>
+<li><code>last_accessed_at</code>: string, format: date-time</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>size_in_bytes</code>: integer</li>
+</ul>
+</li>
+</ul>
+<h2 id="delete-github-actions-caches-for-a-repository-using-a-cache-key" title="Delete GitHub Actions caches for a repository (using a cache key)">Delete GitHub Actions caches for a repository (using a cache key)<a href="#delete-github-actions-caches-for-a-repository-using-a-cache-key" aria-label="Link to heading 'Delete GitHub Actions caches for a repository (using a cache key)'" data-heading-content="Delete GitHub Actions caches for a repository (using a cache key)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/caches
+</span></code></pre>
+<p>Deletes one or more GitHub Actions caches for a repository, using a complete cache key. By default, all caches that match the provided key are deleted, but you can optionally provide a Git ref to restrict deletions to caches that match both the provided key and the Git ref.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-16" title="Delete GitHub Actions caches for a repository (using a cache key) / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>key</code></strong> (string) (required)<br>
+A key for identifying the cache.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The full Git reference for narrowing down the cache. The ref for a branch should be formatted as refs/heads/<branch name="">. To reference a pull request use refs/pull/<number>/merge.</number></branch></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-16" title="Delete GitHub Actions caches for a repository (using a cache key) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-16" title="Delete GitHub Actions caches for a repository (using a cache key) / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-16">Example<a href="#example-16" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/caches
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-github-actions-caches-for-a-repository">List GitHub Actions caches for a repository</a>.</p>
+<h2 id="delete-a-github-actions-cache-for-a-repository-using-a-cache-id" title="Delete a GitHub Actions cache for a repository (using a cache ID)">Delete a GitHub Actions cache for a repository (using a cache ID)<a href="#delete-a-github-actions-cache-for-a-repository-using-a-cache-id" aria-label="Link to heading 'Delete a GitHub Actions cache for a repository (using a cache ID)'" data-heading-content="Delete a GitHub Actions cache for a repository (using a cache ID)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}
+</span></code></pre>
+<p>Deletes a GitHub Actions cache for a repository, using a cache ID.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-17" title="Delete a GitHub Actions cache for a repository (using a cache ID) / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-17">Path and query parameters<a href="#path-and-query-parameters-17" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>cache_id</code></strong> (integer) (required)<br>
+The unique identifier of the GitHub Actions cache.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-17" title="Delete a GitHub Actions cache for a repository (using a cache ID) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-17" title="Delete a GitHub Actions cache for a repository (using a cache ID) / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-17">Example<a href="#example-17" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/caches/CACHE_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

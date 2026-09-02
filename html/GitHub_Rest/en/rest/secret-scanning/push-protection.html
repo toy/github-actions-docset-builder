@@ -1,0 +1,173 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for secret scanning push protection</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Secret scanning</a> / </nav><h1 id="rest-api-endpoints-for-secret-scanning-push-protection">REST API endpoints for secret scanning push protection<a href="#rest-api-endpoints-for-secret-scanning-push-protection" aria-label="Link to heading 'REST API endpoints for secret scanning push protection'" data-heading-content="REST API endpoints for secret scanning push protection" class="anchor"></a></h1>
+<p>Use the REST API to manage secret scanning push protection.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-organization-pattern-configurations" title="List organization pattern configurations">List organization pattern configurations<a href="#list-organization-pattern-configurations" aria-label="Link to heading 'List organization pattern configurations'" data-heading-content="List organization pattern configurations" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/secret-scanning/pattern-configurations
+</span></code></pre>
+<p>Lists the secret scanning pattern configurations for an organization.<br>
+Personal access tokens (classic) need the read:org scope to use this endpoint.</p>
+<h3 id="parameters" title="List organization pattern configurations / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes" title="List organization pattern configurations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List organization pattern configurations / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/secret-scanning/pattern-configurations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>pattern_config_version</code>: string or null</li>
+<li><code>provider_pattern_overrides</code>: array of objects:
+<ul>
+<li><code>token_type</code>: string</li>
+<li><code>custom_pattern_version</code>: string or null</li>
+<li><code>slug</code>: string</li>
+<li><code>display_name</code>: string</li>
+<li><code>alert_total</code>: integer</li>
+<li><code>alert_total_percentage</code>: integer</li>
+<li><code>false_positives</code>: integer</li>
+<li><code>false_positive_rate</code>: integer</li>
+<li><code>bypass_rate</code>: integer</li>
+<li><code>default_setting</code>: string, enum: <code>disabled</code>, <code>enabled</code></li>
+<li><code>enterprise_setting</code>: string or null, enum: <code>not-set</code>, <code>disabled</code>, <code>enabled</code>, <code>null</code></li>
+<li><code>setting</code>: string, enum: <code>not-set</code>, <code>disabled</code>, <code>enabled</code></li>
+</ul>
+</li>
+<li><code>custom_pattern_overrides</code>: array of objects:
+<ul>
+<li><code>token_type</code>: string</li>
+<li><code>custom_pattern_version</code>: string or null</li>
+<li><code>slug</code>: string</li>
+<li><code>display_name</code>: string</li>
+<li><code>alert_total</code>: integer</li>
+<li><code>alert_total_percentage</code>: integer</li>
+<li><code>false_positives</code>: integer</li>
+<li><code>false_positive_rate</code>: integer</li>
+<li><code>bypass_rate</code>: integer</li>
+<li><code>default_setting</code>: string, enum: <code>disabled</code>, <code>enabled</code></li>
+<li><code>enterprise_setting</code>: string or null, enum: <code>not-set</code>, <code>disabled</code>, <code>enabled</code>, <code>null</code></li>
+<li><code>setting</code>: string, enum: <code>not-set</code>, <code>disabled</code>, <code>enabled</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="update-organization-pattern-configurations" title="Update organization pattern configurations">Update organization pattern configurations<a href="#update-organization-pattern-configurations" aria-label="Link to heading 'Update organization pattern configurations'" data-heading-content="Update organization pattern configurations" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/secret-scanning/pattern-configurations
+</span></code></pre>
+<p>Updates the secret scanning pattern configurations for an organization.<br>
+Personal access tokens (classic) need the write:org scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Update organization pattern configurations / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>pattern_config_version</code></strong> (string or null)<br>
+The version of the entity. This is used to confirm you're updating the current version of the entity and mitigate unintentionally overriding someone else's update.</p>
+</li>
+<li>
+<p><strong><code>provider_pattern_settings</code></strong> (array of objects)<br>
+Pattern settings for provider patterns.</p>
+<ul>
+<li><strong><code>token_type</code></strong> (string)<br>
+The ID of the pattern to configure.</li>
+<li><strong><code>push_protection_setting</code></strong> (string)<br>
+Push protection setting to set for the pattern.<br>
+Can be one of: <code>not-set</code>, <code>disabled</code>, <code>enabled</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>custom_pattern_settings</code></strong> (array of objects)<br>
+Pattern settings for custom patterns.</p>
+<ul>
+<li><strong><code>token_type</code></strong> (string)<br>
+The ID of the pattern to configure.</li>
+<li><strong><code>custom_pattern_version</code></strong> (string or null)<br>
+The version of the entity. This is used to confirm you're updating the current version of the entity and mitigate unintentionally overriding someone else's update.</li>
+<li><strong><code>push_protection_setting</code></strong> (string)<br>
+Push protection setting to set for the pattern.<br>
+Can be one of: <code>disabled</code>, <code>enabled</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Update organization pattern configurations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Update organization pattern configurations / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/secret-scanning/pattern-configurations \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "pattern_config_version": "0ujsswThIGTUYm2K8FjOOfXtY1K",
+</span><span style="color:#c0c5ce;">  "provider_pattern_settings": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "token_type": "GITHUB_PERSONAL_ACCESS_TOKEN",
+</span><span style="color:#c0c5ce;">      "push_protection_setting": "enabled"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "custom_pattern_settings": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "token_type": "cp_2",
+</span><span style="color:#c0c5ce;">      "custom_pattern_version": "0ujsswThIGTUYm2K8FjOOfXtY1K",
+</span><span style="color:#c0c5ce;">      "push_protection_setting": "enabled"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>pattern_config_version</code>: string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

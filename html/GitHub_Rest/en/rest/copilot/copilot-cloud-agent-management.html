@@ -1,0 +1,100 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Copilot cloud agent repository management</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Copilot</a> / </nav><h1 id="rest-api-endpoints-for-copilot-cloud-agent-repository-management">REST API endpoints for Copilot cloud agent repository management<a href="#rest-api-endpoints-for-copilot-cloud-agent-repository-management" aria-label="Link to heading 'REST API endpoints for Copilot cloud agent repository management'" data-heading-content="REST API endpoints for Copilot cloud agent repository management" class="anchor"></a></h1>
+<p>Use the REST API to manage repository-level settings for Copilot cloud agent.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-copilot-cloud-agent-configuration-for-a-repository" title="Get Copilot cloud agent configuration for a repository">Get Copilot cloud agent configuration for a repository<a href="#get-copilot-cloud-agent-configuration-for-a-repository" aria-label="Link to heading 'Get Copilot cloud agent configuration for a repository'" data-heading-content="Get Copilot cloud agent configuration for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/copilot/cloud-agent/configuration
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Gets the Copilot cloud agent configuration for a repository, including MCP server<br>
+configuration, enabled review tools, Actions workflow approval settings, and firewall<br>
+configuration.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters" title="Get Copilot cloud agent configuration for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get Copilot cloud agent configuration for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get Copilot cloud agent configuration for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/copilot/cloud-agent/configuration
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>mcp_configuration</code>: required, object or null, additional properties allowed</li>
+<li><code>enabled_tools</code>: required, object:
+<ul>
+<li><code>codeql</code>: required, boolean</li>
+<li><code>copilot_code_review</code>: required, boolean</li>
+<li><code>secret_scanning</code>: required, boolean</li>
+<li><code>dependency_vulnerability_checks</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>require_actions_workflow_approval</code>: required, boolean</li>
+<li><code>is_firewall_enabled</code>: required, boolean</li>
+<li><code>is_firewall_recommended_allowlist_enabled</code>: required, boolean</li>
+<li><code>custom_allowlist</code>: required, array of string</li>
+<li><code>is_automations_enabled</code>: required, boolean</li>
+<li><code>require_write_access_for_automation_triggers</code>: required, boolean</li>
+</ul>
+<h4 id="example-2-status-code-200">Example 2: Status Code 200<a href="#example-2-status-code-200" aria-label="Link to heading 'Example 2: Status Code 200'" data-heading-content="Example 2: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/copilot/cloud-agent/configuration
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>mcp_configuration</code>: required, object or null, additional properties allowed</li>
+<li><code>enabled_tools</code>: required, object:
+<ul>
+<li><code>codeql</code>: required, boolean</li>
+<li><code>copilot_code_review</code>: required, boolean</li>
+<li><code>secret_scanning</code>: required, boolean</li>
+<li><code>dependency_vulnerability_checks</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>require_actions_workflow_approval</code>: required, boolean</li>
+<li><code>is_firewall_enabled</code>: required, boolean</li>
+<li><code>is_firewall_recommended_allowlist_enabled</code>: required, boolean</li>
+<li><code>custom_allowlist</code>: required, array of string</li>
+<li><code>is_automations_enabled</code>: required, boolean</li>
+<li><code>require_write_access_for_automation_triggers</code>: required, boolean</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

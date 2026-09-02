@@ -1,0 +1,508 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Teams</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Reference</a> / </nav><h1 id="teams">Teams<a href="#teams" aria-label="Link to heading 'Teams'" data-heading-content="Teams" class="anchor"></a></h1>
+<p>Reference documentation for GraphQL schema types in the Teams category.</p>
+<h2 id="organizationteamshovercardcontext---object" title="OrganizationTeamsHovercardContext - object">OrganizationTeamsHovercardContext - object<a href="#organizationteamshovercardcontext---object" aria-label="Link to heading 'OrganizationTeamsHovercardContext - object'" data-heading-content="OrganizationTeamsHovercardContext - object" class="anchor"></a></h2>
+<p>An organization teams hovercard context.</p>
+<p><strong>Implements:</strong> HovercardContext</p>
+<h3 id="fields-for-organizationteamshovercardcontext" title="OrganizationTeamsHovercardContext - object / Fields for OrganizationTeamsHovercardContext">Fields for <code>OrganizationTeamsHovercardContext</code><a href="#fields-for-organizationteamshovercardcontext" aria-label="Link to heading 'Fields for OrganizationTeamsHovercardContext'" data-heading-content="Fields for OrganizationTeamsHovercardContext" class="anchor"></a></h3>
+<ul>
+<li><code>message</code> (String!): A string describing this context.</li>
+<li><code>octicon</code> (String!): An octicon to accompany this context.</li>
+<li><code>relevantTeams</code> (TeamConnection!): Teams in this organization the user is a member of that are relevant. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+<li><code>teamsResourcePath</code> (URI!): The path for the full team list for this user.</li>
+<li><code>teamsUrl</code> (URI!): The URL for the full team list for this user.</li>
+<li><code>totalTeamCount</code> (Int!): The total number of teams the user is on in the organization.</li>
+</ul>
+<h2 id="team---object" title="Team - object">Team - object<a href="#team---object" aria-label="Link to heading 'Team - object'" data-heading-content="Team - object" class="anchor"></a></h2>
+<p>A team of users in an organization.</p>
+<p><strong>Implements:</strong> MemberStatusable, Node, Subscribable, TeamReviewRequestable</p>
+<h3 id="fields-for-team" title="Team - object / Fields for Team">Fields for <code>Team</code><a href="#fields-for-team" aria-label="Link to heading 'Fields for Team'" data-heading-content="Fields for Team" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>ancestors</code> (TeamConnection!): A list of teams that are ancestors of this team. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>avatarUrl</code> (URI): A URL pointing to the team's avatar.</p>
+<ul>
+<li><code>size</code> (Int): The size in pixels of the resulting square image. Default: <code>400</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>childTeams</code> (TeamConnection!): List of child teams belonging to this team.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>immediateOnly</code> (Boolean): Whether to list immediate child teams or all descendant child teams. Default: <code>true</code>.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (TeamOrder): Order for connection.</li>
+<li><code>userLogins</code> ([String!]): User logins to filter by.</li>
+</ul>
+</li>
+<li>
+<p><code>combinedSlug</code> (String!): The slug corresponding to the organization and team.</p>
+</li>
+<li>
+<p><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</p>
+</li>
+<li>
+<p><code>databaseId</code> (Int): Identifies the primary key from the database.</p>
+</li>
+<li>
+<p><code>description</code> (String): The description of the team.</p>
+</li>
+<li>
+<p><code>editTeamResourcePath</code> (URI!): The HTTP path for editing this team.</p>
+</li>
+<li>
+<p><code>editTeamUrl</code> (URI!): The HTTP URL for editing this team.</p>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the Team object.</p>
+</li>
+<li>
+<p><code>invitations</code> (OrganizationInvitationConnection): A list of pending invitations for users to this team. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>memberStatuses</code> (UserStatusConnection!): Get the status messages members of this entity have set that are either public or visible only to the organization.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (UserStatusOrder): Ordering options for user statuses returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>members</code> (TeamMemberConnection!): A list of users who are members of this team.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>membership</code> (TeamMembershipType): Filter by membership type. Default: <code>ALL</code>.</li>
+<li><code>orderBy</code> (TeamMemberOrder): Order for the connection.</li>
+<li><code>query</code> (String): The search string to look for.</li>
+<li><code>role</code> (TeamMemberRole): Filter by team member role.</li>
+</ul>
+</li>
+<li>
+<p><code>membersResourcePath</code> (URI!): The HTTP path for the team' members.</p>
+</li>
+<li>
+<p><code>membersUrl</code> (URI!): The HTTP URL for the team' members.</p>
+</li>
+<li>
+<p><code>name</code> (String!): The name of the team.</p>
+</li>
+<li>
+<p><code>newTeamResourcePath</code> (URI!): The HTTP path creating a new team.</p>
+</li>
+<li>
+<p><code>newTeamUrl</code> (URI!): The HTTP URL creating a new team.</p>
+</li>
+<li>
+<p><code>notificationSetting</code> (TeamNotificationSetting!): The notification setting that the team has set.</p>
+</li>
+<li>
+<p><code>organization</code> (Organization!): The organization that owns this team.</p>
+</li>
+<li>
+<p><code>parentTeam</code> (Team): The parent team of the team.</p>
+</li>
+<li>
+<p><code>privacy</code> (TeamPrivacy!): The level of privacy the team has.</p>
+</li>
+<li>
+<p><code>projectV2</code> (ProjectV2): Finds and returns the project according to the provided project number.</p>
+<ul>
+<li><code>number</code> (Int!): The Project number.</li>
+</ul>
+</li>
+<li>
+<p><code>projectsV2</code> (ProjectV2Connection!): List of projects this team has collaborator access to.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>filterBy</code> (ProjectV2Filters): Filtering options for projects returned from this connection.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>minPermissionLevel</code> (ProjectV2PermissionLevel): Filter projects based on user role. Default: <code>READ</code>.</li>
+<li><code>orderBy</code> (ProjectV2Order): How to order the returned projects.</li>
+<li><code>query</code> (String): The query to search projects by. Default: ``.</li>
+</ul>
+</li>
+<li>
+<p><code>repositories</code> (TeamRepositoryConnection!): A list of repositories this team has access to.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (TeamRepositoryOrder): Order for the connection.</li>
+<li><code>query</code> (String): The search string to look for. Repositories will be returned where the name contains your search string.</li>
+</ul>
+</li>
+<li>
+<p><code>repositoriesResourcePath</code> (URI!): The HTTP path for this team's repositories.</p>
+</li>
+<li>
+<p><code>repositoriesUrl</code> (URI!): The HTTP URL for this team's repositories.</p>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path for this team.</p>
+</li>
+<li>
+<p><code>reviewRequestDelegationAlgorithm</code> (TeamReviewAssignmentAlgorithm): What algorithm is used for review assignment for this team.</p>
+</li>
+<li>
+<p><code>reviewRequestDelegationEnabled</code> (Boolean!): True if review assignment is enabled for this team.</p>
+</li>
+<li>
+<p><code>reviewRequestDelegationMemberCount</code> (Int): How many team members are required for review assignment for this team.</p>
+</li>
+<li>
+<p><code>reviewRequestDelegationNotifyTeam</code> (Boolean!): When assigning team members via delegation, whether the entire team should be notified as well.</p>
+</li>
+<li>
+<p><code>slug</code> (String!): The slug corresponding to the team.</p>
+</li>
+<li>
+<p><code>teamsResourcePath</code> (URI!): The HTTP path for this team's teams.</p>
+</li>
+<li>
+<p><code>teamsUrl</code> (URI!): The HTTP URL for this team's teams.</p>
+</li>
+<li>
+<p><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL for this team.</p>
+</li>
+<li>
+<p><code>viewerCanAdminister</code> (Boolean!): Team is adminable by the viewer.</p>
+</li>
+<li>
+<p><code>viewerCanSubscribe</code> (Boolean!): Check if the viewer is able to change their subscription status for the subscribable entity. <strong>Deprecated:</strong> Team.viewerCanSubscribe will be removed. Team notifications subscriptions are being deprecated. Removal on 2026-07-01 UTC.</p>
+</li>
+<li>
+<p><code>viewerSubscription</code> (SubscriptionState): Identifies if the viewer is watching, not watching, or ignoring the subscribable entity. <strong>Deprecated:</strong> Team.viewerSubscription will be removed. Team notifications subscriptions are being deprecated. Removal on 2026-07-01 UTC.</p>
+</li>
+</ul>
+<h2 id="teamaddmemberauditentry---object" title="TeamAddMemberAuditEntry - object">TeamAddMemberAuditEntry - object<a href="#teamaddmemberauditentry---object" aria-label="Link to heading 'TeamAddMemberAuditEntry - object'" data-heading-content="TeamAddMemberAuditEntry - object" class="anchor"></a></h2>
+<p>Audit log entry for a team.add_member event.</p>
+<p><strong>Implements:</strong> AuditEntry, Node, OrganizationAuditEntryData, TeamAuditEntryData</p>
+<h3 id="fields-for-teamaddmemberauditentry" title="TeamAddMemberAuditEntry - object / Fields for TeamAddMemberAuditEntry">Fields for <code>TeamAddMemberAuditEntry</code><a href="#fields-for-teamaddmemberauditentry" aria-label="Link to heading 'Fields for TeamAddMemberAuditEntry'" data-heading-content="Fields for TeamAddMemberAuditEntry" class="anchor"></a></h3>
+<ul>
+<li><code>action</code> (String!): The action name. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actor</code> (AuditEntryActor): The user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorIp</code> (String): The IP address of the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLocation</code> (ActorLocation): A readable representation of the actor's location. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLogin</code> (String): The username of the user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorResourcePath</code> (URI): The HTTP path for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorUrl</code> (URI): The HTTP URL for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>createdAt</code> (PreciseDateTime!): The time the action was initiated. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>id</code> (ID!): The Node ID of the TeamAddMemberAuditEntry object.</li>
+<li><code>isLdapMapped</code> (Boolean): Whether the team was mapped to an LDAP Group. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>operationType</code> (OperationType): The corresponding operation type for the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organization</code> (Organization): The Organization associated with the Audit Entry. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationName</code> (String): The name of the Organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationResourcePath</code> (URI): The HTTP path for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationUrl</code> (URI): The HTTP URL for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+<li><code>user</code> (User): The user affected by the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userLogin</code> (String): For actions involving two users, the actor is the initiator and the user is the affected user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userResourcePath</code> (URI): The HTTP path for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userUrl</code> (URI): The HTTP URL for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+</ul>
+<h2 id="teamaddrepositoryauditentry---object" title="TeamAddRepositoryAuditEntry - object">TeamAddRepositoryAuditEntry - object<a href="#teamaddrepositoryauditentry---object" aria-label="Link to heading 'TeamAddRepositoryAuditEntry - object'" data-heading-content="TeamAddRepositoryAuditEntry - object" class="anchor"></a></h2>
+<p>Audit log entry for a team.add_repository event.</p>
+<p><strong>Implements:</strong> AuditEntry, Node, OrganizationAuditEntryData, RepositoryAuditEntryData, TeamAuditEntryData</p>
+<h3 id="fields-for-teamaddrepositoryauditentry" title="TeamAddRepositoryAuditEntry - object / Fields for TeamAddRepositoryAuditEntry">Fields for <code>TeamAddRepositoryAuditEntry</code><a href="#fields-for-teamaddrepositoryauditentry" aria-label="Link to heading 'Fields for TeamAddRepositoryAuditEntry'" data-heading-content="Fields for TeamAddRepositoryAuditEntry" class="anchor"></a></h3>
+<ul>
+<li><code>action</code> (String!): The action name. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actor</code> (AuditEntryActor): The user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorIp</code> (String): The IP address of the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLocation</code> (ActorLocation): A readable representation of the actor's location. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLogin</code> (String): The username of the user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorResourcePath</code> (URI): The HTTP path for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorUrl</code> (URI): The HTTP URL for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>createdAt</code> (PreciseDateTime!): The time the action was initiated. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>id</code> (ID!): The Node ID of the TeamAddRepositoryAuditEntry object.</li>
+<li><code>isLdapMapped</code> (Boolean): Whether the team was mapped to an LDAP Group. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>operationType</code> (OperationType): The corresponding operation type for the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organization</code> (Organization): The Organization associated with the Audit Entry. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationName</code> (String): The name of the Organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationResourcePath</code> (URI): The HTTP path for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationUrl</code> (URI): The HTTP URL for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>repository</code> (Repository): The repository associated with the action.</li>
+<li><code>repositoryName</code> (String): The name of the repository.</li>
+<li><code>repositoryResourcePath</code> (URI): The HTTP path for the repository.</li>
+<li><code>repositoryUrl</code> (URI): The HTTP URL for the repository.</li>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+<li><code>user</code> (User): The user affected by the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userLogin</code> (String): For actions involving two users, the actor is the initiator and the user is the affected user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userResourcePath</code> (URI): The HTTP path for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userUrl</code> (URI): The HTTP URL for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+</ul>
+<h2 id="teamauditentrydata---interface" title="TeamAuditEntryData - interface">TeamAuditEntryData - interface<a href="#teamauditentrydata---interface" aria-label="Link to heading 'TeamAuditEntryData - interface'" data-heading-content="TeamAuditEntryData - interface" class="anchor"></a></h2>
+<p>Metadata for an audit entry with action team.*.</p>
+<h3 id="fields-for-teamauditentrydata" title="TeamAuditEntryData - interface / Fields for TeamAuditEntryData">Fields for <code>TeamAuditEntryData</code><a href="#fields-for-teamauditentrydata" aria-label="Link to heading 'Fields for TeamAuditEntryData'" data-heading-content="Fields for TeamAuditEntryData" class="anchor"></a></h3>
+<ul>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+</ul>
+<h3 id="implemented-by" title="TeamAuditEntryData - interface / Implemented by">Implemented by<a href="#implemented-by" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>OrgRestoreMemberMembershipTeamAuditEntryData</li>
+<li>TeamAddMemberAuditEntry</li>
+<li>TeamAddRepositoryAuditEntry</li>
+<li>TeamChangeParentTeamAuditEntry</li>
+<li>TeamRemoveMemberAuditEntry</li>
+<li>TeamRemoveRepositoryAuditEntry</li>
+</ul>
+<h2 id="teamchangeparentteamauditentry---object" title="TeamChangeParentTeamAuditEntry - object">TeamChangeParentTeamAuditEntry - object<a href="#teamchangeparentteamauditentry---object" aria-label="Link to heading 'TeamChangeParentTeamAuditEntry - object'" data-heading-content="TeamChangeParentTeamAuditEntry - object" class="anchor"></a></h2>
+<p>Audit log entry for a team.change_parent_team event.</p>
+<p><strong>Implements:</strong> AuditEntry, Node, OrganizationAuditEntryData, TeamAuditEntryData</p>
+<h3 id="fields-for-teamchangeparentteamauditentry" title="TeamChangeParentTeamAuditEntry - object / Fields for TeamChangeParentTeamAuditEntry">Fields for <code>TeamChangeParentTeamAuditEntry</code><a href="#fields-for-teamchangeparentteamauditentry" aria-label="Link to heading 'Fields for TeamChangeParentTeamAuditEntry'" data-heading-content="Fields for TeamChangeParentTeamAuditEntry" class="anchor"></a></h3>
+<ul>
+<li><code>action</code> (String!): The action name. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actor</code> (AuditEntryActor): The user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorIp</code> (String): The IP address of the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLocation</code> (ActorLocation): A readable representation of the actor's location. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLogin</code> (String): The username of the user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorResourcePath</code> (URI): The HTTP path for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorUrl</code> (URI): The HTTP URL for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>createdAt</code> (PreciseDateTime!): The time the action was initiated. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>id</code> (ID!): The Node ID of the TeamChangeParentTeamAuditEntry object.</li>
+<li><code>isLdapMapped</code> (Boolean): Whether the team was mapped to an LDAP Group. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>operationType</code> (OperationType): The corresponding operation type for the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organization</code> (Organization): The Organization associated with the Audit Entry. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationName</code> (String): The name of the Organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationResourcePath</code> (URI): The HTTP path for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationUrl</code> (URI): The HTTP URL for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeam</code> (Team): The new parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamName</code> (String): The name of the new parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamNameWas</code> (String): The name of the former parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamResourcePath</code> (URI): The HTTP path for the parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamUrl</code> (URI): The HTTP URL for the parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamWas</code> (Team): The former parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamWasResourcePath</code> (URI): The HTTP path for the previous parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>parentTeamWasUrl</code> (URI): The HTTP URL for the previous parent team. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+<li><code>user</code> (User): The user affected by the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userLogin</code> (String): For actions involving two users, the actor is the initiator and the user is the affected user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userResourcePath</code> (URI): The HTTP path for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userUrl</code> (URI): The HTTP URL for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+</ul>
+<h2 id="teamconnection---object" title="TeamConnection - object">TeamConnection - object<a href="#teamconnection---object" aria-label="Link to heading 'TeamConnection - object'" data-heading-content="TeamConnection - object" class="anchor"></a></h2>
+<p>The connection type for Team.</p>
+<h3 id="fields-for-teamconnection" title="TeamConnection - object / Fields for TeamConnection">Fields for <code>TeamConnection</code><a href="#fields-for-teamconnection" aria-label="Link to heading 'Fields for TeamConnection'" data-heading-content="Fields for TeamConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([TeamEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Team]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="teamedge---object" title="TeamEdge - object">TeamEdge - object<a href="#teamedge---object" aria-label="Link to heading 'TeamEdge - object'" data-heading-content="TeamEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-teamedge" title="TeamEdge - object / Fields for TeamEdge">Fields for <code>TeamEdge</code><a href="#fields-for-teamedge" aria-label="Link to heading 'Fields for TeamEdge'" data-heading-content="Fields for TeamEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (Team): The item at the end of the edge.</li>
+</ul>
+<h2 id="teammemberorder---input-object" title="TeamMemberOrder - input object">TeamMemberOrder - input object<a href="#teammemberorder---input-object" aria-label="Link to heading 'TeamMemberOrder - input object'" data-heading-content="TeamMemberOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for team member connections.</p>
+<h3 id="input-fields-for-teammemberorder" title="TeamMemberOrder - input object / Input fields for TeamMemberOrder">Input fields for <code>TeamMemberOrder</code><a href="#input-fields-for-teammemberorder" aria-label="Link to heading 'Input fields for TeamMemberOrder'" data-heading-content="Input fields for TeamMemberOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+<li><code>field</code> (TeamMemberOrderField!): The field to order team members by.</li>
+</ul>
+<h2 id="teammemberorderfield---enum" title="TeamMemberOrderField - enum">TeamMemberOrderField - enum<a href="#teammemberorderfield---enum" aria-label="Link to heading 'TeamMemberOrderField - enum'" data-heading-content="TeamMemberOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which team member connections can be ordered.</p>
+<h3 id="values-for-teammemberorderfield" title="TeamMemberOrderField - enum / Values for TeamMemberOrderField">Values for <code>TeamMemberOrderField</code><a href="#values-for-teammemberorderfield" aria-label="Link to heading 'Values for TeamMemberOrderField'" data-heading-content="Values for TeamMemberOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>CREATED_AT</code>: Order team members by creation time.</li>
+<li><code>LOGIN</code>: Order team members by login.</li>
+</ul>
+<h2 id="teammemberrole---enum" title="TeamMemberRole - enum">TeamMemberRole - enum<a href="#teammemberrole---enum" aria-label="Link to heading 'TeamMemberRole - enum'" data-heading-content="TeamMemberRole - enum" class="anchor"></a></h2>
+<p>The possible team member roles; eithermaintaineror 'member'.</p>
+<h3 id="values-for-teammemberrole" title="TeamMemberRole - enum / Values for TeamMemberRole">Values for <code>TeamMemberRole</code><a href="#values-for-teammemberrole" aria-label="Link to heading 'Values for TeamMemberRole'" data-heading-content="Values for TeamMemberRole" class="anchor"></a></h3>
+<ul>
+<li><code>MAINTAINER</code>: A team maintainer has permission to add and remove team members.</li>
+<li><code>MEMBER</code>: A team member has no administrative permissions on the team.</li>
+</ul>
+<h2 id="teammembershiptype---enum" title="TeamMembershipType - enum">TeamMembershipType - enum<a href="#teammembershiptype---enum" aria-label="Link to heading 'TeamMembershipType - enum'" data-heading-content="TeamMembershipType - enum" class="anchor"></a></h2>
+<p>Defines which types of team members are included in the returned list. Can be one of IMMEDIATE, CHILD_TEAM or ALL.</p>
+<h3 id="values-for-teammembershiptype" title="TeamMembershipType - enum / Values for TeamMembershipType">Values for <code>TeamMembershipType</code><a href="#values-for-teammembershiptype" aria-label="Link to heading 'Values for TeamMembershipType'" data-heading-content="Values for TeamMembershipType" class="anchor"></a></h3>
+<ul>
+<li><code>ALL</code>: Includes immediate and child team members for the team.</li>
+<li><code>CHILD_TEAM</code>: Includes only child team members for the team.</li>
+<li><code>IMMEDIATE</code>: Includes only immediate members of the team.</li>
+</ul>
+<h2 id="teamnotificationsetting---enum" title="TeamNotificationSetting - enum">TeamNotificationSetting - enum<a href="#teamnotificationsetting---enum" aria-label="Link to heading 'TeamNotificationSetting - enum'" data-heading-content="TeamNotificationSetting - enum" class="anchor"></a></h2>
+<p>The possible team notification values.</p>
+<h3 id="values-for-teamnotificationsetting" title="TeamNotificationSetting - enum / Values for TeamNotificationSetting">Values for <code>TeamNotificationSetting</code><a href="#values-for-teamnotificationsetting" aria-label="Link to heading 'Values for TeamNotificationSetting'" data-heading-content="Values for TeamNotificationSetting" class="anchor"></a></h3>
+<ul>
+<li><code>NOTIFICATIONS_DISABLED</code>: No one will receive notifications.</li>
+<li><code>NOTIFICATIONS_ENABLED</code>: Everyone will receive notifications when the team is @mentioned.</li>
+</ul>
+<h2 id="teamorder---input-object" title="TeamOrder - input object">TeamOrder - input object<a href="#teamorder---input-object" aria-label="Link to heading 'TeamOrder - input object'" data-heading-content="TeamOrder - input object" class="anchor"></a></h2>
+<p>Ways in which team connections can be ordered.</p>
+<h3 id="input-fields-for-teamorder" title="TeamOrder - input object / Input fields for TeamOrder">Input fields for <code>TeamOrder</code><a href="#input-fields-for-teamorder" aria-label="Link to heading 'Input fields for TeamOrder'" data-heading-content="Input fields for TeamOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The direction in which to order nodes.</li>
+<li><code>field</code> (TeamOrderField!): The field in which to order nodes by.</li>
+</ul>
+<h2 id="teamorderfield---enum" title="TeamOrderField - enum">TeamOrderField - enum<a href="#teamorderfield---enum" aria-label="Link to heading 'TeamOrderField - enum'" data-heading-content="TeamOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which team connections can be ordered.</p>
+<h3 id="values-for-teamorderfield" title="TeamOrderField - enum / Values for TeamOrderField">Values for <code>TeamOrderField</code><a href="#values-for-teamorderfield" aria-label="Link to heading 'Values for TeamOrderField'" data-heading-content="Values for TeamOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>NAME</code>: Allows ordering a list of teams by name.</li>
+</ul>
+<h2 id="teamprivacy---enum" title="TeamPrivacy - enum">TeamPrivacy - enum<a href="#teamprivacy---enum" aria-label="Link to heading 'TeamPrivacy - enum'" data-heading-content="TeamPrivacy - enum" class="anchor"></a></h2>
+<p>The possible team privacy values.</p>
+<h3 id="values-for-teamprivacy" title="TeamPrivacy - enum / Values for TeamPrivacy">Values for <code>TeamPrivacy</code><a href="#values-for-teamprivacy" aria-label="Link to heading 'Values for TeamPrivacy'" data-heading-content="Values for TeamPrivacy" class="anchor"></a></h3>
+<ul>
+<li><code>SECRET</code>: A secret team can only be seen by its members.</li>
+<li><code>VISIBLE</code>: A visible team can be seen and @mentioned by every member of the organization.</li>
+</ul>
+<h2 id="teamremovememberauditentry---object" title="TeamRemoveMemberAuditEntry - object">TeamRemoveMemberAuditEntry - object<a href="#teamremovememberauditentry---object" aria-label="Link to heading 'TeamRemoveMemberAuditEntry - object'" data-heading-content="TeamRemoveMemberAuditEntry - object" class="anchor"></a></h2>
+<p>Audit log entry for a team.remove_member event.</p>
+<p><strong>Implements:</strong> AuditEntry, Node, OrganizationAuditEntryData, TeamAuditEntryData</p>
+<h3 id="fields-for-teamremovememberauditentry" title="TeamRemoveMemberAuditEntry - object / Fields for TeamRemoveMemberAuditEntry">Fields for <code>TeamRemoveMemberAuditEntry</code><a href="#fields-for-teamremovememberauditentry" aria-label="Link to heading 'Fields for TeamRemoveMemberAuditEntry'" data-heading-content="Fields for TeamRemoveMemberAuditEntry" class="anchor"></a></h3>
+<ul>
+<li><code>action</code> (String!): The action name. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actor</code> (AuditEntryActor): The user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorIp</code> (String): The IP address of the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLocation</code> (ActorLocation): A readable representation of the actor's location. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLogin</code> (String): The username of the user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorResourcePath</code> (URI): The HTTP path for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorUrl</code> (URI): The HTTP URL for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>createdAt</code> (PreciseDateTime!): The time the action was initiated. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>id</code> (ID!): The Node ID of the TeamRemoveMemberAuditEntry object.</li>
+<li><code>isLdapMapped</code> (Boolean): Whether the team was mapped to an LDAP Group. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>operationType</code> (OperationType): The corresponding operation type for the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organization</code> (Organization): The Organization associated with the Audit Entry. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationName</code> (String): The name of the Organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationResourcePath</code> (URI): The HTTP path for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationUrl</code> (URI): The HTTP URL for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+<li><code>user</code> (User): The user affected by the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userLogin</code> (String): For actions involving two users, the actor is the initiator and the user is the affected user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userResourcePath</code> (URI): The HTTP path for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userUrl</code> (URI): The HTTP URL for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+</ul>
+<h2 id="teamremoverepositoryauditentry---object" title="TeamRemoveRepositoryAuditEntry - object">TeamRemoveRepositoryAuditEntry - object<a href="#teamremoverepositoryauditentry---object" aria-label="Link to heading 'TeamRemoveRepositoryAuditEntry - object'" data-heading-content="TeamRemoveRepositoryAuditEntry - object" class="anchor"></a></h2>
+<p>Audit log entry for a team.remove_repository event.</p>
+<p><strong>Implements:</strong> AuditEntry, Node, OrganizationAuditEntryData, RepositoryAuditEntryData, TeamAuditEntryData</p>
+<h3 id="fields-for-teamremoverepositoryauditentry" title="TeamRemoveRepositoryAuditEntry - object / Fields for TeamRemoveRepositoryAuditEntry">Fields for <code>TeamRemoveRepositoryAuditEntry</code><a href="#fields-for-teamremoverepositoryauditentry" aria-label="Link to heading 'Fields for TeamRemoveRepositoryAuditEntry'" data-heading-content="Fields for TeamRemoveRepositoryAuditEntry" class="anchor"></a></h3>
+<ul>
+<li><code>action</code> (String!): The action name. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actor</code> (AuditEntryActor): The user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorIp</code> (String): The IP address of the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLocation</code> (ActorLocation): A readable representation of the actor's location. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorLogin</code> (String): The username of the user who initiated the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorResourcePath</code> (URI): The HTTP path for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>actorUrl</code> (URI): The HTTP URL for the actor. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>createdAt</code> (PreciseDateTime!): The time the action was initiated. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>id</code> (ID!): The Node ID of the TeamRemoveRepositoryAuditEntry object.</li>
+<li><code>isLdapMapped</code> (Boolean): Whether the team was mapped to an LDAP Group. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>operationType</code> (OperationType): The corresponding operation type for the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organization</code> (Organization): The Organization associated with the Audit Entry. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationName</code> (String): The name of the Organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationResourcePath</code> (URI): The HTTP path for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>organizationUrl</code> (URI): The HTTP URL for the organization. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>repository</code> (Repository): The repository associated with the action.</li>
+<li><code>repositoryName</code> (String): The name of the repository.</li>
+<li><code>repositoryResourcePath</code> (URI): The HTTP path for the repository.</li>
+<li><code>repositoryUrl</code> (URI): The HTTP URL for the repository.</li>
+<li><code>team</code> (Team): The team associated with the action.</li>
+<li><code>teamName</code> (String): The name of the team.</li>
+<li><code>teamResourcePath</code> (URI): The HTTP path for this team.</li>
+<li><code>teamUrl</code> (URI): The HTTP URL for this team.</li>
+<li><code>user</code> (User): The user affected by the action. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userLogin</code> (String): For actions involving two users, the actor is the initiator and the user is the affected user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userResourcePath</code> (URI): The HTTP path for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+<li><code>userUrl</code> (URI): The HTTP URL for the user. <strong>Deprecated:</strong> The GraphQL audit-log is deprecated. Please use the REST API instead. Removal on 2026-04-01 UTC.</li>
+</ul>
+<h2 id="teamrepositoryorder---input-object" title="TeamRepositoryOrder - input object">TeamRepositoryOrder - input object<a href="#teamrepositoryorder---input-object" aria-label="Link to heading 'TeamRepositoryOrder - input object'" data-heading-content="TeamRepositoryOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for team repository connections.</p>
+<h3 id="input-fields-for-teamrepositoryorder" title="TeamRepositoryOrder - input object / Input fields for TeamRepositoryOrder">Input fields for <code>TeamRepositoryOrder</code><a href="#input-fields-for-teamrepositoryorder" aria-label="Link to heading 'Input fields for TeamRepositoryOrder'" data-heading-content="Input fields for TeamRepositoryOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+<li><code>field</code> (TeamRepositoryOrderField!): The field to order repositories by.</li>
+</ul>
+<h2 id="teamrepositoryorderfield---enum" title="TeamRepositoryOrderField - enum">TeamRepositoryOrderField - enum<a href="#teamrepositoryorderfield---enum" aria-label="Link to heading 'TeamRepositoryOrderField - enum'" data-heading-content="TeamRepositoryOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which team repository connections can be ordered.</p>
+<h3 id="values-for-teamrepositoryorderfield" title="TeamRepositoryOrderField - enum / Values for TeamRepositoryOrderField">Values for <code>TeamRepositoryOrderField</code><a href="#values-for-teamrepositoryorderfield" aria-label="Link to heading 'Values for TeamRepositoryOrderField'" data-heading-content="Values for TeamRepositoryOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>CREATED_AT</code>: Order repositories by creation time.</li>
+<li><code>NAME</code>: Order repositories by name.</li>
+<li><code>PERMISSION</code>: Order repositories by permission.</li>
+<li><code>PUSHED_AT</code>: Order repositories by push time.</li>
+<li><code>STARGAZERS</code>: Order repositories by number of stargazers.</li>
+<li><code>UPDATED_AT</code>: Order repositories by update time.</li>
+</ul>
+<h2 id="teamreviewassignmentalgorithm---enum" title="TeamReviewAssignmentAlgorithm - enum">TeamReviewAssignmentAlgorithm - enum<a href="#teamreviewassignmentalgorithm---enum" aria-label="Link to heading 'TeamReviewAssignmentAlgorithm - enum'" data-heading-content="TeamReviewAssignmentAlgorithm - enum" class="anchor"></a></h2>
+<p>The possible team review assignment algorithms.</p>
+<h3 id="values-for-teamreviewassignmentalgorithm" title="TeamReviewAssignmentAlgorithm - enum / Values for TeamReviewAssignmentAlgorithm">Values for <code>TeamReviewAssignmentAlgorithm</code><a href="#values-for-teamreviewassignmentalgorithm" aria-label="Link to heading 'Values for TeamReviewAssignmentAlgorithm'" data-heading-content="Values for TeamReviewAssignmentAlgorithm" class="anchor"></a></h3>
+<ul>
+<li><code>LOAD_BALANCE</code>: Balance review load across the entire team.</li>
+<li><code>ROUND_ROBIN</code>: Alternate reviews between each team member.</li>
+</ul>
+<h2 id="teamreviewrequestable---interface" title="TeamReviewRequestable - interface">TeamReviewRequestable - interface<a href="#teamreviewrequestable---interface" aria-label="Link to heading 'TeamReviewRequestable - interface'" data-heading-content="TeamReviewRequestable - interface" class="anchor"></a></h2>
+<p>Represents a team that can be requested to review a pull request.</p>
+<h3 id="fields-for-teamreviewrequestable" title="TeamReviewRequestable - interface / Fields for TeamReviewRequestable">Fields for <code>TeamReviewRequestable</code><a href="#fields-for-teamreviewrequestable" aria-label="Link to heading 'Fields for TeamReviewRequestable'" data-heading-content="Fields for TeamReviewRequestable" class="anchor"></a></h3>
+<ul>
+<li><code>id</code> (ID!): The Node ID of the TeamReviewRequestable object.</li>
+<li><code>name</code> (String!): The name of the team.</li>
+<li><code>slug</code> (String!): A unique, human-readable identifier for the team.</li>
+</ul>
+<h3 id="implemented-by-1" title="TeamReviewRequestable - interface / Implemented by">Implemented by<a href="#implemented-by-1" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>EnterpriseTeam</li>
+<li>Team</li>
+</ul>
+<h2 id="teamrole---enum" title="TeamRole - enum">TeamRole - enum<a href="#teamrole---enum" aria-label="Link to heading 'TeamRole - enum'" data-heading-content="TeamRole - enum" class="anchor"></a></h2>
+<p>The role of a user on a team.</p>
+<h3 id="values-for-teamrole" title="TeamRole - enum / Values for TeamRole">Values for <code>TeamRole</code><a href="#values-for-teamrole" aria-label="Link to heading 'Values for TeamRole'" data-heading-content="Values for TeamRole" class="anchor"></a></h3>
+<ul>
+<li><code>ADMIN</code>: User has admin rights on the team.</li>
+<li><code>MEMBER</code>: User is a member of the team.</li>
+</ul>
+<h2 id="updateteamsrepository---mutation" title="updateTeamsRepository - mutation">updateTeamsRepository - mutation<a href="#updateteamsrepository---mutation" aria-label="Link to heading 'updateTeamsRepository - mutation'" data-heading-content="updateTeamsRepository - mutation" class="anchor"></a></h2>
+<p>Update team repository.</p>
+<h3 id="input-fields-for-updateteamsrepository" title="updateTeamsRepository - mutation / Input fields for updateTeamsRepository">Input fields for <code>updateTeamsRepository</code><a href="#input-fields-for-updateteamsrepository" aria-label="Link to heading 'Input fields for updateTeamsRepository'" data-heading-content="Input fields for updateTeamsRepository" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UpdateTeamsRepositoryInput!):</li>
+</ul>
+<h3 id="return-fields-for-updateteamsrepository" title="updateTeamsRepository - mutation / Return fields for updateTeamsRepository">Return fields for <code>updateTeamsRepository</code><a href="#return-fields-for-updateteamsrepository" aria-label="Link to heading 'Return fields for updateTeamsRepository'" data-heading-content="Return fields for updateTeamsRepository" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>repository</code> (Repository): The repository that was updated.</li>
+<li><code>teams</code> ([Team!]): The teams granted permission on the repository.</li>
+</ul>
+<h2 id="updateteamsrepositoryinput---input-object" title="UpdateTeamsRepositoryInput - input object">UpdateTeamsRepositoryInput - input object<a href="#updateteamsrepositoryinput---input-object" aria-label="Link to heading 'UpdateTeamsRepositoryInput - input object'" data-heading-content="UpdateTeamsRepositoryInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UpdateTeamsRepository.</p>
+<h3 id="input-fields-for-updateteamsrepositoryinput" title="UpdateTeamsRepositoryInput - input object / Input fields for UpdateTeamsRepositoryInput">Input fields for <code>UpdateTeamsRepositoryInput</code><a href="#input-fields-for-updateteamsrepositoryinput" aria-label="Link to heading 'Input fields for UpdateTeamsRepositoryInput'" data-heading-content="Input fields for UpdateTeamsRepositoryInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>permission</code> (RepositoryPermission!): Permission that should be granted to the teams.</li>
+<li><code>repositoryId</code> (ID!): Repository ID being granted access to.</li>
+<li><code>teamIds</code> ([ID!]!): A list of teams being granted access. Limit: 10.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

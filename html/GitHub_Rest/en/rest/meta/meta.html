@@ -1,0 +1,196 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for meta data</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Meta</a> / </nav><h1 id="rest-api-endpoints-for-meta-data">REST API endpoints for meta data<a href="#rest-api-endpoints-for-meta-data" aria-label="Link to heading 'REST API endpoints for meta data'" data-heading-content="REST API endpoints for meta data" class="anchor"></a></h1>
+<p>Use the REST API to get meta information about GitHub, including the IP addresses of GitHub services.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="github-api-root" title="GitHub API Root">GitHub API Root<a href="#github-api-root" aria-label="Link to heading 'GitHub API Root'" data-heading-content="GitHub API Root" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /
+</span></code></pre>
+<p>Get Hypermedia links to resources accessible in GitHub's REST API</p>
+<h3 id="http-response-status-codes" title="GitHub API Root / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="GitHub API Root / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>current_user_url</code>: required, string, format: uri-template</li>
+<li><code>current_user_authorizations_html_url</code>: required, string, format: uri-template</li>
+<li><code>code_search_url</code>: required, string, format: uri-template</li>
+<li><code>commit_search_url</code>: required, string, format: uri-template</li>
+<li><code>emails_url</code>: required, string, format: uri-template</li>
+<li><code>emojis_url</code>: required, string, format: uri-template</li>
+<li><code>events_url</code>: required, string, format: uri-template</li>
+<li><code>feeds_url</code>: required, string, format: uri-template</li>
+<li><code>followers_url</code>: required, string, format: uri-template</li>
+<li><code>following_url</code>: required, string, format: uri-template</li>
+<li><code>gists_url</code>: required, string, format: uri-template</li>
+<li><code>issue_search_url</code>: required, string, format: uri-template</li>
+<li><code>issues_url</code>: required, string, format: uri-template</li>
+<li><code>keys_url</code>: required, string, format: uri-template</li>
+<li><code>label_search_url</code>: required, string, format: uri-template</li>
+<li><code>notifications_url</code>: required, string, format: uri-template</li>
+<li><code>organization_url</code>: required, string, format: uri-template</li>
+<li><code>organization_repositories_url</code>: required, string, format: uri-template</li>
+<li><code>organization_teams_url</code>: required, string, format: uri-template</li>
+<li><code>public_gists_url</code>: required, string, format: uri-template</li>
+<li><code>rate_limit_url</code>: required, string, format: uri-template</li>
+<li><code>repository_url</code>: required, string, format: uri-template</li>
+<li><code>repository_search_url</code>: required, string, format: uri-template</li>
+<li><code>current_user_repositories_url</code>: required, string, format: uri-template</li>
+<li><code>starred_url</code>: required, string, format: uri-template</li>
+<li><code>starred_gists_url</code>: required, string, format: uri-template</li>
+<li><code>topic_search_url</code>: string, format: uri-template</li>
+<li><code>user_url</code>: required, string, format: uri-template</li>
+<li><code>user_organizations_url</code>: required, string, format: uri-template</li>
+<li><code>user_repositories_url</code>: required, string, format: uri-template</li>
+<li><code>user_search_url</code>: required, string, format: uri-template</li>
+</ul>
+<h2 id="get-github-meta-information" title="Get GitHub meta information">Get GitHub meta information<a href="#get-github-meta-information" aria-label="Link to heading 'Get GitHub meta information'" data-heading-content="Get GitHub meta information" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /meta
+</span></code></pre>
+<p>Returns meta information about GitHub, including a list of GitHub's IP addresses. For more information, see "About GitHub's IP addresses."<br>
+The API's response also includes a list of GitHub's domain names, and the public keys used by GitHub to sign commits made through the web UI.<br>
+The values shown in the documentation's response are example values. You must always query the API directly to get the latest values.<br>
+Note</p>
+<p>This endpoint returns both IPv4 and IPv6 addresses. However, not all features support IPv6. You should refer to the specific documentation for each feature to determine if IPv6 is supported.</p>
+<h3 id="http-response-status-codes-1" title="Get GitHub meta information / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get GitHub meta information / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/meta
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>verifiable_password_authentication</code>: required, boolean</li>
+<li><code>ssh_key_fingerprints</code>: object:
+<ul>
+<li><code>SHA256_RSA</code>: string</li>
+<li><code>SHA256_DSA</code>: string</li>
+<li><code>SHA256_ECDSA</code>: string</li>
+<li><code>SHA256_ED25519</code>: string</li>
+</ul>
+</li>
+<li><code>ssh_keys</code>: array of string</li>
+<li><code>hooks</code>: array of string</li>
+<li><code>github_enterprise_importer</code>: array of string</li>
+<li><code>web</code>: array of string</li>
+<li><code>api</code>: array of string</li>
+<li><code>git</code>: array of string</li>
+<li><code>packages</code>: array of string</li>
+<li><code>pages</code>: array of string</li>
+<li><code>importer</code>: array of string</li>
+<li><code>actions</code>: array of string</li>
+<li><code>actions_macos</code>: array of string</li>
+<li><code>codespaces</code>: array of string</li>
+<li><code>dependabot</code>: array of string</li>
+<li><code>copilot</code>: array of string</li>
+<li><code>commit_signing_keys</code>: array of string</li>
+<li><code>domains</code>: object:
+<ul>
+<li><code>website</code>: array of string</li>
+<li><code>codespaces</code>: array of string</li>
+<li><code>copilot</code>: array of string</li>
+<li><code>packages</code>: array of string</li>
+<li><code>storage</code>: array of string</li>
+<li><code>actions</code>: array of string</li>
+<li><code>actions_inbound</code>: object:
+<ul>
+<li><code>full_domains</code>: array of string</li>
+<li><code>wildcard_domains</code>: array of string</li>
+</ul>
+</li>
+<li><code>artifact_attestations</code>: object:
+<ul>
+<li><code>trust_domain</code>: string</li>
+<li><code>services</code>: array of string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-octocat" title="Get Octocat">Get Octocat<a href="#get-octocat" aria-label="Link to heading 'Get Octocat'" data-heading-content="Get Octocat" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /octocat
+</span></code></pre>
+<p>Get the octocat as ASCII art</p>
+<h3 id="parameters" title="Get Octocat / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>s</code></strong> (string)<br>
+The words to show in Octocat's speech bubble</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get Octocat / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2" title="Get Octocat / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/octocat
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>string</p>
+<h2 id="get-all-api-versions" title="Get all API versions">Get all API versions<a href="#get-all-api-versions" aria-label="Link to heading 'Get all API versions'" data-heading-content="Get all API versions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /versions
+</span></code></pre>
+<p>Get all supported GitHub API versions.</p>
+<h3 id="http-response-status-codes-3" title="Get all API versions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get all API versions / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/versions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of string, format: date</p>
+<h2 id="get-the-zen-of-github" title="Get the Zen of GitHub">Get the Zen of GitHub<a href="#get-the-zen-of-github" aria-label="Link to heading 'Get the Zen of GitHub'" data-heading-content="Get the Zen of GitHub" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /zen
+</span></code></pre>
+<p>Get a random sentence from the Zen of GitHub</p>
+<h3 id="http-response-status-codes-4" title="Get the Zen of GitHub / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="Get the Zen of GitHub / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/zen
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-octocat">Get Octocat</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

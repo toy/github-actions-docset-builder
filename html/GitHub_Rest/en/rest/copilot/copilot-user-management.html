@@ -1,0 +1,734 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Copilot user management</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Copilot</a> / </nav><h1 id="rest-api-endpoints-for-copilot-user-management">REST API endpoints for Copilot user management<a href="#rest-api-endpoints-for-copilot-user-management" aria-label="Link to heading 'REST API endpoints for Copilot user management'" data-heading-content="REST API endpoints for Copilot user management" class="anchor"></a></h1>
+<p>Use the REST API to manage the GitHub Copilot Business subscription for your organization.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">These endpoints are in public preview and subject to change.</p>
+</div>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-copilot-seat-information-and-settings-for-an-organization" title="Get Copilot seat information and settings for an organization">Get Copilot seat information and settings for an organization<a href="#get-copilot-seat-information-and-settings-for-an-organization" aria-label="Link to heading 'Get Copilot seat information and settings for an organization'" data-heading-content="Get Copilot seat information and settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/copilot/billing
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Gets information about an organization's Copilot subscription, including seat breakdown<br>
+and feature policies. To configure these settings, go to your organization's settings on GitHub.com.<br>
+For more information, see "Managing policies for Copilot in your organization."<br>
+Only organization owners can view details about the organization's Copilot Business or Copilot Enterprise subscription.<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or read:org scopes to use this endpoint.</p>
+<h3 id="parameters" title="Get Copilot seat information and settings for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get Copilot seat information and settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - There is a problem with your account's associated payment method.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get Copilot seat information and settings for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>seat_breakdown</code>: required, <code>Copilot Seat Breakdown</code>:
+<ul>
+<li><code>total</code>: integer</li>
+<li><code>added_this_cycle</code>: integer</li>
+<li><code>pending_cancellation</code>: integer</li>
+<li><code>pending_invitation</code>: integer</li>
+<li><code>active_this_cycle</code>: integer</li>
+<li><code>inactive_this_cycle</code>: integer</li>
+</ul>
+</li>
+<li><code>public_code_suggestions</code>: required, string, enum: <code>allow</code>, <code>block</code>, <code>unconfigured</code></li>
+<li><code>ide_chat</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>unconfigured</code></li>
+<li><code>platform_chat</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>unconfigured</code></li>
+<li><code>cli</code>: string, enum: <code>enabled</code>, <code>disabled</code>, <code>unconfigured</code></li>
+<li><code>seat_management_setting</code>: required, string, enum: <code>assign_all</code>, <code>assign_selected</code>, <code>disabled</code>, <code>unconfigured</code></li>
+<li><code>plan_type</code>: string, enum: <code>business</code>, <code>enterprise</code></li>
+</ul>
+<h2 id="list-all-copilot-seat-assignments-for-an-organization" title="List all Copilot seat assignments for an organization">List all Copilot seat assignments for an organization<a href="#list-all-copilot-seat-assignments-for-an-organization" aria-label="Link to heading 'List all Copilot seat assignments for an organization'" data-heading-content="List all Copilot seat assignments for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/copilot/billing/seats
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Lists all Copilot seats for which an organization with a Copilot Business or Copilot Enterprise subscription is currently being billed.<br>
+Only organization owners can view assigned seats.<br>
+Each seat object contains information about the assigned user's most recent Copilot activity. Users must have telemetry enabled in their IDE for Copilot in the IDE activity to be reflected in last_activity_at.<br>
+For more information about activity data, see Metrics data properties for GitHub Copilot.<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or read:org scopes to use this endpoint.</p>
+<h3 id="parameters-1" title="List all Copilot seat assignments for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>50</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List all Copilot seat assignments for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List all Copilot seat assignments for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing/seats
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_seats</code>: integer</li>
+<li><code>seats</code>: array of <code>Copilot Business Seat Detail</code>:
+<ul>
+<li><code>assignee</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>organization</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Organization Simple</strong>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>assigning_team</code>: one of:
+<ul>
+<li><strong>Team</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Enterprise Team</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>sync_to_organizations</code>: string</li>
+<li><code>organization_selection_type</code>: string</li>
+<li><code>group_id</code>: required, string or null</li>
+<li><code>group_name</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>pending_cancellation_date</code>: string or null, format: date</li>
+<li><code>last_activity_at</code>: string or null, format: date-time</li>
+<li><code>last_activity_editor</code>: string or null</li>
+<li><code>last_authenticated_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time, deprecated</li>
+<li><code>plan_type</code>: string, enum: <code>business</code>, <code>enterprise</code>, <code>unknown</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="add-teams-to-the-copilot-subscription-for-an-organization" title="Add teams to the Copilot subscription for an organization">Add teams to the Copilot subscription for an organization<a href="#add-teams-to-the-copilot-subscription-for-an-organization" aria-label="Link to heading 'Add teams to the Copilot subscription for an organization'" data-heading-content="Add teams to the Copilot subscription for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/copilot/billing/selected_teams
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Purchases a GitHub Copilot seat for all users within each specified team.<br>
+The organization will be billed for each seat based on the organization's Copilot plan. For more information about Copilot pricing, see "About billing for GitHub Copilot in your organization."<br>
+Only organization owners can purchase Copilot seats for their organization members. The organization must have a Copilot Business or Copilot Enterprise subscription and a configured suggestion matching policy.<br>
+For more information about setting up a Copilot subscription, see "Subscribing to Copilot for your organization."<br>
+For more information about setting a suggestion matching policy, see "Managing policies for Copilot in your organization."<br>
+The response contains the total number of new seats that were created and existing seats that were refreshed.<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or admin:org scopes to use this endpoint.</p>
+<h3 id="parameters-2" title="Add teams to the Copilot subscription for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_teams</code></strong> (array of strings) (required)<br>
+List of team names within the organization to which to grant access to GitHub Copilot.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Add teams to the Copilot subscription for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Copilot Business or Enterprise is not enabled for this organization, billing has not been set up for this organization, a public code suggestions policy has not been set for this organization, or the organization's Copilot access setting is set to enable Copilot for all users or is unconfigured.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Add teams to the Copilot subscription for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing/selected_teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_teams": [
+</span><span style="color:#c0c5ce;">    "engteam1",
+</span><span style="color:#c0c5ce;">    "engteam2",
+</span><span style="color:#c0c5ce;">    "engteam3"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>seats_created</code>: required, integer</li>
+</ul>
+<h2 id="remove-teams-from-the-copilot-subscription-for-an-organization" title="Remove teams from the Copilot subscription for an organization">Remove teams from the Copilot subscription for an organization<a href="#remove-teams-from-the-copilot-subscription-for-an-organization" aria-label="Link to heading 'Remove teams from the Copilot subscription for an organization'" data-heading-content="Remove teams from the Copilot subscription for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/copilot/billing/selected_teams
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Sets seats for all members of each team specified to "pending cancellation".<br>
+This will cause the members of the specified team(s) to lose access to GitHub Copilot at the end of the current billing cycle unless they retain access through another team.<br>
+For more information about disabling access to Copilot, see "Revoking access to Copilot for members of your organization."<br>
+Only organization owners can cancel Copilot seats for their organization members.<br>
+The response contains the total number of seats set to "pending cancellation".<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or admin:org scopes to use this endpoint.</p>
+<h3 id="parameters-3" title="Remove teams from the Copilot subscription for an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_teams</code></strong> (array of strings) (required)<br>
+The names of teams from which to revoke access to GitHub Copilot.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Remove teams from the Copilot subscription for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Copilot Business or Enterprise is not enabled for this organization, billing has not been set up for this organization, a public code suggestions policy has not been set for this organization, or the organization's Copilot access setting is set to enable Copilot for all users or is unconfigured.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Remove teams from the Copilot subscription for an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing/selected_teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_teams": [
+</span><span style="color:#c0c5ce;">    "engteam1",
+</span><span style="color:#c0c5ce;">    "engteam2",
+</span><span style="color:#c0c5ce;">    "engteam3"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>seats_cancelled</code>: required, integer</li>
+</ul>
+<h2 id="add-users-to-the-copilot-subscription-for-an-organization" title="Add users to the Copilot subscription for an organization">Add users to the Copilot subscription for an organization<a href="#add-users-to-the-copilot-subscription-for-an-organization" aria-label="Link to heading 'Add users to the Copilot subscription for an organization'" data-heading-content="Add users to the Copilot subscription for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/copilot/billing/selected_users
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Purchases a GitHub Copilot seat for each user specified.<br>
+The organization will be billed for each seat based on the organization's Copilot plan. For more information about Copilot pricing, see "About billing for GitHub Copilot in your organization."<br>
+Only organization owners can purchase Copilot seats for their organization members. The organization must have a Copilot Business or Copilot Enterprise subscription and a configured suggestion matching policy.<br>
+For more information about setting up a Copilot subscription, see "Subscribing to Copilot for your organization."<br>
+For more information about setting a suggestion matching policy, see "Managing policies for Copilot in your organization."<br>
+The response contains the total number of new seats that were created and existing seats that were refreshed.<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or admin:org scopes to use this endpoint.</p>
+<h3 id="parameters-4" title="Add users to the Copilot subscription for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_usernames</code></strong> (array of strings) (required)<br>
+The usernames of the organization members to be granted access to GitHub Copilot.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Add users to the Copilot subscription for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Copilot Business or Enterprise is not enabled for this organization, billing has not been set up for this organization, a public code suggestions policy has not been set for this organization, or the organization's Copilot access setting is set to enable Copilot for all users or is unconfigured.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Add users to the Copilot subscription for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing/selected_users \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_usernames": [
+</span><span style="color:#c0c5ce;">    "cooluser1",
+</span><span style="color:#c0c5ce;">    "hacker2",
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#add-teams-to-the-copilot-subscription-for-an-organization">Add teams to the Copilot subscription for an organization</a>.</p>
+<h2 id="remove-users-from-the-copilot-subscription-for-an-organization" title="Remove users from the Copilot subscription for an organization">Remove users from the Copilot subscription for an organization<a href="#remove-users-from-the-copilot-subscription-for-an-organization" aria-label="Link to heading 'Remove users from the Copilot subscription for an organization'" data-heading-content="Remove users from the Copilot subscription for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/copilot/billing/selected_users
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Sets seats for all users specified to "pending cancellation".<br>
+This will cause the specified users to lose access to GitHub Copilot at the end of the current billing cycle unless they retain access through team membership.<br>
+For more information about disabling access to Copilot, see "Revoking access to Copilot for members of your organization."<br>
+Only organization owners can cancel Copilot seats for their organization members.<br>
+The response contains the total number of seats set to "pending cancellation".<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or admin:org scopes to use this endpoint.</p>
+<h3 id="parameters-5" title="Remove users from the Copilot subscription for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_usernames</code></strong> (array of strings) (required)<br>
+The usernames of the organization members for which to revoke access to GitHub Copilot.</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Remove users from the Copilot subscription for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Copilot Business or Enterprise is not enabled for this organization, billing has not been set up for this organization, a public code suggestions policy has not been set for this organization, the seat management setting is set to enable Copilot for all users or is unconfigured, or a user's seat cannot be cancelled because it was assigned to them via a team.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Remove users from the Copilot subscription for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/copilot/billing/selected_users \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_usernames": [
+</span><span style="color:#c0c5ce;">    "cooluser1",
+</span><span style="color:#c0c5ce;">    "hacker2",
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#remove-teams-from-the-copilot-subscription-for-an-organization">Remove teams from the Copilot subscription for an organization</a>.</p>
+<h2 id="get-copilot-seat-assignment-details-for-a-user" title="Get Copilot seat assignment details for a user">Get Copilot seat assignment details for a user<a href="#get-copilot-seat-assignment-details-for-a-user" aria-label="Link to heading 'Get Copilot seat assignment details for a user'" data-heading-content="Get Copilot seat assignment details for a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/members/{username}/copilot
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Gets the GitHub Copilot seat details for a member of an organization who currently has access to GitHub Copilot.<br>
+The seat object contains information about the user's most recent Copilot activity. Users must have telemetry enabled in their IDE for Copilot in the IDE activity to be reflected in last_activity_at.<br>
+For more information about activity data, see Metrics data properties for GitHub Copilot.<br>
+Only organization owners can view Copilot seat assignment details for members of their organization.<br>
+OAuth app tokens and personal access tokens (classic) need either the manage_billing:copilot or read:org scopes to use this endpoint.</p>
+<h3 id="parameters-6" title="Get Copilot seat assignment details for a user / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get Copilot seat assignment details for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - The user's GitHub Copilot seat details, including usage.</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Copilot Business or Enterprise is not enabled for this organization or the user has a pending organization invitation.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Get Copilot seat assignment details for a user / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/members/USERNAME/copilot
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>assignee</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>organization</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Organization Simple</strong>
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>assigning_team</code>: one of:
+<ul>
+<li><strong>Team</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Enterprise Team</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>sync_to_organizations</code>: string</li>
+<li><code>organization_selection_type</code>: string</li>
+<li><code>group_id</code>: required, string or null</li>
+<li><code>group_name</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>pending_cancellation_date</code>: string or null, format: date</li>
+<li><code>last_activity_at</code>: string or null, format: date-time</li>
+<li><code>last_activity_editor</code>: string or null</li>
+<li><code>last_authenticated_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time, deprecated</li>
+<li><code>plan_type</code>: string, enum: <code>business</code>, <code>enterprise</code>, <code>unknown</code></li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

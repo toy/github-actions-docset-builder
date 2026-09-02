@@ -1,0 +1,1936 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Actions permissions</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="rest-api-endpoints-for-github-actions-permissions">REST API endpoints for GitHub Actions permissions<a href="#rest-api-endpoints-for-github-actions-permissions" aria-label="Link to heading 'REST API endpoints for GitHub Actions permissions'" data-heading-content="REST API endpoints for GitHub Actions permissions" class="anchor"></a></h1>
+<p>Use the REST API to interact with permissions for GitHub Actions.</p>
+<h2 id="about-permissions-for-github-actions" title="About permissions for GitHub Actions">About permissions for GitHub Actions<a href="#about-permissions-for-github-actions" aria-label="Link to heading 'About permissions for GitHub Actions'" data-heading-content="About permissions for GitHub Actions" class="anchor"></a></h2>
+<p>You can use the REST API to set permissions for the organizations and repositories that are allowed to run GitHub Actions, and the actions and reusable workflows that are allowed to run. For more information, see <a href="https://docs.github.com/en/organizations/managing-organization-settings/disabling-or-limiting-github-actions-for-your-organization" class="external">Disabling or limiting GitHub Actions for your organization</a>, and <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository" class="external">Managing GitHub Actions settings for a repository</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-github-actions-permissions-for-an-organization" title="Get GitHub Actions permissions for an organization">Get GitHub Actions permissions for an organization<a href="#get-github-actions-permissions-for-an-organization" aria-label="Link to heading 'Get GitHub Actions permissions for an organization'" data-heading-content="Get GitHub Actions permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions
+</span></code></pre>
+<p>Gets the GitHub Actions permissions policy for repositories and allowed actions and reusable workflows in an organization.<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters" title="Get GitHub Actions permissions for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get GitHub Actions permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get GitHub Actions permissions for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>enabled_repositories</code>: required, string, enum: <code>all</code>, <code>none</code>, <code>selected</code></li>
+<li><code>selected_repositories_url</code>: string</li>
+<li><code>allowed_actions</code>: string, enum: <code>all</code>, <code>local_only</code>, <code>selected</code></li>
+<li><code>selected_actions_url</code>: string</li>
+<li><code>sha_pinning_required</code>: boolean</li>
+</ul>
+<h2 id="set-github-actions-permissions-for-an-organization" title="Set GitHub Actions permissions for an organization">Set GitHub Actions permissions for an organization<a href="#set-github-actions-permissions-for-an-organization" aria-label="Link to heading 'Set GitHub Actions permissions for an organization'" data-heading-content="Set GitHub Actions permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions
+</span></code></pre>
+<p>Sets the GitHub Actions permissions policy for repositories and allowed actions and reusable workflows in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Set GitHub Actions permissions for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enabled_repositories</code></strong> (string) (required)<br>
+The policy that controls the repositories in the organization that are allowed to run GitHub Actions.<br>
+Can be one of: <code>all</code>, <code>none</code>, <code>selected</code></p>
+</li>
+<li>
+<p><strong><code>allowed_actions</code></strong> (string)<br>
+The permissions policy that controls the actions and reusable workflows that are allowed to run.<br>
+Can be one of: <code>all</code>, <code>local_only</code>, <code>selected</code></p>
+</li>
+<li>
+<p><strong><code>sha_pinning_required</code></strong> (boolean)<br>
+Whether actions must be pinned to a full-length commit SHA.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Set GitHub Actions permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-1" title="Set GitHub Actions permissions for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "enabled_repositories": "all",
+</span><span style="color:#c0c5ce;">  "allowed_actions": "selected",
+</span><span style="color:#c0c5ce;">  "sha_pinning_required": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-artifact-and-log-retention-settings-for-an-organization" title="Get artifact and log retention settings for an organization">Get artifact and log retention settings for an organization<a href="#get-artifact-and-log-retention-settings-for-an-organization" aria-label="Link to heading 'Get artifact and log retention settings for an organization'" data-heading-content="Get artifact and log retention settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p>Gets artifact and log retention settings for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-2" title="Get artifact and log retention settings for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get artifact and log retention settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get artifact and log retention settings for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>days</code>: required, integer</li>
+<li><code>maximum_allowed_days</code>: required, integer</li>
+</ul>
+<h2 id="set-artifact-and-log-retention-settings-for-an-organization" title="Set artifact and log retention settings for an organization">Set artifact and log retention settings for an organization<a href="#set-artifact-and-log-retention-settings-for-an-organization" aria-label="Link to heading 'Set artifact and log retention settings for an organization'" data-heading-content="Set artifact and log retention settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p>Sets artifact and log retention settings for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-3" title="Set artifact and log retention settings for an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>days</code></strong> (integer) (required)<br>
+The number of days to retain artifacts and logs</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Set artifact and log retention settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Set artifact and log retention settings for an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/artifact-and-log-retention \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "days": 100
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-fork-pr-contributor-approval-permissions-for-an-organization" title="Get fork PR contributor approval permissions for an organization">Get fork PR contributor approval permissions for an organization<a href="#get-fork-pr-contributor-approval-permissions-for-an-organization" aria-label="Link to heading 'Get fork PR contributor approval permissions for an organization'" data-heading-content="Get fork PR contributor approval permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p>Gets the fork PR contributor approval policy for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-4" title="Get fork PR contributor approval permissions for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get fork PR contributor approval permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get fork PR contributor approval permissions for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>approval_policy</code>: required, string, enum: <code>first_time_contributors_new_to_github</code>, <code>first_time_contributors</code>, <code>all_external_contributors</code></li>
+</ul>
+<h2 id="set-fork-pr-contributor-approval-permissions-for-an-organization" title="Set fork PR contributor approval permissions for an organization">Set fork PR contributor approval permissions for an organization<a href="#set-fork-pr-contributor-approval-permissions-for-an-organization" aria-label="Link to heading 'Set fork PR contributor approval permissions for an organization'" data-heading-content="Set fork PR contributor approval permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p>Sets the fork PR contributor approval policy for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Set fork PR contributor approval permissions for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>approval_policy</code></strong> (string) (required)<br>
+The policy that controls when fork PR workflows require approval from a maintainer.<br>
+Can be one of: <code>first_time_contributors_new_to_github</code>, <code>first_time_contributors</code>, <code>all_external_contributors</code></li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Set fork PR contributor approval permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Set fork PR contributor approval permissions for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="set-approval-policy-to-first-time-contributors">Set approval policy to first time contributors<a href="#set-approval-policy-to-first-time-contributors" aria-label="Link to heading 'Set approval policy to first time contributors'" data-heading-content="Set approval policy to first time contributors" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/fork-pr-contributor-approval \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "approval_policy": "first_time_contributors"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-private-repo-fork-pr-workflow-settings-for-an-organization" title="Get private repo fork PR workflow settings for an organization">Get private repo fork PR workflow settings for an organization<a href="#get-private-repo-fork-pr-workflow-settings-for-an-organization" aria-label="Link to heading 'Get private repo fork PR workflow settings for an organization'" data-heading-content="Get private repo fork PR workflow settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p>Gets the settings for whether workflows from fork pull requests can run on private repositories in an organization.</p>
+<h3 id="parameters-6" title="Get private repo fork PR workflow settings for an organization / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get private repo fork PR workflow settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Get private repo fork PR workflow settings for an organization / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>run_workflows_from_fork_pull_requests</code>: required, boolean</li>
+<li><code>send_write_tokens_to_workflows</code>: required, boolean</li>
+<li><code>send_secrets_and_variables</code>: required, boolean</li>
+<li><code>require_approval_for_fork_pr_workflows</code>: required, boolean</li>
+</ul>
+<h2 id="set-private-repo-fork-pr-workflow-settings-for-an-organization" title="Set private repo fork PR workflow settings for an organization">Set private repo fork PR workflow settings for an organization<a href="#set-private-repo-fork-pr-workflow-settings-for-an-organization" aria-label="Link to heading 'Set private repo fork PR workflow settings for an organization'" data-heading-content="Set private repo fork PR workflow settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p>Sets the settings for whether workflows from fork pull requests can run on private repositories in an organization.</p>
+<h3 id="parameters-7" title="Set private repo fork PR workflow settings for an organization / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>run_workflows_from_fork_pull_requests</code></strong> (boolean) (required)<br>
+Whether workflows triggered by pull requests from forks are allowed to run on private repositories.</p>
+</li>
+<li>
+<p><strong><code>send_write_tokens_to_workflows</code></strong> (boolean)<br>
+Whether GitHub Actions can create pull requests or submit approving pull request reviews from a workflow triggered by a fork pull request.</p>
+</li>
+<li>
+<p><strong><code>send_secrets_and_variables</code></strong> (boolean)<br>
+Whether to make secrets and variables available to workflows triggered by pull requests from forks.</p>
+</li>
+<li>
+<p><strong><code>require_approval_for_fork_pr_workflows</code></strong> (boolean)<br>
+Whether workflows triggered by pull requests from forks require approval from a repository administrator to run.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Set private repo fork PR workflow settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Empty response for successful settings update</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden - Fork PR workflow settings for private repositories are managed by the enterprise owner</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Set private repo fork PR workflow settings for an organization / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/fork-pr-workflows-private-repos \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "run_workflows_from_fork_pull_requests": true,
+</span><span style="color:#c0c5ce;">  "send_write_tokens_to_workflows": false,
+</span><span style="color:#c0c5ce;">  "send_secrets_and_variables": false,
+</span><span style="color:#c0c5ce;">  "require_approval_for_fork_pr_workflows": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-selected-repositories-enabled-for-github-actions-in-an-organization" title="List selected repositories enabled for GitHub Actions in an organization">List selected repositories enabled for GitHub Actions in an organization<a href="#list-selected-repositories-enabled-for-github-actions-in-an-organization" aria-label="Link to heading 'List selected repositories enabled for GitHub Actions in an organization'" data-heading-content="List selected repositories enabled for GitHub Actions in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/repositories
+</span></code></pre>
+<p>Lists the selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for enabled<span data-escaped-char="">_</span>repositories must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-8" title="List selected repositories enabled for GitHub Actions in an organization / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="List selected repositories enabled for GitHub Actions in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-8" title="List selected repositories enabled for GitHub Actions in an organization / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, number</li>
+<li><code>repositories</code>: required, array of <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="set-selected-repositories-enabled-for-github-actions-in-an-organization" title="Set selected repositories enabled for GitHub Actions in an organization">Set selected repositories enabled for GitHub Actions in an organization<a href="#set-selected-repositories-enabled-for-github-actions-in-an-organization" aria-label="Link to heading 'Set selected repositories enabled for GitHub Actions in an organization'" data-heading-content="Set selected repositories enabled for GitHub Actions in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/repositories
+</span></code></pre>
+<p>Replaces the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for enabled<span data-escaped-char="">_</span>repositories must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-9" title="Set selected repositories enabled for GitHub Actions in an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_repository_ids</code></strong> (array of integers) (required)<br>
+List of repository IDs to enable for GitHub Actions.</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Set selected repositories enabled for GitHub Actions in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-9" title="Set selected repositories enabled for GitHub Actions in an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/repositories \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_repository_ids": [
+</span><span style="color:#c0c5ce;">    32,
+</span><span style="color:#c0c5ce;">    42
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="enable-a-selected-repository-for-github-actions-in-an-organization" title="Enable a selected repository for GitHub Actions in an organization">Enable a selected repository for GitHub Actions in an organization<a href="#enable-a-selected-repository-for-github-actions-in-an-organization" aria-label="Link to heading 'Enable a selected repository for GitHub Actions in an organization'" data-heading-content="Enable a selected repository for GitHub Actions in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/repositories/{repository_id}
+</span></code></pre>
+<p>Adds a repository to the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for enabled<span data-escaped-char="">_</span>repositories must be must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-10" title="Enable a selected repository for GitHub Actions in an organization / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Enable a selected repository for GitHub Actions in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-10" title="Enable a selected repository for GitHub Actions in an organization / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="disable-a-selected-repository-for-github-actions-in-an-organization" title="Disable a selected repository for GitHub Actions in an organization">Disable a selected repository for GitHub Actions in an organization<a href="#disable-a-selected-repository-for-github-actions-in-an-organization" aria-label="Link to heading 'Disable a selected repository for GitHub Actions in an organization'" data-heading-content="Disable a selected repository for GitHub Actions in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}
+</span></code></pre>
+<p>Removes a repository from the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for enabled<span data-escaped-char="">_</span>repositories must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-11" title="Disable a selected repository for GitHub Actions in an organization / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Disable a selected repository for GitHub Actions in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-11" title="Disable a selected repository for GitHub Actions in an organization / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-allowed-actions-and-reusable-workflows-for-an-organization" title="Get allowed actions and reusable workflows for an organization">Get allowed actions and reusable workflows for an organization<a href="#get-allowed-actions-and-reusable-workflows-for-an-organization" aria-label="Link to heading 'Get allowed actions and reusable workflows for an organization'" data-heading-content="Get allowed actions and reusable workflows for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/selected-actions
+</span></code></pre>
+<p>Gets the selected actions and reusable workflows that are allowed in an organization. To use this endpoint, the organization permission policy for allowed<span data-escaped-char="">_</span>actions must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-12" title="Get allowed actions and reusable workflows for an organization / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get allowed actions and reusable workflows for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-12" title="Get allowed actions and reusable workflows for an organization / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/selected-actions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>github_owned_allowed</code>: boolean</li>
+<li><code>verified_allowed</code>: boolean</li>
+<li><code>patterns_allowed</code>: array of string</li>
+</ul>
+<h2 id="set-allowed-actions-and-reusable-workflows-for-an-organization" title="Set allowed actions and reusable workflows for an organization">Set allowed actions and reusable workflows for an organization<a href="#set-allowed-actions-and-reusable-workflows-for-an-organization" aria-label="Link to heading 'Set allowed actions and reusable workflows for an organization'" data-heading-content="Set allowed actions and reusable workflows for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/selected-actions
+</span></code></pre>
+<p>Sets the actions and reusable workflows that are allowed in an organization. To use this endpoint, the organization permission policy for allowed<span data-escaped-char="">_</span>actions must be configured to selected. For more information, see "Set GitHub Actions permissions for an organization."<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-13" title="Set allowed actions and reusable workflows for an organization / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>github_owned_allowed</code></strong> (boolean)<br>
+Whether GitHub-owned actions are allowed. For example, this includes the actions in the actions organization.</p>
+</li>
+<li>
+<p><strong><code>verified_allowed</code></strong> (boolean)<br>
+Whether actions from GitHub Marketplace verified creators are allowed. Set to true to allow all actions by GitHub Marketplace verified creators.</p>
+</li>
+<li>
+<p><strong><code>patterns_allowed</code></strong> (array of strings)<br>
+Specifies a list of string-matching patterns to allow specific action(s) and reusable workflow(s). Wildcards, tags, and SHAs are allowed. For example, monalisa/octocat@<em>, monalisa/octocat<span data-escaped-char="">@</span>v2, monalisa/</em>.<br>
+Note</p>
+</li>
+</ul>
+<p>The patterns<span data-escaped-char="">_</span>allowed setting only applies to public repositories.</p>
+<h3 id="http-response-status-codes-13" title="Set allowed actions and reusable workflows for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-13" title="Set allowed actions and reusable workflows for an organization / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/selected-actions \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "github_owned_allowed": true,
+</span><span style="color:#c0c5ce;">  "verified_allowed": false,
+</span><span style="color:#c0c5ce;">  "patterns_allowed": [
+</span><span style="color:#c0c5ce;">    "monalisa/octocat@*",
+</span><span style="color:#c0c5ce;">    "docker/*"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-self-hosted-runners-settings-for-an-organization" title="Get self-hosted runners settings for an organization">Get self-hosted runners settings for an organization<a href="#get-self-hosted-runners-settings-for-an-organization" aria-label="Link to heading 'Get self-hosted runners settings for an organization'" data-heading-content="Get self-hosted runners settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/self-hosted-runners
+</span></code></pre>
+<p>Gets the settings for self-hosted runners for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-14" title="Get self-hosted runners settings for an organization / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Get self-hosted runners settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-14" title="Get self-hosted runners settings for an organization / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>enabled_repositories</code>: required, string, enum: <code>all</code>, <code>selected</code>, <code>none</code></li>
+<li><code>selected_repositories_url</code>: string</li>
+</ul>
+<h2 id="set-self-hosted-runners-settings-for-an-organization" title="Set self-hosted runners settings for an organization">Set self-hosted runners settings for an organization<a href="#set-self-hosted-runners-settings-for-an-organization" aria-label="Link to heading 'Set self-hosted runners settings for an organization'" data-heading-content="Set self-hosted runners settings for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/self-hosted-runners
+</span></code></pre>
+<p>Sets the settings for self-hosted runners for an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-15" title="Set self-hosted runners settings for an organization / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-6">Body parameters<a href="#body-parameters-6" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>enabled_repositories</code></strong> (string) (required)<br>
+The policy that controls whether self-hosted runners can be used in the organization<br>
+Can be one of: <code>all</code>, <code>selected</code>, <code>none</code></li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Set self-hosted runners settings for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-15" title="Set self-hosted runners settings for an organization / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "enabled_repositories": "all"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-repositories-allowed-to-use-self-hosted-runners-in-an-organization" title="List repositories allowed to use self-hosted runners in an organization">List repositories allowed to use self-hosted runners in an organization<a href="#list-repositories-allowed-to-use-self-hosted-runners-in-an-organization" aria-label="Link to heading 'List repositories allowed to use self-hosted runners in an organization'" data-heading-content="List repositories allowed to use self-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/self-hosted-runners/repositories
+</span></code></pre>
+<p>Lists repositories that are allowed to use self-hosted runners in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-16" title="List repositories allowed to use self-hosted runners in an organization / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-16" title="List repositories allowed to use self-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-16" title="List repositories allowed to use self-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners/repositories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: integer</li>
+<li><code>repositories</code>: array of <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="set-repositories-allowed-to-use-self-hosted-runners-in-an-organization" title="Set repositories allowed to use self-hosted runners in an organization">Set repositories allowed to use self-hosted runners in an organization<a href="#set-repositories-allowed-to-use-self-hosted-runners-in-an-organization" aria-label="Link to heading 'Set repositories allowed to use self-hosted runners in an organization'" data-heading-content="Set repositories allowed to use self-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/self-hosted-runners/repositories
+</span></code></pre>
+<p>Sets repositories that are allowed to use self-hosted runners in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-17" title="Set repositories allowed to use self-hosted runners in an organization / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-17">Path and query parameters<a href="#path-and-query-parameters-17" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-7">Body parameters<a href="#body-parameters-7" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>selected_repository_ids</code></strong> (array of integers) (required)<br>
+IDs of repositories that can use repository-level self-hosted runners</li>
+</ul>
+<h3 id="http-response-status-codes-17" title="Set repositories allowed to use self-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-17" title="Set repositories allowed to use self-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-16">Example<a href="#example-16" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners/repositories \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "selected_repository_ids": [
+</span><span style="color:#c0c5ce;">    1,
+</span><span style="color:#c0c5ce;">    2,
+</span><span style="color:#c0c5ce;">    3
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="add-a-repository-to-the-list-of-repositories-allowed-to-use-self-hosted-runners-in-an-organization" title="Add a repository to the list of repositories allowed to use self-hosted runners in an organization">Add a repository to the list of repositories allowed to use self-hosted runners in an organization<a href="#add-a-repository-to-the-list-of-repositories-allowed-to-use-self-hosted-runners-in-an-organization" aria-label="Link to heading 'Add a repository to the list of repositories allowed to use self-hosted runners in an organization'" data-heading-content="Add a repository to the list of repositories allowed to use self-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/self-hosted-runners/repositories/{repository_id}
+</span></code></pre>
+<p>Adds a repository to the list of repositories that are allowed to use self-hosted runners in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-18" title="Add a repository to the list of repositories allowed to use self-hosted runners in an organization / Parameters">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-18">Headers<a href="#headers-18" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-18">Path and query parameters<a href="#path-and-query-parameters-18" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-18" title="Add a repository to the list of repositories allowed to use self-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-18" title="Add a repository to the list of repositories allowed to use self-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-17">Example<a href="#example-17" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="remove-a-repository-from-the-list-of-repositories-allowed-to-use-self-hosted-runners-in-an-organization" title="Remove a repository from the list of repositories allowed to use self-hosted runners in an organization">Remove a repository from the list of repositories allowed to use self-hosted runners in an organization<a href="#remove-a-repository-from-the-list-of-repositories-allowed-to-use-self-hosted-runners-in-an-organization" aria-label="Link to heading 'Remove a repository from the list of repositories allowed to use self-hosted runners in an organization'" data-heading-content="Remove a repository from the list of repositories allowed to use self-hosted runners in an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/permissions/self-hosted-runners/repositories/{repository_id}
+</span></code></pre>
+<p>Removes a repository from the list of repositories that are allowed to use self-hosted runners in an organization.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope or the "Actions policies" fine-grained permission to use this endpoint.</p>
+<h3 id="parameters-19" title="Remove a repository from the list of repositories allowed to use self-hosted runners in an organization / Parameters">Parameters<a href="#parameters-19" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-19">Headers<a href="#headers-19" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-19">Path and query parameters<a href="#path-and-query-parameters-19" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+The unique identifier of the repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-19" title="Remove a repository from the list of repositories allowed to use self-hosted runners in an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-19" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-19" title="Remove a repository from the list of repositories allowed to use self-hosted runners in an organization / Code examples">Code examples<a href="#code-examples-19" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-18">Example<a href="#example-18" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/self-hosted-runners/repositories/REPOSITORY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-default-workflow-permissions-for-an-organization" title="Get default workflow permissions for an organization">Get default workflow permissions for an organization<a href="#get-default-workflow-permissions-for-an-organization" aria-label="Link to heading 'Get default workflow permissions for an organization'" data-heading-content="Get default workflow permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/permissions/workflow
+</span></code></pre>
+<p>Gets the default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows in an organization,<br>
+as well as whether GitHub Actions can submit approving pull request reviews. For more information, see<br>
+"Setting the permissions of the GITHUB<span data-escaped-char="">_</span>TOKEN for your organization."<br>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-20" title="Get default workflow permissions for an organization / Parameters">Parameters<a href="#parameters-20" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-20">Headers<a href="#headers-20" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-20">Path and query parameters<a href="#path-and-query-parameters-20" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-20" title="Get default workflow permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-20" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-20" title="Get default workflow permissions for an organization / Code examples">Code examples<a href="#code-examples-20" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-19">Example<a href="#example-19" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/workflow
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>default_workflow_permissions</code>: required, string, enum: <code>read</code>, <code>write</code></li>
+<li><code>can_approve_pull_request_reviews</code>: required, boolean</li>
+</ul>
+<h2 id="set-default-workflow-permissions-for-an-organization" title="Set default workflow permissions for an organization">Set default workflow permissions for an organization<a href="#set-default-workflow-permissions-for-an-organization" aria-label="Link to heading 'Set default workflow permissions for an organization'" data-heading-content="Set default workflow permissions for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/permissions/workflow
+</span></code></pre>
+<p>Sets the default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows in an organization, and sets if GitHub Actions<br>
+can submit approving pull request reviews. For more information, see<br>
+"Setting the permissions of the GITHUB<span data-escaped-char="">_</span>TOKEN for your organization."<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-21" title="Set default workflow permissions for an organization / Parameters">Parameters<a href="#parameters-21" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-21">Headers<a href="#headers-21" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-21">Path and query parameters<a href="#path-and-query-parameters-21" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-8">Body parameters<a href="#body-parameters-8" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>default_workflow_permissions</code></strong> (string)<br>
+The default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows.<br>
+Can be one of: <code>read</code>, <code>write</code></p>
+</li>
+<li>
+<p><strong><code>can_approve_pull_request_reviews</code></strong> (boolean)<br>
+Whether GitHub Actions can approve pull requests. Enabling this can be a security risk.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-21" title="Set default workflow permissions for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-21" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - Success response</li>
+</ul>
+<h3 id="code-examples-21" title="Set default workflow permissions for an organization / Code examples">Code examples<a href="#code-examples-21" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="give-read-only-permission-and-allow-approving-prs">Give read-only permission, and allow approving PRs.<a href="#give-read-only-permission-and-allow-approving-prs" aria-label="Link to heading 'Give read-only permission, and allow approving PRs.'" data-heading-content="Give read-only permission, and allow approving PRs." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/permissions/workflow \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "default_workflow_permissions": "read",
+</span><span style="color:#c0c5ce;">  "can_approve_pull_request_reviews": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-github-actions-permissions-for-a-repository" title="Get GitHub Actions permissions for a repository">Get GitHub Actions permissions for a repository<a href="#get-github-actions-permissions-for-a-repository" aria-label="Link to heading 'Get GitHub Actions permissions for a repository'" data-heading-content="Get GitHub Actions permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions
+</span></code></pre>
+<p>Gets the GitHub Actions permissions policy for a repository, including whether GitHub Actions is enabled and the actions and reusable workflows allowed to run in the repository.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-22" title="Get GitHub Actions permissions for a repository / Parameters">Parameters<a href="#parameters-22" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-22">Headers<a href="#headers-22" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-22">Path and query parameters<a href="#path-and-query-parameters-22" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-22" title="Get GitHub Actions permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-22" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-22" title="Get GitHub Actions permissions for a repository / Code examples">Code examples<a href="#code-examples-22" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-20">Example<a href="#example-20" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>enabled</code>: required, boolean</li>
+<li><code>allowed_actions</code>: string, enum: <code>all</code>, <code>local_only</code>, <code>selected</code></li>
+<li><code>selected_actions_url</code>: string</li>
+<li><code>sha_pinning_required</code>: boolean</li>
+</ul>
+<h2 id="set-github-actions-permissions-for-a-repository" title="Set GitHub Actions permissions for a repository">Set GitHub Actions permissions for a repository<a href="#set-github-actions-permissions-for-a-repository" aria-label="Link to heading 'Set GitHub Actions permissions for a repository'" data-heading-content="Set GitHub Actions permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions
+</span></code></pre>
+<p>Sets the GitHub Actions permissions policy for enabling GitHub Actions and allowed actions and reusable workflows in the repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-23" title="Set GitHub Actions permissions for a repository / Parameters">Parameters<a href="#parameters-23" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-23">Headers<a href="#headers-23" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-23">Path and query parameters<a href="#path-and-query-parameters-23" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-9">Body parameters<a href="#body-parameters-9" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>enabled</code></strong> (boolean) (required)<br>
+Whether GitHub Actions is enabled on the repository.</p>
+</li>
+<li>
+<p><strong><code>allowed_actions</code></strong> (string)<br>
+The permissions policy that controls the actions and reusable workflows that are allowed to run.<br>
+Can be one of: <code>all</code>, <code>local_only</code>, <code>selected</code></p>
+</li>
+<li>
+<p><strong><code>sha_pinning_required</code></strong> (boolean)<br>
+Whether actions must be pinned to a full-length commit SHA.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-23" title="Set GitHub Actions permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-23" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-23" title="Set GitHub Actions permissions for a repository / Code examples">Code examples<a href="#code-examples-23" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-21">Example<a href="#example-21" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "enabled": true,
+</span><span style="color:#c0c5ce;">  "allowed_actions": "selected",
+</span><span style="color:#c0c5ce;">  "sha_pinning_required": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-the-level-of-access-for-workflows-outside-of-the-repository" title="Get the level of access for workflows outside of the repository">Get the level of access for workflows outside of the repository<a href="#get-the-level-of-access-for-workflows-outside-of-the-repository" aria-label="Link to heading 'Get the level of access for workflows outside of the repository'" data-heading-content="Get the level of access for workflows outside of the repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/access
+</span></code></pre>
+<p>Gets the level of access that workflows outside of the repository have to actions and reusable workflows in the repository.<br>
+This endpoint only applies to private repositories.<br>
+For more information, see "Allowing access to components in a private repository."<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-24" title="Get the level of access for workflows outside of the repository / Parameters">Parameters<a href="#parameters-24" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-24">Headers<a href="#headers-24" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-24">Path and query parameters<a href="#path-and-query-parameters-24" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-24" title="Get the level of access for workflows outside of the repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-24" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-24" title="Get the level of access for workflows outside of the repository / Code examples">Code examples<a href="#code-examples-24" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-22">Example<a href="#example-22" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/access
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>access_level</code>: required, string, enum: <code>none</code>, <code>user</code>, <code>organization</code></li>
+</ul>
+<h2 id="set-the-level-of-access-for-workflows-outside-of-the-repository" title="Set the level of access for workflows outside of the repository">Set the level of access for workflows outside of the repository<a href="#set-the-level-of-access-for-workflows-outside-of-the-repository" aria-label="Link to heading 'Set the level of access for workflows outside of the repository'" data-heading-content="Set the level of access for workflows outside of the repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/access
+</span></code></pre>
+<p>Sets the level of access that workflows outside of the repository have to actions and reusable workflows in the repository.<br>
+This endpoint only applies to private repositories.<br>
+For more information, see "Allowing access to components in a private repository".<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-25" title="Set the level of access for workflows outside of the repository / Parameters">Parameters<a href="#parameters-25" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-25">Headers<a href="#headers-25" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-25">Path and query parameters<a href="#path-and-query-parameters-25" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-10">Body parameters<a href="#body-parameters-10" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>access_level</code></strong> (string) (required)<br>
+Defines the level of access that workflows outside of the repository have to actions and reusable workflows within the<br>
+repository.<br>
+none means the access is only possible from workflows in this repository. user level access allows sharing across user owned private repositories only. organization level access allows sharing across the organization.<br>
+Can be one of: <code>none</code>, <code>user</code>, <code>organization</code></li>
+</ul>
+<h3 id="http-response-status-codes-25" title="Set the level of access for workflows outside of the repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-25" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-25" title="Set the level of access for workflows outside of the repository / Code examples">Code examples<a href="#code-examples-25" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-23">Example<a href="#example-23" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/access \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_level": "organization"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-artifact-and-log-retention-settings-for-a-repository" title="Get artifact and log retention settings for a repository">Get artifact and log retention settings for a repository<a href="#get-artifact-and-log-retention-settings-for-a-repository" aria-label="Link to heading 'Get artifact and log retention settings for a repository'" data-heading-content="Get artifact and log retention settings for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p>Gets artifact and log retention settings for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-26" title="Get artifact and log retention settings for a repository / Parameters">Parameters<a href="#parameters-26" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-26">Headers<a href="#headers-26" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-26">Path and query parameters<a href="#path-and-query-parameters-26" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-26" title="Get artifact and log retention settings for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-26" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-26" title="Get artifact and log retention settings for a repository / Code examples">Code examples<a href="#code-examples-26" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-24">Example<a href="#example-24" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-artifact-and-log-retention-settings-for-an-organization">Get artifact and log retention settings for an organization</a>.</p>
+<h2 id="set-artifact-and-log-retention-settings-for-a-repository" title="Set artifact and log retention settings for a repository">Set artifact and log retention settings for a repository<a href="#set-artifact-and-log-retention-settings-for-a-repository" aria-label="Link to heading 'Set artifact and log retention settings for a repository'" data-heading-content="Set artifact and log retention settings for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention
+</span></code></pre>
+<p>Sets artifact and log retention settings for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-27" title="Set artifact and log retention settings for a repository / Parameters">Parameters<a href="#parameters-27" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-27">Headers<a href="#headers-27" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-27">Path and query parameters<a href="#path-and-query-parameters-27" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-11">Body parameters<a href="#body-parameters-11" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>days</code></strong> (integer) (required)<br>
+The number of days to retain artifacts and logs</li>
+</ul>
+<h3 id="http-response-status-codes-27" title="Set artifact and log retention settings for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-27" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Empty response for successful settings update</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-27" title="Set artifact and log retention settings for a repository / Code examples">Code examples<a href="#code-examples-27" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="set-retention-days">Set retention days<a href="#set-retention-days" aria-label="Link to heading 'Set retention days'" data-heading-content="Set retention days" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/artifact-and-log-retention \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "days": 90
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-fork-pr-contributor-approval-permissions-for-a-repository" title="Get fork PR contributor approval permissions for a repository">Get fork PR contributor approval permissions for a repository<a href="#get-fork-pr-contributor-approval-permissions-for-a-repository" aria-label="Link to heading 'Get fork PR contributor approval permissions for a repository'" data-heading-content="Get fork PR contributor approval permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p>Gets the fork PR contributor approval policy for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-28" title="Get fork PR contributor approval permissions for a repository / Parameters">Parameters<a href="#parameters-28" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-28">Headers<a href="#headers-28" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-28">Path and query parameters<a href="#path-and-query-parameters-28" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-28" title="Get fork PR contributor approval permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-28" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-28" title="Get fork PR contributor approval permissions for a repository / Code examples">Code examples<a href="#code-examples-28" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-25">Example<a href="#example-25" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-fork-pr-contributor-approval-permissions-for-an-organization">Get fork PR contributor approval permissions for an organization</a>.</p>
+<h2 id="set-fork-pr-contributor-approval-permissions-for-a-repository" title="Set fork PR contributor approval permissions for a repository">Set fork PR contributor approval permissions for a repository<a href="#set-fork-pr-contributor-approval-permissions-for-a-repository" aria-label="Link to heading 'Set fork PR contributor approval permissions for a repository'" data-heading-content="Set fork PR contributor approval permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval
+</span></code></pre>
+<p>Sets the fork PR contributor approval policy for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-29" title="Set fork PR contributor approval permissions for a repository / Parameters">Parameters<a href="#parameters-29" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-29">Headers<a href="#headers-29" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-29">Path and query parameters<a href="#path-and-query-parameters-29" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-12">Body parameters<a href="#body-parameters-12" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>approval_policy</code></strong> (string) (required)<br>
+The policy that controls when fork PR workflows require approval from a maintainer.<br>
+Can be one of: <code>first_time_contributors_new_to_github</code>, <code>first_time_contributors</code>, <code>all_external_contributors</code></li>
+</ul>
+<h3 id="http-response-status-codes-29" title="Set fork PR contributor approval permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-29" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-29" title="Set fork PR contributor approval permissions for a repository / Code examples">Code examples<a href="#code-examples-29" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="set-approval-policy-to-first-time-contributors-1">Set approval policy to first time contributors<a href="#set-approval-policy-to-first-time-contributors-1" aria-label="Link to heading 'Set approval policy to first time contributors'" data-heading-content="Set approval policy to first time contributors" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/fork-pr-contributor-approval \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "approval_policy": "first_time_contributors"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-private-repo-fork-pr-workflow-settings-for-a-repository" title="Get private repo fork PR workflow settings for a repository">Get private repo fork PR workflow settings for a repository<a href="#get-private-repo-fork-pr-workflow-settings-for-a-repository" aria-label="Link to heading 'Get private repo fork PR workflow settings for a repository'" data-heading-content="Get private repo fork PR workflow settings for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p>Gets the settings for whether workflows from fork pull requests can run on a private repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-30" title="Get private repo fork PR workflow settings for a repository / Parameters">Parameters<a href="#parameters-30" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-30">Headers<a href="#headers-30" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-30">Path and query parameters<a href="#path-and-query-parameters-30" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-30" title="Get private repo fork PR workflow settings for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-30" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-30" title="Get private repo fork PR workflow settings for a repository / Code examples">Code examples<a href="#code-examples-30" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-26">Example<a href="#example-26" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-private-repo-fork-pr-workflow-settings-for-an-organization">Get private repo fork PR workflow settings for an organization</a>.</p>
+<h2 id="set-private-repo-fork-pr-workflow-settings-for-a-repository" title="Set private repo fork PR workflow settings for a repository">Set private repo fork PR workflow settings for a repository<a href="#set-private-repo-fork-pr-workflow-settings-for-a-repository" aria-label="Link to heading 'Set private repo fork PR workflow settings for a repository'" data-heading-content="Set private repo fork PR workflow settings for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos
+</span></code></pre>
+<p>Sets the settings for whether workflows from fork pull requests can run on a private repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-31" title="Set private repo fork PR workflow settings for a repository / Parameters">Parameters<a href="#parameters-31" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-31">Headers<a href="#headers-31" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-31">Path and query parameters<a href="#path-and-query-parameters-31" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-13">Body parameters<a href="#body-parameters-13" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>run_workflows_from_fork_pull_requests</code></strong> (boolean) (required)<br>
+Whether workflows triggered by pull requests from forks are allowed to run on private repositories.</p>
+</li>
+<li>
+<p><strong><code>send_write_tokens_to_workflows</code></strong> (boolean)<br>
+Whether GitHub Actions can create pull requests or submit approving pull request reviews from a workflow triggered by a fork pull request.</p>
+</li>
+<li>
+<p><strong><code>send_secrets_and_variables</code></strong> (boolean)<br>
+Whether to make secrets and variables available to workflows triggered by pull requests from forks.</p>
+</li>
+<li>
+<p><strong><code>require_approval_for_fork_pr_workflows</code></strong> (boolean)<br>
+Whether workflows triggered by pull requests from forks require approval from a repository administrator to run.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-31" title="Set private repo fork PR workflow settings for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-31" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Empty response for successful settings update</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-31" title="Set private repo fork PR workflow settings for a repository / Code examples">Code examples<a href="#code-examples-31" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-27">Example<a href="#example-27" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/fork-pr-workflows-private-repos \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "run_workflows_from_fork_pull_requests": true,
+</span><span style="color:#c0c5ce;">  "send_write_tokens_to_workflows": false,
+</span><span style="color:#c0c5ce;">  "send_secrets_and_variables": false,
+</span><span style="color:#c0c5ce;">  "require_approval_for_fork_pr_workflows": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-allowed-actions-and-reusable-workflows-for-a-repository" title="Get allowed actions and reusable workflows for a repository">Get allowed actions and reusable workflows for a repository<a href="#get-allowed-actions-and-reusable-workflows-for-a-repository" aria-label="Link to heading 'Get allowed actions and reusable workflows for a repository'" data-heading-content="Get allowed actions and reusable workflows for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/selected-actions
+</span></code></pre>
+<p>Gets the settings for selected actions and reusable workflows that are allowed in a repository. To use this endpoint, the repository policy for allowed<span data-escaped-char="">_</span>actions must be configured to selected. For more information, see "Set GitHub Actions permissions for a repository."<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-32" title="Get allowed actions and reusable workflows for a repository / Parameters">Parameters<a href="#parameters-32" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-32">Headers<a href="#headers-32" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-32">Path and query parameters<a href="#path-and-query-parameters-32" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-32" title="Get allowed actions and reusable workflows for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-32" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-32" title="Get allowed actions and reusable workflows for a repository / Code examples">Code examples<a href="#code-examples-32" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-28">Example<a href="#example-28" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/selected-actions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-allowed-actions-and-reusable-workflows-for-an-organization">Get allowed actions and reusable workflows for an organization</a>.</p>
+<h2 id="set-allowed-actions-and-reusable-workflows-for-a-repository" title="Set allowed actions and reusable workflows for a repository">Set allowed actions and reusable workflows for a repository<a href="#set-allowed-actions-and-reusable-workflows-for-a-repository" aria-label="Link to heading 'Set allowed actions and reusable workflows for a repository'" data-heading-content="Set allowed actions and reusable workflows for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/selected-actions
+</span></code></pre>
+<p>Sets the actions and reusable workflows that are allowed in a repository. To use this endpoint, the repository permission policy for allowed<span data-escaped-char="">_</span>actions must be configured to selected. For more information, see "Set GitHub Actions permissions for a repository."<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-33" title="Set allowed actions and reusable workflows for a repository / Parameters">Parameters<a href="#parameters-33" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-33">Headers<a href="#headers-33" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-33">Path and query parameters<a href="#path-and-query-parameters-33" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-14">Body parameters<a href="#body-parameters-14" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>github_owned_allowed</code></strong> (boolean)<br>
+Whether GitHub-owned actions are allowed. For example, this includes the actions in the actions organization.</p>
+</li>
+<li>
+<p><strong><code>verified_allowed</code></strong> (boolean)<br>
+Whether actions from GitHub Marketplace verified creators are allowed. Set to true to allow all actions by GitHub Marketplace verified creators.</p>
+</li>
+<li>
+<p><strong><code>patterns_allowed</code></strong> (array of strings)<br>
+Specifies a list of string-matching patterns to allow specific action(s) and reusable workflow(s). Wildcards, tags, and SHAs are allowed. For example, monalisa/octocat@<em>, monalisa/octocat<span data-escaped-char="">@</span>v2, monalisa/</em>.<br>
+Note</p>
+</li>
+</ul>
+<p>The patterns<span data-escaped-char="">_</span>allowed setting only applies to public repositories.</p>
+<h3 id="http-response-status-codes-33" title="Set allowed actions and reusable workflows for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-33" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-33" title="Set allowed actions and reusable workflows for a repository / Code examples">Code examples<a href="#code-examples-33" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-29">Example<a href="#example-29" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/selected-actions \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "github_owned_allowed": true,
+</span><span style="color:#c0c5ce;">  "verified_allowed": false,
+</span><span style="color:#c0c5ce;">  "patterns_allowed": [
+</span><span style="color:#c0c5ce;">    "monalisa/octocat@*",
+</span><span style="color:#c0c5ce;">    "docker/*"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-default-workflow-permissions-for-a-repository" title="Get default workflow permissions for a repository">Get default workflow permissions for a repository<a href="#get-default-workflow-permissions-for-a-repository" aria-label="Link to heading 'Get default workflow permissions for a repository'" data-heading-content="Get default workflow permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/permissions/workflow
+</span></code></pre>
+<p>Gets the default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows in a repository,<br>
+as well as if GitHub Actions can submit approving pull request reviews.<br>
+For more information, see "Setting the permissions of the GITHUB<span data-escaped-char="">_</span>TOKEN for your repository."<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-34" title="Get default workflow permissions for a repository / Parameters">Parameters<a href="#parameters-34" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-34">Headers<a href="#headers-34" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-34">Path and query parameters<a href="#path-and-query-parameters-34" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-34" title="Get default workflow permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-34" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-34" title="Get default workflow permissions for a repository / Code examples">Code examples<a href="#code-examples-34" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-30">Example<a href="#example-30" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/workflow
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-default-workflow-permissions-for-an-organization">Get default workflow permissions for an organization</a>.</p>
+<h2 id="set-default-workflow-permissions-for-a-repository" title="Set default workflow permissions for a repository">Set default workflow permissions for a repository<a href="#set-default-workflow-permissions-for-a-repository" aria-label="Link to heading 'Set default workflow permissions for a repository'" data-heading-content="Set default workflow permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/permissions/workflow
+</span></code></pre>
+<p>Sets the default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows in a repository, and sets if GitHub Actions<br>
+can submit approving pull request reviews.<br>
+For more information, see "Setting the permissions of the GITHUB<span data-escaped-char="">_</span>TOKEN for your repository."<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-35" title="Set default workflow permissions for a repository / Parameters">Parameters<a href="#parameters-35" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-35">Headers<a href="#headers-35" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-35">Path and query parameters<a href="#path-and-query-parameters-35" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-15">Body parameters<a href="#body-parameters-15" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>default_workflow_permissions</code></strong> (string)<br>
+The default workflow permissions granted to the GITHUB<span data-escaped-char="">_</span>TOKEN when running workflows.<br>
+Can be one of: <code>read</code>, <code>write</code></p>
+</li>
+<li>
+<p><strong><code>can_approve_pull_request_reviews</code></strong> (boolean)<br>
+Whether GitHub Actions can approve pull requests. Enabling this can be a security risk.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-35" title="Set default workflow permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-35" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - Success response</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict response when changing a setting is prevented by the owning organization</p>
+</li>
+</ul>
+<h3 id="code-examples-35" title="Set default workflow permissions for a repository / Code examples">Code examples<a href="#code-examples-35" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="give-read-only-permission-and-allow-approving-prs-1">Give read-only permission, and allow approving PRs.<a href="#give-read-only-permission-and-allow-approving-prs-1" aria-label="Link to heading 'Give read-only permission, and allow approving PRs.'" data-heading-content="Give read-only permission, and allow approving PRs." class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/permissions/workflow \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "default_workflow_permissions": "read",
+</span><span style="color:#c0c5ce;">  "can_approve_pull_request_reviews": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

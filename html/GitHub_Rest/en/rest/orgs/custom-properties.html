@@ -1,0 +1,504 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for custom properties</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Organizations</a> / </nav><h1 id="rest-api-endpoints-for-custom-properties">REST API endpoints for custom properties<a href="#rest-api-endpoints-for-custom-properties" aria-label="Link to heading 'REST API endpoints for custom properties'" data-heading-content="REST API endpoints for custom properties" class="anchor"></a></h1>
+<p>Use the REST API to create and manage custom properties for an organization.</p>
+<h2 id="about-custom-properties" title="About custom properties">About custom properties<a href="#about-custom-properties" aria-label="Link to heading 'About custom properties'" data-heading-content="About custom properties" class="anchor"></a></h2>
+<p>You can use the REST API to create and manage custom properties for an organization. You can use custom properties to add metadata to repositories in your organization. For more information, see <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-all-custom-properties-for-an-organization" title="Get all custom properties for an organization">Get all custom properties for an organization<a href="#get-all-custom-properties-for-an-organization" aria-label="Link to heading 'Get all custom properties for an organization'" data-heading-content="Get all custom properties for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/properties/schema
+</span></code></pre>
+<p>Gets all custom properties defined for an organization.<br>
+Organization members can read these properties.</p>
+<h3 id="parameters" title="Get all custom properties for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get all custom properties for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get all custom properties for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/schema
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Organization Custom Property</code>:</p>
+<ul>
+<li><code>property_name</code>: required, string</li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>source_type</code>: string, enum: <code>organization</code>, <code>enterprise</code></li>
+<li><code>value_type</code>: required, string, enum: <code>string</code>, <code>single_select</code>, <code>multi_select</code>, <code>true_false</code>, <code>url</code></li>
+<li><code>required</code>: boolean</li>
+<li><code>default_value</code>: one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+<li><code>description</code>: string or null</li>
+<li><code>allowed_values</code>: array of string or null</li>
+<li><code>values_editable_by</code>: string or null, enum: <code>org_actors</code>, <code>org_and_repo_actors</code>, <code>null</code></li>
+<li><code>require_explicit_values</code>: boolean</li>
+</ul>
+<h2 id="create-or-update-custom-properties-for-an-organization" title="Create or update custom properties for an organization">Create or update custom properties for an organization<a href="#create-or-update-custom-properties-for-an-organization" aria-label="Link to heading 'Create or update custom properties for an organization'" data-heading-content="Create or update custom properties for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/properties/schema
+</span></code></pre>
+<p>Creates new or updates existing custom properties defined for an organization in a batch.<br>
+If the property already exists, the existing property will be replaced with the new values.<br>
+Missing optional values will fall back to default values, previous values will be overwritten.<br>
+E.g. if a property exists with values<span data-escaped-char="">_</span>editable<span data-escaped-char="">_</span>by: org<span data-escaped-char="">_</span>and<span data-escaped-char="">_</span>repo<span data-escaped-char="">_</span>actors and it's updated without specifying values<span data-escaped-char="">_</span>editable<span data-escaped-char="">_</span>by, it will be updated to default value org<span data-escaped-char="">_</span>actors.<br>
+To use this endpoint, the authenticated user must be one of:</p>
+<p>An administrator for the organization.<br>
+A user, or a user on a team, with the fine-grained permission of custom<span data-escaped-char="">_</span>properties<span data-escaped-char="">_</span>org<span data-escaped-char="">_</span>definitions<span data-escaped-char="">_</span>manager in the organization.</p>
+<h3 id="parameters-1" title="Create or update custom properties for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>properties</code></strong> (array of objects) (required)<br>
+The array of custom properties to create or update.
+<ul>
+<li><strong><code>property_name</code></strong> (string) (required)<br>
+The name of the property</li>
+<li><strong><code>url</code></strong> (string)<br>
+The URL that can be used to fetch, update, or delete info about this property via the API.</li>
+<li><strong><code>source_type</code></strong> (string)<br>
+The source type of the property<br>
+Can be one of: <code>organization</code>, <code>enterprise</code></li>
+<li><strong><code>value_type</code></strong> (string) (required)<br>
+The type of the value for the property<br>
+Can be one of: <code>string</code>, <code>single_select</code>, <code>multi_select</code>, <code>true_false</code>, <code>url</code></li>
+<li><strong><code>required</code></strong> (boolean)<br>
+Whether the property is required.</li>
+<li><strong><code>default_value</code></strong> (null or string or array)<br>
+Default value of the property</li>
+<li><strong><code>description</code></strong> (string or null)<br>
+Short description of the property</li>
+<li><strong><code>allowed_values</code></strong> (array of strings or null)<br>
+An ordered list of the allowed values of the property.<br>
+The property can have up to 200 allowed values.</li>
+<li><strong><code>values_editable_by</code></strong> (string or null)<br>
+Who can edit the values of the property<br>
+Can be one of: <code>org_actors</code>, <code>org_and_repo_actors</code>, <code>null</code></li>
+<li><strong><code>require_explicit_values</code></strong> (boolean)<br>
+Whether setting properties values is mandatory</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create or update custom properties for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create or update custom properties for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/schema \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "properties": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "environment",
+</span><span style="color:#c0c5ce;">      "value_type": "single_select",
+</span><span style="color:#c0c5ce;">      "required": true,
+</span><span style="color:#c0c5ce;">      "default_value": "production",
+</span><span style="color:#c0c5ce;">      "description": "Prod or dev environment",
+</span><span style="color:#c0c5ce;">      "allowed_values": [
+</span><span style="color:#c0c5ce;">        "production",
+</span><span style="color:#c0c5ce;">        "development"
+</span><span style="color:#c0c5ce;">      ],
+</span><span style="color:#c0c5ce;">      "values_editable_by": "org_actors"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "service",
+</span><span style="color:#c0c5ce;">      "value_type": "string"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "team",
+</span><span style="color:#c0c5ce;">      "value_type": "string",
+</span><span style="color:#c0c5ce;">      "description": "Team owning the repository"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-all-custom-properties-for-an-organization">Get all custom properties for an organization</a>.</p>
+<h2 id="get-a-custom-property-for-an-organization" title="Get a custom property for an organization">Get a custom property for an organization<a href="#get-a-custom-property-for-an-organization" aria-label="Link to heading 'Get a custom property for an organization'" data-heading-content="Get a custom property for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/properties/schema/{custom_property_name}
+</span></code></pre>
+<p>Gets a custom property that is defined for an organization.<br>
+Organization members can read these properties.</p>
+<h3 id="parameters-2" title="Get a custom property for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>custom_property_name</code></strong> (string) (required)<br>
+The custom property name</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a custom property for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a custom property for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/schema/CUSTOM_PROPERTY_NAME
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>property_name</code>: required, string</li>
+<li><code>url</code>: string, format: uri</li>
+<li><code>source_type</code>: string, enum: <code>organization</code>, <code>enterprise</code></li>
+<li><code>value_type</code>: required, string, enum: <code>string</code>, <code>single_select</code>, <code>multi_select</code>, <code>true_false</code>, <code>url</code></li>
+<li><code>required</code>: boolean</li>
+<li><code>default_value</code>: one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+<li><code>description</code>: string or null</li>
+<li><code>allowed_values</code>: array of string or null</li>
+<li><code>values_editable_by</code>: string or null, enum: <code>org_actors</code>, <code>org_and_repo_actors</code>, <code>null</code></li>
+<li><code>require_explicit_values</code>: boolean</li>
+</ul>
+<h2 id="create-or-update-a-custom-property-for-an-organization" title="Create or update a custom property for an organization">Create or update a custom property for an organization<a href="#create-or-update-a-custom-property-for-an-organization" aria-label="Link to heading 'Create or update a custom property for an organization'" data-heading-content="Create or update a custom property for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/properties/schema/{custom_property_name}
+</span></code></pre>
+<p>Creates a new or updates an existing custom property that is defined for an organization.<br>
+To use this endpoint, the authenticated user must be one of:</p>
+<p>An administrator for the organization.<br>
+A user, or a user on a team, with the fine-grained permission of custom<span data-escaped-char="">_</span>properties<span data-escaped-char="">_</span>org<span data-escaped-char="">_</span>definitions<span data-escaped-char="">_</span>manager in the organization.</p>
+<h3 id="parameters-3" title="Create or update a custom property for an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>custom_property_name</code></strong> (string) (required)<br>
+The custom property name</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>value_type</code></strong> (string) (required)<br>
+The type of the value for the property<br>
+Can be one of: <code>string</code>, <code>single_select</code>, <code>multi_select</code>, <code>true_false</code>, <code>url</code></p>
+</li>
+<li>
+<p><strong><code>required</code></strong> (boolean)<br>
+Whether the property is required.</p>
+</li>
+<li>
+<p><strong><code>default_value</code></strong> (null or string or array)<br>
+Default value of the property</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string or null)<br>
+Short description of the property</p>
+</li>
+<li>
+<p><strong><code>allowed_values</code></strong> (array of strings or null)<br>
+An ordered list of the allowed values of the property.<br>
+The property can have up to 200 allowed values.</p>
+</li>
+<li>
+<p><strong><code>values_editable_by</code></strong> (string or null)<br>
+Who can edit the values of the property<br>
+Can be one of: <code>org_actors</code>, <code>org_and_repo_actors</code>, <code>null</code></p>
+</li>
+<li>
+<p><strong><code>require_explicit_values</code></strong> (boolean)<br>
+Whether setting properties values is mandatory</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Create or update a custom property for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Create or update a custom property for an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/schema/CUSTOM_PROPERTY_NAME \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "value_type": "single_select",
+</span><span style="color:#c0c5ce;">  "required": true,
+</span><span style="color:#c0c5ce;">  "default_value": "production",
+</span><span style="color:#c0c5ce;">  "description": "Prod or dev environment",
+</span><span style="color:#c0c5ce;">  "allowed_values": [
+</span><span style="color:#c0c5ce;">    "production",
+</span><span style="color:#c0c5ce;">    "development"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-custom-property-for-an-organization">Get a custom property for an organization</a>.</p>
+<h2 id="remove-a-custom-property-for-an-organization" title="Remove a custom property for an organization">Remove a custom property for an organization<a href="#remove-a-custom-property-for-an-organization" aria-label="Link to heading 'Remove a custom property for an organization'" data-heading-content="Remove a custom property for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/properties/schema/{custom_property_name}
+</span></code></pre>
+<p>Removes a custom property that is defined for an organization.<br>
+To use this endpoint, the authenticated user must be one of:</p>
+<p>An administrator for the organization.<br>
+A user, or a user on a team, with the fine-grained permission of custom<span data-escaped-char="">_</span>properties<span data-escaped-char="">_</span>org<span data-escaped-char="">_</span>definitions<span data-escaped-char="">_</span>manager in the organization.</p>
+<h3 id="parameters-4" title="Remove a custom property for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>custom_property_name</code></strong> (string) (required)<br>
+The custom property name</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Remove a custom property for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Remove a custom property for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/schema/CUSTOM_PROPERTY_NAME
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-custom-property-values-for-organization-repositories" title="List custom property values for organization repositories">List custom property values for organization repositories<a href="#list-custom-property-values-for-organization-repositories" aria-label="Link to heading 'List custom property values for organization repositories'" data-heading-content="List custom property values for organization repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/properties/values
+</span></code></pre>
+<p>Lists organization repositories with all of their custom property values.<br>
+Organization members can read these properties.</p>
+<h3 id="parameters-5" title="List custom property values for organization repositories / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>repository_query</code></strong> (string)<br>
+Finds repositories in the organization with a query containing one or more search keywords and qualifiers. Qualifiers allow you to limit your search to specific areas of GitHub. The REST API supports the same qualifiers as the web interface for GitHub. To learn more about the format of the query, see Constructing a search query. See "Searching for repositories" for a detailed list of qualifiers.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List custom property values for organization repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="List custom property values for organization repositories / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/values
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Organization Repository Custom Property Values</code>:</p>
+<ul>
+<li><code>repository_id</code>: required, integer</li>
+<li><code>repository_name</code>: required, string</li>
+<li><code>repository_full_name</code>: required, string</li>
+<li><code>properties</code>: required, array of <code>Custom Property Value</code>:
+<ul>
+<li><code>property_name</code>: required, string</li>
+<li><code>value</code>: required, one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-or-update-custom-property-values-for-organization-repositories" title="Create or update custom property values for organization repositories">Create or update custom property values for organization repositories<a href="#create-or-update-custom-property-values-for-organization-repositories" aria-label="Link to heading 'Create or update custom property values for organization repositories'" data-heading-content="Create or update custom property values for organization repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/properties/values
+</span></code></pre>
+<p>Create new or update existing custom property values for repositories in a batch that belong to an organization.<br>
+Each target repository will have its custom property values updated to match the values provided in the request.<br>
+A maximum of 30 repositories can be updated in a single request.<br>
+Using a value of null for a custom property will remove or 'unset' the property value from the repository.<br>
+To use this endpoint, the authenticated user must be one of:</p>
+<p>An administrator for the organization.<br>
+A user, or a user on a team, with the fine-grained permission of custom<span data-escaped-char="">_</span>properties<span data-escaped-char="">_</span>org<span data-escaped-char="">_</span>values<span data-escaped-char="">_</span>editor in the organization.</p>
+<h3 id="parameters-6" title="Create or update custom property values for organization repositories / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>repository_names</code></strong> (array of strings) (required)<br>
+The names of repositories that the custom property values will be applied to.</p>
+</li>
+<li>
+<p><strong><code>properties</code></strong> (array of objects) (required)<br>
+List of custom property names and associated values to apply to the repositories.</p>
+<ul>
+<li><strong><code>property_name</code></strong> (string) (required)<br>
+The name of the property</li>
+<li><strong><code>value</code></strong> (null or string or array) (required)<br>
+The value assigned to the property</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Create or update custom property values for organization repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content when custom property values are successfully created or updated</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Create or update custom property values for organization repositories / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/properties/values \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository_names": [
+</span><span style="color:#c0c5ce;">    "Hello-World",
+</span><span style="color:#c0c5ce;">    "octo-repo"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "properties": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "environment",
+</span><span style="color:#c0c5ce;">      "value": "production"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "service",
+</span><span style="color:#c0c5ce;">      "value": "web"
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "property_name": "team",
+</span><span style="color:#c0c5ce;">      "value": "octocat"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

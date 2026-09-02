@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Using global node IDs</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="using-global-node-ids">Using global node IDs<a href="#using-global-node-ids" aria-label="Link to heading 'Using global node IDs'" data-heading-content="Using global node IDs" class="anchor"></a></h1>
+<p>You can get global node IDs of objects via the REST API and use them in GraphQL operations.</p>
+<p>You can access most objects in GitHub (users, issues, pull requests, etc.) using either the REST API or the GraphQL API. You can find the <strong>global node ID</strong> of many objects from within the REST API and use these IDs in your GraphQL operations. For more information, see <a href="https://developer.github.com/changes/2017-12-19-graphql-node-id/" class="external">Preview GraphQL API Node IDs in REST API resources</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>In REST, the global node ID field is named <code>node_id</code>. In GraphQL, it's an <code>id</code> field on the <code>node</code> interface. For a refresher on what "node" means in GraphQL, see <a href="introduction-to-graphql.html#node">Introduction to GraphQL</a>.</p>
+</div>
+<h2 id="putting-global-node-ids-to-use" title="Putting global node IDs to use">Putting global node IDs to use<a href="#putting-global-node-ids-to-use" aria-label="Link to heading 'Putting global node IDs to use'" data-heading-content="Putting global node IDs to use" class="anchor"></a></h2>
+<p>You can follow three steps to use global node IDs effectively:</p>
+<ol>
+<li>Call a REST endpoint that returns an object's <code>node_id</code>.</li>
+<li>Find the object's type in GraphQL.</li>
+<li>Use the ID and type to do a direct node lookup in GraphQL.</li>
+</ol>
+<p>Let's walk through an example.</p>
+<h2 id="1-call-a-rest-endpoint-that-returns-an-objects-node-id" title="1. Call a REST endpoint that returns an object's node ID">1. Call a REST endpoint that returns an object's node ID<a href="#1-call-a-rest-endpoint-that-returns-an-objects-node-id" aria-label="Link to heading '1. Call a REST endpoint that returns an object's node ID'" data-heading-content="1. Call a REST endpoint that returns an object's node ID" class="anchor"></a></h2>
+<p>If you <a href="https://docs.github.com/en/rest/users/users#get-the-authenticated-user" class="external">request the authenticated user</a>:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -i --header "Authorization: Bearer YOUR-TOKEN" https://api.github.com/user
+</span></code></pre>
+<p>you'll get a response that includes the <code>node_id</code> of the authenticated user:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">login</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">id</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">avatar_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://github.com/images/error/octocat_happy.gif</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">gravatar_id</span><span style="color:#c0c5ce;">": "",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">html_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://github.com/octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">followers_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/followers</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">following_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/following{/other_user}</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">gists_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/gists{/gist_id}</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">starred_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/starred{/owner}{/repo}</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">subscriptions_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/subscriptions</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">organizations_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/orgs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">repos_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/repos</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">events_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/events{/privacy}</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">received_events_url</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://api.github.com/users/octocat/received_events</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">type</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">User</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">site_admin</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">name</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">monalisa octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">company</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">GitHub</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">blog</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">https://github.com/blog</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">location</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">San Francisco</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">email</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">octocat@github.com</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">hireable</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">false</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">bio</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">There once was...</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">public_repos</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">public_gists</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">followers</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">20</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">following</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">created_at</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2008-01-14T04:33:35Z</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">updated_at</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2008-01-14T04:33:35Z</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">private_gists</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">81</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">total_private_repos</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">owned_private_repos</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">disk_usage</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">10000</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">collaborators</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">8</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">two_factor_authentication</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">plan</span><span style="color:#c0c5ce;">": {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">name</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Medium</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">space</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">400</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">private_repos</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">20</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">collaborators</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">0
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">node_id</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">MDQ6VXNlcjU4MzIzMQ==</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h2 id="2-find-the-object-type-in-graphql" title="2. Find the object type in GraphQL">2. Find the object type in GraphQL<a href="#2-find-the-object-type-in-graphql" aria-label="Link to heading '2. Find the object type in GraphQL'" data-heading-content="2. Find the object type in GraphQL" class="anchor"></a></h2>
+<p>In this example, the <code>node_id</code> value is <code>MDQ6VXNlcjU4MzIzMQ==</code>. You can use this value to query the same object in GraphQL.</p>
+<p>You'll need to know the object's <em>type</em> first, though. You can check the type with a simple GraphQL query:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  node(id:"MDQ6VXNlcjU4MzIzMQ==") {
+</span><span style="color:#c0c5ce;">     __typename
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>This type of query—that is, finding the node by ID—is known as a "direct node lookup."</p>
+<p>When you run this query, you'll see that the <code>__typename</code> is <a href="../reference/users.html#object-user"><code>User</code></a>.</p>
+<h2 id="3-do-a-direct-node-lookup-in-graphql" title="3. Do a direct node lookup in GraphQL">3. Do a direct node lookup in GraphQL<a href="#3-do-a-direct-node-lookup-in-graphql" aria-label="Link to heading '3. Do a direct node lookup in GraphQL'" data-heading-content="3. Do a direct node lookup in GraphQL" class="anchor"></a></h2>
+<p>Once you've confirmed the type, you can use an <a href="https://graphql.org/learn/queries/#inline-fragments" class="external">inline fragment</a> to access the object by its ID and return additional data. In this example, we define the fields on <code>User</code> that we'd like to query:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  node(id:"MDQ6VXNlcjU4MzIzMQ==") {
+</span><span style="color:#c0c5ce;">   ... on User {
+</span><span style="color:#c0c5ce;">      name
+</span><span style="color:#c0c5ce;">      login
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>This type of query is the standard approach for looking up an object by its global node ID.</p>
+<h2 id="using-global-node-ids-in-migrations" title="Using global node IDs in migrations">Using global node IDs in migrations<a href="#using-global-node-ids-in-migrations" aria-label="Link to heading 'Using global node IDs in migrations'" data-heading-content="Using global node IDs in migrations" class="anchor"></a></h2>
+<p>When building integrations that use either the REST API or the GraphQL API, it's best practice to persist the global node ID so you can easily reference objects across API versions. For more information on handling the transition between REST and GraphQL, see <a href="migrating-from-rest-to-graphql.html">Migrating from REST to GraphQL</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

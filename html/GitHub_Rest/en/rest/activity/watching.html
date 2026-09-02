@@ -1,0 +1,502 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for watching</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Activity</a> / </nav><h1 id="rest-api-endpoints-for-watching">REST API endpoints for watching<a href="#rest-api-endpoints-for-watching" aria-label="Link to heading 'REST API endpoints for watching'" data-heading-content="REST API endpoints for watching" class="anchor"></a></h1>
+<p>Use the REST API to subscribe to notifications for activity in a repository.</p>
+<h2 id="about-watching" title="About watching">About watching<a href="#about-watching" aria-label="Link to heading 'About watching'" data-heading-content="About watching" class="anchor"></a></h2>
+<p>You can use the REST API to subscribe to notifications for activity in a repository. To bookmark a repository instead, see <a href="starring.html">REST API endpoints for starring</a>.</p>
+<h3 id="watching-versus-starring" title="About watching / Watching versus starring">Watching versus starring<a href="#watching-versus-starring" aria-label="Link to heading 'Watching versus starring'" data-heading-content="Watching versus starring" class="anchor"></a></h3>
+<p>In August 2012, we <a href="https://github.com/blog/1204-notifications-stars" class="external">changed the way watching<br>
+works</a> on GitHub. Some API<br>
+client applications may still be using the original "watcher" endpoints for accessing<br>
+this data. You should now use the "star" endpoints instead. For more information, <a href="starring.html">REST API endpoints for starring</a> and the <a href="https://developer.github.com/changes/2012-09-05-watcher-api/" class="external">changelog post</a>.</p>
+<p>In responses from the REST API, <code>subscribers_count</code> corresponds to the number of watchers, whereas <code>watchers</code>, <code>watchers_count</code>, and <code>stargazers_count</code> correspond to the number of users that have starred a repository.</p>
+<h3 id="new-access-restrictions" title="About watching / New access restrictions">New access restrictions<a href="#new-access-restrictions" aria-label="Link to heading 'New access restrictions'" data-heading-content="New access restrictions" class="anchor"></a></h3>
+<p>In July 2026, to ensure responsible use of this data and to protect users from misuse, we are introducing new access restrictions to several public API endpoints related to watching. Access to the subscribers and subscriptions listing endpoints will be limited to admins and collaborators, and the endpoint that lists repositories watched by a user is being deprecated. During the deprecation period, the endpoint will remain available but will return empty responses, and it will be fully removed in a later phase. For more information, see the <a href="https://github.blog/changelog/2026-06-30-upcoming-access-restrictions-to-public-api-endpoints-and-ui-views/" class="external">changelog post</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-watchers" title="List watchers">List watchers<a href="#list-watchers" aria-label="Link to heading 'List watchers'" data-heading-content="List watchers" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/subscribers
+</span></code></pre>
+<p>Lists the people watching the specified repository.</p>
+<h3 id="parameters" title="List watchers / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List watchers / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="List watchers / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/subscribers
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Simple User</code>:</p>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+<h2 id="get-a-repository-subscription" title="Get a repository subscription">Get a repository subscription<a href="#get-a-repository-subscription" aria-label="Link to heading 'Get a repository subscription'" data-heading-content="Get a repository subscription" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/subscription
+</span></code></pre>
+<p>Gets information about whether the authenticated user is subscribed to the repository.</p>
+<h3 id="parameters-1" title="Get a repository subscription / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a repository subscription / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - if you subscribe to the repository</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Not Found if you don't subscribe to the repository</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a repository subscription / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/subscription
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>subscribed</code>: required, boolean</li>
+<li><code>ignored</code>: required, boolean</li>
+<li><code>reason</code>: required, string or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+</ul>
+<h2 id="set-a-repository-subscription" title="Set a repository subscription">Set a repository subscription<a href="#set-a-repository-subscription" aria-label="Link to heading 'Set a repository subscription'" data-heading-content="Set a repository subscription" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/subscription
+</span></code></pre>
+<p>If you would like to watch a repository, set subscribed to true. If you would like to ignore notifications made within a repository, set ignored to true. If you would like to stop watching a repository, delete the repository's subscription completely.</p>
+<h3 id="parameters-2" title="Set a repository subscription / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>subscribed</code></strong> (boolean)<br>
+Determines if notifications should be received from this repository.</p>
+</li>
+<li>
+<p><strong><code>ignored</code></strong> (boolean)<br>
+Determines if all notifications should be blocked from this repository.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Set a repository subscription / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2" title="Set a repository subscription / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/subscription \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "subscribed": true,
+</span><span style="color:#c0c5ce;">  "ignored": false
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-repository-subscription">Get a repository subscription</a>.</p>
+<h2 id="delete-a-repository-subscription" title="Delete a repository subscription">Delete a repository subscription<a href="#delete-a-repository-subscription" aria-label="Link to heading 'Delete a repository subscription'" data-heading-content="Delete a repository subscription" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/subscription
+</span></code></pre>
+<p>This endpoint should only be used to stop watching a repository. To control whether or not you wish to receive notifications from a repository, set the repository's subscription manually.</p>
+<h3 id="parameters-3" title="Delete a repository subscription / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete a repository subscription / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-3" title="Delete a repository subscription / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/subscription
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-repositories-watched-by-the-authenticated-user" title="List repositories watched by the authenticated user">List repositories watched by the authenticated user<a href="#list-repositories-watched-by-the-authenticated-user" aria-label="Link to heading 'List repositories watched by the authenticated user'" data-heading-content="List repositories watched by the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/subscriptions
+</span></code></pre>
+<p>Lists repositories the authenticated user is watching.</p>
+<h3 id="parameters-4" title="List repositories watched by the authenticated user / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List repositories watched by the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="List repositories watched by the authenticated user / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/subscriptions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Minimal Repository</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+<h2 id="list-repositories-watched-by-a-user" title="List repositories watched by a user">List repositories watched by a user<a href="#list-repositories-watched-by-a-user" aria-label="Link to heading 'List repositories watched by a user'" data-heading-content="List repositories watched by a user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/subscriptions
+</span></code></pre>
+<p>Lists repositories a user is watching.</p>
+<h3 id="parameters-5" title="List repositories watched by a user / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List repositories watched by a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-5" title="List repositories watched by a user / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/subscriptions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-repositories-watched-by-the-authenticated-user">List repositories watched by the authenticated user</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

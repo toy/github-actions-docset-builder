@@ -1,0 +1,2021 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Users</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Reference</a> / </nav><h1 id="users">Users<a href="#users" aria-label="Link to heading 'Users'" data-heading-content="Users" class="anchor"></a></h1>
+<p>Reference documentation for GraphQL schema types in the Users category.</p>
+<h2 id="actor---interface" title="Actor - interface">Actor - interface<a href="#actor---interface" aria-label="Link to heading 'Actor - interface'" data-heading-content="Actor - interface" class="anchor"></a></h2>
+<p>Represents an object which can take actions on GitHub. Typically a User or Bot.</p>
+<h3 id="fields-for-actor" title="Actor - interface / Fields for Actor">Fields for <code>Actor</code><a href="#fields-for-actor" aria-label="Link to heading 'Fields for Actor'" data-heading-content="Fields for Actor" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>avatarUrl</code> (URI!): A URL pointing to the actor's public avatar.</p>
+<ul>
+<li><code>size</code> (Int): The size of the resulting square image.</li>
+</ul>
+</li>
+<li>
+<p><code>login</code> (String!): The username of the actor.</p>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path for this actor.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL for this actor.</p>
+</li>
+</ul>
+<h3 id="implemented-by" title="Actor - interface / Implemented by">Implemented by<a href="#implemented-by" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>Bot</li>
+<li>EnterpriseUserAccount</li>
+<li>Mannequin</li>
+<li>Organization</li>
+<li>User</li>
+</ul>
+<h2 id="actorconnection---object" title="ActorConnection - object">ActorConnection - object<a href="#actorconnection---object" aria-label="Link to heading 'ActorConnection - object'" data-heading-content="ActorConnection - object" class="anchor"></a></h2>
+<p>The connection type for Actor.</p>
+<h3 id="fields-for-actorconnection" title="ActorConnection - object / Fields for ActorConnection">Fields for <code>ActorConnection</code><a href="#fields-for-actorconnection" aria-label="Link to heading 'Fields for ActorConnection'" data-heading-content="Fields for ActorConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([ActorEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Actor]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="actoredge---object" title="ActorEdge - object">ActorEdge - object<a href="#actoredge---object" aria-label="Link to heading 'ActorEdge - object'" data-heading-content="ActorEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-actoredge" title="ActorEdge - object / Fields for ActorEdge">Fields for <code>ActorEdge</code><a href="#fields-for-actoredge" aria-label="Link to heading 'Fields for ActorEdge'" data-heading-content="Fields for ActorEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (Actor): The item at the end of the edge.</li>
+</ul>
+<h2 id="actorlocation---object" title="ActorLocation - object">ActorLocation - object<a href="#actorlocation---object" aria-label="Link to heading 'ActorLocation - object'" data-heading-content="ActorLocation - object" class="anchor"></a></h2>
+<p>Location information for an actor.</p>
+<h3 id="fields-for-actorlocation" title="ActorLocation - object / Fields for ActorLocation">Fields for <code>ActorLocation</code><a href="#fields-for-actorlocation" aria-label="Link to heading 'Fields for ActorLocation'" data-heading-content="Fields for ActorLocation" class="anchor"></a></h3>
+<ul>
+<li><code>city</code> (String): City.</li>
+<li><code>country</code> (String): Country name.</li>
+<li><code>countryCode</code> (String): Country code.</li>
+<li><code>region</code> (String): Region name.</li>
+<li><code>regionCode</code> (String): Region or state code.</li>
+</ul>
+<h2 id="actortype---enum" title="ActorType - enum">ActorType - enum<a href="#actortype---enum" aria-label="Link to heading 'ActorType - enum'" data-heading-content="ActorType - enum" class="anchor"></a></h2>
+<p>The actor's type.</p>
+<h3 id="values-for-actortype" title="ActorType - enum / Values for ActorType">Values for <code>ActorType</code><a href="#values-for-actortype" aria-label="Link to heading 'Values for ActorType'" data-heading-content="Values for ActorType" class="anchor"></a></h3>
+<ul>
+<li><code>TEAM</code>: Indicates a team actor.</li>
+<li><code>USER</code>: Indicates a user actor.</li>
+</ul>
+<h2 id="agentassignmentinput---input-object" title="AgentAssignmentInput - input object">AgentAssignmentInput - input object<a href="#agentassignmentinput---input-object" aria-label="Link to heading 'AgentAssignmentInput - input object'" data-heading-content="AgentAssignmentInput - input object" class="anchor"></a></h2>
+<p>Represents configuration for assigning Copilot to an issue (public variant).</p>
+<h3 id="input-fields-for-agentassignmentinput" title="AgentAssignmentInput - input object / Input fields for AgentAssignmentInput">Input fields for <code>AgentAssignmentInput</code><a href="#input-fields-for-agentassignmentinput" aria-label="Link to heading 'Input fields for AgentAssignmentInput'" data-heading-content="Input fields for AgentAssignmentInput" class="anchor"></a></h3>
+<ul>
+<li><code>baseRef</code> (String): The base ref/branch for the repository. Defaults to the default branch if not provided.</li>
+<li><code>customAgent</code> (String): Custom agent for Copilot.</li>
+<li><code>customInstructions</code> (String): Custom instructions for Copilot.</li>
+<li><code>targetRepositoryId</code> (ID): The Node ID of the target repository where Copilot should work. Defaults to the issue's repository if not provided.</li>
+</ul>
+<h2 id="changeuserstatus---mutation" title="changeUserStatus - mutation">changeUserStatus - mutation<a href="#changeuserstatus---mutation" aria-label="Link to heading 'changeUserStatus - mutation'" data-heading-content="changeUserStatus - mutation" class="anchor"></a></h2>
+<p>Update your status on GitHub.</p>
+<h3 id="input-fields-for-changeuserstatus" title="changeUserStatus - mutation / Input fields for changeUserStatus">Input fields for <code>changeUserStatus</code><a href="#input-fields-for-changeuserstatus" aria-label="Link to heading 'Input fields for changeUserStatus'" data-heading-content="Input fields for changeUserStatus" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (ChangeUserStatusInput!):</li>
+</ul>
+<h3 id="return-fields-for-changeuserstatus" title="changeUserStatus - mutation / Return fields for changeUserStatus">Return fields for <code>changeUserStatus</code><a href="#return-fields-for-changeuserstatus" aria-label="Link to heading 'Return fields for changeUserStatus'" data-heading-content="Return fields for changeUserStatus" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>status</code> (UserStatus): Your updated status.</li>
+</ul>
+<h2 id="changeuserstatusinput---input-object" title="ChangeUserStatusInput - input object">ChangeUserStatusInput - input object<a href="#changeuserstatusinput---input-object" aria-label="Link to heading 'ChangeUserStatusInput - input object'" data-heading-content="ChangeUserStatusInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of ChangeUserStatus.</p>
+<h3 id="input-fields-for-changeuserstatusinput" title="ChangeUserStatusInput - input object / Input fields for ChangeUserStatusInput">Input fields for <code>ChangeUserStatusInput</code><a href="#input-fields-for-changeuserstatusinput" aria-label="Link to heading 'Input fields for ChangeUserStatusInput'" data-heading-content="Input fields for ChangeUserStatusInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>emoji</code> (String): The emoji to represent your status. Can either be a native Unicode emoji or an emoji name with colons, e.g., 😀.</li>
+<li><code>expiresAt</code> (DateTime): If set, the user status will not be shown after this date.</li>
+<li><code>limitedAvailability</code> (Boolean): Whether this status should indicate you are not fully available on GitHub, e.g., you are away.</li>
+<li><code>message</code> (String): A short description of your current status.</li>
+<li><code>organizationId</code> (ID): The ID of the organization whose members will be allowed to see the status. If<br>
+omitted, the status will be publicly visible.</li>
+</ul>
+<h2 id="claimable---union" title="Claimable - union">Claimable - union<a href="#claimable---union" aria-label="Link to heading 'Claimable - union'" data-heading-content="Claimable - union" class="anchor"></a></h2>
+<p>An object which can have its data claimed or claim data from another.</p>
+<h3 id="possible-types-for-claimable" title="Claimable - union / Possible types for Claimable">Possible types for <code>Claimable</code><a href="#possible-types-for-claimable" aria-label="Link to heading 'Possible types for Claimable'" data-heading-content="Possible types for Claimable" class="anchor"></a></h3>
+<ul>
+<li>Mannequin</li>
+<li>User</li>
+</ul>
+<h2 id="contribution---interface" title="Contribution - interface">Contribution - interface<a href="#contribution---interface" aria-label="Link to heading 'Contribution - interface'" data-heading-content="Contribution - interface" class="anchor"></a></h2>
+<p>Represents a contribution a user made on GitHub, such as opening an issue.</p>
+<h3 id="fields-for-contribution" title="Contribution - interface / Fields for Contribution">Fields for <code>Contribution</code><a href="#fields-for-contribution" aria-label="Link to heading 'Fields for Contribution'" data-heading-content="Fields for Contribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h3 id="implemented-by-1" title="Contribution - interface / Implemented by">Implemented by<a href="#implemented-by-1" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>CreatedCommitContribution</li>
+<li>CreatedIssueContribution</li>
+<li>CreatedPullRequestContribution</li>
+<li>CreatedPullRequestReviewContribution</li>
+<li>CreatedRepositoryContribution</li>
+<li>JoinedGitHubContribution</li>
+<li>RestrictedContribution</li>
+</ul>
+<h2 id="contributioncalendar---object" title="ContributionCalendar - object">ContributionCalendar - object<a href="#contributioncalendar---object" aria-label="Link to heading 'ContributionCalendar - object'" data-heading-content="ContributionCalendar - object" class="anchor"></a></h2>
+<p>A calendar of contributions made on GitHub by a user.</p>
+<h3 id="fields-for-contributioncalendar" title="ContributionCalendar - object / Fields for ContributionCalendar">Fields for <code>ContributionCalendar</code><a href="#fields-for-contributioncalendar" aria-label="Link to heading 'Fields for ContributionCalendar'" data-heading-content="Fields for ContributionCalendar" class="anchor"></a></h3>
+<ul>
+<li><code>colors</code> ([String!]!): A list of hex color codes used in this calendar. The darker the color, the more contributions it represents.</li>
+<li><code>isHalloween</code> (Boolean!): Determine if the color set was chosen because it's currently Halloween.</li>
+<li><code>months</code> ([ContributionCalendarMonth!]!): A list of the months of contributions in this calendar.</li>
+<li><code>totalContributions</code> (Int!): The count of total contributions in the calendar.</li>
+<li><code>weeks</code> ([ContributionCalendarWeek!]!): A list of the weeks of contributions in this calendar.</li>
+</ul>
+<h2 id="contributioncalendarday---object" title="ContributionCalendarDay - object">ContributionCalendarDay - object<a href="#contributioncalendarday---object" aria-label="Link to heading 'ContributionCalendarDay - object'" data-heading-content="ContributionCalendarDay - object" class="anchor"></a></h2>
+<p>Represents a single day of contributions on GitHub by a user.</p>
+<h3 id="fields-for-contributioncalendarday" title="ContributionCalendarDay - object / Fields for ContributionCalendarDay">Fields for <code>ContributionCalendarDay</code><a href="#fields-for-contributioncalendarday" aria-label="Link to heading 'Fields for ContributionCalendarDay'" data-heading-content="Fields for ContributionCalendarDay" class="anchor"></a></h3>
+<ul>
+<li><code>color</code> (String!): The hex color code that represents how many contributions were made on this day compared to others in the calendar.</li>
+<li><code>contributionCount</code> (Int!): How many contributions were made by the user on this day.</li>
+<li><code>contributionLevel</code> (ContributionLevel!): Indication of contributions, relative to other days. Can be used to indicate<br>
+which color to represent this day on a calendar.</li>
+<li><code>date</code> (Date!): The day this square represents.</li>
+<li><code>weekday</code> (Int!): A number representing which day of the week this square represents, e.g., 1 is Monday.</li>
+</ul>
+<h2 id="contributioncalendarmonth---object" title="ContributionCalendarMonth - object">ContributionCalendarMonth - object<a href="#contributioncalendarmonth---object" aria-label="Link to heading 'ContributionCalendarMonth - object'" data-heading-content="ContributionCalendarMonth - object" class="anchor"></a></h2>
+<p>A month of contributions in a user's contribution graph.</p>
+<h3 id="fields-for-contributioncalendarmonth" title="ContributionCalendarMonth - object / Fields for ContributionCalendarMonth">Fields for <code>ContributionCalendarMonth</code><a href="#fields-for-contributioncalendarmonth" aria-label="Link to heading 'Fields for ContributionCalendarMonth'" data-heading-content="Fields for ContributionCalendarMonth" class="anchor"></a></h3>
+<ul>
+<li><code>firstDay</code> (Date!): The date of the first day of this month.</li>
+<li><code>name</code> (String!): The name of the month.</li>
+<li><code>totalWeeks</code> (Int!): How many weeks started in this month.</li>
+<li><code>year</code> (Int!): The year the month occurred in.</li>
+</ul>
+<h2 id="contributioncalendarweek---object" title="ContributionCalendarWeek - object">ContributionCalendarWeek - object<a href="#contributioncalendarweek---object" aria-label="Link to heading 'ContributionCalendarWeek - object'" data-heading-content="ContributionCalendarWeek - object" class="anchor"></a></h2>
+<p>A week of contributions in a user's contribution graph.</p>
+<h3 id="fields-for-contributioncalendarweek" title="ContributionCalendarWeek - object / Fields for ContributionCalendarWeek">Fields for <code>ContributionCalendarWeek</code><a href="#fields-for-contributioncalendarweek" aria-label="Link to heading 'Fields for ContributionCalendarWeek'" data-heading-content="Fields for ContributionCalendarWeek" class="anchor"></a></h3>
+<ul>
+<li><code>contributionDays</code> ([ContributionCalendarDay!]!): The days of contributions in this week.</li>
+<li><code>firstDay</code> (Date!): The date of the earliest square in this week.</li>
+</ul>
+<h2 id="contributionlevel---enum" title="ContributionLevel - enum">ContributionLevel - enum<a href="#contributionlevel---enum" aria-label="Link to heading 'ContributionLevel - enum'" data-heading-content="ContributionLevel - enum" class="anchor"></a></h2>
+<p>Varying levels of contributions from none to many.</p>
+<h3 id="values-for-contributionlevel" title="ContributionLevel - enum / Values for ContributionLevel">Values for <code>ContributionLevel</code><a href="#values-for-contributionlevel" aria-label="Link to heading 'Values for ContributionLevel'" data-heading-content="Values for ContributionLevel" class="anchor"></a></h3>
+<ul>
+<li><code>FIRST_QUARTILE</code>: Lowest 25% of days of contributions.</li>
+<li><code>FOURTH_QUARTILE</code>: Highest 25% of days of contributions. More contributions than the third quartile.</li>
+<li><code>NONE</code>: No contributions occurred.</li>
+<li><code>SECOND_QUARTILE</code>: Second lowest 25% of days of contributions. More contributions than the first quartile.</li>
+<li><code>THIRD_QUARTILE</code>: Second highest 25% of days of contributions. More contributions than second quartile, less than the fourth quartile.</li>
+</ul>
+<h2 id="contributionorder---input-object" title="ContributionOrder - input object">ContributionOrder - input object<a href="#contributionorder---input-object" aria-label="Link to heading 'ContributionOrder - input object'" data-heading-content="ContributionOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for contribution connections.</p>
+<h3 id="input-fields-for-contributionorder" title="ContributionOrder - input object / Input fields for ContributionOrder">Input fields for <code>ContributionOrder</code><a href="#input-fields-for-contributionorder" aria-label="Link to heading 'Input fields for ContributionOrder'" data-heading-content="Input fields for ContributionOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+</ul>
+<h2 id="contributionscollection---object" title="ContributionsCollection - object">ContributionsCollection - object<a href="#contributionscollection---object" aria-label="Link to heading 'ContributionsCollection - object'" data-heading-content="ContributionsCollection - object" class="anchor"></a></h2>
+<p>A collection of contributions made by a user, including opened issues, commits, and pull requests.<br>
+Contributions in private and internal repositories are only included with the optional read:user scope.</p>
+<h3 id="fields-for-contributionscollection" title="ContributionsCollection - object / Fields for ContributionsCollection">Fields for <code>ContributionsCollection</code><a href="#fields-for-contributionscollection" aria-label="Link to heading 'Fields for ContributionsCollection'" data-heading-content="Fields for ContributionsCollection" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>commitContributionsByRepository</code> ([CommitContributionsByRepository!]!): Commit contributions made by the user, grouped by repository.</p>
+<ul>
+<li><code>maxRepositories</code> (Int): How many repositories should be included. Default: <code>25</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>contributionCalendar</code> (ContributionCalendar!): A calendar of this user's contributions on GitHub.</p>
+</li>
+<li>
+<p><code>contributionYears</code> ([Int!]!): The years the user has been making contributions with the most recent year first.</p>
+</li>
+<li>
+<p><code>doesEndInCurrentMonth</code> (Boolean!): Determine if this collection's time span ends in the current month.</p>
+</li>
+<li>
+<p><code>earliestRestrictedContributionDate</code> (Date): The date of the first restricted contribution the user made in this time<br>
+period. Can only be non-null when the user has enabled private contribution counts.</p>
+</li>
+<li>
+<p><code>endedAt</code> (DateTime!): The ending date and time of this collection.</p>
+</li>
+<li>
+<p><code>firstIssueContribution</code> (CreatedIssueOrRestrictedContribution): The first issue the user opened on GitHub. This will be null if that issue was<br>
+opened outside the collection's time range and ignoreTimeRange is false. If<br>
+the issue is not visible but the user has opted to show private contributions,<br>
+a RestrictedContribution will be returned.</p>
+</li>
+<li>
+<p><code>firstPullRequestContribution</code> (CreatedPullRequestOrRestrictedContribution): The first pull request the user opened on GitHub. This will be null if that<br>
+pull request was opened outside the collection's time range and<br>
+ignoreTimeRange is not true. If the pull request is not visible but the user<br>
+has opted to show private contributions, a RestrictedContribution will be returned.</p>
+</li>
+<li>
+<p><code>firstRepositoryContribution</code> (CreatedRepositoryOrRestrictedContribution): The first repository the user created on GitHub. This will be null if that<br>
+first repository was created outside the collection's time range and<br>
+ignoreTimeRange is false. If the repository is not visible, then a<br>
+RestrictedContribution is returned.</p>
+</li>
+<li>
+<p><code>hasActivityInThePast</code> (Boolean!): Does the user have any more activity in the timeline that occurred prior to the collection's time range?.</p>
+</li>
+<li>
+<p><code>hasAnyContributions</code> (Boolean!): Determine if there are any contributions in this collection.</p>
+</li>
+<li>
+<p><code>hasAnyRestrictedContributions</code> (Boolean!): Determine if the user made any contributions in this time frame whose details<br>
+are not visible because they were made in a private repository. Can only be<br>
+true if the user enabled private contribution counts.</p>
+</li>
+<li>
+<p><code>isSingleDay</code> (Boolean!): Whether or not the collector's time span is all within the same day.</p>
+</li>
+<li>
+<p><code>issueContributions</code> (CreatedIssueContributionConnection!): A list of issues the user opened.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>excludeFirst</code> (Boolean): Should the user's first issue ever be excluded from the result.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented issue be excluded from the result.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ContributionOrder): Ordering options for contributions returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>issueContributionsByRepository</code> ([IssueContributionsByRepository!]!): Issue contributions made by the user, grouped by repository.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first issue ever be excluded from the result.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented issue be excluded from the result.</li>
+<li><code>maxRepositories</code> (Int): How many repositories should be included. Default: <code>25</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>joinedGitHubContribution</code> (JoinedGitHubContribution): When the user signed up for GitHub. This will be null if that sign up date<br>
+falls outside the collection's time range and ignoreTimeRange is false.</p>
+</li>
+<li>
+<p><code>latestRestrictedContributionDate</code> (Date): The date of the most recent restricted contribution the user made in this time<br>
+period. Can only be non-null when the user has enabled private contribution counts.</p>
+</li>
+<li>
+<p><code>mostRecentCollectionWithActivity</code> (ContributionsCollection): When this collection's time range does not include any activity from the user, use this<br>
+to get a different collection from an earlier time range that does have activity.</p>
+</li>
+<li>
+<p><code>mostRecentCollectionWithoutActivity</code> (ContributionsCollection): Returns a different contributions collection from an earlier time range than this one<br>
+that does not have any contributions.</p>
+</li>
+<li>
+<p><code>popularIssueContribution</code> (CreatedIssueContribution): The issue the user opened on GitHub that received the most comments in the specified<br>
+time frame.</p>
+</li>
+<li>
+<p><code>popularPullRequestContribution</code> (CreatedPullRequestContribution): The pull request the user opened on GitHub that received the most comments in the<br>
+specified time frame.</p>
+</li>
+<li>
+<p><code>pullRequestContributions</code> (CreatedPullRequestContributionConnection!): Pull request contributions made by the user.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>excludeFirst</code> (Boolean): Should the user's first pull request ever be excluded from the result.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented pull request be excluded from the result.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ContributionOrder): Ordering options for contributions returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>pullRequestContributionsByRepository</code> ([PullRequestContributionsByRepository!]!): Pull request contributions made by the user, grouped by repository.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first pull request ever be excluded from the result.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented pull request be excluded from the result.</li>
+<li><code>maxRepositories</code> (Int): How many repositories should be included. Default: <code>25</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>pullRequestReviewContributions</code> (CreatedPullRequestReviewContributionConnection!): Pull request review contributions made by the user. Returns the most recently<br>
+submitted review for each PR reviewed by the user.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ContributionOrder): Ordering options for contributions returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>pullRequestReviewContributionsByRepository</code> ([PullRequestReviewContributionsByRepository!]!): Pull request review contributions made by the user, grouped by repository.</p>
+<ul>
+<li><code>maxRepositories</code> (Int): How many repositories should be included. Default: <code>25</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>repositoryContributions</code> (CreatedRepositoryContributionConnection!): A list of repositories owned by the user that the user created in this time range.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>excludeFirst</code> (Boolean): Should the user's first repository ever be excluded from the result.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ContributionOrder): Ordering options for contributions returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>restrictedContributionsCount</code> (Int!): A count of contributions made by the user that the viewer cannot access. Only<br>
+non-zero when the user has chosen to share their private contribution counts.</p>
+</li>
+<li>
+<p><code>startedAt</code> (DateTime!): The beginning date and time of this collection.</p>
+</li>
+<li>
+<p><code>totalCommitContributions</code> (Int!): How many commits were made by the user in this time span.</p>
+</li>
+<li>
+<p><code>totalIssueContributions</code> (Int!): How many issues the user opened.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first issue ever be excluded from this count.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented issue be excluded from this count.</li>
+</ul>
+</li>
+<li>
+<p><code>totalPullRequestContributions</code> (Int!): How many pull requests the user opened.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first pull request ever be excluded from this count.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented pull request be excluded from this count.</li>
+</ul>
+</li>
+<li>
+<p><code>totalPullRequestReviewContributions</code> (Int!): How many pull request reviews the user left.</p>
+</li>
+<li>
+<p><code>totalRepositoriesWithContributedCommits</code> (Int!): How many different repositories the user committed to.</p>
+</li>
+<li>
+<p><code>totalRepositoriesWithContributedIssues</code> (Int!): How many different repositories the user opened issues in.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first issue ever be excluded from this count.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented issue be excluded from this count.</li>
+</ul>
+</li>
+<li>
+<p><code>totalRepositoriesWithContributedPullRequestReviews</code> (Int!): How many different repositories the user left pull request reviews in.</p>
+</li>
+<li>
+<p><code>totalRepositoriesWithContributedPullRequests</code> (Int!): How many different repositories the user opened pull requests in.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first pull request ever be excluded from this count.</li>
+<li><code>excludePopular</code> (Boolean): Should the user's most commented pull request be excluded from this count.</li>
+</ul>
+</li>
+<li>
+<p><code>totalRepositoryContributions</code> (Int!): How many repositories the user created.</p>
+<ul>
+<li><code>excludeFirst</code> (Boolean): Should the user's first repository ever be excluded from this count.</li>
+</ul>
+</li>
+<li>
+<p><code>user</code> (User!): The user who made the contributions in this collection.</p>
+</li>
+</ul>
+<h2 id="createdcommitcontribution---object" title="CreatedCommitContribution - object">CreatedCommitContribution - object<a href="#createdcommitcontribution---object" aria-label="Link to heading 'CreatedCommitContribution - object'" data-heading-content="CreatedCommitContribution - object" class="anchor"></a></h2>
+<p>Represents the contribution a user made by committing to a repository.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-createdcommitcontribution" title="CreatedCommitContribution - object / Fields for CreatedCommitContribution">Fields for <code>CreatedCommitContribution</code><a href="#fields-for-createdcommitcontribution" aria-label="Link to heading 'Fields for CreatedCommitContribution'" data-heading-content="Fields for CreatedCommitContribution" class="anchor"></a></h3>
+<ul>
+<li><code>commitCount</code> (Int!): How many commits were made on this day to this repository by the user.</li>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>repository</code> (Repository!): The repository the user made a commit in.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="createdcommitcontributionconnection---object" title="CreatedCommitContributionConnection - object">CreatedCommitContributionConnection - object<a href="#createdcommitcontributionconnection---object" aria-label="Link to heading 'CreatedCommitContributionConnection - object'" data-heading-content="CreatedCommitContributionConnection - object" class="anchor"></a></h2>
+<p>The connection type for CreatedCommitContribution.</p>
+<h3 id="fields-for-createdcommitcontributionconnection" title="CreatedCommitContributionConnection - object / Fields for CreatedCommitContributionConnection">Fields for <code>CreatedCommitContributionConnection</code><a href="#fields-for-createdcommitcontributionconnection" aria-label="Link to heading 'Fields for CreatedCommitContributionConnection'" data-heading-content="Fields for CreatedCommitContributionConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CreatedCommitContributionEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CreatedCommitContribution]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of commits across days and repositories in the connection.</li>
+</ul>
+<h2 id="createdcommitcontributionedge---object" title="CreatedCommitContributionEdge - object">CreatedCommitContributionEdge - object<a href="#createdcommitcontributionedge---object" aria-label="Link to heading 'CreatedCommitContributionEdge - object'" data-heading-content="CreatedCommitContributionEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-createdcommitcontributionedge" title="CreatedCommitContributionEdge - object / Fields for CreatedCommitContributionEdge">Fields for <code>CreatedCommitContributionEdge</code><a href="#fields-for-createdcommitcontributionedge" aria-label="Link to heading 'Fields for CreatedCommitContributionEdge'" data-heading-content="Fields for CreatedCommitContributionEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CreatedCommitContribution): The item at the end of the edge.</li>
+</ul>
+<h2 id="createdissuecontribution---object" title="CreatedIssueContribution - object">CreatedIssueContribution - object<a href="#createdissuecontribution---object" aria-label="Link to heading 'CreatedIssueContribution - object'" data-heading-content="CreatedIssueContribution - object" class="anchor"></a></h2>
+<p>Represents the contribution a user made on GitHub by opening an issue.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-createdissuecontribution" title="CreatedIssueContribution - object / Fields for CreatedIssueContribution">Fields for <code>CreatedIssueContribution</code><a href="#fields-for-createdissuecontribution" aria-label="Link to heading 'Fields for CreatedIssueContribution'" data-heading-content="Fields for CreatedIssueContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>issue</code> (Issue!): The issue that was opened.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="createdissuecontributionconnection---object" title="CreatedIssueContributionConnection - object">CreatedIssueContributionConnection - object<a href="#createdissuecontributionconnection---object" aria-label="Link to heading 'CreatedIssueContributionConnection - object'" data-heading-content="CreatedIssueContributionConnection - object" class="anchor"></a></h2>
+<p>The connection type for CreatedIssueContribution.</p>
+<h3 id="fields-for-createdissuecontributionconnection" title="CreatedIssueContributionConnection - object / Fields for CreatedIssueContributionConnection">Fields for <code>CreatedIssueContributionConnection</code><a href="#fields-for-createdissuecontributionconnection" aria-label="Link to heading 'Fields for CreatedIssueContributionConnection'" data-heading-content="Fields for CreatedIssueContributionConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CreatedIssueContributionEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CreatedIssueContribution]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="createdissuecontributionedge---object" title="CreatedIssueContributionEdge - object">CreatedIssueContributionEdge - object<a href="#createdissuecontributionedge---object" aria-label="Link to heading 'CreatedIssueContributionEdge - object'" data-heading-content="CreatedIssueContributionEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-createdissuecontributionedge" title="CreatedIssueContributionEdge - object / Fields for CreatedIssueContributionEdge">Fields for <code>CreatedIssueContributionEdge</code><a href="#fields-for-createdissuecontributionedge" aria-label="Link to heading 'Fields for CreatedIssueContributionEdge'" data-heading-content="Fields for CreatedIssueContributionEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CreatedIssueContribution): The item at the end of the edge.</li>
+</ul>
+<h2 id="createdissueorrestrictedcontribution---union" title="CreatedIssueOrRestrictedContribution - union">CreatedIssueOrRestrictedContribution - union<a href="#createdissueorrestrictedcontribution---union" aria-label="Link to heading 'CreatedIssueOrRestrictedContribution - union'" data-heading-content="CreatedIssueOrRestrictedContribution - union" class="anchor"></a></h2>
+<p>Represents either a issue the viewer can access or a restricted contribution.</p>
+<h3 id="possible-types-for-createdissueorrestrictedcontribution" title="CreatedIssueOrRestrictedContribution - union / Possible types for CreatedIssueOrRestrictedContribution">Possible types for <code>CreatedIssueOrRestrictedContribution</code><a href="#possible-types-for-createdissueorrestrictedcontribution" aria-label="Link to heading 'Possible types for CreatedIssueOrRestrictedContribution'" data-heading-content="Possible types for CreatedIssueOrRestrictedContribution" class="anchor"></a></h3>
+<ul>
+<li>CreatedIssueContribution</li>
+<li>RestrictedContribution</li>
+</ul>
+<h2 id="createdpullrequestcontribution---object" title="CreatedPullRequestContribution - object">CreatedPullRequestContribution - object<a href="#createdpullrequestcontribution---object" aria-label="Link to heading 'CreatedPullRequestContribution - object'" data-heading-content="CreatedPullRequestContribution - object" class="anchor"></a></h2>
+<p>Represents the contribution a user made on GitHub by opening a pull request.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-createdpullrequestcontribution" title="CreatedPullRequestContribution - object / Fields for CreatedPullRequestContribution">Fields for <code>CreatedPullRequestContribution</code><a href="#fields-for-createdpullrequestcontribution" aria-label="Link to heading 'Fields for CreatedPullRequestContribution'" data-heading-content="Fields for CreatedPullRequestContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>pullRequest</code> (PullRequest!): The pull request that was opened.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="createdpullrequestcontributionconnection---object" title="CreatedPullRequestContributionConnection - object">CreatedPullRequestContributionConnection - object<a href="#createdpullrequestcontributionconnection---object" aria-label="Link to heading 'CreatedPullRequestContributionConnection - object'" data-heading-content="CreatedPullRequestContributionConnection - object" class="anchor"></a></h2>
+<p>The connection type for CreatedPullRequestContribution.</p>
+<h3 id="fields-for-createdpullrequestcontributionconnection" title="CreatedPullRequestContributionConnection - object / Fields for CreatedPullRequestContributionConnection">Fields for <code>CreatedPullRequestContributionConnection</code><a href="#fields-for-createdpullrequestcontributionconnection" aria-label="Link to heading 'Fields for CreatedPullRequestContributionConnection'" data-heading-content="Fields for CreatedPullRequestContributionConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CreatedPullRequestContributionEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CreatedPullRequestContribution]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="createdpullrequestcontributionedge---object" title="CreatedPullRequestContributionEdge - object">CreatedPullRequestContributionEdge - object<a href="#createdpullrequestcontributionedge---object" aria-label="Link to heading 'CreatedPullRequestContributionEdge - object'" data-heading-content="CreatedPullRequestContributionEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-createdpullrequestcontributionedge" title="CreatedPullRequestContributionEdge - object / Fields for CreatedPullRequestContributionEdge">Fields for <code>CreatedPullRequestContributionEdge</code><a href="#fields-for-createdpullrequestcontributionedge" aria-label="Link to heading 'Fields for CreatedPullRequestContributionEdge'" data-heading-content="Fields for CreatedPullRequestContributionEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CreatedPullRequestContribution): The item at the end of the edge.</li>
+</ul>
+<h2 id="createdpullrequestorrestrictedcontribution---union" title="CreatedPullRequestOrRestrictedContribution - union">CreatedPullRequestOrRestrictedContribution - union<a href="#createdpullrequestorrestrictedcontribution---union" aria-label="Link to heading 'CreatedPullRequestOrRestrictedContribution - union'" data-heading-content="CreatedPullRequestOrRestrictedContribution - union" class="anchor"></a></h2>
+<p>Represents either a pull request the viewer can access or a restricted contribution.</p>
+<h3 id="possible-types-for-createdpullrequestorrestrictedcontribution" title="CreatedPullRequestOrRestrictedContribution - union / Possible types for CreatedPullRequestOrRestrictedContribution">Possible types for <code>CreatedPullRequestOrRestrictedContribution</code><a href="#possible-types-for-createdpullrequestorrestrictedcontribution" aria-label="Link to heading 'Possible types for CreatedPullRequestOrRestrictedContribution'" data-heading-content="Possible types for CreatedPullRequestOrRestrictedContribution" class="anchor"></a></h3>
+<ul>
+<li>CreatedPullRequestContribution</li>
+<li>RestrictedContribution</li>
+</ul>
+<h2 id="createdpullrequestreviewcontribution---object" title="CreatedPullRequestReviewContribution - object">CreatedPullRequestReviewContribution - object<a href="#createdpullrequestreviewcontribution---object" aria-label="Link to heading 'CreatedPullRequestReviewContribution - object'" data-heading-content="CreatedPullRequestReviewContribution - object" class="anchor"></a></h2>
+<p>Represents the contribution a user made by leaving a review on a pull request.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-createdpullrequestreviewcontribution" title="CreatedPullRequestReviewContribution - object / Fields for CreatedPullRequestReviewContribution">Fields for <code>CreatedPullRequestReviewContribution</code><a href="#fields-for-createdpullrequestreviewcontribution" aria-label="Link to heading 'Fields for CreatedPullRequestReviewContribution'" data-heading-content="Fields for CreatedPullRequestReviewContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>pullRequest</code> (PullRequest!): The pull request the user reviewed.</li>
+<li><code>pullRequestReview</code> (PullRequestReview!): The review the user left on the pull request.</li>
+<li><code>repository</code> (Repository!): The repository containing the pull request that the user reviewed.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="createdpullrequestreviewcontributionconnection---object" title="CreatedPullRequestReviewContributionConnection - object">CreatedPullRequestReviewContributionConnection - object<a href="#createdpullrequestreviewcontributionconnection---object" aria-label="Link to heading 'CreatedPullRequestReviewContributionConnection - object'" data-heading-content="CreatedPullRequestReviewContributionConnection - object" class="anchor"></a></h2>
+<p>The connection type for CreatedPullRequestReviewContribution.</p>
+<h3 id="fields-for-createdpullrequestreviewcontributionconnection" title="CreatedPullRequestReviewContributionConnection - object / Fields for CreatedPullRequestReviewContributionConnection">Fields for <code>CreatedPullRequestReviewContributionConnection</code><a href="#fields-for-createdpullrequestreviewcontributionconnection" aria-label="Link to heading 'Fields for CreatedPullRequestReviewContributionConnection'" data-heading-content="Fields for CreatedPullRequestReviewContributionConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CreatedPullRequestReviewContributionEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CreatedPullRequestReviewContribution]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="createdpullrequestreviewcontributionedge---object" title="CreatedPullRequestReviewContributionEdge - object">CreatedPullRequestReviewContributionEdge - object<a href="#createdpullrequestreviewcontributionedge---object" aria-label="Link to heading 'CreatedPullRequestReviewContributionEdge - object'" data-heading-content="CreatedPullRequestReviewContributionEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-createdpullrequestreviewcontributionedge" title="CreatedPullRequestReviewContributionEdge - object / Fields for CreatedPullRequestReviewContributionEdge">Fields for <code>CreatedPullRequestReviewContributionEdge</code><a href="#fields-for-createdpullrequestreviewcontributionedge" aria-label="Link to heading 'Fields for CreatedPullRequestReviewContributionEdge'" data-heading-content="Fields for CreatedPullRequestReviewContributionEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CreatedPullRequestReviewContribution): The item at the end of the edge.</li>
+</ul>
+<h2 id="createdrepositorycontribution---object" title="CreatedRepositoryContribution - object">CreatedRepositoryContribution - object<a href="#createdrepositorycontribution---object" aria-label="Link to heading 'CreatedRepositoryContribution - object'" data-heading-content="CreatedRepositoryContribution - object" class="anchor"></a></h2>
+<p>Represents the contribution a user made on GitHub by creating a repository.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-createdrepositorycontribution" title="CreatedRepositoryContribution - object / Fields for CreatedRepositoryContribution">Fields for <code>CreatedRepositoryContribution</code><a href="#fields-for-createdrepositorycontribution" aria-label="Link to heading 'Fields for CreatedRepositoryContribution'" data-heading-content="Fields for CreatedRepositoryContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>repository</code> (Repository!): The repository that was created.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="createdrepositorycontributionconnection---object" title="CreatedRepositoryContributionConnection - object">CreatedRepositoryContributionConnection - object<a href="#createdrepositorycontributionconnection---object" aria-label="Link to heading 'CreatedRepositoryContributionConnection - object'" data-heading-content="CreatedRepositoryContributionConnection - object" class="anchor"></a></h2>
+<p>The connection type for CreatedRepositoryContribution.</p>
+<h3 id="fields-for-createdrepositorycontributionconnection" title="CreatedRepositoryContributionConnection - object / Fields for CreatedRepositoryContributionConnection">Fields for <code>CreatedRepositoryContributionConnection</code><a href="#fields-for-createdrepositorycontributionconnection" aria-label="Link to heading 'Fields for CreatedRepositoryContributionConnection'" data-heading-content="Fields for CreatedRepositoryContributionConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CreatedRepositoryContributionEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CreatedRepositoryContribution]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="createdrepositorycontributionedge---object" title="CreatedRepositoryContributionEdge - object">CreatedRepositoryContributionEdge - object<a href="#createdrepositorycontributionedge---object" aria-label="Link to heading 'CreatedRepositoryContributionEdge - object'" data-heading-content="CreatedRepositoryContributionEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-createdrepositorycontributionedge" title="CreatedRepositoryContributionEdge - object / Fields for CreatedRepositoryContributionEdge">Fields for <code>CreatedRepositoryContributionEdge</code><a href="#fields-for-createdrepositorycontributionedge" aria-label="Link to heading 'Fields for CreatedRepositoryContributionEdge'" data-heading-content="Fields for CreatedRepositoryContributionEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CreatedRepositoryContribution): The item at the end of the edge.</li>
+</ul>
+<h2 id="createdrepositoryorrestrictedcontribution---union" title="CreatedRepositoryOrRestrictedContribution - union">CreatedRepositoryOrRestrictedContribution - union<a href="#createdrepositoryorrestrictedcontribution---union" aria-label="Link to heading 'CreatedRepositoryOrRestrictedContribution - union'" data-heading-content="CreatedRepositoryOrRestrictedContribution - union" class="anchor"></a></h2>
+<p>Represents either a repository the viewer can access or a restricted contribution.</p>
+<h3 id="possible-types-for-createdrepositoryorrestrictedcontribution" title="CreatedRepositoryOrRestrictedContribution - union / Possible types for CreatedRepositoryOrRestrictedContribution">Possible types for <code>CreatedRepositoryOrRestrictedContribution</code><a href="#possible-types-for-createdrepositoryorrestrictedcontribution" aria-label="Link to heading 'Possible types for CreatedRepositoryOrRestrictedContribution'" data-heading-content="Possible types for CreatedRepositoryOrRestrictedContribution" class="anchor"></a></h3>
+<ul>
+<li>CreatedRepositoryContribution</li>
+<li>RestrictedContribution</li>
+</ul>
+<h2 id="createuserlist---mutation" title="createUserList - mutation">createUserList - mutation<a href="#createuserlist---mutation" aria-label="Link to heading 'createUserList - mutation'" data-heading-content="createUserList - mutation" class="anchor"></a></h2>
+<p>Creates a new user list.</p>
+<h3 id="input-fields-for-createuserlist" title="createUserList - mutation / Input fields for createUserList">Input fields for <code>createUserList</code><a href="#input-fields-for-createuserlist" aria-label="Link to heading 'Input fields for createUserList'" data-heading-content="Input fields for createUserList" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (CreateUserListInput!):</li>
+</ul>
+<h3 id="return-fields-for-createuserlist" title="createUserList - mutation / Return fields for createUserList">Return fields for <code>createUserList</code><a href="#return-fields-for-createuserlist" aria-label="Link to heading 'Return fields for createUserList'" data-heading-content="Return fields for createUserList" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>list</code> (UserList): The list that was just created.</li>
+<li><code>viewer</code> (User): The user who created the list.</li>
+</ul>
+<h2 id="createuserlistinput---input-object" title="CreateUserListInput - input object">CreateUserListInput - input object<a href="#createuserlistinput---input-object" aria-label="Link to heading 'CreateUserListInput - input object'" data-heading-content="CreateUserListInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of CreateUserList.</p>
+<h3 id="input-fields-for-createuserlistinput" title="CreateUserListInput - input object / Input fields for CreateUserListInput">Input fields for <code>CreateUserListInput</code><a href="#input-fields-for-createuserlistinput" aria-label="Link to heading 'Input fields for CreateUserListInput'" data-heading-content="Input fields for CreateUserListInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>description</code> (String): A description of the list.</li>
+<li><code>isPrivate</code> (Boolean): Whether or not the list is private.</li>
+<li><code>name</code> (String!): The name of the new list.</li>
+</ul>
+<h2 id="deleteuserlist---mutation" title="deleteUserList - mutation">deleteUserList - mutation<a href="#deleteuserlist---mutation" aria-label="Link to heading 'deleteUserList - mutation'" data-heading-content="deleteUserList - mutation" class="anchor"></a></h2>
+<p>Deletes a user list.</p>
+<h3 id="input-fields-for-deleteuserlist" title="deleteUserList - mutation / Input fields for deleteUserList">Input fields for <code>deleteUserList</code><a href="#input-fields-for-deleteuserlist" aria-label="Link to heading 'Input fields for deleteUserList'" data-heading-content="Input fields for deleteUserList" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (DeleteUserListInput!):</li>
+</ul>
+<h3 id="return-fields-for-deleteuserlist" title="deleteUserList - mutation / Return fields for deleteUserList">Return fields for <code>deleteUserList</code><a href="#return-fields-for-deleteuserlist" aria-label="Link to heading 'Return fields for deleteUserList'" data-heading-content="Return fields for deleteUserList" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>user</code> (User): The owner of the list that will be deleted.</li>
+</ul>
+<h2 id="deleteuserlistinput---input-object" title="DeleteUserListInput - input object">DeleteUserListInput - input object<a href="#deleteuserlistinput---input-object" aria-label="Link to heading 'DeleteUserListInput - input object'" data-heading-content="DeleteUserListInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of DeleteUserList.</p>
+<h3 id="input-fields-for-deleteuserlistinput" title="DeleteUserListInput - input object / Input fields for DeleteUserListInput">Input fields for <code>DeleteUserListInput</code><a href="#input-fields-for-deleteuserlistinput" aria-label="Link to heading 'Input fields for DeleteUserListInput'" data-heading-content="Input fields for DeleteUserListInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>listId</code> (ID!): The ID of the list to delete.</li>
+</ul>
+<h2 id="enterpriseadministratorconnection---object" title="EnterpriseAdministratorConnection - object">EnterpriseAdministratorConnection - object<a href="#enterpriseadministratorconnection---object" aria-label="Link to heading 'EnterpriseAdministratorConnection - object'" data-heading-content="EnterpriseAdministratorConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-enterpriseadministratorconnection" title="EnterpriseAdministratorConnection - object / Fields for EnterpriseAdministratorConnection">Fields for <code>EnterpriseAdministratorConnection</code><a href="#fields-for-enterpriseadministratorconnection" aria-label="Link to heading 'Fields for EnterpriseAdministratorConnection'" data-heading-content="Fields for EnterpriseAdministratorConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([EnterpriseAdministratorEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="enterpriseadministratoredge---object" title="EnterpriseAdministratorEdge - object">EnterpriseAdministratorEdge - object<a href="#enterpriseadministratoredge---object" aria-label="Link to heading 'EnterpriseAdministratorEdge - object'" data-heading-content="EnterpriseAdministratorEdge - object" class="anchor"></a></h2>
+<p>A User who is an administrator of an enterprise.</p>
+<h3 id="fields-for-enterpriseadministratoredge" title="EnterpriseAdministratorEdge - object / Fields for EnterpriseAdministratorEdge">Fields for <code>EnterpriseAdministratorEdge</code><a href="#fields-for-enterpriseadministratoredge" aria-label="Link to heading 'Fields for EnterpriseAdministratorEdge'" data-heading-content="Fields for EnterpriseAdministratorEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User): The item at the end of the edge.</li>
+<li><code>role</code> (EnterpriseAdministratorRole!): The role of the administrator.</li>
+</ul>
+<h2 id="enterpriseoutsidecollaboratorconnection---object" title="EnterpriseOutsideCollaboratorConnection - object">EnterpriseOutsideCollaboratorConnection - object<a href="#enterpriseoutsidecollaboratorconnection---object" aria-label="Link to heading 'EnterpriseOutsideCollaboratorConnection - object'" data-heading-content="EnterpriseOutsideCollaboratorConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-enterpriseoutsidecollaboratorconnection" title="EnterpriseOutsideCollaboratorConnection - object / Fields for EnterpriseOutsideCollaboratorConnection">Fields for <code>EnterpriseOutsideCollaboratorConnection</code><a href="#fields-for-enterpriseoutsidecollaboratorconnection" aria-label="Link to heading 'Fields for EnterpriseOutsideCollaboratorConnection'" data-heading-content="Fields for EnterpriseOutsideCollaboratorConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([EnterpriseOutsideCollaboratorEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="enterpriseoutsidecollaboratoredge---object" title="EnterpriseOutsideCollaboratorEdge - object">EnterpriseOutsideCollaboratorEdge - object<a href="#enterpriseoutsidecollaboratoredge---object" aria-label="Link to heading 'EnterpriseOutsideCollaboratorEdge - object'" data-heading-content="EnterpriseOutsideCollaboratorEdge - object" class="anchor"></a></h2>
+<p>A User who is an outside collaborator of an enterprise through one or more organizations.</p>
+<h3 id="fields-for-enterpriseoutsidecollaboratoredge" title="EnterpriseOutsideCollaboratorEdge - object / Fields for EnterpriseOutsideCollaboratorEdge">Fields for <code>EnterpriseOutsideCollaboratorEdge</code><a href="#fields-for-enterpriseoutsidecollaboratoredge" aria-label="Link to heading 'Fields for EnterpriseOutsideCollaboratorEdge'" data-heading-content="Fields for EnterpriseOutsideCollaboratorEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User): The item at the end of the edge.</li>
+<li><code>repositories</code> (EnterpriseRepositoryInfoConnection!): The enterprise organization repositories this user is a member of.
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryOrder): Ordering options for repositories.</li>
+</ul>
+</li>
+</ul>
+<h2 id="enterpriseteammemberconnection---object" title="EnterpriseTeamMemberConnection - object">EnterpriseTeamMemberConnection - object<a href="#enterpriseteammemberconnection---object" aria-label="Link to heading 'EnterpriseTeamMemberConnection - object'" data-heading-content="EnterpriseTeamMemberConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-enterpriseteammemberconnection" title="EnterpriseTeamMemberConnection - object / Fields for EnterpriseTeamMemberConnection">Fields for <code>EnterpriseTeamMemberConnection</code><a href="#fields-for-enterpriseteammemberconnection" aria-label="Link to heading 'Fields for EnterpriseTeamMemberConnection'" data-heading-content="Fields for EnterpriseTeamMemberConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([EnterpriseTeamMemberEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="enterpriseteammemberedge---object" title="EnterpriseTeamMemberEdge - object">EnterpriseTeamMemberEdge - object<a href="#enterpriseteammemberedge---object" aria-label="Link to heading 'EnterpriseTeamMemberEdge - object'" data-heading-content="EnterpriseTeamMemberEdge - object" class="anchor"></a></h2>
+<p>Represents a user who is a member of an enterprise team.</p>
+<h3 id="fields-for-enterpriseteammemberedge" title="EnterpriseTeamMemberEdge - object / Fields for EnterpriseTeamMemberEdge">Fields for <code>EnterpriseTeamMemberEdge</code><a href="#fields-for-enterpriseteammemberedge" aria-label="Link to heading 'Fields for EnterpriseTeamMemberEdge'" data-heading-content="Fields for EnterpriseTeamMemberEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User):</li>
+</ul>
+<h2 id="followerconnection---object" title="FollowerConnection - object">FollowerConnection - object<a href="#followerconnection---object" aria-label="Link to heading 'FollowerConnection - object'" data-heading-content="FollowerConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-followerconnection" title="FollowerConnection - object / Fields for FollowerConnection">Fields for <code>FollowerConnection</code><a href="#fields-for-followerconnection" aria-label="Link to heading 'Fields for FollowerConnection'" data-heading-content="Fields for FollowerConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="followingconnection---object" title="FollowingConnection - object">FollowingConnection - object<a href="#followingconnection---object" aria-label="Link to heading 'FollowingConnection - object'" data-heading-content="FollowingConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-followingconnection" title="FollowingConnection - object / Fields for FollowingConnection">Fields for <code>FollowingConnection</code><a href="#fields-for-followingconnection" aria-label="Link to heading 'Fields for FollowingConnection'" data-heading-content="Fields for FollowingConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="followuser---mutation" title="followUser - mutation">followUser - mutation<a href="#followuser---mutation" aria-label="Link to heading 'followUser - mutation'" data-heading-content="followUser - mutation" class="anchor"></a></h2>
+<p>Follow a user.</p>
+<h3 id="input-fields-for-followuser" title="followUser - mutation / Input fields for followUser">Input fields for <code>followUser</code><a href="#input-fields-for-followuser" aria-label="Link to heading 'Input fields for followUser'" data-heading-content="Input fields for followUser" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (FollowUserInput!):</li>
+</ul>
+<h3 id="return-fields-for-followuser" title="followUser - mutation / Return fields for followUser">Return fields for <code>followUser</code><a href="#return-fields-for-followuser" aria-label="Link to heading 'Return fields for followUser'" data-heading-content="Return fields for followUser" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>user</code> (User): The user that was followed.</li>
+</ul>
+<h2 id="followuserinput---input-object" title="FollowUserInput - input object">FollowUserInput - input object<a href="#followuserinput---input-object" aria-label="Link to heading 'FollowUserInput - input object'" data-heading-content="FollowUserInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of FollowUser.</p>
+<h3 id="input-fields-for-followuserinput" title="FollowUserInput - input object / Input fields for FollowUserInput">Input fields for <code>FollowUserInput</code><a href="#input-fields-for-followuserinput" aria-label="Link to heading 'Input fields for FollowUserInput'" data-heading-content="Input fields for FollowUserInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>userId</code> (ID!): ID of the user to follow.</li>
+</ul>
+<h2 id="generichovercardcontext---object" title="GenericHovercardContext - object">GenericHovercardContext - object<a href="#generichovercardcontext---object" aria-label="Link to heading 'GenericHovercardContext - object'" data-heading-content="GenericHovercardContext - object" class="anchor"></a></h2>
+<p>A generic hovercard context with a message and icon.</p>
+<p><strong>Implements:</strong> HovercardContext</p>
+<h3 id="fields-for-generichovercardcontext" title="GenericHovercardContext - object / Fields for GenericHovercardContext">Fields for <code>GenericHovercardContext</code><a href="#fields-for-generichovercardcontext" aria-label="Link to heading 'Fields for GenericHovercardContext'" data-heading-content="Fields for GenericHovercardContext" class="anchor"></a></h3>
+<ul>
+<li><code>message</code> (String!): A string describing this context.</li>
+<li><code>octicon</code> (String!): An octicon to accompany this context.</li>
+</ul>
+<h2 id="hovercard---object" title="Hovercard - object">Hovercard - object<a href="#hovercard---object" aria-label="Link to heading 'Hovercard - object'" data-heading-content="Hovercard - object" class="anchor"></a></h2>
+<p>Detail needed to display a hovercard for a user.</p>
+<h3 id="fields-for-hovercard" title="Hovercard - object / Fields for Hovercard">Fields for <code>Hovercard</code><a href="#fields-for-hovercard" aria-label="Link to heading 'Fields for Hovercard'" data-heading-content="Fields for Hovercard" class="anchor"></a></h3>
+<ul>
+<li><code>contexts</code> ([HovercardContext!]!): Each of the contexts for this hovercard.</li>
+</ul>
+<h2 id="hovercardcontext---interface" title="HovercardContext - interface">HovercardContext - interface<a href="#hovercardcontext---interface" aria-label="Link to heading 'HovercardContext - interface'" data-heading-content="HovercardContext - interface" class="anchor"></a></h2>
+<p>An individual line of a hovercard.</p>
+<h3 id="fields-for-hovercardcontext" title="HovercardContext - interface / Fields for HovercardContext">Fields for <code>HovercardContext</code><a href="#fields-for-hovercardcontext" aria-label="Link to heading 'Fields for HovercardContext'" data-heading-content="Fields for HovercardContext" class="anchor"></a></h3>
+<ul>
+<li><code>message</code> (String!): A string describing this context.</li>
+<li><code>octicon</code> (String!): An octicon to accompany this context.</li>
+</ul>
+<h3 id="implemented-by-2" title="HovercardContext - interface / Implemented by">Implemented by<a href="#implemented-by-2" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>OrganizationsHovercardContext</li>
+<li>ReviewStatusHovercardContext</li>
+<li>OrganizationTeamsHovercardContext</li>
+<li>GenericHovercardContext</li>
+<li>ViewerHovercardContext</li>
+</ul>
+<h2 id="joinedgithubcontribution---object" title="JoinedGitHubContribution - object">JoinedGitHubContribution - object<a href="#joinedgithubcontribution---object" aria-label="Link to heading 'JoinedGitHubContribution - object'" data-heading-content="JoinedGitHubContribution - object" class="anchor"></a></h2>
+<p>Represents a user signing up for a GitHub account.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-joinedgithubcontribution" title="JoinedGitHubContribution - object / Fields for JoinedGitHubContribution">Fields for <code>JoinedGitHubContribution</code><a href="#fields-for-joinedgithubcontribution" aria-label="Link to heading 'Fields for JoinedGitHubContribution'" data-heading-content="Fields for JoinedGitHubContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="memberstatusable---interface" title="MemberStatusable - interface">MemberStatusable - interface<a href="#memberstatusable---interface" aria-label="Link to heading 'MemberStatusable - interface'" data-heading-content="MemberStatusable - interface" class="anchor"></a></h2>
+<p>Entities that have members who can set status messages.</p>
+<h3 id="fields-for-memberstatusable" title="MemberStatusable - interface / Fields for MemberStatusable">Fields for <code>MemberStatusable</code><a href="#fields-for-memberstatusable" aria-label="Link to heading 'Fields for MemberStatusable'" data-heading-content="Fields for MemberStatusable" class="anchor"></a></h3>
+<ul>
+<li><code>memberStatuses</code> (UserStatusConnection!): Get the status messages members of this entity have set that are either public or visible only to the organization.
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (UserStatusOrder): Ordering options for user statuses returned from the connection.</li>
+</ul>
+</li>
+</ul>
+<h3 id="implemented-by-3" title="MemberStatusable - interface / Implemented by">Implemented by<a href="#implemented-by-3" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>Organization</li>
+<li>Team</li>
+</ul>
+<h2 id="organizationenterpriseownerconnection---object" title="OrganizationEnterpriseOwnerConnection - object">OrganizationEnterpriseOwnerConnection - object<a href="#organizationenterpriseownerconnection---object" aria-label="Link to heading 'OrganizationEnterpriseOwnerConnection - object'" data-heading-content="OrganizationEnterpriseOwnerConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-organizationenterpriseownerconnection" title="OrganizationEnterpriseOwnerConnection - object / Fields for OrganizationEnterpriseOwnerConnection">Fields for <code>OrganizationEnterpriseOwnerConnection</code><a href="#fields-for-organizationenterpriseownerconnection" aria-label="Link to heading 'Fields for OrganizationEnterpriseOwnerConnection'" data-heading-content="Fields for OrganizationEnterpriseOwnerConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([OrganizationEnterpriseOwnerEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="organizationenterpriseowneredge---object" title="OrganizationEnterpriseOwnerEdge - object">OrganizationEnterpriseOwnerEdge - object<a href="#organizationenterpriseowneredge---object" aria-label="Link to heading 'OrganizationEnterpriseOwnerEdge - object'" data-heading-content="OrganizationEnterpriseOwnerEdge - object" class="anchor"></a></h2>
+<p>An enterprise owner in the context of an organization that is part of the enterprise.</p>
+<h3 id="fields-for-organizationenterpriseowneredge" title="OrganizationEnterpriseOwnerEdge - object / Fields for OrganizationEnterpriseOwnerEdge">Fields for <code>OrganizationEnterpriseOwnerEdge</code><a href="#fields-for-organizationenterpriseowneredge" aria-label="Link to heading 'Fields for OrganizationEnterpriseOwnerEdge'" data-heading-content="Fields for OrganizationEnterpriseOwnerEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User): The item at the end of the edge.</li>
+<li><code>organizationRole</code> (RoleInOrganization!): The role of the owner with respect to the organization.</li>
+</ul>
+<h2 id="organizationmemberconnection---object" title="OrganizationMemberConnection - object">OrganizationMemberConnection - object<a href="#organizationmemberconnection---object" aria-label="Link to heading 'OrganizationMemberConnection - object'" data-heading-content="OrganizationMemberConnection - object" class="anchor"></a></h2>
+<p>A list of users who belong to the organization.</p>
+<h3 id="fields-for-organizationmemberconnection" title="OrganizationMemberConnection - object / Fields for OrganizationMemberConnection">Fields for <code>OrganizationMemberConnection</code><a href="#fields-for-organizationmemberconnection" aria-label="Link to heading 'Fields for OrganizationMemberConnection'" data-heading-content="Fields for OrganizationMemberConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([OrganizationMemberEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="organizationmemberedge---object" title="OrganizationMemberEdge - object">OrganizationMemberEdge - object<a href="#organizationmemberedge---object" aria-label="Link to heading 'OrganizationMemberEdge - object'" data-heading-content="OrganizationMemberEdge - object" class="anchor"></a></h2>
+<p>Represents a user within an organization.</p>
+<h3 id="fields-for-organizationmemberedge" title="OrganizationMemberEdge - object / Fields for OrganizationMemberEdge">Fields for <code>OrganizationMemberEdge</code><a href="#fields-for-organizationmemberedge" aria-label="Link to heading 'Fields for OrganizationMemberEdge'" data-heading-content="Fields for OrganizationMemberEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>hasTwoFactorEnabled</code> (Boolean): Whether the organization member has two factor enabled or not. Returns null if information is not available to viewer.</li>
+<li><code>node</code> (User): The item at the end of the edge.</li>
+<li><code>role</code> (OrganizationMemberRole): The role this user has in the organization.</li>
+</ul>
+<h2 id="pinnable---interface" title="Pinnable - interface">Pinnable - interface<a href="#pinnable---interface" aria-label="Link to heading 'Pinnable - interface'" data-heading-content="Pinnable - interface" class="anchor"></a></h2>
+<p>Entities that can be pinned.</p>
+<h3 id="fields-for-pinnable" title="Pinnable - interface / Fields for Pinnable">Fields for <code>Pinnable</code><a href="#fields-for-pinnable" aria-label="Link to heading 'Fields for Pinnable'" data-heading-content="Fields for Pinnable" class="anchor"></a></h3>
+<ul>
+<li><code>isPinned</code> (Boolean): Indicates whether or not this entity is currently pinned.</li>
+<li><code>pinnedAt</code> (DateTime): Identifies the date and time when this entity was pinned.</li>
+<li><code>pinnedBy</code> (User): The user who pinned this entity.</li>
+<li><code>viewerCanPin</code> (Boolean!): Check if the current viewer can pin this entity.</li>
+<li><code>viewerCanUnpin</code> (Boolean!): Check if the current viewer can unpin this entity.</li>
+</ul>
+<h3 id="implemented-by-4" title="Pinnable - interface / Implemented by">Implemented by<a href="#implemented-by-4" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>IssueComment</li>
+</ul>
+<h2 id="pinnableitem---union" title="PinnableItem - union">PinnableItem - union<a href="#pinnableitem---union" aria-label="Link to heading 'PinnableItem - union'" data-heading-content="PinnableItem - union" class="anchor"></a></h2>
+<p>Types that can be pinned to a profile page.</p>
+<h3 id="possible-types-for-pinnableitem" title="PinnableItem - union / Possible types for PinnableItem">Possible types for <code>PinnableItem</code><a href="#possible-types-for-pinnableitem" aria-label="Link to heading 'Possible types for PinnableItem'" data-heading-content="Possible types for PinnableItem" class="anchor"></a></h3>
+<ul>
+<li>Gist</li>
+<li>Repository</li>
+</ul>
+<h2 id="pinnableitemconnection---object" title="PinnableItemConnection - object">PinnableItemConnection - object<a href="#pinnableitemconnection---object" aria-label="Link to heading 'PinnableItemConnection - object'" data-heading-content="PinnableItemConnection - object" class="anchor"></a></h2>
+<p>The connection type for PinnableItem.</p>
+<h3 id="fields-for-pinnableitemconnection" title="PinnableItemConnection - object / Fields for PinnableItemConnection">Fields for <code>PinnableItemConnection</code><a href="#fields-for-pinnableitemconnection" aria-label="Link to heading 'Fields for PinnableItemConnection'" data-heading-content="Fields for PinnableItemConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([PinnableItemEdge]): A list of edges.</li>
+<li><code>nodes</code> ([PinnableItem]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="pinnableitemedge---object" title="PinnableItemEdge - object">PinnableItemEdge - object<a href="#pinnableitemedge---object" aria-label="Link to heading 'PinnableItemEdge - object'" data-heading-content="PinnableItemEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-pinnableitemedge" title="PinnableItemEdge - object / Fields for PinnableItemEdge">Fields for <code>PinnableItemEdge</code><a href="#fields-for-pinnableitemedge" aria-label="Link to heading 'Fields for PinnableItemEdge'" data-heading-content="Fields for PinnableItemEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (PinnableItem): The item at the end of the edge.</li>
+</ul>
+<h2 id="pinnableitemtype---enum" title="PinnableItemType - enum">PinnableItemType - enum<a href="#pinnableitemtype---enum" aria-label="Link to heading 'PinnableItemType - enum'" data-heading-content="PinnableItemType - enum" class="anchor"></a></h2>
+<p>Represents items that can be pinned to a profile page or dashboard.</p>
+<h3 id="values-for-pinnableitemtype" title="PinnableItemType - enum / Values for PinnableItemType">Values for <code>PinnableItemType</code><a href="#values-for-pinnableitemtype" aria-label="Link to heading 'Values for PinnableItemType'" data-heading-content="Values for PinnableItemType" class="anchor"></a></h3>
+<ul>
+<li><code>GIST</code>: A gist.</li>
+<li><code>ISSUE</code>: An issue.</li>
+<li><code>ORGANIZATION</code>: An organization.</li>
+<li><code>PROJECT</code>: A project.</li>
+<li><code>PULL_REQUEST</code>: A pull request.</li>
+<li><code>REPOSITORY</code>: A repository.</li>
+<li><code>TEAM</code>: A team.</li>
+<li><code>USER</code>: A user.</li>
+</ul>
+<h2 id="profileitemshowcase---object" title="ProfileItemShowcase - object">ProfileItemShowcase - object<a href="#profileitemshowcase---object" aria-label="Link to heading 'ProfileItemShowcase - object'" data-heading-content="ProfileItemShowcase - object" class="anchor"></a></h2>
+<p>A curatable list of repositories relating to a repository owner, which defaults<br>
+to showing the most popular repositories they own.</p>
+<h3 id="fields-for-profileitemshowcase" title="ProfileItemShowcase - object / Fields for ProfileItemShowcase">Fields for <code>ProfileItemShowcase</code><a href="#fields-for-profileitemshowcase" aria-label="Link to heading 'Fields for ProfileItemShowcase'" data-heading-content="Fields for ProfileItemShowcase" class="anchor"></a></h3>
+<ul>
+<li><code>hasPinnedItems</code> (Boolean!): Whether or not the owner has pinned any repositories or gists.</li>
+<li><code>items</code> (PinnableItemConnection!): The repositories and gists in the showcase. If the profile owner has any<br>
+pinned items, those will be returned. Otherwise, the profile owner's popular<br>
+repositories will be returned. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+</ul>
+<h2 id="profileowner---interface" title="ProfileOwner - interface">ProfileOwner - interface<a href="#profileowner---interface" aria-label="Link to heading 'ProfileOwner - interface'" data-heading-content="ProfileOwner - interface" class="anchor"></a></h2>
+<p>Represents any entity on GitHub that has a profile page.</p>
+<h3 id="fields-for-profileowner" title="ProfileOwner - interface / Fields for ProfileOwner">Fields for <code>ProfileOwner</code><a href="#fields-for-profileowner" aria-label="Link to heading 'Fields for ProfileOwner'" data-heading-content="Fields for ProfileOwner" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>anyPinnableItems</code> (Boolean!): Determine if this repository owner has any items that can be pinned to their profile.</p>
+<ul>
+<li><code>type</code> (PinnableItemType): Filter to only a particular kind of pinnable item.</li>
+</ul>
+</li>
+<li>
+<p><code>email</code> (String): The public profile email.</p>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the ProfileOwner object.</p>
+</li>
+<li>
+<p><code>itemShowcase</code> (ProfileItemShowcase!): Showcases a selection of repositories and gists that the profile owner has<br>
+either curated or that have been selected automatically based on popularity.</p>
+</li>
+<li>
+<p><code>location</code> (String): The public profile location.</p>
+</li>
+<li>
+<p><code>login</code> (String!): The username used to login.</p>
+</li>
+<li>
+<p><code>name</code> (String): The public profile name.</p>
+</li>
+<li>
+<p><code>pinnableItems</code> (PinnableItemConnection!): A list of repositories and gists this profile owner can pin to their profile.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>types</code> ([PinnableItemType!]): Filter the types of pinnable items that are returned.</li>
+</ul>
+</li>
+<li>
+<p><code>pinnedItems</code> (PinnableItemConnection!): A list of repositories and gists this profile owner has pinned to their profile.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>types</code> ([PinnableItemType!]): Filter the types of pinned items that are returned.</li>
+</ul>
+</li>
+<li>
+<p><code>pinnedItemsRemaining</code> (Int!): Returns how many more items this profile owner can pin to their profile.</p>
+</li>
+<li>
+<p><code>viewerCanChangePinnedItems</code> (Boolean!): Can the viewer pin repositories and gists to the profile?.</p>
+</li>
+<li>
+<p><code>websiteUrl</code> (URI): The public profile website URL.</p>
+</li>
+</ul>
+<h3 id="implemented-by-5" title="ProfileOwner - interface / Implemented by">Implemented by<a href="#implemented-by-5" aria-label="Link to heading 'Implemented by'" data-heading-content="Implemented by" class="anchor"></a></h3>
+<ul>
+<li>Organization</li>
+<li>User</li>
+</ul>
+<h2 id="publickey---object" title="PublicKey - object">PublicKey - object<a href="#publickey---object" aria-label="Link to heading 'PublicKey - object'" data-heading-content="PublicKey - object" class="anchor"></a></h2>
+<p>A user's public key.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-publickey" title="PublicKey - object / Fields for PublicKey">Fields for <code>PublicKey</code><a href="#fields-for-publickey" aria-label="Link to heading 'Fields for PublicKey'" data-heading-content="Fields for PublicKey" class="anchor"></a></h3>
+<ul>
+<li><code>accessedAt</code> (DateTime): The last time this authorization was used to perform an action. Values will be null for keys not owned by the user.</li>
+<li><code>createdAt</code> (DateTime): Identifies the date and time when the key was created. Keys created before<br>
+March 5th, 2014 have inaccurate values. Values will be null for keys not owned by the user.</li>
+<li><code>fingerprint</code> (String!): The fingerprint for this PublicKey.</li>
+<li><code>id</code> (ID!): The Node ID of the PublicKey object.</li>
+<li><code>isReadOnly</code> (Boolean): Whether this PublicKey is read-only or not. Values will be null for keys not owned by the user.</li>
+<li><code>key</code> (String!): The public key string.</li>
+<li><code>updatedAt</code> (DateTime): Identifies the date and time when the key was updated. Keys created before<br>
+March 5th, 2014 may have inaccurate values. Values will be null for keys not<br>
+owned by the user.</li>
+</ul>
+<h2 id="publickeyconnection---object" title="PublicKeyConnection - object">PublicKeyConnection - object<a href="#publickeyconnection---object" aria-label="Link to heading 'PublicKeyConnection - object'" data-heading-content="PublicKeyConnection - object" class="anchor"></a></h2>
+<p>The connection type for PublicKey.</p>
+<h3 id="fields-for-publickeyconnection" title="PublicKeyConnection - object / Fields for PublicKeyConnection">Fields for <code>PublicKeyConnection</code><a href="#fields-for-publickeyconnection" aria-label="Link to heading 'Fields for PublicKeyConnection'" data-heading-content="Fields for PublicKeyConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([PublicKeyEdge]): A list of edges.</li>
+<li><code>nodes</code> ([PublicKey]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="publickeyedge---object" title="PublicKeyEdge - object">PublicKeyEdge - object<a href="#publickeyedge---object" aria-label="Link to heading 'PublicKeyEdge - object'" data-heading-content="PublicKeyEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-publickeyedge" title="PublicKeyEdge - object / Fields for PublicKeyEdge">Fields for <code>PublicKeyEdge</code><a href="#fields-for-publickeyedge" aria-label="Link to heading 'Fields for PublicKeyEdge'" data-heading-content="Fields for PublicKeyEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (PublicKey): The item at the end of the edge.</li>
+</ul>
+<h2 id="reactinguserconnection---object" title="ReactingUserConnection - object">ReactingUserConnection - object<a href="#reactinguserconnection---object" aria-label="Link to heading 'ReactingUserConnection - object'" data-heading-content="ReactingUserConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-reactinguserconnection" title="ReactingUserConnection - object / Fields for ReactingUserConnection">Fields for <code>ReactingUserConnection</code><a href="#fields-for-reactinguserconnection" aria-label="Link to heading 'Fields for ReactingUserConnection'" data-heading-content="Fields for ReactingUserConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([ReactingUserEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="reactinguseredge---object" title="ReactingUserEdge - object">ReactingUserEdge - object<a href="#reactinguseredge---object" aria-label="Link to heading 'ReactingUserEdge - object'" data-heading-content="ReactingUserEdge - object" class="anchor"></a></h2>
+<p>Represents a user that's made a reaction.</p>
+<h3 id="fields-for-reactinguseredge" title="ReactingUserEdge - object / Fields for ReactingUserEdge">Fields for <code>ReactingUserEdge</code><a href="#fields-for-reactinguseredge" aria-label="Link to heading 'Fields for ReactingUserEdge'" data-heading-content="Fields for ReactingUserEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User!):</li>
+<li><code>reactedAt</code> (DateTime!): The moment when the user made the reaction.</li>
+</ul>
+<h2 id="repositorycollaboratorconnection---object" title="RepositoryCollaboratorConnection - object">RepositoryCollaboratorConnection - object<a href="#repositorycollaboratorconnection---object" aria-label="Link to heading 'RepositoryCollaboratorConnection - object'" data-heading-content="RepositoryCollaboratorConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-repositorycollaboratorconnection" title="RepositoryCollaboratorConnection - object / Fields for RepositoryCollaboratorConnection">Fields for <code>RepositoryCollaboratorConnection</code><a href="#fields-for-repositorycollaboratorconnection" aria-label="Link to heading 'Fields for RepositoryCollaboratorConnection'" data-heading-content="Fields for RepositoryCollaboratorConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([RepositoryCollaboratorEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="repositorycollaboratoredge---object" title="RepositoryCollaboratorEdge - object">RepositoryCollaboratorEdge - object<a href="#repositorycollaboratoredge---object" aria-label="Link to heading 'RepositoryCollaboratorEdge - object'" data-heading-content="RepositoryCollaboratorEdge - object" class="anchor"></a></h2>
+<p>Represents a user who is a collaborator of a repository.</p>
+<h3 id="fields-for-repositorycollaboratoredge" title="RepositoryCollaboratorEdge - object / Fields for RepositoryCollaboratorEdge">Fields for <code>RepositoryCollaboratorEdge</code><a href="#fields-for-repositorycollaboratoredge" aria-label="Link to heading 'Fields for RepositoryCollaboratorEdge'" data-heading-content="Fields for RepositoryCollaboratorEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User!):</li>
+<li><code>permission</code> (RepositoryPermission!): The permission the user has on the repository.</li>
+<li><code>permissionSources</code> ([PermissionSource!]): A list of sources for the user's access to the repository.</li>
+</ul>
+<h2 id="restrictedcontribution---object" title="RestrictedContribution - object">RestrictedContribution - object<a href="#restrictedcontribution---object" aria-label="Link to heading 'RestrictedContribution - object'" data-heading-content="RestrictedContribution - object" class="anchor"></a></h2>
+<p>Represents a private contribution a user made on GitHub.</p>
+<p><strong>Implements:</strong> Contribution</p>
+<h3 id="fields-for-restrictedcontribution" title="RestrictedContribution - object / Fields for RestrictedContribution">Fields for <code>RestrictedContribution</code><a href="#fields-for-restrictedcontribution" aria-label="Link to heading 'Fields for RestrictedContribution'" data-heading-content="Fields for RestrictedContribution" class="anchor"></a></h3>
+<ul>
+<li><code>isRestricted</code> (Boolean!): Whether this contribution is associated with a record you do not have access to. For<br>
+example, your own 'first issue' contribution may have been made on a repository you can no<br>
+longer access.</li>
+<li><code>occurredAt</code> (DateTime!): When this contribution was made.</li>
+<li><code>resourcePath</code> (URI!): The HTTP path for this contribution.</li>
+<li><code>url</code> (URI!): The HTTP URL for this contribution.</li>
+<li><code>user</code> (User!): The user who made this contribution.</li>
+</ul>
+<h2 id="savedreply---object" title="SavedReply - object">SavedReply - object<a href="#savedreply---object" aria-label="Link to heading 'SavedReply - object'" data-heading-content="SavedReply - object" class="anchor"></a></h2>
+<p>A Saved Reply is text a user can use to reply quickly.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-savedreply" title="SavedReply - object / Fields for SavedReply">Fields for <code>SavedReply</code><a href="#fields-for-savedreply" aria-label="Link to heading 'Fields for SavedReply'" data-heading-content="Fields for SavedReply" class="anchor"></a></h3>
+<ul>
+<li><code>body</code> (String!): The body of the saved reply.</li>
+<li><code>bodyHTML</code> (HTML!): The saved reply body rendered to HTML.</li>
+<li><code>databaseId</code> (Int): Identifies the primary key from the database.</li>
+<li><code>id</code> (ID!): The Node ID of the SavedReply object.</li>
+<li><code>title</code> (String!): The title of the saved reply.</li>
+<li><code>user</code> (Actor): The user that saved this reply.</li>
+</ul>
+<h2 id="savedreplyconnection---object" title="SavedReplyConnection - object">SavedReplyConnection - object<a href="#savedreplyconnection---object" aria-label="Link to heading 'SavedReplyConnection - object'" data-heading-content="SavedReplyConnection - object" class="anchor"></a></h2>
+<p>The connection type for SavedReply.</p>
+<h3 id="fields-for-savedreplyconnection" title="SavedReplyConnection - object / Fields for SavedReplyConnection">Fields for <code>SavedReplyConnection</code><a href="#fields-for-savedreplyconnection" aria-label="Link to heading 'Fields for SavedReplyConnection'" data-heading-content="Fields for SavedReplyConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([SavedReplyEdge]): A list of edges.</li>
+<li><code>nodes</code> ([SavedReply]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="savedreplyedge---object" title="SavedReplyEdge - object">SavedReplyEdge - object<a href="#savedreplyedge---object" aria-label="Link to heading 'SavedReplyEdge - object'" data-heading-content="SavedReplyEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-savedreplyedge" title="SavedReplyEdge - object / Fields for SavedReplyEdge">Fields for <code>SavedReplyEdge</code><a href="#fields-for-savedreplyedge" aria-label="Link to heading 'Fields for SavedReplyEdge'" data-heading-content="Fields for SavedReplyEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (SavedReply): The item at the end of the edge.</li>
+</ul>
+<h2 id="savedreplyorder---input-object" title="SavedReplyOrder - input object">SavedReplyOrder - input object<a href="#savedreplyorder---input-object" aria-label="Link to heading 'SavedReplyOrder - input object'" data-heading-content="SavedReplyOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for saved reply connections.</p>
+<h3 id="input-fields-for-savedreplyorder" title="SavedReplyOrder - input object / Input fields for SavedReplyOrder">Input fields for <code>SavedReplyOrder</code><a href="#input-fields-for-savedreplyorder" aria-label="Link to heading 'Input fields for SavedReplyOrder'" data-heading-content="Input fields for SavedReplyOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+<li><code>field</code> (SavedReplyOrderField!): The field to order saved replies by.</li>
+</ul>
+<h2 id="savedreplyorderfield---enum" title="SavedReplyOrderField - enum">SavedReplyOrderField - enum<a href="#savedreplyorderfield---enum" aria-label="Link to heading 'SavedReplyOrderField - enum'" data-heading-content="SavedReplyOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which saved reply connections can be ordered.</p>
+<h3 id="values-for-savedreplyorderfield" title="SavedReplyOrderField - enum / Values for SavedReplyOrderField">Values for <code>SavedReplyOrderField</code><a href="#values-for-savedreplyorderfield" aria-label="Link to heading 'Values for SavedReplyOrderField'" data-heading-content="Values for SavedReplyOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>UPDATED_AT</code>: Order saved reply by when they were updated.</li>
+</ul>
+<h2 id="setuserinteractionlimit---mutation" title="setUserInteractionLimit - mutation">setUserInteractionLimit - mutation<a href="#setuserinteractionlimit---mutation" aria-label="Link to heading 'setUserInteractionLimit - mutation'" data-heading-content="setUserInteractionLimit - mutation" class="anchor"></a></h2>
+<p>Set a user level interaction limit for an user's public repositories.</p>
+<h3 id="input-fields-for-setuserinteractionlimit" title="setUserInteractionLimit - mutation / Input fields for setUserInteractionLimit">Input fields for <code>setUserInteractionLimit</code><a href="#input-fields-for-setuserinteractionlimit" aria-label="Link to heading 'Input fields for setUserInteractionLimit'" data-heading-content="Input fields for setUserInteractionLimit" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (SetUserInteractionLimitInput!):</li>
+</ul>
+<h3 id="return-fields-for-setuserinteractionlimit" title="setUserInteractionLimit - mutation / Return fields for setUserInteractionLimit">Return fields for <code>setUserInteractionLimit</code><a href="#return-fields-for-setuserinteractionlimit" aria-label="Link to heading 'Return fields for setUserInteractionLimit'" data-heading-content="Return fields for setUserInteractionLimit" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>user</code> (User): The user that the interaction limit was set for.</li>
+</ul>
+<h2 id="setuserinteractionlimitinput---input-object" title="SetUserInteractionLimitInput - input object">SetUserInteractionLimitInput - input object<a href="#setuserinteractionlimitinput---input-object" aria-label="Link to heading 'SetUserInteractionLimitInput - input object'" data-heading-content="SetUserInteractionLimitInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of SetUserInteractionLimit.</p>
+<h3 id="input-fields-for-setuserinteractionlimitinput" title="SetUserInteractionLimitInput - input object / Input fields for SetUserInteractionLimitInput">Input fields for <code>SetUserInteractionLimitInput</code><a href="#input-fields-for-setuserinteractionlimitinput" aria-label="Link to heading 'Input fields for SetUserInteractionLimitInput'" data-heading-content="Input fields for SetUserInteractionLimitInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>expiry</code> (RepositoryInteractionLimitExpiry): When this limit should expire.</li>
+<li><code>limit</code> (RepositoryInteractionLimit!): The limit to set.</li>
+<li><code>userId</code> (ID!): The ID of the user to set a limit for.</li>
+</ul>
+<h2 id="socialaccount---object" title="SocialAccount - object">SocialAccount - object<a href="#socialaccount---object" aria-label="Link to heading 'SocialAccount - object'" data-heading-content="SocialAccount - object" class="anchor"></a></h2>
+<p>Social media profile associated with a user.</p>
+<h3 id="fields-for-socialaccount" title="SocialAccount - object / Fields for SocialAccount">Fields for <code>SocialAccount</code><a href="#fields-for-socialaccount" aria-label="Link to heading 'Fields for SocialAccount'" data-heading-content="Fields for SocialAccount" class="anchor"></a></h3>
+<ul>
+<li><code>displayName</code> (String!): Name of the social media account as it appears on the profile.</li>
+<li><code>provider</code> (SocialAccountProvider!): Software or company that hosts the social media account.</li>
+<li><code>url</code> (URI!): URL of the social media account.</li>
+</ul>
+<h2 id="socialaccountconnection---object" title="SocialAccountConnection - object">SocialAccountConnection - object<a href="#socialaccountconnection---object" aria-label="Link to heading 'SocialAccountConnection - object'" data-heading-content="SocialAccountConnection - object" class="anchor"></a></h2>
+<p>The connection type for SocialAccount.</p>
+<h3 id="fields-for-socialaccountconnection" title="SocialAccountConnection - object / Fields for SocialAccountConnection">Fields for <code>SocialAccountConnection</code><a href="#fields-for-socialaccountconnection" aria-label="Link to heading 'Fields for SocialAccountConnection'" data-heading-content="Fields for SocialAccountConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([SocialAccountEdge]): A list of edges.</li>
+<li><code>nodes</code> ([SocialAccount]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="socialaccountedge---object" title="SocialAccountEdge - object">SocialAccountEdge - object<a href="#socialaccountedge---object" aria-label="Link to heading 'SocialAccountEdge - object'" data-heading-content="SocialAccountEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-socialaccountedge" title="SocialAccountEdge - object / Fields for SocialAccountEdge">Fields for <code>SocialAccountEdge</code><a href="#fields-for-socialaccountedge" aria-label="Link to heading 'Fields for SocialAccountEdge'" data-heading-content="Fields for SocialAccountEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (SocialAccount): The item at the end of the edge.</li>
+</ul>
+<h2 id="socialaccountprovider---enum" title="SocialAccountProvider - enum">SocialAccountProvider - enum<a href="#socialaccountprovider---enum" aria-label="Link to heading 'SocialAccountProvider - enum'" data-heading-content="SocialAccountProvider - enum" class="anchor"></a></h2>
+<p>Software or company that hosts social media accounts.</p>
+<h3 id="values-for-socialaccountprovider" title="SocialAccountProvider - enum / Values for SocialAccountProvider">Values for <code>SocialAccountProvider</code><a href="#values-for-socialaccountprovider" aria-label="Link to heading 'Values for SocialAccountProvider'" data-heading-content="Values for SocialAccountProvider" class="anchor"></a></h3>
+<ul>
+<li><code>BLUESKY</code>: Decentralized microblogging social platform.</li>
+<li><code>FACEBOOK</code>: Social media and networking website.</li>
+<li><code>GENERIC</code>: Catch-all for social media providers that do not yet have specific handling.</li>
+<li><code>HOMETOWN</code>: Fork of Mastodon with a greater focus on local posting.</li>
+<li><code>INSTAGRAM</code>: Social media website with a focus on photo and video sharing.</li>
+<li><code>LINKEDIN</code>: Professional networking website.</li>
+<li><code>MASTODON</code>: Open-source federated microblogging service.</li>
+<li><code>NPM</code>: JavaScript package registry.</li>
+<li><code>REDDIT</code>: Social news aggregation and discussion website.</li>
+<li><code>THREADS</code>: Microblogging social platform.</li>
+<li><code>TWITCH</code>: Live-streaming service.</li>
+<li><code>TWITTER</code>: Microblogging website.</li>
+<li><code>YOUTUBE</code>: Online video platform.</li>
+</ul>
+<h2 id="stargazerconnection---object" title="StargazerConnection - object">StargazerConnection - object<a href="#stargazerconnection---object" aria-label="Link to heading 'StargazerConnection - object'" data-heading-content="StargazerConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-stargazerconnection" title="StargazerConnection - object / Fields for StargazerConnection">Fields for <code>StargazerConnection</code><a href="#fields-for-stargazerconnection" aria-label="Link to heading 'Fields for StargazerConnection'" data-heading-content="Fields for StargazerConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([StargazerEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="stargazeredge---object" title="StargazerEdge - object">StargazerEdge - object<a href="#stargazeredge---object" aria-label="Link to heading 'StargazerEdge - object'" data-heading-content="StargazerEdge - object" class="anchor"></a></h2>
+<p>Represents a user that's starred a repository.</p>
+<h3 id="fields-for-stargazeredge" title="StargazerEdge - object / Fields for StargazerEdge">Fields for <code>StargazerEdge</code><a href="#fields-for-stargazeredge" aria-label="Link to heading 'Fields for StargazerEdge'" data-heading-content="Fields for StargazerEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User!):</li>
+<li><code>starredAt</code> (DateTime!): Identifies when the item was starred.</li>
+</ul>
+<h2 id="teammemberconnection---object" title="TeamMemberConnection - object">TeamMemberConnection - object<a href="#teammemberconnection---object" aria-label="Link to heading 'TeamMemberConnection - object'" data-heading-content="TeamMemberConnection - object" class="anchor"></a></h2>
+<p>The connection type for User.</p>
+<h3 id="fields-for-teammemberconnection" title="TeamMemberConnection - object / Fields for TeamMemberConnection">Fields for <code>TeamMemberConnection</code><a href="#fields-for-teammemberconnection" aria-label="Link to heading 'Fields for TeamMemberConnection'" data-heading-content="Fields for TeamMemberConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([TeamMemberEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="teammemberedge---object" title="TeamMemberEdge - object">TeamMemberEdge - object<a href="#teammemberedge---object" aria-label="Link to heading 'TeamMemberEdge - object'" data-heading-content="TeamMemberEdge - object" class="anchor"></a></h2>
+<p>Represents a user who is a member of a team.</p>
+<h3 id="fields-for-teammemberedge" title="TeamMemberEdge - object / Fields for TeamMemberEdge">Fields for <code>TeamMemberEdge</code><a href="#fields-for-teammemberedge" aria-label="Link to heading 'Fields for TeamMemberEdge'" data-heading-content="Fields for TeamMemberEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>memberAccessResourcePath</code> (URI!): The HTTP path to the organization's member access page.</li>
+<li><code>memberAccessUrl</code> (URI!): The HTTP URL to the organization's member access page.</li>
+<li><code>node</code> (User!):</li>
+<li><code>role</code> (TeamMemberRole!): The role the member has on the team.</li>
+</ul>
+<h2 id="unfollowuser---mutation" title="unfollowUser - mutation">unfollowUser - mutation<a href="#unfollowuser---mutation" aria-label="Link to heading 'unfollowUser - mutation'" data-heading-content="unfollowUser - mutation" class="anchor"></a></h2>
+<p>Unfollow a user.</p>
+<h3 id="input-fields-for-unfollowuser" title="unfollowUser - mutation / Input fields for unfollowUser">Input fields for <code>unfollowUser</code><a href="#input-fields-for-unfollowuser" aria-label="Link to heading 'Input fields for unfollowUser'" data-heading-content="Input fields for unfollowUser" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UnfollowUserInput!):</li>
+</ul>
+<h3 id="return-fields-for-unfollowuser" title="unfollowUser - mutation / Return fields for unfollowUser">Return fields for <code>unfollowUser</code><a href="#return-fields-for-unfollowuser" aria-label="Link to heading 'Return fields for unfollowUser'" data-heading-content="Return fields for unfollowUser" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>user</code> (User): The user that was unfollowed.</li>
+</ul>
+<h2 id="unfollowuserinput---input-object" title="UnfollowUserInput - input object">UnfollowUserInput - input object<a href="#unfollowuserinput---input-object" aria-label="Link to heading 'UnfollowUserInput - input object'" data-heading-content="UnfollowUserInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UnfollowUser.</p>
+<h3 id="input-fields-for-unfollowuserinput" title="UnfollowUserInput - input object / Input fields for UnfollowUserInput">Input fields for <code>UnfollowUserInput</code><a href="#input-fields-for-unfollowuserinput" aria-label="Link to heading 'Input fields for UnfollowUserInput'" data-heading-content="Input fields for UnfollowUserInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>userId</code> (ID!): ID of the user to unfollow.</li>
+</ul>
+<h2 id="updateuserlist---mutation" title="updateUserList - mutation">updateUserList - mutation<a href="#updateuserlist---mutation" aria-label="Link to heading 'updateUserList - mutation'" data-heading-content="updateUserList - mutation" class="anchor"></a></h2>
+<p>Updates an existing user list.</p>
+<h3 id="input-fields-for-updateuserlist" title="updateUserList - mutation / Input fields for updateUserList">Input fields for <code>updateUserList</code><a href="#input-fields-for-updateuserlist" aria-label="Link to heading 'Input fields for updateUserList'" data-heading-content="Input fields for updateUserList" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UpdateUserListInput!):</li>
+</ul>
+<h3 id="return-fields-for-updateuserlist" title="updateUserList - mutation / Return fields for updateUserList">Return fields for <code>updateUserList</code><a href="#return-fields-for-updateuserlist" aria-label="Link to heading 'Return fields for updateUserList'" data-heading-content="Return fields for updateUserList" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>list</code> (UserList): The list that was just updated.</li>
+</ul>
+<h2 id="updateuserlistinput---input-object" title="UpdateUserListInput - input object">UpdateUserListInput - input object<a href="#updateuserlistinput---input-object" aria-label="Link to heading 'UpdateUserListInput - input object'" data-heading-content="UpdateUserListInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UpdateUserList.</p>
+<h3 id="input-fields-for-updateuserlistinput" title="UpdateUserListInput - input object / Input fields for UpdateUserListInput">Input fields for <code>UpdateUserListInput</code><a href="#input-fields-for-updateuserlistinput" aria-label="Link to heading 'Input fields for UpdateUserListInput'" data-heading-content="Input fields for UpdateUserListInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>description</code> (String): A description of the list.</li>
+<li><code>isPrivate</code> (Boolean): Whether or not the list is private.</li>
+<li><code>listId</code> (ID!): The ID of the list to update.</li>
+<li><code>name</code> (String): The name of the list.</li>
+</ul>
+<h2 id="updateuserlistsforitem---mutation" title="updateUserListsForItem - mutation">updateUserListsForItem - mutation<a href="#updateuserlistsforitem---mutation" aria-label="Link to heading 'updateUserListsForItem - mutation'" data-heading-content="updateUserListsForItem - mutation" class="anchor"></a></h2>
+<p>Updates which of the viewer's lists an item belongs to.</p>
+<h3 id="input-fields-for-updateuserlistsforitem" title="updateUserListsForItem - mutation / Input fields for updateUserListsForItem">Input fields for <code>updateUserListsForItem</code><a href="#input-fields-for-updateuserlistsforitem" aria-label="Link to heading 'Input fields for updateUserListsForItem'" data-heading-content="Input fields for updateUserListsForItem" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (UpdateUserListsForItemInput!):</li>
+</ul>
+<h3 id="return-fields-for-updateuserlistsforitem" title="updateUserListsForItem - mutation / Return fields for updateUserListsForItem">Return fields for <code>updateUserListsForItem</code><a href="#return-fields-for-updateuserlistsforitem" aria-label="Link to heading 'Return fields for updateUserListsForItem'" data-heading-content="Return fields for updateUserListsForItem" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>item</code> (UserListItems): The item that was added.</li>
+<li><code>lists</code> ([UserList!]): The lists to which this item belongs.</li>
+<li><code>user</code> (User): The user who owns the lists.</li>
+</ul>
+<h2 id="updateuserlistsforiteminput---input-object" title="UpdateUserListsForItemInput - input object">UpdateUserListsForItemInput - input object<a href="#updateuserlistsforiteminput---input-object" aria-label="Link to heading 'UpdateUserListsForItemInput - input object'" data-heading-content="UpdateUserListsForItemInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of UpdateUserListsForItem.</p>
+<h3 id="input-fields-for-updateuserlistsforiteminput" title="UpdateUserListsForItemInput - input object / Input fields for UpdateUserListsForItemInput">Input fields for <code>UpdateUserListsForItemInput</code><a href="#input-fields-for-updateuserlistsforiteminput" aria-label="Link to heading 'Input fields for UpdateUserListsForItemInput'" data-heading-content="Input fields for UpdateUserListsForItemInput" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>itemId</code> (ID!): The item to add to the list.</li>
+<li><code>listIds</code> ([ID!]!): The lists to which this item should belong.</li>
+<li><code>suggestedListIds</code> ([ID!]): The suggested lists to create and add this item to.</li>
+</ul>
+<h2 id="user---object" title="User - object">User - object<a href="#user---object" aria-label="Link to heading 'User - object'" data-heading-content="User - object" class="anchor"></a></h2>
+<p>A user is an individual's account on GitHub that owns repositories and can make new content.</p>
+<p><strong>Implements:</strong> Actor, Agentic, Node, PackageOwner, ProfileOwner, ProjectOwner, ProjectV2Owner, ProjectV2Recent, RepositoryDiscussionAuthor, RepositoryDiscussionCommentAuthor, RepositoryOwner, Sponsorable, UniformResourceLocatable</p>
+<h3 id="fields-for-user" title="User - object / Fields for User">Fields for <code>User</code><a href="#fields-for-user" aria-label="Link to heading 'Fields for User'" data-heading-content="Fields for User" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>anyPinnableItems</code> (Boolean!): Determine if this repository owner has any items that can be pinned to their profile.</p>
+<ul>
+<li><code>type</code> (PinnableItemType): Filter to only a particular kind of pinnable item.</li>
+</ul>
+</li>
+<li>
+<p><code>avatarUrl</code> (URI!): A URL pointing to the user's public avatar.</p>
+<ul>
+<li><code>size</code> (Int): The size of the resulting square image.</li>
+</ul>
+</li>
+<li>
+<p><code>bio</code> (String): The user's public profile bio.</p>
+</li>
+<li>
+<p><code>bioHTML</code> (HTML!): The user's public profile bio as HTML.</p>
+</li>
+<li>
+<p><code>canReceiveOrganizationEmailsWhenNotificationsRestricted</code> (Boolean!): Could this user receive email notifications, if the organization had notification restrictions enabled?.</p>
+<ul>
+<li><code>login</code> (String!): The login of the organization to check.</li>
+</ul>
+</li>
+<li>
+<p><code>commitComments</code> (CommitCommentConnection!): A list of commit comments made by this user. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>company</code> (String): The user's public profile company.</p>
+</li>
+<li>
+<p><code>companyHTML</code> (HTML!): The user's public profile company as HTML.</p>
+</li>
+<li>
+<p><code>contributionsCollection</code> (ContributionsCollection!): The collection of contributions this user has made to different repositories.</p>
+<ul>
+<li><code>from</code> (DateTime): Only contributions made at this time or later will be counted. If omitted, defaults to a year ago.</li>
+<li><code>organizationID</code> (ID): The ID of the organization used to filter contributions.</li>
+<li><code>to</code> (DateTime): Only contributions made before and up to (including) this time will be<br>
+counted. If omitted, defaults to the current time or one year from the<br>
+provided from argument.</li>
+</ul>
+</li>
+<li>
+<p><code>copilotEndpoints</code> (CopilotEndpoints): The user's Copilot endpoint information.</p>
+</li>
+<li>
+<p><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</p>
+</li>
+<li>
+<p><code>databaseId</code> (Int): Identifies the primary key from the database.</p>
+</li>
+<li>
+<p><code>email</code> (String!): The user's publicly visible profile email.</p>
+</li>
+<li>
+<p><code>enterprises</code> (EnterpriseConnection): A list of enterprises that the user belongs to.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>membershipType</code> (EnterpriseMembershipType): Filter enterprises returned based on the user's membership type. Default: <code>ALL</code>.</li>
+<li><code>orderBy</code> (EnterpriseOrder): Ordering options for the User's enterprises.</li>
+</ul>
+</li>
+<li>
+<p><code>estimatedNextSponsorsPayoutInCents</code> (Int!): The estimated next GitHub Sponsors payout for this user/organization in cents (USD).</p>
+</li>
+<li>
+<p><code>followers</code> (FollowerConnection!): A list of users the given user is followed by. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>following</code> (FollowingConnection!): A list of users the given user is following. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>gist</code> (Gist): Find gist by repo name.</p>
+<ul>
+<li><code>name</code> (String!): The gist name to find.</li>
+</ul>
+</li>
+<li>
+<p><code>gistComments</code> (GistCommentConnection!): A list of gist comments made by this user. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>gists</code> (GistConnection!): A list of the Gists the user has created.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (GistOrder): Ordering options for gists returned from the connection.</li>
+<li><code>privacy</code> (GistPrivacy): Filters Gists according to privacy.</li>
+</ul>
+</li>
+<li>
+<p><code>hasSponsorsListing</code> (Boolean!): True if this user/organization has a GitHub Sponsors listing.</p>
+</li>
+<li>
+<p><code>hovercard</code> (Hovercard!): The hovercard information for this user in a given context.</p>
+<ul>
+<li><code>primarySubjectId</code> (ID): The ID of the subject to get the hovercard in the context of.</li>
+</ul>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the User object.</p>
+</li>
+<li>
+<p><code>interactionAbility</code> (RepositoryInteractionAbility): The interaction ability settings for this user.</p>
+</li>
+<li>
+<p><code>isBountyHunter</code> (Boolean!): Whether or not this user is a participant in the GitHub Security Bug Bounty.</p>
+</li>
+<li>
+<p><code>isCampusExpert</code> (Boolean!): Whether or not this user is a participant in the GitHub Campus Experts Program.</p>
+</li>
+<li>
+<p><code>isDeveloperProgramMember</code> (Boolean!): Whether or not this user is a GitHub Developer Program member.</p>
+</li>
+<li>
+<p><code>isEmployee</code> (Boolean!): Whether or not this user is a GitHub employee.</p>
+</li>
+<li>
+<p><code>isFollowingViewer</code> (Boolean!): Whether or not this user is following the viewer. Inverse of viewerIsFollowing.</p>
+</li>
+<li>
+<p><code>isGitHubStar</code> (Boolean!): Whether or not this user is a member of the GitHub Stars Program.</p>
+</li>
+<li>
+<p><code>isHireable</code> (Boolean!): Whether or not the user has marked themselves as for hire.</p>
+</li>
+<li>
+<p><code>isSiteAdmin</code> (Boolean!): Whether or not this user is a site administrator.</p>
+</li>
+<li>
+<p><code>isSponsoredBy</code> (Boolean!): Whether the given account is sponsoring this user/organization.</p>
+<ul>
+<li><code>accountLogin</code> (String!): The target account's login.</li>
+</ul>
+</li>
+<li>
+<p><code>isSponsoringViewer</code> (Boolean!): True if the viewer is sponsored by this user/organization.</p>
+</li>
+<li>
+<p><code>isViewer</code> (Boolean!): Whether or not this user is the viewing user.</p>
+</li>
+<li>
+<p><code>issueComments</code> (IssueCommentConnection!): A list of issue comments made by this user.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (IssueCommentOrder): Ordering options for issue comments returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>issues</code> (IssueConnection!): A list of issues associated with this user.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>filterBy</code> (IssueFilters): Filtering options for issues returned from the connection.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>labels</code> ([String!]): A list of label names to filter the pull requests by.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (IssueOrder): Ordering options for issues returned from the connection.</li>
+<li><code>states</code> ([IssueState!]): A list of states to filter the issues by.</li>
+</ul>
+</li>
+<li>
+<p><code>itemShowcase</code> (ProfileItemShowcase!): Showcases a selection of repositories and gists that the profile owner has<br>
+either curated or that have been selected automatically based on popularity.</p>
+</li>
+<li>
+<p><code>lifetimeReceivedSponsorshipValues</code> (SponsorAndLifetimeValueConnection!): Calculate how much each sponsor has ever paid total to this maintainer via<br>
+GitHub Sponsors. Does not include sponsorships paid via Patreon.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorAndLifetimeValueOrder): Ordering options for results returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>lists</code> (UserListConnection!): A user-curated list of repositories. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>location</code> (String): The user's public profile location.</p>
+</li>
+<li>
+<p><code>login</code> (String!): The username used to login.</p>
+</li>
+<li>
+<p><code>monthlyEstimatedSponsorsIncomeInCents</code> (Int!): The estimated monthly GitHub Sponsors income for this user/organization in cents (USD).</p>
+</li>
+<li>
+<p><code>name</code> (String): The user's public profile name.</p>
+</li>
+<li>
+<p><code>organization</code> (Organization): Find an organization by its login that the user belongs to.</p>
+<ul>
+<li><code>login</code> (String!): The login of the organization to find.</li>
+</ul>
+</li>
+<li>
+<p><code>organizationVerifiedDomainEmails</code> ([String!]!): Verified email addresses that match verified domains for a specified organization the user is a member of.</p>
+<ul>
+<li><code>login</code> (String!): The login of the organization to match verified domains from.</li>
+</ul>
+</li>
+<li>
+<p><code>organizations</code> (OrganizationConnection!): A list of organizations the user belongs to.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (OrganizationOrder): Ordering options for the User's organizations.</li>
+</ul>
+</li>
+<li>
+<p><code>packages</code> (PackageConnection!): A list of packages under the owner.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>names</code> ([String]): Find packages by their names.</li>
+<li><code>orderBy</code> (PackageOrder): Ordering of the returned packages.</li>
+<li><code>packageType</code> (PackageType): Filter registry package by type.</li>
+<li><code>repositoryId</code> (ID): Find packages in a repository by ID.</li>
+</ul>
+</li>
+<li>
+<p><code>pinnableItems</code> (PinnableItemConnection!): A list of repositories and gists this profile owner can pin to their profile.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>types</code> ([PinnableItemType!]): Filter the types of pinnable items that are returned.</li>
+</ul>
+</li>
+<li>
+<p><code>pinnedItems</code> (PinnableItemConnection!): A list of repositories and gists this profile owner has pinned to their profile.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>types</code> ([PinnableItemType!]): Filter the types of pinned items that are returned.</li>
+</ul>
+</li>
+<li>
+<p><code>pinnedItemsRemaining</code> (Int!): Returns how many more items this profile owner can pin to their profile.</p>
+</li>
+<li>
+<p><code>project</code> (Project): Find project by number. <strong>Deprecated:</strong> Projects (classic) is being deprecated in favor of the new Projects experience, see: <a href="https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/" class="external">https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/</a>. Removal on 2025-04-01 UTC.</p>
+<ul>
+<li><code>number</code> (Int!): The project number to find.</li>
+</ul>
+</li>
+<li>
+<p><code>projectV2</code> (ProjectV2): Find a project by number.</p>
+<ul>
+<li><code>number</code> (Int!): The project number.</li>
+</ul>
+</li>
+<li>
+<p><code>projects</code> (ProjectConnection!): A list of projects under the owner. <strong>Deprecated:</strong> Projects (classic) is being deprecated in favor of the new Projects experience, see: <a href="https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/" class="external">https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/</a>. Removal on 2025-04-01 UTC.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ProjectOrder): Ordering options for projects returned from the connection.</li>
+<li><code>search</code> (String): Query to search projects by, currently only searching by name.</li>
+<li><code>states</code> ([ProjectState!]): A list of states to filter the projects by.</li>
+</ul>
+</li>
+<li>
+<p><code>projectsResourcePath</code> (URI!): The HTTP path listing user's projects.</p>
+</li>
+<li>
+<p><code>projectsUrl</code> (URI!): The HTTP URL listing user's projects.</p>
+</li>
+<li>
+<p><code>projectsV2</code> (ProjectV2Connection!): A list of projects under the owner.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>minPermissionLevel</code> (ProjectV2PermissionLevel): Filter projects based on user role. Default: <code>READ</code>.</li>
+<li><code>orderBy</code> (ProjectV2Order): How to order the returned projects.</li>
+<li><code>query</code> (String): A project to search for under the owner.</li>
+</ul>
+</li>
+<li>
+<p><code>pronouns</code> (String): The user's profile pronouns.</p>
+</li>
+<li>
+<p><code>publicKeys</code> (PublicKeyConnection!): A list of public keys associated with this user. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>pullRequests</code> (PullRequestConnection!): A list of pull requests associated with this user.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>baseRefName</code> (String): The base ref name to filter the pull requests by.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>headRefName</code> (String): The head ref name to filter the pull requests by.</li>
+<li><code>labels</code> ([String!]): A list of label names to filter the pull requests by.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (IssueOrder): Ordering options for pull requests returned from the connection.</li>
+<li><code>states</code> ([PullRequestState!]): A list of states to filter the pull requests by.</li>
+</ul>
+</li>
+<li>
+<p><code>recentProjects</code> (ProjectV2Connection!): Recent projects that this user has modified in the context of the owner. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>repositories</code> (RepositoryConnection!): A list of repositories that the user owns.</p>
+<ul>
+<li><code>affiliations</code> ([RepositoryAffiliation]): Array of viewer's affiliation options for repositories returned from the<br>
+connection. For example, OWNER will include only repositories that the<br>
+current viewer owns.</li>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>hasIssuesEnabled</code> (Boolean): If non-null, filters repositories according to whether they have issues enabled.</li>
+<li><code>isArchived</code> (Boolean): If non-null, filters repositories according to whether they are archived and not maintained.</li>
+<li><code>isFork</code> (Boolean): If non-null, filters repositories according to whether they are forks of another repository.</li>
+<li><code>isLocked</code> (Boolean): If non-null, filters repositories according to whether they have been locked.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryOrder): Ordering options for repositories returned from the connection.</li>
+<li><code>ownerAffiliations</code> ([RepositoryAffiliation]): Array of owner's affiliation options for repositories returned from the<br>
+connection. For example, OWNER will include only repositories that the<br>
+organization or user being viewed owns.</li>
+<li><code>privacy</code> (RepositoryPrivacy): If non-null, filters repositories according to privacy. Internal<br>
+repositories are considered private; consider using the visibility argument<br>
+if only internal repositories are needed. Cannot be combined with the<br>
+visibility argument.</li>
+<li><code>visibility</code> (RepositoryVisibility): If non-null, filters repositories according to visibility. Cannot be combined with the privacy argument.</li>
+</ul>
+</li>
+<li>
+<p><code>repositoriesContributedTo</code> (RepositoryConnection!): A list of repositories that the user recently contributed to.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>contributionTypes</code> ([RepositoryContributionType]): If non-null, include only the specified types of contributions. The<br>
+GitHub.com UI uses [COMMIT, ISSUE, PULL_REQUEST, REPOSITORY].</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>hasIssues</code> (Boolean): If non-null, filters repositories according to whether they have issues enabled.</li>
+<li><code>includeUserRepositories</code> (Boolean): If true, include user repositories.</li>
+<li><code>isLocked</code> (Boolean): If non-null, filters repositories according to whether they have been locked.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryOrder): Ordering options for repositories returned from the connection.</li>
+<li><code>privacy</code> (RepositoryPrivacy): If non-null, filters repositories according to privacy.</li>
+</ul>
+</li>
+<li>
+<p><code>repository</code> (Repository): Find Repository.</p>
+<ul>
+<li><code>followRenames</code> (Boolean): Follow repository renames. If disabled, a repository referenced by its old name will return an error. Default: <code>true</code>.</li>
+<li><code>name</code> (String!): Name of Repository to find.</li>
+</ul>
+</li>
+<li>
+<p><code>repositoryDiscussionComments</code> (DiscussionCommentConnection!): Discussion comments this user has authored.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>onlyAnswers</code> (Boolean): Filter discussion comments to only those that were marked as the answer.</li>
+<li><code>repositoryId</code> (ID): Filter discussion comments to only those in a specific repository.</li>
+</ul>
+</li>
+<li>
+<p><code>repositoryDiscussions</code> (DiscussionConnection!): Discussions this user has started.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>answered</code> (Boolean): Filter discussions to only those that have been answered or not. Defaults to<br>
+including both answered and unanswered discussions.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (DiscussionOrder): Ordering options for discussions returned from the connection.</li>
+<li><code>repositoryId</code> (ID): Filter discussions to only those in a specific repository.</li>
+<li><code>states</code> ([DiscussionState!]): A list of states to filter the discussions by.</li>
+</ul>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path for this user.</p>
+</li>
+<li>
+<p><code>savedReplies</code> (SavedReplyConnection): Replies this user has saved.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SavedReplyOrder): The field to order saved replies by.</li>
+</ul>
+</li>
+<li>
+<p><code>socialAccounts</code> (SocialAccountConnection!): The user's social media accounts, ordered as they appear on the user's profile. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>sponsoring</code> (SponsorConnection!): List of users and organizations this entity is sponsoring.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorOrder): Ordering options for the users and organizations returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsors</code> (SponsorConnection!): List of sponsors for this user or organization.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorOrder): Ordering options for sponsors returned from the connection.</li>
+<li><code>tierId</code> (ID): If given, will filter for sponsors at the given tier. Will only return<br>
+sponsors whose tier the viewer is permitted to see.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorsActivities</code> (SponsorsActivityConnection!): Events involving this sponsorable, such as new sponsorships.</p>
+<ul>
+<li><code>actions</code> ([SponsorsActivityAction!]): Filter activities to only the specified actions.</li>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>includeAsSponsor</code> (Boolean): Whether to include those events where this sponsorable acted as the sponsor.<br>
+Defaults to only including events where this sponsorable was the recipient<br>
+of a sponsorship.</li>
+<li><code>includePrivate</code> (Boolean): Whether or not to include private activities in the result set. Defaults to including public and private activities. Default: <code>true</code>.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorsActivityOrder): Ordering options for activity returned from the connection.</li>
+<li><code>period</code> (SponsorsActivityPeriod): Filter activities returned to only those that occurred in the most recent<br>
+specified time period. Set to ALL to avoid filtering by when the activity<br>
+occurred. Will be ignored if since or until is given. Default: <code>MONTH</code>.</li>
+<li><code>since</code> (DateTime): Filter activities to those that occurred on or after this time.</li>
+<li><code>until</code> (DateTime): Filter activities to those that occurred before this time.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorsListing</code> (SponsorsListing): The GitHub Sponsors listing for this user or organization.</p>
+</li>
+<li>
+<p><code>sponsorshipForViewerAsSponsor</code> (Sponsorship): The sponsorship from the viewer to this user/organization; that is, the sponsorship where you're the sponsor.</p>
+<ul>
+<li><code>activeOnly</code> (Boolean): Whether to return the sponsorship only if it's still active. Pass false to<br>
+get the viewer's sponsorship back even if it has been cancelled. Default: <code>true</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorshipForViewerAsSponsorable</code> (Sponsorship): The sponsorship from this user/organization to the viewer; that is, the sponsorship you're receiving.</p>
+<ul>
+<li><code>activeOnly</code> (Boolean): Whether to return the sponsorship only if it's still active. Pass false to<br>
+get the sponsorship back even if it has been cancelled. Default: <code>true</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorshipNewsletters</code> (SponsorshipNewsletterConnection!): List of sponsorship updates sent from this sponsorable to sponsors.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorshipNewsletterOrder): Ordering options for sponsorship updates returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorshipsAsMaintainer</code> (SponsorshipConnection!): The sponsorships where this user or organization is the maintainer receiving the funds.</p>
+<ul>
+<li><code>activeOnly</code> (Boolean): Whether to include only sponsorships that are active right now, versus all<br>
+sponsorships this maintainer has ever received. Default: <code>true</code>.</li>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>includePrivate</code> (Boolean): Whether or not to include private sponsorships in the result set.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (SponsorshipOrder): Ordering options for sponsorships returned from this connection. If left<br>
+blank, the sponsorships will be ordered based on relevancy to the viewer.</li>
+</ul>
+</li>
+<li>
+<p><code>sponsorshipsAsSponsor</code> (SponsorshipConnection!): The sponsorships where this user or organization is the funder.</p>
+<ul>
+<li><code>activeOnly</code> (Boolean): Whether to include only sponsorships that are active right now, versus all sponsorships this sponsor has ever made. Default: <code>true</code>.</li>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>maintainerLogins</code> ([String!]): Filter sponsorships returned to those for the specified maintainers. That<br>
+is, the recipient of the sponsorship is a user or organization with one of<br>
+the given logins.</li>
+<li><code>orderBy</code> (SponsorshipOrder): Ordering options for sponsorships returned from this connection. If left<br>
+blank, the sponsorships will be ordered based on relevancy to the viewer.</li>
+</ul>
+</li>
+<li>
+<p><code>starredRepositories</code> (StarredRepositoryConnection!): Repositories the user has starred.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (StarOrder): Order for connection.</li>
+<li><code>ownedByViewer</code> (Boolean): Filters starred repositories to only return repositories owned by the viewer.</li>
+</ul>
+</li>
+<li>
+<p><code>status</code> (UserStatus): The user's description of what they're currently doing.</p>
+</li>
+<li>
+<p><code>suggestedListNames</code> ([UserListSuggestion!]!): Suggested names for user lists.</p>
+</li>
+<li>
+<p><code>topRepositories</code> (RepositoryConnection!): Repositories the user has contributed to, ordered by contribution rank, plus repositories the user has created.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryOrder!): Ordering options for repositories returned from the connection.</li>
+<li><code>since</code> (DateTime): How far back in time to fetch contributed repositories.</li>
+</ul>
+</li>
+<li>
+<p><code>totalSponsorshipAmountAsSponsorInCents</code> (Int): The amount in United States cents (e.g., 500 = $5.00 USD) that this entity has<br>
+spent on GitHub to fund sponsorships. Only returns a value when viewed by the<br>
+user themselves or by a user who can manage sponsorships for the requested organization.</p>
+<ul>
+<li><code>since</code> (DateTime): Filter payments to those that occurred on or after this time.</li>
+<li><code>sponsorableLogins</code> ([String!]): Filter payments to those made to the users or organizations with the specified usernames.</li>
+<li><code>until</code> (DateTime): Filter payments to those that occurred before this time.</li>
+</ul>
+</li>
+<li>
+<p><code>twitterUsername</code> (String): The user's Twitter username.</p>
+</li>
+<li>
+<p><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL for this user.</p>
+</li>
+<li>
+<p><code>userViewType</code> (UserViewType!): Whether the request returns publicly visible information or privately visible information about the user.</p>
+</li>
+<li>
+<p><code>viewerCanChangePinnedItems</code> (Boolean!): Can the viewer pin repositories and gists to the profile?.</p>
+</li>
+<li>
+<p><code>viewerCanCreateProjects</code> (Boolean!): Can the current viewer create new projects on this owner. <strong>Deprecated:</strong> Projects (classic) is being deprecated in favor of the new Projects experience, see: <a href="https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/" class="external">https://github.blog/changelog/2024-05-23-sunset-notice-projects-classic/</a>. Removal on 2025-04-01 UTC.</p>
+</li>
+<li>
+<p><code>viewerCanFollow</code> (Boolean!): Whether or not the viewer is able to follow the user.</p>
+</li>
+<li>
+<p><code>viewerCanSponsor</code> (Boolean!): Whether or not the viewer is able to sponsor this user/organization.</p>
+</li>
+<li>
+<p><code>viewerCopilotAgentCreatesChannel</code> (String): Channel value for subscribing to live updates for session creations.</p>
+</li>
+<li>
+<p><code>viewerCopilotAgentLogUpdatesChannel</code> (String): Channel value for subscribing to live updates for session log updates.</p>
+</li>
+<li>
+<p><code>viewerCopilotAgentTaskUpdatesChannel</code> (String): Channel value for subscribing to live updates for task updates.</p>
+</li>
+<li>
+<p><code>viewerCopilotAgentUpdatesChannel</code> (String): Channel value for subscribing to live updates for session updates.</p>
+</li>
+<li>
+<p><code>viewerIsFollowing</code> (Boolean!): Whether or not this user is followed by the viewer. Inverse of isFollowingViewer.</p>
+</li>
+<li>
+<p><code>viewerIsSponsoring</code> (Boolean!): True if the viewer is sponsoring this user/organization.</p>
+</li>
+<li>
+<p><code>watching</code> (RepositoryConnection!): A list of repositories the given user is watching.</p>
+<ul>
+<li><code>affiliations</code> ([RepositoryAffiliation]): Affiliation options for repositories returned from the connection. If none<br>
+specified, the results will include repositories for which the current<br>
+viewer is an owner or collaborator, or member.</li>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>hasIssuesEnabled</code> (Boolean): If non-null, filters repositories according to whether they have issues enabled.</li>
+<li><code>isLocked</code> (Boolean): If non-null, filters repositories according to whether they have been locked.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (RepositoryOrder): Ordering options for repositories returned from the connection.</li>
+<li><code>ownerAffiliations</code> ([RepositoryAffiliation]): Array of owner's affiliation options for repositories returned from the<br>
+connection. For example, OWNER will include only repositories that the<br>
+organization or user being viewed owns.</li>
+<li><code>privacy</code> (RepositoryPrivacy): If non-null, filters repositories according to privacy. Internal<br>
+repositories are considered private; consider using the visibility argument<br>
+if only internal repositories are needed. Cannot be combined with the<br>
+visibility argument.</li>
+<li><code>visibility</code> (RepositoryVisibility): If non-null, filters repositories according to visibility. Cannot be combined with the privacy argument.</li>
+</ul>
+</li>
+<li>
+<p><code>websiteUrl</code> (URI): A URL pointing to the user's public website/blog.</p>
+</li>
+</ul>
+<h2 id="user---query" title="user - query">user - query<a href="#user---query" aria-label="Link to heading 'user - query'" data-heading-content="user - query" class="anchor"></a></h2>
+<p>Lookup a user by login.</p>
+<p><strong>Type:</strong> User</p>
+<h3 id="arguments-for-user" title="user - query / Arguments for user">Arguments for <code>user</code><a href="#arguments-for-user" aria-label="Link to heading 'Arguments for user'" data-heading-content="Arguments for user" class="anchor"></a></h3>
+<ul>
+<li><code>login</code> (String!): The user's login.</li>
+</ul>
+<h2 id="userblockduration---enum" title="UserBlockDuration - enum">UserBlockDuration - enum<a href="#userblockduration---enum" aria-label="Link to heading 'UserBlockDuration - enum'" data-heading-content="UserBlockDuration - enum" class="anchor"></a></h2>
+<p>The possible durations that a user can be blocked for.</p>
+<h3 id="values-for-userblockduration" title="UserBlockDuration - enum / Values for UserBlockDuration">Values for <code>UserBlockDuration</code><a href="#values-for-userblockduration" aria-label="Link to heading 'Values for UserBlockDuration'" data-heading-content="Values for UserBlockDuration" class="anchor"></a></h3>
+<ul>
+<li><code>ONE_DAY</code>: The user was blocked for 1 day.</li>
+<li><code>ONE_MONTH</code>: The user was blocked for 30 days.</li>
+<li><code>ONE_WEEK</code>: The user was blocked for 7 days.</li>
+<li><code>PERMANENT</code>: The user was blocked permanently.</li>
+<li><code>THREE_DAYS</code>: The user was blocked for 3 days.</li>
+</ul>
+<h2 id="userblockedevent---object" title="UserBlockedEvent - object">UserBlockedEvent - object<a href="#userblockedevent---object" aria-label="Link to heading 'UserBlockedEvent - object'" data-heading-content="UserBlockedEvent - object" class="anchor"></a></h2>
+<p>Represents auser_blockedevent on a given user.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-userblockedevent" title="UserBlockedEvent - object / Fields for UserBlockedEvent">Fields for <code>UserBlockedEvent</code><a href="#fields-for-userblockedevent" aria-label="Link to heading 'Fields for UserBlockedEvent'" data-heading-content="Fields for UserBlockedEvent" class="anchor"></a></h3>
+<ul>
+<li><code>actor</code> (Actor): Identifies the actor who performed the event.</li>
+<li><code>blockDuration</code> (UserBlockDuration!): Number of days that the user was blocked for.</li>
+<li><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</li>
+<li><code>id</code> (ID!): The Node ID of the UserBlockedEvent object.</li>
+<li><code>subject</code> (User): The user who was blocked.</li>
+</ul>
+<h2 id="userconnection---object" title="UserConnection - object">UserConnection - object<a href="#userconnection---object" aria-label="Link to heading 'UserConnection - object'" data-heading-content="UserConnection - object" class="anchor"></a></h2>
+<p>A list of users.</p>
+<h3 id="fields-for-userconnection" title="UserConnection - object / Fields for UserConnection">Fields for <code>UserConnection</code><a href="#fields-for-userconnection" aria-label="Link to heading 'Fields for UserConnection'" data-heading-content="Fields for UserConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserEdge]): A list of edges.</li>
+<li><code>nodes</code> ([User]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="usercontentedit---object" title="UserContentEdit - object">UserContentEdit - object<a href="#usercontentedit---object" aria-label="Link to heading 'UserContentEdit - object'" data-heading-content="UserContentEdit - object" class="anchor"></a></h2>
+<p>An edit on user content.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-usercontentedit" title="UserContentEdit - object / Fields for UserContentEdit">Fields for <code>UserContentEdit</code><a href="#fields-for-usercontentedit" aria-label="Link to heading 'Fields for UserContentEdit'" data-heading-content="Fields for UserContentEdit" class="anchor"></a></h3>
+<ul>
+<li><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</li>
+<li><code>deletedAt</code> (DateTime): Identifies the date and time when the object was deleted.</li>
+<li><code>deletedBy</code> (Actor): The actor who deleted this content.</li>
+<li><code>diff</code> (String): A summary of the changes for this edit.</li>
+<li><code>editedAt</code> (DateTime!): When this content was edited.</li>
+<li><code>editor</code> (Actor): The actor who edited this content.</li>
+<li><code>id</code> (ID!): The Node ID of the UserContentEdit object.</li>
+<li><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</li>
+</ul>
+<h2 id="usercontenteditconnection---object" title="UserContentEditConnection - object">UserContentEditConnection - object<a href="#usercontenteditconnection---object" aria-label="Link to heading 'UserContentEditConnection - object'" data-heading-content="UserContentEditConnection - object" class="anchor"></a></h2>
+<p>A list of edits to content.</p>
+<h3 id="fields-for-usercontenteditconnection" title="UserContentEditConnection - object / Fields for UserContentEditConnection">Fields for <code>UserContentEditConnection</code><a href="#fields-for-usercontenteditconnection" aria-label="Link to heading 'Fields for UserContentEditConnection'" data-heading-content="Fields for UserContentEditConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserContentEditEdge]): A list of edges.</li>
+<li><code>nodes</code> ([UserContentEdit]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="usercontenteditedge---object" title="UserContentEditEdge - object">UserContentEditEdge - object<a href="#usercontenteditedge---object" aria-label="Link to heading 'UserContentEditEdge - object'" data-heading-content="UserContentEditEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-usercontenteditedge" title="UserContentEditEdge - object / Fields for UserContentEditEdge">Fields for <code>UserContentEditEdge</code><a href="#fields-for-usercontenteditedge" aria-label="Link to heading 'Fields for UserContentEditEdge'" data-heading-content="Fields for UserContentEditEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (UserContentEdit): The item at the end of the edge.</li>
+</ul>
+<h2 id="useredge---object" title="UserEdge - object">UserEdge - object<a href="#useredge---object" aria-label="Link to heading 'UserEdge - object'" data-heading-content="UserEdge - object" class="anchor"></a></h2>
+<p>Represents a user.</p>
+<h3 id="fields-for-useredge" title="UserEdge - object / Fields for UserEdge">Fields for <code>UserEdge</code><a href="#fields-for-useredge" aria-label="Link to heading 'Fields for UserEdge'" data-heading-content="Fields for UserEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (User): The item at the end of the edge.</li>
+</ul>
+<h2 id="useremailmetadata---object" title="UserEmailMetadata - object">UserEmailMetadata - object<a href="#useremailmetadata---object" aria-label="Link to heading 'UserEmailMetadata - object'" data-heading-content="UserEmailMetadata - object" class="anchor"></a></h2>
+<p>Email attributes from External Identity.</p>
+<h3 id="fields-for-useremailmetadata" title="UserEmailMetadata - object / Fields for UserEmailMetadata">Fields for <code>UserEmailMetadata</code><a href="#fields-for-useremailmetadata" aria-label="Link to heading 'Fields for UserEmailMetadata'" data-heading-content="Fields for UserEmailMetadata" class="anchor"></a></h3>
+<ul>
+<li><code>primary</code> (Boolean): Boolean to identify primary emails.</li>
+<li><code>type</code> (String): Type of email.</li>
+<li><code>value</code> (String!): Email id.</li>
+</ul>
+<h2 id="userlist---object" title="UserList - object">UserList - object<a href="#userlist---object" aria-label="Link to heading 'UserList - object'" data-heading-content="UserList - object" class="anchor"></a></h2>
+<p>A user-curated list of repositories.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-userlist" title="UserList - object / Fields for UserList">Fields for <code>UserList</code><a href="#fields-for-userlist" aria-label="Link to heading 'Fields for UserList'" data-heading-content="Fields for UserList" class="anchor"></a></h3>
+<ul>
+<li><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</li>
+<li><code>description</code> (String): The description of this list.</li>
+<li><code>id</code> (ID!): The Node ID of the UserList object.</li>
+<li><code>isPrivate</code> (Boolean!): Whether or not this list is private.</li>
+<li><code>items</code> (UserListItemsConnection!): The items associated with this list. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+<li><code>lastAddedAt</code> (DateTime!): The date and time at which this list was created or last had items added to it.</li>
+<li><code>name</code> (String!): The name of this list.</li>
+<li><code>slug</code> (String!): The slug of this list.</li>
+<li><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</li>
+<li><code>user</code> (User!): The user to which this list belongs.</li>
+</ul>
+<h2 id="userlistconnection---object" title="UserListConnection - object">UserListConnection - object<a href="#userlistconnection---object" aria-label="Link to heading 'UserListConnection - object'" data-heading-content="UserListConnection - object" class="anchor"></a></h2>
+<p>The connection type for UserList.</p>
+<h3 id="fields-for-userlistconnection" title="UserListConnection - object / Fields for UserListConnection">Fields for <code>UserListConnection</code><a href="#fields-for-userlistconnection" aria-label="Link to heading 'Fields for UserListConnection'" data-heading-content="Fields for UserListConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserListEdge]): A list of edges.</li>
+<li><code>nodes</code> ([UserList]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="userlistedge---object" title="UserListEdge - object">UserListEdge - object<a href="#userlistedge---object" aria-label="Link to heading 'UserListEdge - object'" data-heading-content="UserListEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-userlistedge" title="UserListEdge - object / Fields for UserListEdge">Fields for <code>UserListEdge</code><a href="#fields-for-userlistedge" aria-label="Link to heading 'Fields for UserListEdge'" data-heading-content="Fields for UserListEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (UserList): The item at the end of the edge.</li>
+</ul>
+<h2 id="userlistitems---union" title="UserListItems - union">UserListItems - union<a href="#userlistitems---union" aria-label="Link to heading 'UserListItems - union'" data-heading-content="UserListItems - union" class="anchor"></a></h2>
+<p>Types that can be added to a user list.</p>
+<h3 id="possible-types-for-userlistitems" title="UserListItems - union / Possible types for UserListItems">Possible types for <code>UserListItems</code><a href="#possible-types-for-userlistitems" aria-label="Link to heading 'Possible types for UserListItems'" data-heading-content="Possible types for UserListItems" class="anchor"></a></h3>
+<ul>
+<li>Repository</li>
+</ul>
+<h2 id="userlistitemsconnection---object" title="UserListItemsConnection - object">UserListItemsConnection - object<a href="#userlistitemsconnection---object" aria-label="Link to heading 'UserListItemsConnection - object'" data-heading-content="UserListItemsConnection - object" class="anchor"></a></h2>
+<p>The connection type for UserListItems.</p>
+<h3 id="fields-for-userlistitemsconnection" title="UserListItemsConnection - object / Fields for UserListItemsConnection">Fields for <code>UserListItemsConnection</code><a href="#fields-for-userlistitemsconnection" aria-label="Link to heading 'Fields for UserListItemsConnection'" data-heading-content="Fields for UserListItemsConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserListItemsEdge]): A list of edges.</li>
+<li><code>nodes</code> ([UserListItems]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="userlistitemsedge---object" title="UserListItemsEdge - object">UserListItemsEdge - object<a href="#userlistitemsedge---object" aria-label="Link to heading 'UserListItemsEdge - object'" data-heading-content="UserListItemsEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-userlistitemsedge" title="UserListItemsEdge - object / Fields for UserListItemsEdge">Fields for <code>UserListItemsEdge</code><a href="#fields-for-userlistitemsedge" aria-label="Link to heading 'Fields for UserListItemsEdge'" data-heading-content="Fields for UserListItemsEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (UserListItems): The item at the end of the edge.</li>
+</ul>
+<h2 id="userlistsuggestion---object" title="UserListSuggestion - object">UserListSuggestion - object<a href="#userlistsuggestion---object" aria-label="Link to heading 'UserListSuggestion - object'" data-heading-content="UserListSuggestion - object" class="anchor"></a></h2>
+<p>Represents a suggested user list.</p>
+<h3 id="fields-for-userlistsuggestion" title="UserListSuggestion - object / Fields for UserListSuggestion">Fields for <code>UserListSuggestion</code><a href="#fields-for-userlistsuggestion" aria-label="Link to heading 'Fields for UserListSuggestion'" data-heading-content="Fields for UserListSuggestion" class="anchor"></a></h3>
+<ul>
+<li><code>id</code> (ID): The ID of the suggested user list.</li>
+<li><code>name</code> (String): The name of the suggested user list.</li>
+</ul>
+<h2 id="userstatus---object" title="UserStatus - object">UserStatus - object<a href="#userstatus---object" aria-label="Link to heading 'UserStatus - object'" data-heading-content="UserStatus - object" class="anchor"></a></h2>
+<p>The user's description of what they're currently doing.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-userstatus" title="UserStatus - object / Fields for UserStatus">Fields for <code>UserStatus</code><a href="#fields-for-userstatus" aria-label="Link to heading 'Fields for UserStatus'" data-heading-content="Fields for UserStatus" class="anchor"></a></h3>
+<ul>
+<li><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</li>
+<li><code>emoji</code> (String): An emoji summarizing the user's status.</li>
+<li><code>emojiHTML</code> (HTML): The status emoji as HTML.</li>
+<li><code>expiresAt</code> (DateTime): If set, the status will not be shown after this date.</li>
+<li><code>id</code> (ID!): The Node ID of the UserStatus object.</li>
+<li><code>indicatesLimitedAvailability</code> (Boolean!): Whether this status indicates the user is not fully available on GitHub.</li>
+<li><code>message</code> (String): A brief message describing what the user is doing.</li>
+<li><code>organization</code> (Organization): The organization whose members can see this status. If null, this status is publicly visible.</li>
+<li><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</li>
+<li><code>user</code> (User!): The user who has this status.</li>
+</ul>
+<h2 id="userstatusconnection---object" title="UserStatusConnection - object">UserStatusConnection - object<a href="#userstatusconnection---object" aria-label="Link to heading 'UserStatusConnection - object'" data-heading-content="UserStatusConnection - object" class="anchor"></a></h2>
+<p>The connection type for UserStatus.</p>
+<h3 id="fields-for-userstatusconnection" title="UserStatusConnection - object / Fields for UserStatusConnection">Fields for <code>UserStatusConnection</code><a href="#fields-for-userstatusconnection" aria-label="Link to heading 'Fields for UserStatusConnection'" data-heading-content="Fields for UserStatusConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([UserStatusEdge]): A list of edges.</li>
+<li><code>nodes</code> ([UserStatus]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="userstatusedge---object" title="UserStatusEdge - object">UserStatusEdge - object<a href="#userstatusedge---object" aria-label="Link to heading 'UserStatusEdge - object'" data-heading-content="UserStatusEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-userstatusedge" title="UserStatusEdge - object / Fields for UserStatusEdge">Fields for <code>UserStatusEdge</code><a href="#fields-for-userstatusedge" aria-label="Link to heading 'Fields for UserStatusEdge'" data-heading-content="Fields for UserStatusEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (UserStatus): The item at the end of the edge.</li>
+</ul>
+<h2 id="userstatusorder---input-object" title="UserStatusOrder - input object">UserStatusOrder - input object<a href="#userstatusorder---input-object" aria-label="Link to heading 'UserStatusOrder - input object'" data-heading-content="UserStatusOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for user status connections.</p>
+<h3 id="input-fields-for-userstatusorder" title="UserStatusOrder - input object / Input fields for UserStatusOrder">Input fields for <code>UserStatusOrder</code><a href="#input-fields-for-userstatusorder" aria-label="Link to heading 'Input fields for UserStatusOrder'" data-heading-content="Input fields for UserStatusOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+<li><code>field</code> (UserStatusOrderField!): The field to order user statuses by.</li>
+</ul>
+<h2 id="userstatusorderfield---enum" title="UserStatusOrderField - enum">UserStatusOrderField - enum<a href="#userstatusorderfield---enum" aria-label="Link to heading 'UserStatusOrderField - enum'" data-heading-content="UserStatusOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which user status connections can be ordered.</p>
+<h3 id="values-for-userstatusorderfield" title="UserStatusOrderField - enum / Values for UserStatusOrderField">Values for <code>UserStatusOrderField</code><a href="#values-for-userstatusorderfield" aria-label="Link to heading 'Values for UserStatusOrderField'" data-heading-content="Values for UserStatusOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>UPDATED_AT</code>: Order user statuses by when they were updated.</li>
+</ul>
+<h2 id="userviewtype---enum" title="UserViewType - enum">UserViewType - enum<a href="#userviewtype---enum" aria-label="Link to heading 'UserViewType - enum'" data-heading-content="UserViewType - enum" class="anchor"></a></h2>
+<p>Whether a user being viewed contains public or private information.</p>
+<h3 id="values-for-userviewtype" title="UserViewType - enum / Values for UserViewType">Values for <code>UserViewType</code><a href="#values-for-userviewtype" aria-label="Link to heading 'Values for UserViewType'" data-heading-content="Values for UserViewType" class="anchor"></a></h3>
+<ul>
+<li><code>PRIVATE</code>: A user containing information only visible to the authenticated user.</li>
+<li><code>PUBLIC</code>: A user that is publicly visible.</li>
+</ul>
+<h2 id="viewer---query" title="viewer - query">viewer - query<a href="#viewer---query" aria-label="Link to heading 'viewer - query'" data-heading-content="viewer - query" class="anchor"></a></h2>
+<p>The currently authenticated user.</p>
+<p><strong>Type:</strong> User!</p>
+<h2 id="viewerhovercardcontext---object" title="ViewerHovercardContext - object">ViewerHovercardContext - object<a href="#viewerhovercardcontext---object" aria-label="Link to heading 'ViewerHovercardContext - object'" data-heading-content="ViewerHovercardContext - object" class="anchor"></a></h2>
+<p>A hovercard context with a message describing how the viewer is related.</p>
+<p><strong>Implements:</strong> HovercardContext</p>
+<h3 id="fields-for-viewerhovercardcontext" title="ViewerHovercardContext - object / Fields for ViewerHovercardContext">Fields for <code>ViewerHovercardContext</code><a href="#fields-for-viewerhovercardcontext" aria-label="Link to heading 'Fields for ViewerHovercardContext'" data-heading-content="Fields for ViewerHovercardContext" class="anchor"></a></h3>
+<ul>
+<li><code>message</code> (String!): A string describing this context.</li>
+<li><code>octicon</code> (String!): An octicon to accompany this context.</li>
+<li><code>viewer</code> (User!): Identifies the user who is related to this context.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

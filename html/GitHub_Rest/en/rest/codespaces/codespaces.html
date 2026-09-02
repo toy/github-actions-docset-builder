@@ -1,0 +1,2292 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Codespaces</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Codespaces</a> / </nav><h1 id="rest-api-endpoints-for-codespaces">REST API endpoints for Codespaces<a href="#rest-api-endpoints-for-codespaces" aria-label="Link to heading 'REST API endpoints for Codespaces'" data-heading-content="REST API endpoints for Codespaces" class="anchor"></a></h1>
+<p>Use the REST API to manage GitHub Codespaces.</p>
+<h2 id="about-github-codespaces" title="About GitHub Codespaces">About GitHub Codespaces<a href="#about-github-codespaces" aria-label="Link to heading 'About GitHub Codespaces'" data-heading-content="About GitHub Codespaces" class="anchor"></a></h2>
+<p>You can manage Codespaces using the REST API. These endpoints are available for authenticated users, OAuth apps, and GitHub Apps. For more information, see <a href="https://docs.github.com/en/codespaces" class="external">Codespaces documentation</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-codespaces-in-a-repository-for-the-authenticated-user" title="List codespaces in a repository for the authenticated user">List codespaces in a repository for the authenticated user<a href="#list-codespaces-in-a-repository-for-the-authenticated-user" aria-label="Link to heading 'List codespaces in a repository for the authenticated user'" data-heading-content="List codespaces in a repository for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/codespaces
+</span></code></pre>
+<p>Lists the codespaces associated to a specified repository and the authenticated user.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters" title="List codespaces in a repository for the authenticated user / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List codespaces in a repository for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List codespaces in a repository for the authenticated user / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>codespaces</code>: required, array of <code>Codespace</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: string or null</li>
+<li><code>environment_id</code>: required, string or null</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>billable_owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>repository</code>: required, <code>Minimal Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of object</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+<li><code>machine</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Codespace machine</strong>
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>operating_system</code>: required, string</li>
+<li><code>storage_in_bytes</code>: required, integer</li>
+<li><code>memory_in_bytes</code>: required, integer</li>
+<li><code>cpus</code>: required, integer</li>
+<li><code>prebuild_availability</code>: required, string or null, enum: <code>none</code>, <code>ready</code>, <code>in_progress</code>, <code>null</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>devcontainer_path</code>: string or null</li>
+<li><code>prebuild</code>: required, boolean or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>last_used_at</code>: required, string, format: date-time</li>
+<li><code>state</code>: required, string, enum: <code>Unknown</code>, <code>Created</code>, <code>Queued</code>, <code>Provisioning</code>, <code>Available</code>, <code>Awaiting</code>, <code>Unavailable</code>, <code>Deleted</code>, <code>Moved</code>, <code>Shutdown</code>, <code>Archived</code>, <code>Starting</code>, <code>ShuttingDown</code>, <code>Failed</code>, <code>Exporting</code>, <code>Updating</code>, <code>Rebuilding</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_status</code>: required, object:
+<ul>
+<li><code>ahead</code>: integer</li>
+<li><code>behind</code>: integer</li>
+<li><code>has_unpushed_changes</code>: boolean</li>
+<li><code>has_uncommitted_changes</code>: boolean</li>
+<li><code>ref</code>: string</li>
+</ul>
+</li>
+<li><code>location</code>: required, string, enum: <code>EastUs</code>, <code>SouthEastAsia</code>, <code>WestEurope</code>, <code>WestUs2</code></li>
+<li><code>idle_timeout_minutes</code>: required, integer or null</li>
+<li><code>web_url</code>: required, string, format: uri</li>
+<li><code>machines_url</code>: required, string, format: uri</li>
+<li><code>start_url</code>: required, string, format: uri</li>
+<li><code>stop_url</code>: required, string, format: uri</li>
+<li><code>publish_url</code>: string or null, format: uri</li>
+<li><code>pulls_url</code>: required, string or null, format: uri</li>
+<li><code>recent_folders</code>: required, array of string</li>
+<li><code>runtime_constraints</code>: object:
+<ul>
+<li><code>allowed_port_privacy_settings</code>: array of string or null</li>
+</ul>
+</li>
+<li><code>pending_operation</code>: boolean or null</li>
+<li><code>pending_operation_disabled_reason</code>: string or null</li>
+<li><code>idle_timeout_notice</code>: string or null</li>
+<li><code>retention_period_minutes</code>: integer or null</li>
+<li><code>retention_expires_at</code>: string or null, format: date-time</li>
+<li><code>last_known_stop_notice</code>: string or null</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-codespace-in-a-repository" title="Create a codespace in a repository">Create a codespace in a repository<a href="#create-a-codespace-in-a-repository" aria-label="Link to heading 'Create a codespace in a repository'" data-heading-content="Create a codespace in a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/codespaces
+</span></code></pre>
+<p>Creates a codespace owned by the authenticated user in the specified repository.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a codespace in a repository / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+Git ref (typically a branch name) for this codespace</p>
+</li>
+<li>
+<p><strong><code>location</code></strong> (string)<br>
+The requested location for a new codespace. Best efforts are made to respect this upon creation. Assigned by IP if not provided.</p>
+</li>
+<li>
+<p><strong><code>geo</code></strong> (string)<br>
+The geographic area for this codespace. If not specified, the value is assigned by IP. This property replaces location, which is closing down.<br>
+Can be one of: <code>EuropeWest</code>, <code>SoutheastAsia</code>, <code>UsEast</code>, <code>UsWest</code></p>
+</li>
+<li>
+<p><strong><code>client_ip</code></strong> (string)<br>
+IP for location auto-detection when proxying a request</p>
+</li>
+<li>
+<p><strong><code>machine</code></strong> (string)<br>
+Machine type to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>devcontainer_path</code></strong> (string)<br>
+Path to devcontainer.json config to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>multi_repo_permissions_opt_out</code></strong> (boolean)<br>
+Whether to authorize requested permissions from devcontainer.json</p>
+</li>
+<li>
+<p><strong><code>working_directory</code></strong> (string)<br>
+Working directory for this codespace</p>
+</li>
+<li>
+<p><strong><code>idle_timeout_minutes</code></strong> (integer)<br>
+Time in minutes before codespace stops from inactivity</p>
+</li>
+<li>
+<p><strong><code>display_name</code></strong> (string)<br>
+Display name for this codespace</p>
+</li>
+<li>
+<p><strong><code>retention_period_minutes</code></strong> (integer)<br>
+Duration in minutes after codespace has gone idle in which it will be deleted. Must be integer minutes between 0 and 43200 (30 days).</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a codespace in a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response when the codespace was successfully created</p>
+</li>
+<li>
+<p><strong>202</strong> - Response when the codespace creation partially failed but is being retried in the background</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a codespace in a repository / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-201">Example 1: Status Code 201<a href="#example-1-status-code-201" aria-label="Link to heading 'Example 1: Status Code 201'" data-heading-content="Example 1: Status Code 201" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "ref": "main",
+</span><span style="color:#c0c5ce;">  "machine": "standardLinux32gb"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: string or null</li>
+<li><code>environment_id</code>: required, string or null</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>billable_owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>repository</code>: required, <code>Minimal Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+<li><code>machine</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Codespace machine</strong>
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>operating_system</code>: required, string</li>
+<li><code>storage_in_bytes</code>: required, integer</li>
+<li><code>memory_in_bytes</code>: required, integer</li>
+<li><code>cpus</code>: required, integer</li>
+<li><code>prebuild_availability</code>: required, string or null, enum: <code>none</code>, <code>ready</code>, <code>in_progress</code>, <code>null</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>devcontainer_path</code>: string or null</li>
+<li><code>prebuild</code>: required, boolean or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>last_used_at</code>: required, string, format: date-time</li>
+<li><code>state</code>: required, string, enum: <code>Unknown</code>, <code>Created</code>, <code>Queued</code>, <code>Provisioning</code>, <code>Available</code>, <code>Awaiting</code>, <code>Unavailable</code>, <code>Deleted</code>, <code>Moved</code>, <code>Shutdown</code>, <code>Archived</code>, <code>Starting</code>, <code>ShuttingDown</code>, <code>Failed</code>, <code>Exporting</code>, <code>Updating</code>, <code>Rebuilding</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_status</code>: required, object:
+<ul>
+<li><code>ahead</code>: integer</li>
+<li><code>behind</code>: integer</li>
+<li><code>has_unpushed_changes</code>: boolean</li>
+<li><code>has_uncommitted_changes</code>: boolean</li>
+<li><code>ref</code>: string</li>
+</ul>
+</li>
+<li><code>location</code>: required, string, enum: <code>EastUs</code>, <code>SouthEastAsia</code>, <code>WestEurope</code>, <code>WestUs2</code></li>
+<li><code>idle_timeout_minutes</code>: required, integer or null</li>
+<li><code>web_url</code>: required, string, format: uri</li>
+<li><code>machines_url</code>: required, string, format: uri</li>
+<li><code>start_url</code>: required, string, format: uri</li>
+<li><code>stop_url</code>: required, string, format: uri</li>
+<li><code>publish_url</code>: string or null, format: uri</li>
+<li><code>pulls_url</code>: required, string or null, format: uri</li>
+<li><code>recent_folders</code>: required, array of string</li>
+<li><code>runtime_constraints</code>: object:
+<ul>
+<li><code>allowed_port_privacy_settings</code>: array of string or null</li>
+</ul>
+</li>
+<li><code>pending_operation</code>: boolean or null</li>
+<li><code>pending_operation_disabled_reason</code>: string or null</li>
+<li><code>idle_timeout_notice</code>: string or null</li>
+<li><code>retention_period_minutes</code>: integer or null</li>
+<li><code>retention_expires_at</code>: string or null, format: date-time</li>
+<li><code>last_known_stop_notice</code>: string or null</li>
+</ul>
+<h4 id="example-2-status-code-202">Example 2: Status Code 202<a href="#example-2-status-code-202" aria-label="Link to heading 'Example 2: Status Code 202'" data-heading-content="Example 2: Status Code 202" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "ref": "main",
+</span><span style="color:#c0c5ce;">  "machine": "standardLinux32gb"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: string or null</li>
+<li><code>environment_id</code>: required, string or null</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>billable_owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>repository</code>: required, <code>Minimal Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+<li><code>machine</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Codespace machine</strong>
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>operating_system</code>: required, string</li>
+<li><code>storage_in_bytes</code>: required, integer</li>
+<li><code>memory_in_bytes</code>: required, integer</li>
+<li><code>cpus</code>: required, integer</li>
+<li><code>prebuild_availability</code>: required, string or null, enum: <code>none</code>, <code>ready</code>, <code>in_progress</code>, <code>null</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>devcontainer_path</code>: string or null</li>
+<li><code>prebuild</code>: required, boolean or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>last_used_at</code>: required, string, format: date-time</li>
+<li><code>state</code>: required, string, enum: <code>Unknown</code>, <code>Created</code>, <code>Queued</code>, <code>Provisioning</code>, <code>Available</code>, <code>Awaiting</code>, <code>Unavailable</code>, <code>Deleted</code>, <code>Moved</code>, <code>Shutdown</code>, <code>Archived</code>, <code>Starting</code>, <code>ShuttingDown</code>, <code>Failed</code>, <code>Exporting</code>, <code>Updating</code>, <code>Rebuilding</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_status</code>: required, object:
+<ul>
+<li><code>ahead</code>: integer</li>
+<li><code>behind</code>: integer</li>
+<li><code>has_unpushed_changes</code>: boolean</li>
+<li><code>has_uncommitted_changes</code>: boolean</li>
+<li><code>ref</code>: string</li>
+</ul>
+</li>
+<li><code>location</code>: required, string, enum: <code>EastUs</code>, <code>SouthEastAsia</code>, <code>WestEurope</code>, <code>WestUs2</code></li>
+<li><code>idle_timeout_minutes</code>: required, integer or null</li>
+<li><code>web_url</code>: required, string, format: uri</li>
+<li><code>machines_url</code>: required, string, format: uri</li>
+<li><code>start_url</code>: required, string, format: uri</li>
+<li><code>stop_url</code>: required, string, format: uri</li>
+<li><code>publish_url</code>: string or null, format: uri</li>
+<li><code>pulls_url</code>: required, string or null, format: uri</li>
+<li><code>recent_folders</code>: required, array of string</li>
+<li><code>runtime_constraints</code>: object:
+<ul>
+<li><code>allowed_port_privacy_settings</code>: array of string or null</li>
+</ul>
+</li>
+<li><code>pending_operation</code>: boolean or null</li>
+<li><code>pending_operation_disabled_reason</code>: string or null</li>
+<li><code>idle_timeout_notice</code>: string or null</li>
+<li><code>retention_period_minutes</code>: integer or null</li>
+<li><code>retention_expires_at</code>: string or null, format: date-time</li>
+<li><code>last_known_stop_notice</code>: string or null</li>
+</ul>
+<h2 id="list-devcontainer-configurations-in-a-repository-for-the-authenticated-user" title="List devcontainer configurations in a repository for the authenticated user">List devcontainer configurations in a repository for the authenticated user<a href="#list-devcontainer-configurations-in-a-repository-for-the-authenticated-user" aria-label="Link to heading 'List devcontainer configurations in a repository for the authenticated user'" data-heading-content="List devcontainer configurations in a repository for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/codespaces/devcontainers
+</span></code></pre>
+<p>Lists the devcontainer.json files associated with a specified repository and the authenticated user. These files<br>
+specify launchpoint configurations for codespaces created within the repository.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-2" title="List devcontainer configurations in a repository for the authenticated user / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List devcontainer configurations in a repository for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List devcontainer configurations in a repository for the authenticated user / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces/devcontainers
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>devcontainers</code>: required, array of objects:
+<ul>
+<li><code>path</code>: required, string</li>
+<li><code>name</code>: string</li>
+<li><code>display_name</code>: string</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-default-attributes-for-a-codespace" title="Get default attributes for a codespace">Get default attributes for a codespace<a href="#get-default-attributes-for-a-codespace" aria-label="Link to heading 'Get default attributes for a codespace'" data-heading-content="Get default attributes for a codespace" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/codespaces/new
+</span></code></pre>
+<p>Gets the default attributes for codespaces created by the user with the repository.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Get default attributes for a codespace / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The branch or commit to check for a default devcontainer path. If not specified, the default branch will be checked.</p>
+</li>
+<li>
+<p><strong><code>client_ip</code></strong> (string)<br>
+An alternative IP for default location auto-detection, such as when proxying a request.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get default attributes for a codespace / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Response when a user is able to create codespaces from the repository.</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get default attributes for a codespace / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces/new
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>billable_owner</code>: <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>defaults</code>: object:
+<ul>
+<li><code>location</code>: required, string</li>
+<li><code>devcontainer_path</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+<h2 id="check-if-permissions-defined-by-a-devcontainer-have-been-accepted-by-the-authenticated-user" title="Check if permissions defined by a devcontainer have been accepted by the authenticated user">Check if permissions defined by a devcontainer have been accepted by the authenticated user<a href="#check-if-permissions-defined-by-a-devcontainer-have-been-accepted-by-the-authenticated-user" aria-label="Link to heading 'Check if permissions defined by a devcontainer have been accepted by the authenticated user'" data-heading-content="Check if permissions defined by a devcontainer have been accepted by the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/codespaces/permissions_check
+</span></code></pre>
+<p>Checks whether the permissions defined by a given devcontainer configuration have been accepted by the authenticated user.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-4" title="Check if permissions defined by a devcontainer have been accepted by the authenticated user / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The git reference that points to the location of the devcontainer configuration to use for the permission check. The value of ref will typically be a branch name (heads/BRANCH<span data-escaped-char="">_</span>NAME). For more information, see "Git References" in the Git documentation.</p>
+</li>
+<li>
+<p><strong><code>devcontainer_path</code></strong> (string) (required)<br>
+Path to the devcontainer.json configuration to use for the permission check.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Check if permissions defined by a devcontainer have been accepted by the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Response when the permission check is successful</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Check if permissions defined by a devcontainer have been accepted by the authenticated user / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces/permissions_check
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>accepted</code>: required, boolean</li>
+</ul>
+<h2 id="create-a-codespace-from-a-pull-request" title="Create a codespace from a pull request">Create a codespace from a pull request<a href="#create-a-codespace-from-a-pull-request" aria-label="Link to heading 'Create a codespace from a pull request'" data-heading-content="Create a codespace from a pull request" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces
+</span></code></pre>
+<p>Creates a codespace owned by the authenticated user for the specified pull request.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-5" title="Create a codespace from a pull request / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pull_number</code></strong> (integer) (required)<br>
+The number that identifies the pull request.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>location</code></strong> (string)<br>
+The requested location for a new codespace. Best efforts are made to respect this upon creation. Assigned by IP if not provided.</p>
+</li>
+<li>
+<p><strong><code>geo</code></strong> (string)<br>
+The geographic area for this codespace. If not specified, the value is assigned by IP. This property replaces location, which is closing down.<br>
+Can be one of: <code>EuropeWest</code>, <code>SoutheastAsia</code>, <code>UsEast</code>, <code>UsWest</code></p>
+</li>
+<li>
+<p><strong><code>client_ip</code></strong> (string)<br>
+IP for location auto-detection when proxying a request</p>
+</li>
+<li>
+<p><strong><code>machine</code></strong> (string)<br>
+Machine type to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>devcontainer_path</code></strong> (string)<br>
+Path to devcontainer.json config to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>multi_repo_permissions_opt_out</code></strong> (boolean)<br>
+Whether to authorize requested permissions from devcontainer.json</p>
+</li>
+<li>
+<p><strong><code>working_directory</code></strong> (string)<br>
+Working directory for this codespace</p>
+</li>
+<li>
+<p><strong><code>idle_timeout_minutes</code></strong> (integer)<br>
+Time in minutes before codespace stops from inactivity</p>
+</li>
+<li>
+<p><strong><code>display_name</code></strong> (string)<br>
+Display name for this codespace</p>
+</li>
+<li>
+<p><strong><code>retention_period_minutes</code></strong> (integer)<br>
+Duration in minutes after codespace has gone idle in which it will be deleted. Must be integer minutes between 0 and 43200 (30 days).</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Create a codespace from a pull request / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response when the codespace was successfully created</p>
+</li>
+<li>
+<p><strong>202</strong> - Response when the codespace creation partially failed but is being retried in the background</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Create a codespace from a pull request / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-201-1">Example 1: Status Code 201<a href="#example-1-status-code-201-1" aria-label="Link to heading 'Example 1: Status Code 201'" data-heading-content="Example 1: Status Code 201" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository_id": 1,
+</span><span style="color:#c0c5ce;">  "ref": "main"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h4 id="example-2-status-code-202-1">Example 2: Status Code 202<a href="#example-2-status-code-202-1" aria-label="Link to heading 'Example 2: Status Code 202'" data-heading-content="Example 2: Status Code 202" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pulls/PULL_NUMBER/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository_id": 1,
+</span><span style="color:#c0c5ce;">  "ref": "main"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h2 id="list-codespaces-for-the-authenticated-user" title="List codespaces for the authenticated user">List codespaces for the authenticated user<a href="#list-codespaces-for-the-authenticated-user" aria-label="Link to heading 'List codespaces for the authenticated user'" data-heading-content="List codespaces for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/codespaces
+</span></code></pre>
+<p>Lists the authenticated user's codespaces.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-6" title="List codespaces for the authenticated user / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>repository_id</code></strong> (integer)<br>
+ID of the Repository to filter on</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="List codespaces for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="List codespaces for the authenticated user / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-codespaces-in-a-repository-for-the-authenticated-user">List codespaces in a repository for the authenticated user</a>.</p>
+<h2 id="create-a-codespace-for-the-authenticated-user" title="Create a codespace for the authenticated user">Create a codespace for the authenticated user<a href="#create-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Create a codespace for the authenticated user'" data-heading-content="Create a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/codespaces
+</span></code></pre>
+<p>Creates a new codespace, owned by the authenticated user.<br>
+This endpoint requires either a repository<span data-escaped-char="">_</span>id OR a pull<span data-escaped-char="">_</span>request but not both.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Create a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>repository_id</code></strong> (integer) (required)<br>
+Repository id for this codespace</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+Git ref (typically a branch name) for this codespace</p>
+</li>
+<li>
+<p><strong><code>location</code></strong> (string)<br>
+The requested location for a new codespace. Best efforts are made to respect this upon creation. Assigned by IP if not provided.</p>
+</li>
+<li>
+<p><strong><code>geo</code></strong> (string)<br>
+The geographic area for this codespace. If not specified, the value is assigned by IP. This property replaces location, which is closing down.<br>
+Can be one of: <code>EuropeWest</code>, <code>SoutheastAsia</code>, <code>UsEast</code>, <code>UsWest</code></p>
+</li>
+<li>
+<p><strong><code>client_ip</code></strong> (string)<br>
+IP for location auto-detection when proxying a request</p>
+</li>
+<li>
+<p><strong><code>machine</code></strong> (string)<br>
+Machine type to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>devcontainer_path</code></strong> (string)<br>
+Path to devcontainer.json config to use for this codespace</p>
+</li>
+<li>
+<p><strong><code>multi_repo_permissions_opt_out</code></strong> (boolean)<br>
+Whether to authorize requested permissions from devcontainer.json</p>
+</li>
+<li>
+<p><strong><code>working_directory</code></strong> (string)<br>
+Working directory for this codespace</p>
+</li>
+<li>
+<p><strong><code>idle_timeout_minutes</code></strong> (integer)<br>
+Time in minutes before codespace stops from inactivity</p>
+</li>
+<li>
+<p><strong><code>display_name</code></strong> (string)<br>
+Display name for this codespace</p>
+</li>
+<li>
+<p><strong><code>retention_period_minutes</code></strong> (integer)<br>
+Duration in minutes after codespace has gone idle in which it will be deleted. Must be integer minutes between 0 and 43200 (30 days).</p>
+</li>
+<li>
+<p><strong><code>pull_request</code></strong> (object) (required)<br>
+Pull request number for this codespace</p>
+<ul>
+<li><strong><code>pull_request_number</code></strong> (integer) (required)<br>
+Pull request number</li>
+<li><strong><code>repository_id</code></strong> (integer) (required)<br>
+Repository id for this codespace</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Create a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Response when the codespace was successfully created</p>
+</li>
+<li>
+<p><strong>202</strong> - Response when the codespace creation partially failed but is being retried in the background</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Create a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-201-2">Example 1: Status Code 201<a href="#example-1-status-code-201-2" aria-label="Link to heading 'Example 1: Status Code 201'" data-heading-content="Example 1: Status Code 201" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository_id": 1,
+</span><span style="color:#c0c5ce;">  "ref": "main",
+</span><span style="color:#c0c5ce;">  "geo": "UsWest"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h4 id="example-2-status-code-202-2">Example 2: Status Code 202<a href="#example-2-status-code-202-2" aria-label="Link to heading 'Example 2: Status Code 202'" data-heading-content="Example 2: Status Code 202" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository_id": 1,
+</span><span style="color:#c0c5ce;">  "ref": "main",
+</span><span style="color:#c0c5ce;">  "geo": "UsWest"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h2 id="get-a-codespace-for-the-authenticated-user" title="Get a codespace for the authenticated user">Get a codespace for the authenticated user<a href="#get-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Get a codespace for the authenticated user'" data-heading-content="Get a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/codespaces/{codespace_name}
+</span></code></pre>
+<p>Gets information about a user's codespace.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-8" title="Get a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Get a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Get a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h2 id="update-a-codespace-for-the-authenticated-user" title="Update a codespace for the authenticated user">Update a codespace for the authenticated user<a href="#update-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Update a codespace for the authenticated user'" data-heading-content="Update a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /user/codespaces/{codespace_name}
+</span></code></pre>
+<p>Updates a codespace owned by the authenticated user. Currently only the codespace's machine type and recent folders can be modified using this endpoint.<br>
+If you specify a new machine type it will be applied the next time your codespace is started.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-9" title="Update a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>machine</code></strong> (string)<br>
+A valid machine to transition this codespace to.</p>
+</li>
+<li>
+<p><strong><code>display_name</code></strong> (string)<br>
+Display name for this codespace</p>
+</li>
+<li>
+<p><strong><code>recent_folders</code></strong> (array of strings)<br>
+Recently opened folders inside the codespace. It is currently used by the clients to determine the folder path to load the codespace in.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Update a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Update a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "machine": "standardLinux"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h2 id="delete-a-codespace-for-the-authenticated-user" title="Delete a codespace for the authenticated user">Delete a codespace for the authenticated user<a href="#delete-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Delete a codespace for the authenticated user'" data-heading-content="Delete a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/codespaces/{codespace_name}
+</span></code></pre>
+<p>Deletes a user's codespace.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-10" title="Delete a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Delete a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Delete a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<p>object</p>
+<h2 id="export-a-codespace-for-the-authenticated-user" title="Export a codespace for the authenticated user">Export a codespace for the authenticated user<a href="#export-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Export a codespace for the authenticated user'" data-heading-content="Export a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/codespaces/{codespace_name}/exports
+</span></code></pre>
+<p>Triggers an export of the specified codespace and returns a URL and ID where the status of the export can be monitored.<br>
+If changes cannot be pushed to the codespace's repository, they will be pushed to a new or previously-existing fork instead.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-11" title="Export a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Export a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Export a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/exports
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<ul>
+<li><code>state</code>: string or null</li>
+<li><code>completed_at</code>: string or null, format: date-time</li>
+<li><code>branch</code>: string or null</li>
+<li><code>sha</code>: string or null</li>
+<li><code>id</code>: string</li>
+<li><code>export_url</code>: string</li>
+<li><code>html_url</code>: string or null</li>
+</ul>
+<h2 id="get-details-about-a-codespace-export" title="Get details about a codespace export">Get details about a codespace export<a href="#get-details-about-a-codespace-export" aria-label="Link to heading 'Get details about a codespace export'" data-heading-content="Get details about a codespace export" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/codespaces/{codespace_name}/exports/{export_id}
+</span></code></pre>
+<p>Gets information about an export of a codespace.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-12" title="Get details about a codespace export / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</p>
+</li>
+<li>
+<p><strong><code>export_id</code></strong> (string) (required)<br>
+The ID of the export operation, or latest. Currently only latest is currently supported.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get details about a codespace export / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Get details about a codespace export / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/exports/EXPORT_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#export-a-codespace-for-the-authenticated-user">Export a codespace for the authenticated user</a>.</p>
+<h2 id="create-a-repository-from-an-unpublished-codespace" title="Create a repository from an unpublished codespace">Create a repository from an unpublished codespace<a href="#create-a-repository-from-an-unpublished-codespace" aria-label="Link to heading 'Create a repository from an unpublished codespace'" data-heading-content="Create a repository from an unpublished codespace" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/codespaces/{codespace_name}/publish
+</span></code></pre>
+<p>Publishes an unpublished codespace, creating a new repository and assigning it to the codespace.<br>
+The codespace's token is granted write permissions to the repository, allowing the user to push their changes.<br>
+This will fail for a codespace that is already published, meaning it has an associated repository.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-13" title="Create a repository from an unpublished codespace / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+A name for the new repository.</p>
+</li>
+<li>
+<p><strong><code>private</code></strong> (boolean)<br>
+Whether the new repository should be private.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Create a repository from an unpublished codespace / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-13" title="Create a repository from an unpublished codespace / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/publish \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repository": "monalisa-octocat-hello-world-g4wpq6h95q",
+</span><span style="color:#c0c5ce;">  "private": false
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: string or null</li>
+<li><code>environment_id</code>: required, string or null</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>billable_owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>repository</code>: required, <code>Full Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean</li>
+<li><code>has_projects</code>: required, boolean</li>
+<li><code>has_wiki</code>: required, boolean</li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: required, boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean</li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: required, string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>allow_rebase_merge</code>: boolean</li>
+<li><code>template_repository</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Repository</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>temp_clone_token</code>: string or null</li>
+<li><code>allow_squash_merge</code>: boolean</li>
+<li><code>allow_auto_merge</code>: boolean</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>allow_merge_commit</code>: boolean</li>
+<li><code>allow_update_branch</code>: boolean</li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>subscribers_count</code>: required, integer</li>
+<li><code>network_count</code>: required, integer</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong> (see above)</li>
+</ul>
+</li>
+<li><code>organization</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>parent</code>: <code>Repository</code> (see above)</li>
+<li><code>source</code>: <code>Repository</code> (see above)</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>master_branch</code>: string</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>anonymous_access_enabled</code>: boolean, default: <code>true</code></li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct Simple</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+</li>
+<li><code>machine</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Codespace machine</strong>
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>operating_system</code>: required, string</li>
+<li><code>storage_in_bytes</code>: required, integer</li>
+<li><code>memory_in_bytes</code>: required, integer</li>
+<li><code>cpus</code>: required, integer</li>
+<li><code>prebuild_availability</code>: required, string or null, enum: <code>none</code>, <code>ready</code>, <code>in_progress</code>, <code>null</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>devcontainer_path</code>: string or null</li>
+<li><code>prebuild</code>: required, boolean or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>last_used_at</code>: required, string, format: date-time</li>
+<li><code>state</code>: required, string, enum: <code>Unknown</code>, <code>Created</code>, <code>Queued</code>, <code>Provisioning</code>, <code>Available</code>, <code>Awaiting</code>, <code>Unavailable</code>, <code>Deleted</code>, <code>Moved</code>, <code>Shutdown</code>, <code>Archived</code>, <code>Starting</code>, <code>ShuttingDown</code>, <code>Failed</code>, <code>Exporting</code>, <code>Updating</code>, <code>Rebuilding</code></li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_status</code>: required, object:
+<ul>
+<li><code>ahead</code>: integer</li>
+<li><code>behind</code>: integer</li>
+<li><code>has_unpushed_changes</code>: boolean</li>
+<li><code>has_uncommitted_changes</code>: boolean</li>
+<li><code>ref</code>: string</li>
+</ul>
+</li>
+<li><code>location</code>: required, string, enum: <code>EastUs</code>, <code>SouthEastAsia</code>, <code>WestEurope</code>, <code>WestUs2</code></li>
+<li><code>idle_timeout_minutes</code>: required, integer or null</li>
+<li><code>web_url</code>: required, string, format: uri</li>
+<li><code>machines_url</code>: required, string, format: uri</li>
+<li><code>start_url</code>: required, string, format: uri</li>
+<li><code>stop_url</code>: required, string, format: uri</li>
+<li><code>publish_url</code>: string or null, format: uri</li>
+<li><code>pulls_url</code>: required, string or null, format: uri</li>
+<li><code>recent_folders</code>: required, array of string</li>
+<li><code>runtime_constraints</code>: object:
+<ul>
+<li><code>allowed_port_privacy_settings</code>: array of string or null</li>
+</ul>
+</li>
+<li><code>pending_operation</code>: boolean or null</li>
+<li><code>pending_operation_disabled_reason</code>: string or null</li>
+<li><code>idle_timeout_notice</code>: string or null</li>
+<li><code>retention_period_minutes</code>: integer or null</li>
+<li><code>retention_expires_at</code>: string or null, format: date-time</li>
+</ul>
+<h2 id="start-a-codespace-for-the-authenticated-user" title="Start a codespace for the authenticated user">Start a codespace for the authenticated user<a href="#start-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Start a codespace for the authenticated user'" data-heading-content="Start a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/codespaces/{codespace_name}/start
+</span></code></pre>
+<p>Starts a user's codespace.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-14" title="Start a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Start a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>402</strong> - Payment required</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-14" title="Start a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/start
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<h2 id="stop-a-codespace-for-the-authenticated-user" title="Stop a codespace for the authenticated user">Stop a codespace for the authenticated user<a href="#stop-a-codespace-for-the-authenticated-user" aria-label="Link to heading 'Stop a codespace for the authenticated user'" data-heading-content="Stop a codespace for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/codespaces/{codespace_name}/stop
+</span></code></pre>
+<p>Stops a user's codespace.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-15" title="Stop a codespace for the authenticated user / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Stop a codespace for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-15" title="Stop a codespace for the authenticated user / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/stop
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-codespace-in-a-repository">Create a codespace in a repository</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

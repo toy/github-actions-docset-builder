@@ -1,0 +1,1676 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for teams</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Teams</a> / </nav><h1 id="rest-api-endpoints-for-teams">REST API endpoints for teams<a href="#rest-api-endpoints-for-teams" aria-label="Link to heading 'REST API endpoints for teams'" data-heading-content="REST API endpoints for teams" class="anchor"></a></h1>
+<p>Use the REST API to create and manage teams in your GitHub organization.</p>
+<h2 id="about-teams" title="About teams">About teams<a href="#about-teams" aria-label="Link to heading 'About teams'" data-heading-content="About teams" class="anchor"></a></h2>
+<p>These endpoints are only available to authenticated members of the team's <a href="../orgs/index.html">organization</a>. OAuth access tokens require the <code>read:org</code> <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">scope</a>. GitHub generates the team's <code>slug</code> from the team <code>name</code>.</p>
+<p>Where <code>pull</code> and <code>push</code> permissions are accepted, these will map to the <strong>Read</strong> and <strong>Write</strong> roles for an organization repository. For more information about repository roles, see <a href="https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization" class="external">Repository roles for an organization</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-teams" title="List teams">List teams<a href="#list-teams" aria-label="Link to heading 'List teams'" data-heading-content="List teams" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams
+</span></code></pre>
+<p>Lists all teams in an organization that are visible to the authenticated user.</p>
+<h3 id="parameters" title="List teams / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>team_type</code></strong> (string)<br>
+Filter team results by their type. For more information, see "What kind of team should I use?"<br>
+Default: <code>all</code><br>
+Can be one of: <code>all</code>, <code>enterprise</code>, <code>organization</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List teams / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List teams / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Team</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-team" title="Create a team">Create a team<a href="#create-a-team" aria-label="Link to heading 'Create a team'" data-heading-content="Create a team" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/teams
+</span></code></pre>
+<p>To create a team, the authenticated user must be a member or owner of {org}. By default, organization members can create teams. Organization owners can limit team creation to organization owners. For more information, see "Setting team creation permissions."<br>
+When you create a new team, you automatically become a team maintainer without explicitly adding yourself to the optional array of maintainers. For more information, see "About teams".</p>
+<h3 id="parameters-1" title="Create a team / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the team.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+The description of the team.</p>
+</li>
+<li>
+<p><strong><code>maintainers</code></strong> (array of strings)<br>
+List GitHub usernames for organization members who will become team maintainers.</p>
+</li>
+<li>
+<p><strong><code>repo_names</code></strong> (array of strings)<br>
+The full name (e.g., "organization-name/repository-name") of repositories to add the team to.</p>
+</li>
+<li>
+<p><strong><code>privacy</code></strong> (string)<br>
+The level of privacy this team should have. The options are:<br>
+For a non-nested team:</p>
+</li>
+</ul>
+<p>secret - only visible to organization owners and members of this team.<br>
+closed - visible to all members of this organization.<br>
+Default: secret<br>
+For a parent or child team:<br>
+closed - visible to all members of this organization.<br>
+Default for child team: closed<br>
+Can be one of: <code>secret</code>, <code>closed</code></p>
+<ul>
+<li><strong><code>notification_setting</code></strong> (string)<br>
+The notification setting the team has chosen. The options are:</li>
+</ul>
+<p>notifications<span data-escaped-char="">_</span>enabled - team members receive notifications when the team is @mentioned.<br>
+notifications<span data-escaped-char="">_</span>disabled - no one receives notifications.<br>
+Default: notifications<span data-escaped-char="">_</span>enabled<br>
+Can be one of: <code>notifications_enabled</code>, <code>notifications_disabled</code></p>
+<ul>
+<li>
+<p><strong><code>parent_team_id</code></strong> (integer)<br>
+The ID of a team to set as the parent team.</p>
+</li>
+<li>
+<p><strong><code>parent_team_slug</code></strong> (string)<br>
+The slug of a team to set as the parent team. Ignored when parent<span data-escaped-char="">_</span>team<span data-escaped-char="">_</span>id is also provided.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a team / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a team / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "Justice League",
+</span><span style="color:#c0c5ce;">  "description": "A great team",
+</span><span style="color:#c0c5ce;">  "permission": "push",
+</span><span style="color:#c0c5ce;">  "notification_setting": "notifications_enabled",
+</span><span style="color:#c0c5ce;">  "privacy": "closed"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string, enum: <code>closed</code>, <code>secret</code></li>
+<li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
+<li><code>permission</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>parent</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>members_count</code>: required, integer</li>
+<li><code>repos_count</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>organization</code>: required, <code>Team Organization</code>:
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>name</code>: string</li>
+<li><code>company</code>: string or null</li>
+<li><code>blog</code>: string or null, format: uri</li>
+<li><code>location</code>: string or null</li>
+<li><code>email</code>: string or null, format: email</li>
+<li><code>twitter_username</code>: string or null</li>
+<li><code>is_verified</code>: boolean</li>
+<li><code>has_organization_projects</code>: required, boolean</li>
+<li><code>has_repository_projects</code>: required, boolean</li>
+<li><code>public_repos</code>: required, integer</li>
+<li><code>public_gists</code>: required, integer</li>
+<li><code>followers</code>: required, integer</li>
+<li><code>following</code>: required, integer</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>type</code>: required, string</li>
+<li><code>total_private_repos</code>: integer</li>
+<li><code>owned_private_repos</code>: integer</li>
+<li><code>private_gists</code>: integer or null</li>
+<li><code>disk_usage</code>: integer or null</li>
+<li><code>collaborators</code>: integer or null</li>
+<li><code>billing_email</code>: string or null, format: email</li>
+<li><code>plan</code>: object:
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>space</code>: required, integer</li>
+<li><code>private_repos</code>: required, integer</li>
+<li><code>filled_seats</code>: integer</li>
+<li><code>seats</code>: integer</li>
+</ul>
+</li>
+<li><code>default_repository_permission</code>: string or null</li>
+<li><code>members_can_create_repositories</code>: boolean or null</li>
+<li><code>two_factor_requirement_enabled</code>: boolean or null</li>
+<li><code>members_allowed_repository_creation_type</code>: string</li>
+<li><code>members_can_create_public_repositories</code>: boolean</li>
+<li><code>members_can_create_private_repositories</code>: boolean</li>
+<li><code>members_can_create_internal_repositories</code>: boolean</li>
+<li><code>members_can_create_pages</code>: boolean</li>
+<li><code>members_can_create_public_pages</code>: boolean</li>
+<li><code>members_can_create_private_pages</code>: boolean</li>
+<li><code>members_can_fork_private_repositories</code>: boolean or null</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>archived_at</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+<h2 id="get-a-team-by-name" title="Get a team by name">Get a team by name<a href="#get-a-team-by-name" aria-label="Link to heading 'Get a team by name'" data-heading-content="Get a team by name" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}
+</span></code></pre>
+<p>Gets a team using the team's slug. To create the slug, GitHub replaces special characters in the name string, changes all words to lowercase, and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route GET /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}.</p>
+<h3 id="parameters-2" title="Get a team by name / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a team by name / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a team by name / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h2 id="update-a-team" title="Update a team">Update a team<a href="#update-a-team" aria-label="Link to heading 'Update a team'" data-heading-content="Update a team" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/teams/{team_slug}
+</span></code></pre>
+<p>To edit a team, the authenticated user must either be an organization owner or a team maintainer.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route PATCH /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}.</p>
+<h3 id="parameters-3" title="Update a team / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the team.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+The description of the team.</p>
+</li>
+<li>
+<p><strong><code>privacy</code></strong> (string)<br>
+The level of privacy this team should have. Editing teams without specifying this parameter leaves privacy intact. When a team is nested, the privacy for parent teams cannot be secret. The options are:<br>
+For a non-nested team:</p>
+</li>
+</ul>
+<p>secret - only visible to organization owners and members of this team.<br>
+closed - visible to all members of this organization.<br>
+For a parent or child team:<br>
+closed - visible to all members of this organization.<br>
+Can be one of: <code>secret</code>, <code>closed</code></p>
+<ul>
+<li><strong><code>notification_setting</code></strong> (string)<br>
+The notification setting the team has chosen. Editing teams without specifying this parameter leaves notification<span data-escaped-char="">_</span>setting intact. The options are:</li>
+</ul>
+<p>notifications<span data-escaped-char="">_</span>enabled - team members receive notifications when the team is @mentioned.<br>
+notifications<span data-escaped-char="">_</span>disabled - no one receives notifications.<br>
+Can be one of: <code>notifications_enabled</code>, <code>notifications_disabled</code></p>
+<ul>
+<li>
+<p><strong><code>permission</code></strong> (string)<br>
+Closing down notice. The permission that new repositories will be added to the team with when none is specified.<br>
+Default: <code>pull</code><br>
+Can be one of: <code>pull</code>, <code>push</code>, <code>admin</code></p>
+</li>
+<li>
+<p><strong><code>parent_team_id</code></strong> (integer or null)<br>
+The ID of a team to set as the parent team.</p>
+</li>
+<li>
+<p><strong><code>parent_team_slug</code></strong> (string or null)<br>
+The slug of a team to set as the parent team. Ignored when parent<span data-escaped-char="">_</span>team<span data-escaped-char="">_</span>id is also provided.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Update a team / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Response when the updated information already exists</p>
+</li>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Update a team / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "new team name",
+</span><span style="color:#c0c5ce;">  "description": "new team description",
+</span><span style="color:#c0c5ce;">  "privacy": "closed",
+</span><span style="color:#c0c5ce;">  "notification_setting": "notifications_enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h4 id="example-2-status-code-201">Example 2: Status Code 201<a href="#example-2-status-code-201" aria-label="Link to heading 'Example 2: Status Code 201'" data-heading-content="Example 2: Status Code 201" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "new team name",
+</span><span style="color:#c0c5ce;">  "description": "new team description",
+</span><span style="color:#c0c5ce;">  "privacy": "closed",
+</span><span style="color:#c0c5ce;">  "notification_setting": "notifications_enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h2 id="delete-a-team" title="Delete a team">Delete a team<a href="#delete-a-team" aria-label="Link to heading 'Delete a team'" data-heading-content="Delete a team" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/teams/{team_slug}
+</span></code></pre>
+<p>To delete a team, the authenticated user must be an organization owner or team maintainer.<br>
+If you are an organization owner, deleting a parent team will delete all of its child teams as well.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route DELETE /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}.</p>
+<h3 id="parameters-4" title="Delete a team / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Delete a team / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>422</strong> - Unprocessable entity if you attempt to modify an enterprise team at the organization level.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Delete a team / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-team-repositories" title="List team repositories">List team repositories<a href="#list-team-repositories" aria-label="Link to heading 'List team repositories'" data-heading-content="List team repositories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/repos
+</span></code></pre>
+<p>Lists a team's repositories visible to the authenticated user.<br>
+OAuth app tokens and personal access tokens (classic) need the read:org or repo scope to use this endpoint.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route GET /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}/repos.</p>
+<h3 id="parameters-5" title="List team repositories / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="List team repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-5" title="List team repositories / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/repos
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Minimal Repository</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: string</li>
+<li><code>mirror_url</code>: string or null</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: string</li>
+<li><code>homepage</code>: string or null</li>
+<li><code>language</code>: string or null</li>
+<li><code>forks_count</code>: integer</li>
+<li><code>stargazers_count</code>: integer</li>
+<li><code>watchers_count</code>: integer</li>
+<li><code>size</code>: integer</li>
+<li><code>default_branch</code>: string</li>
+<li><code>open_issues_count</code>: integer</li>
+<li><code>is_template</code>: boolean</li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: boolean</li>
+<li><code>has_projects</code>: boolean</li>
+<li><code>has_wiki</code>: boolean</li>
+<li><code>has_pages</code>: boolean</li>
+<li><code>has_discussions</code>: boolean</li>
+<li><code>has_pull_requests</code>: boolean</li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: boolean</li>
+<li><code>disabled</code>: boolean</li>
+<li><code>visibility</code>: string</li>
+<li><code>pushed_at</code>: string or null, format: date-time</li>
+<li><code>created_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: boolean</li>
+<li><code>maintain</code>: boolean</li>
+<li><code>push</code>: boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>pull</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>delete_branch_on_merge</code>: boolean</li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>code_of_conduct</code>: <code>Code Of Conduct</code>:
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>license</code>: object or null:
+<ul>
+<li><code>key</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>spdx_id</code>: string</li>
+<li><code>url</code>: string or null</li>
+<li><code>node_id</code>: string</li>
+</ul>
+</li>
+<li><code>forks</code>: integer</li>
+<li><code>open_issues</code>: integer</li>
+<li><code>watchers</code>: integer</li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>security_and_analysis</code>: object or null:
+<ul>
+<li><code>advanced_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>code_security</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>dependabot_security_updates</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_push_protection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_non_provider_patterns</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_ai_detection</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_alert_dismissal</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass</code>: object:
+<ul>
+<li><code>status</code>: string, enum: <code>enabled</code>, <code>disabled</code></li>
+</ul>
+</li>
+<li><code>secret_scanning_delegated_bypass_options</code>: object:
+<ul>
+<li><code>reviewers</code>: array of objects:
+<ul>
+<li><code>reviewer_id</code>: required, integer</li>
+<li><code>reviewer_type</code>: required, string, enum: <code>TEAM</code>, <code>ROLE</code></li>
+<li><code>mode</code>: string, enum: <code>ALWAYS</code>, <code>EXEMPT</code>, default: <code>"ALWAYS"</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>custom_properties</code>: object, additional properties allowed</li>
+</ul>
+<h2 id="check-team-permissions-for-a-repository" title="Check team permissions for a repository">Check team permissions for a repository<a href="#check-team-permissions-for-a-repository" aria-label="Link to heading 'Check team permissions for a repository'" data-heading-content="Check team permissions for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+</span></code></pre>
+<p>Checks whether a team has admin, push, maintain, triage, or pull permission for a repository. Repositories inherited through a parent team will also be checked.<br>
+You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom media type via the application/vnd.github.v3.repository+json accept header.<br>
+If a team doesn't have permission for the repository, you will receive a 404 Not Found response status.<br>
+If the repository is private, you must have at least read permission for that repository, and your token must have the repo or admin:org scope. Otherwise, you will receive a 404 Not Found response status.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route GET /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}/repos/{owner}/{repo}.</p>
+<h3 id="parameters-6" title="Check team permissions for a repository / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Check team permissions for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Alternative response with repository permissions</p>
+</li>
+<li>
+<p><strong>204</strong> - Response if team has permission for the repository. This is the response when the repository media type hasn't been provded in the Accept header.</p>
+</li>
+<li>
+<p><strong>404</strong> - Not Found if team does not have permission for the repository</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Check team permissions for a repository / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/repos/OWNER/REPO
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>role_name</code>: string</li>
+<li><code>owner</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean, default: <code>false</code></li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>subscribers_count</code>: integer</li>
+<li><code>network_count</code>: integer</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>master_branch</code>: string</li>
+</ul>
+<h2 id="add-or-update-team-repository-permissions" title="Add or update team repository permissions">Add or update team repository permissions<a href="#add-or-update-team-repository-permissions" aria-label="Link to heading 'Add or update team repository permissions'" data-heading-content="Add or update team repository permissions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+</span></code></pre>
+<p>To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a 422 Unprocessable Entity status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route PUT /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}/repos/{owner}/{repo}.</p>
+<p>For more information about the permission levels, see "Repository permission levels for an organization".</p>
+<h3 id="parameters-7" title="Add or update team repository permissions / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>permission</code></strong> (string)<br>
+The permission to grant the team on this repository. We accept the following permissions to be set: pull, triage, push, maintain, admin and you can also specify a custom repository role name, if the owning organization has defined any. If no permission is specified, the team's permission attribute will be used to determine what permission to grant the team on this repository.</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Add or update team repository permissions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-7" title="Add or update team repository permissions / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="adding-a-team-to-an-organization-repository-with-the-write-role">Adding a team to an organization repository with the write role<a href="#adding-a-team-to-an-organization-repository-with-the-write-role" aria-label="Link to heading 'Adding a team to an organization repository with the write role'" data-heading-content="Adding a team to an organization repository with the write role" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/repos/OWNER/REPO \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "permission": "push"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="remove-a-repository-from-a-team" title="Remove a repository from a team">Remove a repository from a team<a href="#remove-a-repository-from-a-team" aria-label="Link to heading 'Remove a repository from a team'" data-heading-content="Remove a repository from a team" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+</span></code></pre>
+<p>If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route DELETE /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}/repos/{owner}/{repo}.</p>
+<h3 id="parameters-8" title="Remove a repository from a team / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Remove a repository from a team / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-8" title="Remove a repository from a team / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/repos/OWNER/REPO
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-child-teams" title="List child teams">List child teams<a href="#list-child-teams" aria-label="Link to heading 'List child teams'" data-heading-content="List child teams" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/teams
+</span></code></pre>
+<p>Lists the child teams of the team specified by {team<span data-escaped-char="">_</span>slug}.<br>
+Note</p>
+<p>You can also specify a team by org<span data-escaped-char="">_</span>id and team<span data-escaped-char="">_</span>id using the route GET /organizations/{org<span data-escaped-char="">_</span>id}/team/{team<span data-escaped-char="">_</span>id}/teams.</p>
+<h3 id="parameters-9" title="List child teams / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>team_slug</code></strong> (string) (required)<br>
+The slug of the team name.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="List child teams / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - if child teams exist</li>
+</ul>
+<h3 id="code-examples-9" title="List child teams / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/teams
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-teams">List teams</a>.</p>
+<h2 id="get-a-team-legacy" title="Get a team (Legacy)">Get a team (Legacy)<a href="#get-a-team-legacy" aria-label="Link to heading 'Get a team (Legacy)'" data-heading-content="Get a team (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the Get a team by name endpoint.</p>
+<h3 id="parameters-10" title="Get a team (Legacy) / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Get a team (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Get a team (Legacy) / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h2 id="update-a-team-legacy" title="Update a team (Legacy)">Update a team (Legacy)<a href="#update-a-team-legacy" aria-label="Link to heading 'Update a team (Legacy)'" data-heading-content="Update a team (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /teams/{team_id}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new Update a team endpoint.</p>
+<p>To edit a team, the authenticated user must either be an organization owner or a team maintainer.<br>
+Note</p>
+<p>With nested teams, the privacy for parent teams cannot be secret.</p>
+<h3 id="parameters-11" title="Update a team (Legacy) / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the team.</p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+The description of the team.</p>
+</li>
+<li>
+<p><strong><code>privacy</code></strong> (string)<br>
+The level of privacy this team should have. Editing teams without specifying this parameter leaves privacy intact. The options are:<br>
+For a non-nested team:</p>
+</li>
+</ul>
+<p>secret - only visible to organization owners and members of this team.<br>
+closed - visible to all members of this organization.<br>
+For a parent or child team:<br>
+closed - visible to all members of this organization.<br>
+Can be one of: <code>secret</code>, <code>closed</code></p>
+<ul>
+<li><strong><code>notification_setting</code></strong> (string)<br>
+The notification setting the team has chosen. Editing teams without specifying this parameter leaves notification<span data-escaped-char="">_</span>setting intact. The options are:</li>
+</ul>
+<p>notifications<span data-escaped-char="">_</span>enabled - team members receive notifications when the team is @mentioned.<br>
+notifications<span data-escaped-char="">_</span>disabled - no one receives notifications.<br>
+Can be one of: <code>notifications_enabled</code>, <code>notifications_disabled</code></p>
+<ul>
+<li>
+<p><strong><code>permission</code></strong> (string)<br>
+Closing down notice. The permission that new repositories will be added to the team with when none is specified.<br>
+Default: <code>pull</code><br>
+Can be one of: <code>pull</code>, <code>push</code>, <code>admin</code></p>
+</li>
+<li>
+<p><strong><code>parent_team_id</code></strong> (integer or null)<br>
+The ID of a team to set as the parent team.</p>
+</li>
+<li>
+<p><strong><code>parent_team_slug</code></strong> (string or null)<br>
+The slug of a team to set as the parent team. Ignored when parent<span data-escaped-char="">_</span>team<span data-escaped-char="">_</span>id is also provided.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Update a team (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Response when the updated information already exists</p>
+</li>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Update a team (Legacy) / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200-1">Example 1: Status Code 200<a href="#example-1-status-code-200-1" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "new team name",
+</span><span style="color:#c0c5ce;">  "description": "new team description",
+</span><span style="color:#c0c5ce;">  "privacy": "closed",
+</span><span style="color:#c0c5ce;">  "notification_setting": "notifications_enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h4 id="example-2-status-code-201-1">Example 2: Status Code 201<a href="#example-2-status-code-201-1" aria-label="Link to heading 'Example 2: Status Code 201'" data-heading-content="Example 2: Status Code 201" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "new team name",
+</span><span style="color:#c0c5ce;">  "description": "new team description",
+</span><span style="color:#c0c5ce;">  "privacy": "closed",
+</span><span style="color:#c0c5ce;">  "notification_setting": "notifications_enabled"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
+<h2 id="delete-a-team-legacy" title="Delete a team (Legacy)">Delete a team (Legacy)<a href="#delete-a-team-legacy" aria-label="Link to heading 'Delete a team (Legacy)'" data-heading-content="Delete a team (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /teams/{team_id}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new Delete a team endpoint.</p>
+<p>To delete a team, the authenticated user must be an organization owner or team maintainer.<br>
+If you are an organization owner, deleting a parent team will delete all of its child teams as well.</p>
+<h3 id="parameters-12" title="Delete a team (Legacy) / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Delete a team (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Delete a team (Legacy) / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-team-repositories-legacy" title="List team repositories (Legacy)">List team repositories (Legacy)<a href="#list-team-repositories-legacy" aria-label="Link to heading 'List team repositories (Legacy)'" data-heading-content="List team repositories (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/repos
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new List team repositories endpoint.</p>
+<h3 id="parameters-13" title="List team repositories (Legacy) / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="List team repositories (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-13" title="List team repositories (Legacy) / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/repos
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-team-repositories">List team repositories</a>.</p>
+<h2 id="check-team-permissions-for-a-repository-legacy" title="Check team permissions for a repository (Legacy)">Check team permissions for a repository (Legacy)<a href="#check-team-permissions-for-a-repository-legacy" aria-label="Link to heading 'Check team permissions for a repository (Legacy)'" data-heading-content="Check team permissions for a repository (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/repos/{owner}/{repo}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new Check team permissions for a repository endpoint.</p>
+<p>Note</p>
+<p>Repositories inherited through a parent team will also be checked.</p>
+<p>You can also get information about the specified repository, including what permissions the team grants on it, by passing the following custom media type via the Accept header:</p>
+<h3 id="parameters-14" title="Check team permissions for a repository (Legacy) / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Check team permissions for a repository (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Alternative response with extra repository information</p>
+</li>
+<li>
+<p><strong>204</strong> - Response if repository is managed by this team</p>
+</li>
+<li>
+<p><strong>404</strong> - Not Found if repository is not managed by this team</p>
+</li>
+</ul>
+<h3 id="code-examples-14" title="Check team permissions for a repository (Legacy) / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/repos/OWNER/REPO
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#check-team-permissions-for-a-repository">Check team permissions for a repository</a>.</p>
+<h2 id="add-or-update-team-repository-permissions-legacy" title="Add or update team repository permissions (Legacy)">Add or update team repository permissions (Legacy)<a href="#add-or-update-team-repository-permissions-legacy" aria-label="Link to heading 'Add or update team repository permissions (Legacy)'" data-heading-content="Add or update team repository permissions (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /teams/{team_id}/repos/{owner}/{repo}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new "Add or update team repository permissions" endpoint.</p>
+<p>To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a 422 Unprocessable Entity status if you attempt to add a repository to a team that is not owned by the organization.<br>
+Note that, if you choose not to pass any parameters, you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."</p>
+<h3 id="parameters-15" title="Add or update team repository permissions (Legacy) / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>permission</code></strong> (string)<br>
+The permission to grant the team on this repository. If no permission is specified, the team's permission attribute will be used to determine what permission to grant the team on this repository.<br>
+Can be one of: <code>pull</code>, <code>push</code>, <code>admin</code></li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Add or update team repository permissions (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-15" title="Add or update team repository permissions (Legacy) / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-setting-permission-to-pull">Example of setting permission to pull<a href="#example-of-setting-permission-to-pull" aria-label="Link to heading 'Example of setting permission to pull'" data-heading-content="Example of setting permission to pull" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/repos/OWNER/REPO \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "permission": "push"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="remove-a-repository-from-a-team-legacy" title="Remove a repository from a team (Legacy)">Remove a repository from a team (Legacy)<a href="#remove-a-repository-from-a-team-legacy" aria-label="Link to heading 'Remove a repository from a team (Legacy)'" data-heading-content="Remove a repository from a team (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /teams/{team_id}/repos/{owner}/{repo}
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new Remove a repository from a team endpoint.</p>
+<p>If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. NOTE: This does not delete the repository, it just removes it from the team.</p>
+<h3 id="parameters-16" title="Remove a repository from a team (Legacy) / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</p>
+</li>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-16" title="Remove a repository from a team (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-16" title="Remove a repository from a team (Legacy) / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/repos/OWNER/REPO
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-child-teams-legacy" title="List child teams (Legacy)">List child teams (Legacy)<a href="#list-child-teams-legacy" aria-label="Link to heading 'List child teams (Legacy)'" data-heading-content="List child teams (Legacy)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/teams
+</span></code></pre>
+<p>Warning</p>
+<p>Endpoint closing down notice: This endpoint route is closing down and will be removed from the Teams API. We recommend migrating your existing code to use the new List child teams endpoint.</p>
+<h3 id="parameters-17" title="List child teams (Legacy) / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-17">Path and query parameters<a href="#path-and-query-parameters-17" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>team_id</code></strong> (integer) (required)<br>
+The unique identifier of the team.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-17" title="List child teams (Legacy) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - if child teams exist</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-17" title="List child teams (Legacy) / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/teams
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-teams">List teams</a>.</p>
+<h2 id="list-teams-for-the-authenticated-user" title="List teams for the authenticated user">List teams for the authenticated user<a href="#list-teams-for-the-authenticated-user" aria-label="Link to heading 'List teams for the authenticated user'" data-heading-content="List teams for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/teams
+</span></code></pre>
+<p>List all of the teams across all of the organizations to which the authenticated<br>
+user belongs.<br>
+OAuth app tokens and personal access tokens (classic) need the user, repo, or read:org scope to use this endpoint.<br>
+When using a fine-grained personal access token, the resource owner of the token must be a single organization, and the response will only include the teams from that organization.</p>
+<h3 id="parameters-18" title="List teams for the authenticated user / Parameters">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-18">Headers<a href="#headers-18" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-18">Path and query parameters<a href="#path-and-query-parameters-18" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-18" title="List teams for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-18" title="List teams for the authenticated user / Code examples">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/teams
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Full Team</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string, enum: <code>closed</code>, <code>secret</code></li>
+<li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
+<li><code>permission</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>parent</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>members_count</code>: required, integer</li>
+<li><code>repos_count</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>organization</code>: required, <code>Team Organization</code>:
+<ul>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>hooks_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>public_members_url</code>: required, string</li>
+<li><code>avatar_url</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>name</code>: string</li>
+<li><code>company</code>: string or null</li>
+<li><code>blog</code>: string or null, format: uri</li>
+<li><code>location</code>: string or null</li>
+<li><code>email</code>: string or null, format: email</li>
+<li><code>twitter_username</code>: string or null</li>
+<li><code>is_verified</code>: boolean</li>
+<li><code>has_organization_projects</code>: required, boolean</li>
+<li><code>has_repository_projects</code>: required, boolean</li>
+<li><code>public_repos</code>: required, integer</li>
+<li><code>public_gists</code>: required, integer</li>
+<li><code>followers</code>: required, integer</li>
+<li><code>following</code>: required, integer</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>type</code>: required, string</li>
+<li><code>total_private_repos</code>: integer</li>
+<li><code>owned_private_repos</code>: integer</li>
+<li><code>private_gists</code>: integer or null</li>
+<li><code>disk_usage</code>: integer or null</li>
+<li><code>collaborators</code>: integer or null</li>
+<li><code>billing_email</code>: string or null, format: email</li>
+<li><code>plan</code>: object:
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>space</code>: required, integer</li>
+<li><code>private_repos</code>: required, integer</li>
+<li><code>filled_seats</code>: integer</li>
+<li><code>seats</code>: integer</li>
+</ul>
+</li>
+<li><code>default_repository_permission</code>: string or null</li>
+<li><code>members_can_create_repositories</code>: boolean or null</li>
+<li><code>two_factor_requirement_enabled</code>: boolean or null</li>
+<li><code>members_allowed_repository_creation_type</code>: string</li>
+<li><code>members_can_create_public_repositories</code>: boolean</li>
+<li><code>members_can_create_private_repositories</code>: boolean</li>
+<li><code>members_can_create_internal_repositories</code>: boolean</li>
+<li><code>members_can_create_pages</code>: boolean</li>
+<li><code>members_can_create_public_pages</code>: boolean</li>
+<li><code>members_can_create_private_pages</code>: boolean</li>
+<li><code>members_can_fork_private_repositories</code>: boolean or null</li>
+<li><code>web_commit_signoff_required</code>: boolean</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>archived_at</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

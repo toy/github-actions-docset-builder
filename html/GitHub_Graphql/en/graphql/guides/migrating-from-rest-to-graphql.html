@@ -1,0 +1,168 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Migrating from REST to GraphQL</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="migrating-from-rest-to-graphql">Migrating from REST to GraphQL<a href="#migrating-from-rest-to-graphql" aria-label="Link to heading 'Migrating from REST to GraphQL'" data-heading-content="Migrating from REST to GraphQL" class="anchor"></a></h1>
+<p>Learn best practices and considerations for migrating from GitHub's REST API to GitHub's GraphQL API.</p>
+<h2 id="differences-in-api-logic" title="Differences in API logic">Differences in API logic<a href="#differences-in-api-logic" aria-label="Link to heading 'Differences in API logic'" data-heading-content="Differences in API logic" class="anchor"></a></h2>
+<p>GitHub provides two APIs: a REST API and a GraphQL API. For more information about GitHub's APIs, see <a href="https://docs.github.com/en/rest/about-the-rest-api/comparing-githubs-rest-api-and-graphql-api" class="external">Comparing GitHub's REST API and GraphQL API</a>.</p>
+<p>Migrating from REST to GraphQL represents a significant shift in API logic. The differences between REST as a style and GraphQL as a specification make it difficult—and often undesirable—to replace REST API calls with GraphQL API queries on a one-to-one basis. We've included specific examples of migration below.</p>
+<p>To migrate your code from the <a href="https://docs.github.com/en/rest" class="external">REST API</a> to the GraphQL API:</p>
+<ul>
+<li>Review the <a href="https://spec.graphql.org/June2018/" class="external">GraphQL spec</a></li>
+<li>Review GitHub's <a href="../reference/index.html">GraphQL schema</a></li>
+<li>Consider how any existing code you have currently interacts with the GitHub REST API</li>
+<li>Use <a href="using-global-node-ids.html">Global Node IDs</a> to reference objects between API versions</li>
+</ul>
+<p>Significant advantages of GraphQL include:</p>
+<ul>
+<li><a href="#example-getting-the-data-you-need-and-nothing-more">Getting the data you need and nothing more</a></li>
+<li><a href="#example-nesting">Nested fields</a></li>
+<li><a href="#example-strong-typing">Strong typing</a></li>
+</ul>
+<p>Here are examples of each.</p>
+<h2 id="example-getting-the-data-you-need-and-nothing-more" title="Example: Getting the data you need and nothing more">Example: Getting the data you need and nothing more<a href="#example-getting-the-data-you-need-and-nothing-more" aria-label="Link to heading 'Example: Getting the data you need and nothing more'" data-heading-content="Example: Getting the data you need and nothing more" class="anchor"></a></h2>
+<p>A single REST API call retrieves a list of your organization's members:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/orgs/:org/members
+</span></code></pre>
+<p>The REST payload contains excessive data if your goal is to retrieve only member names and links to avatars. However, a GraphQL query returns only what you specify:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">    organization(login:"github") {
+</span><span style="color:#c0c5ce;">    membersWithRole(first: 100) {
+</span><span style="color:#c0c5ce;">      edges {
+</span><span style="color:#c0c5ce;">        node {
+</span><span style="color:#c0c5ce;">          name
+</span><span style="color:#c0c5ce;">          avatarUrl
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>Consider another example: retrieving a list of pull requests and checking if each one is mergeable. A call to the REST API retrieves a list of pull requests and their <a href="https://docs.github.com/en/rest#summary-representations" class="external">summary representations</a>:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls
+</span></code></pre>
+<p>Determining if a pull request is mergeable requires retrieving each pull request individually for its <a href="https://docs.github.com/en/rest#detailed-representations" class="external">detailed representation</a> (a large payload) and checking whether its <code>mergeable</code> attribute is true or false:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number
+</span></code></pre>
+<p>With GraphQL, you could retrieve only the <code>number</code> and <code>mergeable</code> attributes for each pull request:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">    repository(owner:"octocat", name:"Hello-World") {
+</span><span style="color:#c0c5ce;">    pullRequests(last: 10) {
+</span><span style="color:#c0c5ce;">      edges {
+</span><span style="color:#c0c5ce;">        node {
+</span><span style="color:#c0c5ce;">          number
+</span><span style="color:#c0c5ce;">          mergeable
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h2 id="example-nesting" title="Example: Nesting">Example: Nesting<a href="#example-nesting" aria-label="Link to heading 'Example: Nesting'" data-heading-content="Example: Nesting" class="anchor"></a></h2>
+<p>Querying with nested fields lets you replace multiple REST calls with fewer GraphQL queries. For example, retrieving a pull request along with its commits, non-review comments, and reviews using the <strong>REST API</strong> requires four separate calls:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number
+</span><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number/commits
+</span><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/issues/:number/comments
+</span><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number/reviews
+</span></code></pre>
+<p>Using the <strong>GraphQL API</strong>, you can retrieve the data with a single query using nested fields:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  repository(owner: "octocat", name: "Hello-World") {
+</span><span style="color:#c0c5ce;">    pullRequest(number: 1) {
+</span><span style="color:#c0c5ce;">      commits(first: 10) {
+</span><span style="color:#c0c5ce;">        edges {
+</span><span style="color:#c0c5ce;">          node {
+</span><span style="color:#c0c5ce;">            commit {
+</span><span style="color:#c0c5ce;">              oid
+</span><span style="color:#c0c5ce;">              message
+</span><span style="color:#c0c5ce;">            }
+</span><span style="color:#c0c5ce;">          }
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">      comments(first: 10) {
+</span><span style="color:#c0c5ce;">        edges {
+</span><span style="color:#c0c5ce;">          node {
+</span><span style="color:#c0c5ce;">            body
+</span><span style="color:#c0c5ce;">            author {
+</span><span style="color:#c0c5ce;">              login
+</span><span style="color:#c0c5ce;">            }
+</span><span style="color:#c0c5ce;">          }
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">      reviews(first: 10) {
+</span><span style="color:#c0c5ce;">        edges {
+</span><span style="color:#c0c5ce;">          node {
+</span><span style="color:#c0c5ce;">            state
+</span><span style="color:#c0c5ce;">          }
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>You can also extend the power of this query by <a href="forming-calls-with-graphql.html#working-with-variables">substituting a variable</a> for the pull request number.</p>
+<h2 id="example-strong-typing" title="Example: Strong typing">Example: Strong typing<a href="#example-strong-typing" aria-label="Link to heading 'Example: Strong typing'" data-heading-content="Example: Strong typing" class="anchor"></a></h2>
+<p>GraphQL schemas are strongly typed, making data handling safer.</p>
+<p>Consider an example of adding a comment to an issue or pull request using a GraphQL <a href="../reference/index.html">mutation</a>, and mistakenly specifying an integer rather than a string for the value of <a href="../reference/issues.html#mutation-addcomment"><code>clientMutationId</code></a>:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">mutation {
+</span><span style="color:#c0c5ce;">  addComment(input:{clientMutationId: 1234, subjectId: "MDA6SXNzdWUyMjcyMDA2MTT=", body: "Looks good to me!"}) {
+</span><span style="color:#c0c5ce;">    clientMutationId
+</span><span style="color:#c0c5ce;">    commentEdge {
+</span><span style="color:#c0c5ce;">      node {
+</span><span style="color:#c0c5ce;">        body
+</span><span style="color:#c0c5ce;">        repository {
+</span><span style="color:#c0c5ce;">          id
+</span><span style="color:#c0c5ce;">          name
+</span><span style="color:#c0c5ce;">          nameWithOwner
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">        issue {
+</span><span style="color:#c0c5ce;">          number
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>Executing this query returns errors specifying the expected types for the operation:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">data</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">null</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">errors</span><span style="color:#c0c5ce;">": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">message</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Argument 'input' on Field 'addComment' has an invalid value. Expected type 'AddCommentInput!'.</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">locations</span><span style="color:#c0c5ce;">": [
+</span><span style="color:#c0c5ce;">        {
+</span><span style="color:#c0c5ce;">          "</span><span style="color:#a3be8c;">line</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">          "</span><span style="color:#a3be8c;">column</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">3
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">message</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Argument 'clientMutationId' on InputObject 'AddCommentInput' has an invalid value. Expected type 'String'.</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">locations</span><span style="color:#c0c5ce;">": [
+</span><span style="color:#c0c5ce;">        {
+</span><span style="color:#c0c5ce;">          "</span><span style="color:#a3be8c;">line</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">          "</span><span style="color:#a3be8c;">column</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">20
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>Wrapping <code>1234</code> in quotes transforms the value from an integer into a string, the expected type:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">mutation {
+</span><span style="color:#c0c5ce;">  addComment(input:{clientMutationId: "1234", subjectId: "MDA6SXNzdWUyMjcyMDA2MTT=", body: "Looks good to me!"}) {
+</span><span style="color:#c0c5ce;">    clientMutationId
+</span><span style="color:#c0c5ce;">    commentEdge {
+</span><span style="color:#c0c5ce;">      node {
+</span><span style="color:#c0c5ce;">        body
+</span><span style="color:#c0c5ce;">        repository {
+</span><span style="color:#c0c5ce;">          id
+</span><span style="color:#c0c5ce;">          name
+</span><span style="color:#c0c5ce;">          nameWithOwner
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">        issue {
+</span><span style="color:#c0c5ce;">          number
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

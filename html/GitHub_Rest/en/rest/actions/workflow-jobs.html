@@ -1,0 +1,277 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for workflow jobs</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="rest-api-endpoints-for-workflow-jobs">REST API endpoints for workflow jobs<a href="#rest-api-endpoints-for-workflow-jobs" aria-label="Link to heading 'REST API endpoints for workflow jobs'" data-heading-content="REST API endpoints for workflow jobs" class="anchor"></a></h1>
+<p>Use the REST API to interact with workflow jobs in GitHub Actions.</p>
+<h2 id="about-workflow-jobs-in-github-actions" title="About workflow jobs in GitHub Actions">About workflow jobs in GitHub Actions<a href="#about-workflow-jobs-in-github-actions" aria-label="Link to heading 'About workflow jobs in GitHub Actions'" data-heading-content="About workflow jobs in GitHub Actions" class="anchor"></a></h2>
+<p>You can use the REST API to view logs and workflow jobs in GitHub Actions. A workflow job is a set of steps that execute on the same runner. For more information, see <a href="https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax" class="external">Workflow syntax for GitHub Actions</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-a-job-for-a-workflow-run" title="Get a job for a workflow run">Get a job for a workflow run<a href="#get-a-job-for-a-workflow-run" aria-label="Link to heading 'Get a job for a workflow run'" data-heading-content="Get a job for a workflow run" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/jobs/{job_id}
+</span></code></pre>
+<p>Gets a specific job in a workflow run.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters" title="Get a job for a workflow run / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>job_id</code></strong> (integer) (required)<br>
+The unique identifier of the job.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get a job for a workflow run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get a job for a workflow run / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/jobs/JOB_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>run_id</code>: required, integer, format: int64</li>
+<li><code>run_url</code>: required, string</li>
+<li><code>run_attempt</code>: integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>head_sha</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>html_url</code>: required, string or null</li>
+<li><code>status</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>waiting</code>, <code>requested</code>, <code>pending</code></li>
+<li><code>conclusion</code>: required, string or null, enum: <code>success</code>, <code>failure</code>, <code>neutral</code>, <code>cancelled</code>, <code>skipped</code>, <code>timed_out</code>, <code>action_required</code>, <code>null</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>started_at</code>: required, string, format: date-time</li>
+<li><code>completed_at</code>: required, string or null, format: date-time</li>
+<li><code>name</code>: required, string</li>
+<li><code>steps</code>: array of objects:
+<ul>
+<li><code>status</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code></li>
+<li><code>conclusion</code>: required, string or null</li>
+<li><code>name</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>started_at</code>: string or null, format: date-time</li>
+<li><code>completed_at</code>: string or null, format: date-time</li>
+</ul>
+</li>
+<li><code>check_run_url</code>: required, string</li>
+<li><code>labels</code>: required, array of string</li>
+<li><code>runner_id</code>: required, integer or null</li>
+<li><code>runner_name</code>: required, string or null</li>
+<li><code>runner_group_id</code>: required, integer or null</li>
+<li><code>runner_group_name</code>: required, string or null</li>
+<li><code>workflow_name</code>: required, string or null</li>
+<li><code>head_branch</code>: required, string or null</li>
+</ul>
+<h2 id="download-job-logs-for-a-workflow-run" title="Download job logs for a workflow run">Download job logs for a workflow run<a href="#download-job-logs-for-a-workflow-run" aria-label="Link to heading 'Download job logs for a workflow run'" data-heading-content="Download job logs for a workflow run" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
+</span></code></pre>
+<p>Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look<br>
+for Location: in the response header to find the URL for the download.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Download job logs for a workflow run / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>job_id</code></strong> (integer) (required)<br>
+The unique identifier of the job.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Download job logs for a workflow run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>302</strong> - Found</li>
+</ul>
+<h3 id="code-examples-1" title="Download job logs for a workflow run / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/jobs/JOB_ID/logs
+</span></code></pre>
+<p><strong>Response schema (Status: 302):</strong></p>
+<h2 id="list-jobs-for-a-workflow-run-attempt" title="List jobs for a workflow run attempt">List jobs for a workflow run attempt<a href="#list-jobs-for-a-workflow-run-attempt" aria-label="Link to heading 'List jobs for a workflow run attempt'" data-heading-content="List jobs for a workflow run attempt" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs
+</span></code></pre>
+<p>Lists jobs for a specific workflow run attempt. You can use parameters to narrow the list of results. For more information<br>
+about using parameters, see Parameters.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint  with a private repository.</p>
+<h3 id="parameters-2" title="List jobs for a workflow run attempt / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>run_id</code></strong> (integer) (required)<br>
+The unique identifier of the workflow run.</p>
+</li>
+<li>
+<p><strong><code>attempt_number</code></strong> (integer) (required)<br>
+The attempt number of the workflow run.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List jobs for a workflow run attempt / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List jobs for a workflow run attempt / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runs/RUN_ID/attempts/ATTEMPT_NUMBER/jobs
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>jobs</code>: required, array of <code>Job</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>run_id</code>: required, integer, format: int64</li>
+<li><code>run_url</code>: required, string</li>
+<li><code>run_attempt</code>: integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>head_sha</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>html_url</code>: required, string or null</li>
+<li><code>status</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>waiting</code>, <code>requested</code>, <code>pending</code></li>
+<li><code>conclusion</code>: required, string or null, enum: <code>success</code>, <code>failure</code>, <code>neutral</code>, <code>cancelled</code>, <code>skipped</code>, <code>timed_out</code>, <code>action_required</code>, <code>null</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>started_at</code>: required, string, format: date-time</li>
+<li><code>completed_at</code>: required, string or null, format: date-time</li>
+<li><code>name</code>: required, string</li>
+<li><code>steps</code>: array of objects:
+<ul>
+<li><code>status</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code></li>
+<li><code>conclusion</code>: required, string or null</li>
+<li><code>name</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>started_at</code>: string or null, format: date-time</li>
+<li><code>completed_at</code>: string or null, format: date-time</li>
+</ul>
+</li>
+<li><code>check_run_url</code>: required, string</li>
+<li><code>labels</code>: required, array of string</li>
+<li><code>runner_id</code>: required, integer or null</li>
+<li><code>runner_name</code>: required, string or null</li>
+<li><code>runner_group_id</code>: required, integer or null</li>
+<li><code>runner_group_name</code>: required, string or null</li>
+<li><code>workflow_name</code>: required, string or null</li>
+<li><code>head_branch</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-jobs-for-a-workflow-run" title="List jobs for a workflow run">List jobs for a workflow run<a href="#list-jobs-for-a-workflow-run" aria-label="Link to heading 'List jobs for a workflow run'" data-heading-content="List jobs for a workflow run" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs
+</span></code></pre>
+<p>Lists jobs for a workflow run. You can use parameters to narrow the list of results. For more information<br>
+about using parameters, see Parameters.<br>
+Anyone with read access to the repository can use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters-3" title="List jobs for a workflow run / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>run_id</code></strong> (integer) (required)<br>
+The unique identifier of the workflow run.</p>
+</li>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+Filters jobs by their completed<span data-escaped-char="">_</span>at timestamp. latest returns jobs from the most recent execution of the workflow run. all returns all jobs for a workflow run, including from old executions of the workflow run.<br>
+Default: <code>latest</code><br>
+Can be one of: <code>latest</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="List jobs for a workflow run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-3" title="List jobs for a workflow run / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runs/RUN_ID/jobs
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-jobs-for-a-workflow-run-attempt">List jobs for a workflow run attempt</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

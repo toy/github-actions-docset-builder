@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Working with comments</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Guides</a> / </nav><h1 id="working-with-comments">Working with comments<a href="#working-with-comments" aria-label="Link to heading 'Working with comments'" data-heading-content="Working with comments" class="anchor"></a></h1>
+<p>Using the REST API, you can access and manage comments in your pull requests, issues, or commits.</p>
+<p>For any Pull Request, GitHub provides three kinds of comment views:<br>
+<a href="https://github.com/octocat/Spoon-Knife/pull/1176#issuecomment-24114792" class="external">comments on the Pull Request</a> as a whole, <a href="https://github.com/octocat/Spoon-Knife/pull/1176#discussion_r6252889" class="external">comments on a specific line</a> within the Pull Request,<br>
+and <a href="https://github.com/octocat/Spoon-Knife/commit/cbc28e7c8caee26febc8c013b0adfb97a4edd96e#commitcomment-4049848" class="external">comments on a specific commit</a> within the Pull Request.</p>
+<p>Each of these types of comments goes through a different portion of the GitHub API.<br>
+In this guide, we'll explore how you can access and manipulate each one. For every<br>
+example, we'll be using <a href="https://github.com/octocat/Spoon-Knife/pull/1176" class="external">this sample Pull Request made</a> on the "octocat"<br>
+repository. As always, samples can be found in <a href="https://github.com/github/platform-samples/tree/master/api/ruby/working-with-comments" class="external">our platform-samples repository</a>.</p>
+<h2 id="pull-request-comments" title="Pull Request Comments">Pull Request Comments<a href="#pull-request-comments" aria-label="Link to heading 'Pull Request Comments'" data-heading-content="Pull Request Comments" class="anchor"></a></h2>
+<p>To access comments on a Pull Request, you'll use <a href="../issues/comments.html">the endpoints to manage issues</a>.<br>
+This may seem counterintuitive at first. But once you understand that a Pull<br>
+Request is just an Issue with code, it makes sense to use these endpoints to<br>
+create comments on a Pull Request.</p>
+<p>We'll demonstrate fetching Pull Request comments by creating a Ruby script using<br>
+<a href="https://github.com/octokit/octokit.rb" class="external">Octokit.rb</a>. You'll also want to create a <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">personal access token</a>.</p>
+<p>The following code should help you get started accessing comments from a Pull Request<br>
+using Octokit.rb:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># !!! DO NOT EVER USE HARD-CODED VALUES IN A REAL APP !!!
+</span><span style="color:#65737e;"># Instead, set and test environment variables, like below
+</span><span style="color:#c0c5ce;">client = </span><span style="color:#ebcb8b;">Octokit</span><span style="color:#c0c5ce;">::</span><span style="color:#ebcb8b;">Client</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">new </span><span style="color:#a3be8c;">:access_token </span><span style="color:#c0c5ce;">=&gt; </span><span style="color:#bf616a;">ENV</span><span style="color:#c0c5ce;">['</span><span style="color:#a3be8c;">MY_PERSONAL_TOKEN</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">client.issue_comments("</span><span style="color:#a3be8c;">octocat/Spoon-Knife</span><span style="color:#c0c5ce;">", </span><span style="color:#d08770;">1176</span><span style="color:#c0c5ce;">).each </span><span style="color:#b48ead;">do </span><span style="color:#c0c5ce;">|</span><span style="color:#bf616a;">comment</span><span style="color:#c0c5ce;">|
+</span><span style="color:#c0c5ce;">  username = comment[</span><span style="color:#a3be8c;">:user</span><span style="color:#c0c5ce;">][</span><span style="color:#a3be8c;">:login</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  post_date = comment[</span><span style="color:#a3be8c;">:created_at</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  content = comment[</span><span style="color:#a3be8c;">:body</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">username</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> made a comment on </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">post_date</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">. It says:</span><span style="color:#96b5b4;">\n</span><span style="color:#a3be8c;">'</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">content</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">'</span><span style="color:#96b5b4;">\n</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Here, we're specifically calling out to the API to get the comments (<code>issue_comments</code>),<br>
+providing both the repository's name (<code>octocat/Spoon-Knife</code>), and the Pull Request ID<br>
+we're interested in (<code>1176</code>). After that, it's simply a matter of iterating through<br>
+the comments to fetch information about each one.</p>
+<h2 id="pull-request-comments-on-a-line" title="Pull Request Comments on a Line">Pull Request Comments on a Line<a href="#pull-request-comments-on-a-line" aria-label="Link to heading 'Pull Request Comments on a Line'" data-heading-content="Pull Request Comments on a Line" class="anchor"></a></h2>
+<p>Within the diff view, you can start a discussion on a particular aspect of a singular<br>
+change made within the Pull Request. These comments occur on the individual lines<br>
+within a changed file. The endpoint URL for this discussion comes from <a href="../pulls/comments.html">the endpoint to manage pull request reviews</a>.</p>
+<p>The following code fetches all the Pull Request comments made on files, given a single Pull Request number:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># !!! DO NOT EVER USE HARD-CODED VALUES IN A REAL APP !!!
+</span><span style="color:#65737e;"># Instead, set and test environment variables, like below
+</span><span style="color:#c0c5ce;">client = </span><span style="color:#ebcb8b;">Octokit</span><span style="color:#c0c5ce;">::</span><span style="color:#ebcb8b;">Client</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">new </span><span style="color:#a3be8c;">:access_token </span><span style="color:#c0c5ce;">=&gt; </span><span style="color:#bf616a;">ENV</span><span style="color:#c0c5ce;">['</span><span style="color:#a3be8c;">MY_PERSONAL_TOKEN</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">client.pull_request_comments("</span><span style="color:#a3be8c;">octocat/Spoon-Knife</span><span style="color:#c0c5ce;">", </span><span style="color:#d08770;">1176</span><span style="color:#c0c5ce;">).each </span><span style="color:#b48ead;">do </span><span style="color:#c0c5ce;">|</span><span style="color:#bf616a;">comment</span><span style="color:#c0c5ce;">|
+</span><span style="color:#c0c5ce;">  username = comment[</span><span style="color:#a3be8c;">:user</span><span style="color:#c0c5ce;">][</span><span style="color:#a3be8c;">:login</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  post_date = comment[</span><span style="color:#a3be8c;">:created_at</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  content = comment[</span><span style="color:#a3be8c;">:body</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  path = comment[</span><span style="color:#a3be8c;">:path</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  position = comment[</span><span style="color:#a3be8c;">:position</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">username</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> made a comment on </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">post_date</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> for the file called </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">path</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">, on line </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">position</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">. It says:</span><span style="color:#96b5b4;">\n</span><span style="color:#a3be8c;">'</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">content</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">'</span><span style="color:#96b5b4;">\n</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>You'll notice that it's incredibly similar to the example above. The difference<br>
+between this view and the Pull Request comment is the focus of the conversation.<br>
+A comment made on a Pull Request should be reserved for discussion or ideas on<br>
+the overall direction of the code. A comment made as part of a Pull Request review should<br>
+deal specifically with the way a particular change was implemented within a file.</p>
+<h2 id="commit-comments" title="Commit Comments">Commit Comments<a href="#commit-comments" aria-label="Link to heading 'Commit Comments'" data-heading-content="Commit Comments" class="anchor"></a></h2>
+<p>The last type of comments occur specifically on individual commits. For this reason,<br>
+they make use of <a href="../commits/index.html#get-a-commit-comment">the endpoint to manage commit comments</a>.</p>
+<p>To retrieve the comments on a commit, you'll want to use the SHA1 of the commit.<br>
+In other words, you won't use any identifier related to the Pull Request. Here's an example:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># !!! DO NOT EVER USE HARD-CODED VALUES IN A REAL APP !!!
+</span><span style="color:#65737e;"># Instead, set and test environment variables, like below
+</span><span style="color:#c0c5ce;">client = </span><span style="color:#ebcb8b;">Octokit</span><span style="color:#c0c5ce;">::</span><span style="color:#ebcb8b;">Client</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">new </span><span style="color:#a3be8c;">:access_token </span><span style="color:#c0c5ce;">=&gt; </span><span style="color:#bf616a;">ENV</span><span style="color:#c0c5ce;">['</span><span style="color:#a3be8c;">MY_PERSONAL_TOKEN</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">client.commit_comments("</span><span style="color:#a3be8c;">octocat/Spoon-Knife</span><span style="color:#c0c5ce;">", "</span><span style="color:#a3be8c;">cbc28e7c8caee26febc8c013b0adfb97a4edd96e</span><span style="color:#c0c5ce;">").each </span><span style="color:#b48ead;">do </span><span style="color:#c0c5ce;">|</span><span style="color:#bf616a;">comment</span><span style="color:#c0c5ce;">|
+</span><span style="color:#c0c5ce;">  username = comment[</span><span style="color:#a3be8c;">:user</span><span style="color:#c0c5ce;">][</span><span style="color:#a3be8c;">:login</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  post_date = comment[</span><span style="color:#a3be8c;">:created_at</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">  content = comment[</span><span style="color:#a3be8c;">:body</span><span style="color:#c0c5ce;">]
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">username</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;"> made a comment on </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">post_date</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">. It says:</span><span style="color:#96b5b4;">\n</span><span style="color:#a3be8c;">'</span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">content</span><span style="color:#ab7967;">}</span><span style="color:#a3be8c;">'</span><span style="color:#96b5b4;">\n</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>Note that this API call will retrieve single line comments, as well as comments made<br>
+on the entire commit.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

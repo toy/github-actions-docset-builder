@@ -1,0 +1,2346 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for issues</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Issues</a> / </nav><h1 id="rest-api-endpoints-for-issues">REST API endpoints for issues<a href="#rest-api-endpoints-for-issues" aria-label="Link to heading 'REST API endpoints for issues'" data-heading-content="REST API endpoints for issues" class="anchor"></a></h1>
+<p>Use the REST API to manage issues and pull requests.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-issues-assigned-to-the-authenticated-user" title="List issues assigned to the authenticated user">List issues assigned to the authenticated user<a href="#list-issues-assigned-to-the-authenticated-user" aria-label="Link to heading 'List issues assigned to the authenticated user'" data-heading-content="List issues assigned to the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /issues
+</span></code></pre>
+<p>List issues assigned to the authenticated user across all visible repositories including owned repositories, member<br>
+repositories, and organization repositories. You can use the filter query parameter to fetch issues that are not<br>
+necessarily assigned to you.<br>
+Note</p>
+<p>GitHub's REST API considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the pull_request key. Be aware that the id of a pull request returned from "Issues" endpoints will be an issue id. To find out the pull request id, use the "List pull requests" endpoint.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters" title="List issues assigned to the authenticated user / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+Indicates which sorts of issues to return. assigned means issues assigned to you. created means issues created by you. mentioned means issues mentioning you. subscribed means issues you're subscribed to updates for. all or repos means all issues you can see, regardless of participation or creation.<br>
+Default: <code>assigned</code><br>
+Can be one of: <code>assigned</code>, <code>created</code>, <code>mentioned</code>, <code>subscribed</code>, <code>repos</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Indicates the state of the issues to return.<br>
+Default: <code>open</code><br>
+Can be one of: <code>open</code>, <code>closed</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (string)<br>
+A list of comma separated label names. Example: bug,ui,@high</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+What to sort results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>comments</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show results that were last updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>collab</code></strong> (boolean)</p>
+</li>
+<li>
+<p><strong><code>orgs</code></strong> (boolean)</p>
+</li>
+<li>
+<p><strong><code>owned</code></strong> (boolean)</p>
+</li>
+<li>
+<p><strong><code>pulls</code></strong> (boolean)</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List issues assigned to the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List issues assigned to the authenticated user / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/issues
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Issue</code>:</p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string</li>
+<li><code>state_reason</code>: string or null, enum: <code>completed</code>, <code>reopened</code>, <code>not_planned</code>, <code>duplicate</code>, <code>null</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>body</code>: string or null</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>labels</code>: required, array of object</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>milestone</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Milestone</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code>, default: <code>"open"</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>closed_issues</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>due_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>locked</code>: required, boolean</li>
+<li><code>active_lock_reason</code>: string or null</li>
+<li><code>comments</code>: required, integer</li>
+<li><code>pull_request</code>: object:
+<ul>
+<li><code>merged_at</code>: string or null, format: date-time</li>
+<li><code>diff_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>patch_url</code>: required, string or null, format: uri</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>draft</code>: boolean</li>
+<li><code>closed_by</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>body_html</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>timeline_url</code>: string, format: uri</li>
+<li><code>type</code>: <code>Issue Type</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>color</code>: string or null, enum: <code>gray</code>, <code>blue</code>, <code>green</code>, <code>yellow</code>, <code>orange</code>, <code>red</code>, <code>pink</code>, <code>purple</code>, <code>null</code></li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>is_enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>repository</code>: <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>reactions</code>: <code>Reaction Rollup</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>total_count</code>: required, integer</li>
+<li><code>+1</code>: required, integer</li>
+<li><code>-1</code>: required, integer</li>
+<li><code>laugh</code>: required, integer</li>
+<li><code>confused</code>: required, integer</li>
+<li><code>heart</code>: required, integer</li>
+<li><code>hooray</code>: required, integer</li>
+<li><code>eyes</code>: required, integer</li>
+<li><code>rocket</code>: required, integer</li>
+</ul>
+</li>
+<li><code>sub_issues_summary</code>: <code>Sub-issues Summary</code>:
+<ul>
+<li><code>total</code>: required, integer</li>
+<li><code>completed</code>: required, integer</li>
+<li><code>percent_completed</code>: required, integer</li>
+</ul>
+</li>
+<li><code>parent_issue_url</code>: string or null, format: uri</li>
+<li><code>pinned_comment</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Issue Comment</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>body_html</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>issue_url</code>: required, string, format: uri</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong> (see above)</li>
+</ul>
+</li>
+<li><code>reactions</code>: <code>Reaction Rollup</code> (see above)</li>
+<li><code>pin</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Pinned Issue Comment</strong>
+<ul>
+<li><code>pinned_at</code>: required, string, format: date-time</li>
+<li><code>pinned_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>minimized</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Minimized Issue Comment</strong>
+<ul>
+<li><code>reason</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>issue_dependencies_summary</code>: <code>Issue Dependencies Summary</code>:
+<ul>
+<li><code>blocked_by</code>: required, integer</li>
+<li><code>blocking</code>: required, integer</li>
+<li><code>total_blocked_by</code>: required, integer</li>
+<li><code>total_blocking</code>: required, integer</li>
+</ul>
+</li>
+<li><code>issue_field_values</code>: array of <code>Issue Field Value</code>:
+<ul>
+<li><code>issue_field_id</code>: required, integer, format: int64</li>
+<li><code>issue_field_name</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>data_type</code>: required, string, enum: <code>text</code>, <code>single_select</code>, <code>multi_select</code>, <code>number</code>, <code>date</code></li>
+<li><code>value</code>: required, any of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>integer</strong></li>
+</ul>
+</li>
+<li><code>single_select_option</code>: object or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+<li><code>multi_select_options</code>: array of objects or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-organization-issues-assigned-to-the-authenticated-user" title="List organization issues assigned to the authenticated user">List organization issues assigned to the authenticated user<a href="#list-organization-issues-assigned-to-the-authenticated-user" aria-label="Link to heading 'List organization issues assigned to the authenticated user'" data-heading-content="List organization issues assigned to the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/issues
+</span></code></pre>
+<p>List issues in an organization assigned to the authenticated user.<br>
+Note</p>
+<p>GitHub's REST API considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the pull_request key. Be aware that the id of a pull request returned from "Issues" endpoints will be an issue id. To find out the pull request id, use the "List pull requests" endpoint.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-1" title="List organization issues assigned to the authenticated user / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+Indicates which sorts of issues to return. assigned means issues assigned to you. created means issues created by you. mentioned means issues mentioning you. subscribed means issues you're subscribed to updates for. all or repos means all issues you can see, regardless of participation or creation.<br>
+Default: <code>assigned</code><br>
+Can be one of: <code>assigned</code>, <code>created</code>, <code>mentioned</code>, <code>subscribed</code>, <code>repos</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Indicates the state of the issues to return.<br>
+Default: <code>open</code><br>
+Can be one of: <code>open</code>, <code>closed</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (string)<br>
+A list of comma separated label names. Example: bug,ui,@high</p>
+</li>
+<li>
+<p><strong><code>type</code></strong> (string)<br>
+Can be the name of an issue type.</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+What to sort results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>comments</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show results that were last updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List organization issues assigned to the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List organization issues assigned to the authenticated user / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/issues
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-issues-assigned-to-the-authenticated-user">List issues assigned to the authenticated user</a>.</p>
+<h2 id="list-repository-issues" title="List repository issues">List repository issues<a href="#list-repository-issues" aria-label="Link to heading 'List repository issues'" data-heading-content="List repository issues" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/issues
+</span></code></pre>
+<p>List issues in a repository. Only open issues will be listed.<br>
+Note</p>
+<p>GitHub's REST API considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the pull_request key. Be aware that the id of a pull request returned from "Issues" endpoints will be an issue id. To find out the pull request id, use the "List pull requests" endpoint.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-2" title="List repository issues / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>milestone</code></strong> (string)<br>
+If an integer is passed, it should refer to a milestone by its number field. If the string * is passed, issues with any milestone are accepted. If the string none is passed, issues without milestones are returned.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Indicates the state of the issues to return.<br>
+Default: <code>open</code><br>
+Can be one of: <code>open</code>, <code>closed</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>assignee</code></strong> (string)<br>
+Can be the name of a user. Pass in none for issues with no assigned user, and * for issues assigned to any user.</p>
+</li>
+<li>
+<p><strong><code>type</code></strong> (string)<br>
+Can be the name of an issue type. If the string * is passed, issues with any type are accepted. If the string none is passed, issues without type are returned.</p>
+</li>
+<li>
+<p><strong><code>creator</code></strong> (string)<br>
+The user that created the issue.</p>
+</li>
+<li>
+<p><strong><code>mentioned</code></strong> (string)<br>
+A user that's mentioned in the issue.</p>
+</li>
+<li>
+<p><strong><code>issue_field_values</code></strong> (string)<br>
+A comma-separated list of issue field filters in field_slug:value format.<br>
+Only issues matching all specified field values are returned.<br>
+Requires issue fields to be enabled for the repository. Issue fields are<br>
+not available for user-owned repositories, and field availability for<br>
+organization-owned public repositories depends on the organization's<br>
+visibility settings. For example, priority:Urgent,severity:High filters<br>
+issues where the priority field is Urgent AND the severity field is<br>
+High.</p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (string)<br>
+A list of comma separated label names. Example: bug,ui,@high</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+What to sort results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>comments</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show results that were last updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List repository issues / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>301</strong> - Moved permanently</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List repository issues / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-issues-assigned-to-the-authenticated-user">List issues assigned to the authenticated user</a>.</p>
+<h2 id="create-an-issue" title="Create an issue">Create an issue<a href="#create-an-issue" aria-label="Link to heading 'Create an issue'" data-heading-content="Create an issue" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/issues
+</span></code></pre>
+<p>Any user with pull access to a repository can create an issue. If issues are disabled in the repository, the API returns a 410 Gone status.<br>
+This endpoint triggers notifications. Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "Rate limits for the API"<br>
+and "Best practices for using the REST API."<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-3" title="Create an issue / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>title</code></strong> (string or integer) (required)<br>
+The title of the issue.</p>
+</li>
+<li>
+<p><strong><code>body</code></strong> (string)<br>
+The contents of the issue.</p>
+</li>
+<li>
+<p><strong><code>milestone</code></strong> (null or string or integer)<br>
+The number of the milestone to associate this issue with. NOTE: Only users with push access can set the milestone for new issues. The milestone is silently dropped otherwise.</p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (array)<br>
+Labels to associate with this issue. NOTE: Only users with push access can set labels for new issues. Labels are silently dropped otherwise.</p>
+</li>
+<li>
+<p><strong><code>assignees</code></strong> (array of strings)<br>
+Logins for Users to assign to this issue. NOTE: Only users with push access can set assignees for new issues. Assignees are silently dropped otherwise.</p>
+</li>
+<li>
+<p><strong><code>issue_field_values</code></strong> (array of objects)<br>
+An array of issue field values to set on this issue. Each field value must include the field ID and the value to set. Issue fields are only available for organization-owned repositories with the feature enabled. Field values are silently dropped otherwise.</p>
+<ul>
+<li><strong><code>field_id</code></strong> (integer) (required)<br>
+The ID of the issue field to set</li>
+<li><strong><code>value</code></strong> (string or number or array) (required)<br>
+The value to set for the field. For multi-select fields, provide an array of option names.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>type</code></strong> (string or null)<br>
+The name of the issue type to associate with this issue. NOTE: Only users with push access can set the type for new issues. The type is silently dropped otherwise.</p>
+</li>
+<li>
+<p><strong><code>parent_issue_id</code></strong> (integer)<br>
+The id of the parent issue to add this issue to as a sub-issue. NOTE: Only users with triage access to both the parent issue's repository and this repository can set the parent issue.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Create an issue / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>410</strong> - Gone</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Create an issue / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "title": "Found a bug",
+</span><span style="color:#c0c5ce;">  "body": "I'm having a problem with this.",
+</span><span style="color:#c0c5ce;">  "assignees": [
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "milestone": 1,
+</span><span style="color:#c0c5ce;">  "labels": [
+</span><span style="color:#c0c5ce;">    "bug"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string</li>
+<li><code>state_reason</code>: string or null, enum: <code>completed</code>, <code>reopened</code>, <code>not_planned</code>, <code>duplicate</code>, <code>null</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>body</code>: string or null</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>labels</code>: required, array of object</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>milestone</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Milestone</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code>, default: <code>"open"</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>closed_issues</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>due_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>locked</code>: required, boolean</li>
+<li><code>active_lock_reason</code>: string or null</li>
+<li><code>comments</code>: required, integer</li>
+<li><code>pull_request</code>: object:
+<ul>
+<li><code>merged_at</code>: string or null, format: date-time</li>
+<li><code>diff_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>patch_url</code>: required, string or null, format: uri</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>draft</code>: boolean</li>
+<li><code>closed_by</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>body_html</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>timeline_url</code>: string, format: uri</li>
+<li><code>type</code>: <code>Issue Type</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>color</code>: string or null, enum: <code>gray</code>, <code>blue</code>, <code>green</code>, <code>yellow</code>, <code>orange</code>, <code>red</code>, <code>pink</code>, <code>purple</code>, <code>null</code></li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>is_enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>repository</code>: <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>reactions</code>: <code>Reaction Rollup</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>total_count</code>: required, integer</li>
+<li><code>+1</code>: required, integer</li>
+<li><code>-1</code>: required, integer</li>
+<li><code>laugh</code>: required, integer</li>
+<li><code>confused</code>: required, integer</li>
+<li><code>heart</code>: required, integer</li>
+<li><code>hooray</code>: required, integer</li>
+<li><code>eyes</code>: required, integer</li>
+<li><code>rocket</code>: required, integer</li>
+</ul>
+</li>
+<li><code>sub_issues_summary</code>: <code>Sub-issues Summary</code>:
+<ul>
+<li><code>total</code>: required, integer</li>
+<li><code>completed</code>: required, integer</li>
+<li><code>percent_completed</code>: required, integer</li>
+</ul>
+</li>
+<li><code>parent_issue_url</code>: string or null, format: uri</li>
+<li><code>pinned_comment</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Issue Comment</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>body_html</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>issue_url</code>: required, string, format: uri</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong> (see above)</li>
+</ul>
+</li>
+<li><code>reactions</code>: <code>Reaction Rollup</code> (see above)</li>
+<li><code>pin</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Pinned Issue Comment</strong>
+<ul>
+<li><code>pinned_at</code>: required, string, format: date-time</li>
+<li><code>pinned_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>minimized</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Minimized Issue Comment</strong>
+<ul>
+<li><code>reason</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>issue_dependencies_summary</code>: <code>Issue Dependencies Summary</code>:
+<ul>
+<li><code>blocked_by</code>: required, integer</li>
+<li><code>blocking</code>: required, integer</li>
+<li><code>total_blocked_by</code>: required, integer</li>
+<li><code>total_blocking</code>: required, integer</li>
+</ul>
+</li>
+<li><code>issue_field_values</code>: array of <code>Issue Field Value</code>:
+<ul>
+<li><code>issue_field_id</code>: required, integer, format: int64</li>
+<li><code>issue_field_name</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>data_type</code>: required, string, enum: <code>text</code>, <code>single_select</code>, <code>multi_select</code>, <code>number</code>, <code>date</code></li>
+<li><code>value</code>: required, any of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>integer</strong></li>
+</ul>
+</li>
+<li><code>single_select_option</code>: object or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+<li><code>multi_select_options</code>: array of objects or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-an-issue" title="Get an issue">Get an issue<a href="#get-an-issue" aria-label="Link to heading 'Get an issue'" data-heading-content="Get an issue" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/issues/{issue_number}
+</span></code></pre>
+<p>The API returns a 301 Moved Permanently status if the issue was<br>
+transferred to another repository. If<br>
+the issue was transferred to or deleted from a repository where the authenticated user lacks read access, the API<br>
+returns a 404 Not Found status. If the issue was deleted from a repository where the authenticated user has read<br>
+access, the API returns a 410 Gone status. To receive webhook events for transferred and deleted issues, subscribe<br>
+to the issues webhook.<br>
+Note</p>
+<p>GitHub's REST API considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the pull_request key. Be aware that the id of a pull request returned from "Issues" endpoints will be an issue id. To find out the pull request id, use the "List pull requests" endpoint.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-4" title="Get an issue / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get an issue / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>301</strong> - Moved permanently</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>410</strong> - Gone</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get an issue / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-issue">Create an issue</a>.</p>
+<h4 id="example-2-status-code-200">Example 2: Status Code 200<a href="#example-2-status-code-200" aria-label="Link to heading 'Example 2: Status Code 200'" data-heading-content="Example 2: Status Code 200" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-issue">Create an issue</a>.</p>
+<h2 id="update-an-issue" title="Update an issue">Update an issue<a href="#update-an-issue" aria-label="Link to heading 'Update an issue'" data-heading-content="Update an issue" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/issues/{issue_number}
+</span></code></pre>
+<p>Issue owners and users with push access or Triage role can edit an issue.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-5" title="Update an issue / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>title</code></strong> (null or string or integer)<br>
+The title of the issue.</p>
+</li>
+<li>
+<p><strong><code>body</code></strong> (string or null)<br>
+The contents of the issue.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+The open or closed state of the issue.<br>
+Can be one of: <code>open</code>, <code>closed</code></p>
+</li>
+<li>
+<p><strong><code>state_reason</code></strong> (string or null)<br>
+The reason for the state change. Ignored unless state is changed.<br>
+Can be one of: <code>completed</code>, <code>not_planned</code>, <code>duplicate</code>, <code>reopened</code>, <code>null</code></p>
+</li>
+<li>
+<p><strong><code>duplicate_issue_id</code></strong> (integer)<br>
+The ID of the issue to mark as the canonical duplicate when state_reason is duplicate. The issue must exist and be accessible to the authenticated user. Ignored when state_reason is not duplicate.</p>
+</li>
+<li>
+<p><strong><code>milestone</code></strong> (null or string or integer)<br>
+The number of the milestone to associate this issue with or use null to remove the current milestone. Only users with push access can set the milestone for issues. Without push access to the repository, milestone changes are silently dropped.</p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (array)<br>
+Labels to associate with this issue. Pass one or more labels to replace the set of labels on this issue. Send an empty array ([]) to clear all labels from the issue. Only users with push access can set labels for issues. Without push access to the repository, label changes are silently dropped.</p>
+</li>
+<li>
+<p><strong><code>assignees</code></strong> (array)<br>
+Usernames to assign to this issue. Pass one or more user logins to replace the set of assignees on this issue. Send an empty array ([]) to clear all assignees from the issue. Only users with push access can set assignees for new issues. Without push access to the repository, assignee changes are silently dropped.</p>
+</li>
+<li>
+<p><strong><code>issue_field_values</code></strong> (array of objects)<br>
+An array of issue field values to set on this issue. Each field value must include the field ID and the value to set. Only users with push access can set field values for issues</p>
+<ul>
+<li><strong><code>field_id</code></strong> (integer) (required)<br>
+The ID of the issue field to set</li>
+<li><strong><code>value</code></strong> (string or number or array) (required)<br>
+The value to set for the field. For multi-select fields, provide an array of option names.</li>
+<li><strong><code>rationale</code></strong> (string)<br>
+Optional reasoning for setting this field value.</li>
+<li><strong><code>suggest</code></strong> (boolean)<br>
+If true, the change is stored as a pending suggestion for human review rather than applied directly.</li>
+<li><strong><code>confidence</code></strong> (string)<br>
+The confidence level for this field value choice.<br>
+Can be one of: <code>low</code>, <code>medium</code>, <code>high</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>type</code></strong> (null or string or object)<br>
+The issue type to associate with this issue. Only users with push access can set the type for issues. Without push access to the repository, type changes are silently dropped.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Update an issue / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>301</strong> - Moved permanently</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>410</strong> - Gone</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Update an issue / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "title": "Found a bug",
+</span><span style="color:#c0c5ce;">  "body": "I'm having a problem with this.",
+</span><span style="color:#c0c5ce;">  "assignees": [
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "milestone": 1,
+</span><span style="color:#c0c5ce;">  "state": "open",
+</span><span style="color:#c0c5ce;">  "labels": [
+</span><span style="color:#c0c5ce;">    "bug"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>all of:
+<ul>
+<li><strong>Issue</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string</li>
+<li><code>state_reason</code>: string or null, enum: <code>completed</code>, <code>reopened</code>, <code>not_planned</code>, <code>duplicate</code>, <code>null</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>body</code>: string or null</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>labels</code>: required, array of object</li>
+<li><code>assignees</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>milestone</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Milestone</strong>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>labels_url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>number</code>: required, integer</li>
+<li><code>state</code>: required, string, enum: <code>open</code>, <code>closed</code>, default: <code>"open"</code></li>
+<li><code>title</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>closed_issues</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>due_on</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>locked</code>: required, boolean</li>
+<li><code>active_lock_reason</code>: string or null</li>
+<li><code>comments</code>: required, integer</li>
+<li><code>pull_request</code>: object:
+<ul>
+<li><code>merged_at</code>: string or null, format: date-time</li>
+<li><code>diff_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>patch_url</code>: required, string or null, format: uri</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+</ul>
+</li>
+<li><code>closed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>draft</code>: boolean</li>
+<li><code>closed_by</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>body_html</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>timeline_url</code>: string, format: uri</li>
+<li><code>type</code>: <code>Issue Type</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>color</code>: string or null, enum: <code>gray</code>, <code>blue</code>, <code>green</code>, <code>yellow</code>, <code>orange</code>, <code>red</code>, <code>pink</code>, <code>purple</code>, <code>null</code></li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>is_enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>repository</code>: <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>reactions</code>: <code>Reaction Rollup</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>total_count</code>: required, integer</li>
+<li><code>+1</code>: required, integer</li>
+<li><code>-1</code>: required, integer</li>
+<li><code>laugh</code>: required, integer</li>
+<li><code>confused</code>: required, integer</li>
+<li><code>heart</code>: required, integer</li>
+<li><code>hooray</code>: required, integer</li>
+<li><code>eyes</code>: required, integer</li>
+<li><code>rocket</code>: required, integer</li>
+</ul>
+</li>
+<li><code>sub_issues_summary</code>: <code>Sub-issues Summary</code>:
+<ul>
+<li><code>total</code>: required, integer</li>
+<li><code>completed</code>: required, integer</li>
+<li><code>percent_completed</code>: required, integer</li>
+</ul>
+</li>
+<li><code>parent_issue_url</code>: string or null, format: uri</li>
+<li><code>pinned_comment</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Issue Comment</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>body</code>: string</li>
+<li><code>body_text</code>: string</li>
+<li><code>body_html</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>user</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>issue_url</code>: required, string, format: uri</li>
+<li><code>author_association</code>: string, enum: <code>COLLABORATOR</code>, <code>CONTRIBUTOR</code>, <code>FIRST_TIMER</code>, <code>FIRST_TIME_CONTRIBUTOR</code>, <code>MANNEQUIN</code>, <code>MEMBER</code>, <code>NONE</code>, <code>OWNER</code></li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong> (see above)</li>
+</ul>
+</li>
+<li><code>reactions</code>: <code>Reaction Rollup</code> (see above)</li>
+<li><code>pin</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Pinned Issue Comment</strong>
+<ul>
+<li><code>pinned_at</code>: required, string, format: date-time</li>
+<li><code>pinned_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>minimized</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Minimized Issue Comment</strong>
+<ul>
+<li><code>reason</code>: required, string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>issue_dependencies_summary</code>: <code>Issue Dependencies Summary</code>:
+<ul>
+<li><code>blocked_by</code>: required, integer</li>
+<li><code>blocking</code>: required, integer</li>
+<li><code>total_blocked_by</code>: required, integer</li>
+<li><code>total_blocking</code>: required, integer</li>
+</ul>
+</li>
+<li><code>issue_field_values</code>: array of <code>Issue Field Value</code>:
+<ul>
+<li><code>issue_field_id</code>: required, integer, format: int64</li>
+<li><code>issue_field_name</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>data_type</code>: required, string, enum: <code>text</code>, <code>single_select</code>, <code>multi_select</code>, <code>number</code>, <code>date</code></li>
+<li><code>value</code>: required, any of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>integer</strong></li>
+</ul>
+</li>
+<li><code>single_select_option</code>: object or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+<li><code>multi_select_options</code>: array of objects or null:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>name</code>: required, string</li>
+<li><code>color</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>suggestions</code>: object:
+<ul>
+<li><code>type</code>: array of objects:
+<ul>
+<li><code>value</code>: string</li>
+<li><code>rationale</code>: string</li>
+<li><code>suggest</code>: boolean</li>
+<li><code>confidence</code>: string, enum: <code>low</code>, <code>medium</code>, <code>high</code></li>
+<li><code>ignored</code>: boolean</li>
+<li><code>ignored_reason</code>: string, enum: <code>already_applied</code>, <code>issue_already_closed</code></li>
+</ul>
+</li>
+<li><code>issue_field_values</code>: array of objects:
+<ul>
+<li><code>field_id</code>: integer</li>
+<li><code>value</code>: one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+<li><code>rationale</code>: string</li>
+<li><code>suggest</code>: boolean</li>
+<li><code>confidence</code>: string, enum: <code>low</code>, <code>medium</code>, <code>high</code></li>
+<li><code>ignored</code>: boolean</li>
+<li><code>ignored_reason</code>: string, enum: <code>already_applied</code>, <code>issue_already_closed</code></li>
+</ul>
+</li>
+<li><code>labels</code>: array of objects:
+<ul>
+<li><code>name</code>: string</li>
+<li><code>rationale</code>: string</li>
+<li><code>suggest</code>: boolean</li>
+<li><code>confidence</code>: string, enum: <code>low</code>, <code>medium</code>, <code>high</code></li>
+<li><code>ignored</code>: boolean</li>
+<li><code>ignored_reason</code>: string, enum: <code>already_applied</code>, <code>issue_already_closed</code></li>
+</ul>
+</li>
+<li><code>assignees</code>: array of objects:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>rationale</code>: string</li>
+<li><code>suggest</code>: boolean</li>
+<li><code>confidence</code>: string, enum: <code>low</code>, <code>medium</code>, <code>high</code></li>
+<li><code>ignored</code>: boolean</li>
+<li><code>ignored_reason</code>: string, enum: <code>already_applied</code>, <code>issue_already_closed</code></li>
+</ul>
+</li>
+<li><code>state</code>: array of objects:
+<ul>
+<li><code>value</code>: string</li>
+<li><code>state_reason</code>: string</li>
+<li><code>duplicate_issue_id</code>: integer</li>
+<li><code>rationale</code>: string</li>
+<li><code>suggest</code>: boolean</li>
+<li><code>confidence</code>: string, enum: <code>low</code>, <code>medium</code>, <code>high</code></li>
+<li><code>ignored</code>: boolean</li>
+<li><code>ignored_reason</code>: string, enum: <code>already_applied</code>, <code>issue_already_closed</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="lock-an-issue" title="Lock an issue">Lock an issue<a href="#lock-an-issue" aria-label="Link to heading 'Lock an issue'" data-heading-content="Lock an issue" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/issues/{issue_number}/lock
+</span></code></pre>
+<p>Users with push access can lock an issue or pull request's conversation.<br>
+Note that, if you choose not to pass any parameters, you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."</p>
+<h3 id="parameters-6" title="Lock an issue / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>lock_reason</code></strong> (string)<br>
+The reason for locking the issue or pull request conversation. Lock will fail if you don't use one of these reasons:</li>
+</ul>
+<p>off-topic<br>
+too heated<br>
+resolved<br>
+spam<br>
+Can be one of: <code>off-topic</code>, <code>too heated</code>, <code>resolved</code>, <code>spam</code></p>
+<h3 id="http-response-status-codes-6" title="Lock an issue / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>410</strong> - Gone</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Lock an issue / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-of-locking-an-issue-as-off-topic">Example of locking an issue as off-topic<a href="#example-of-locking-an-issue-as-off-topic" aria-label="Link to heading 'Example of locking an issue as off-topic'" data-heading-content="Example of locking an issue as off-topic" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER/lock \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "lock_reason": "off-topic"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="unlock-an-issue" title="Unlock an issue">Unlock an issue<a href="#unlock-an-issue" aria-label="Link to heading 'Unlock an issue'" data-heading-content="Unlock an issue" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/issues/{issue_number}/lock
+</span></code></pre>
+<p>Users with push access can unlock an issue's conversation.</p>
+<h3 id="parameters-7" title="Unlock an issue / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Unlock an issue / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Unlock an issue / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER/lock
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-issue-suggestions" title="List issue suggestions">List issue suggestions<a href="#list-issue-suggestions" aria-label="Link to heading 'List issue suggestions'" data-heading-content="List issue suggestions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/issues/{issue_number}/suggestions
+</span></code></pre>
+<p>Lists the suggestions on an issue. A suggestion is an agent-proposed change to an issue's type, labels, fields, assignees, or closed state that a maintainer can approve or dismiss.<br>
+By default only pending suggestions are returned. Use state=all to return suggestions in every state, or state=<state> to filter to a single state. Use action=<action> to return only suggestions for a specific change.<br>
+This endpoint is only available while the issue suggestions feature is enabled for the repository, and only supports issues, not pull requests.<br>
+Requires triage access to the repository.</action></state></p>
+<h3 id="parameters-8" title="List issue suggestions / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Filter suggestions by their state.<br>
+Default: <code>pending</code><br>
+Can be one of: <code>pending</code>, <code>applied</code>, <code>approved</code>, <code>dismissed</code>, <code>replaced</code>, <code>invalidated</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>action</code></strong> (string)<br>
+Filter suggestions by the change they propose.<br>
+Can be one of: <code>set_type</code>, <code>add_label</code>, <code>add_field</code>, <code>add_assignee</code>, <code>close_issue</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="List issue suggestions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="List issue suggestions / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER/suggestions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Issue Suggestion</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>issue_id</code>: required, integer</li>
+<li><code>action</code>: required, string, enum: <code>set_type</code>, <code>add_label</code>, <code>add_field</code>, <code>add_assignee</code>, <code>close_issue</code></li>
+<li><code>state</code>: required, string, enum: <code>pending</code>, <code>applied</code>, <code>approved</code>, <code>dismissed</code>, <code>replaced</code>, <code>invalidated</code></li>
+<li><code>target_id</code>: required, integer or null</li>
+<li><code>target_value</code>: required, one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>boolean</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+<li><code>rationale</code>: required, string or null</li>
+<li><code>confidence</code>: required, string or null, enum: <code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>, <code>null</code></li>
+<li><code>actor_id</code>: required, integer or null</li>
+<li><code>issue_event_id</code>: required, integer or null</li>
+<li><code>resolved_by</code>: required, integer or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="approve-an-issue-suggestion" title="Approve an issue suggestion">Approve an issue suggestion<a href="#approve-an-issue-suggestion" aria-label="Link to heading 'Approve an issue suggestion'" data-heading-content="Approve an issue suggestion" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/issues/{issue_number}/suggestions/{suggestion_id}/approve
+</span></code></pre>
+<p>Approves a pending suggestion on an issue. Applies the proposed change (creating the corresponding timeline event), transitions the suggestion to approved, and dismisses any competing pending suggestions for the same change.<br>
+Requires triage access to the repository. Approving a suggestion also requires permission to perform the change it applies (for example, setting the issue type, adding a label or assignee, or closing the issue); this only affects fine-grained access tokens and GitHub Apps whose permissions are narrower than the triage role. This endpoint only supports issues, not pull requests.</p>
+<h3 id="parameters-9" title="Approve an issue suggestion / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+<li>
+<p><strong><code>suggestion_id</code></strong> (integer) (required)<br>
+The unique identifier of the suggestion.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Approve an issue suggestion / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Approve an issue suggestion / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER/suggestions/SUGGESTION_ID/approve
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>issue_id</code>: required, integer</li>
+<li><code>action</code>: required, string, enum: <code>set_type</code>, <code>add_label</code>, <code>add_field</code>, <code>add_assignee</code>, <code>close_issue</code></li>
+<li><code>state</code>: required, string, enum: <code>pending</code>, <code>applied</code>, <code>approved</code>, <code>dismissed</code>, <code>replaced</code>, <code>invalidated</code></li>
+<li><code>target_id</code>: required, integer or null</li>
+<li><code>target_value</code>: required, one of:
+<ul>
+<li><strong>string</strong></li>
+<li><strong>number</strong></li>
+<li><strong>boolean</strong></li>
+<li><strong>array</strong></li>
+</ul>
+</li>
+<li><code>rationale</code>: required, string or null</li>
+<li><code>confidence</code>: required, string or null, enum: <code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>, <code>null</code></li>
+<li><code>actor_id</code>: required, integer or null</li>
+<li><code>issue_event_id</code>: required, integer or null</li>
+<li><code>resolved_by</code>: required, integer or null</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="dismiss-an-issue-suggestion" title="Dismiss an issue suggestion">Dismiss an issue suggestion<a href="#dismiss-an-issue-suggestion" aria-label="Link to heading 'Dismiss an issue suggestion'" data-heading-content="Dismiss an issue suggestion" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/issues/{issue_number}/suggestions/{suggestion_id}/dismiss
+</span></code></pre>
+<p>Dismisses a pending suggestion on an issue. Transitions the suggestion to dismissed without applying any change or creating a timeline event.<br>
+Requires triage access to the repository. This endpoint only supports issues, not pull requests.</p>
+<h3 id="parameters-10" title="Dismiss an issue suggestion / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>issue_number</code></strong> (integer) (required)<br>
+The number that identifies the issue.</p>
+</li>
+<li>
+<p><strong><code>suggestion_id</code></strong> (integer) (required)<br>
+The unique identifier of the suggestion.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Dismiss an issue suggestion / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Dismiss an issue suggestion / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/issues/ISSUE_NUMBER/suggestions/SUGGESTION_ID/dismiss
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#approve-an-issue-suggestion">Approve an issue suggestion</a>.</p>
+<h2 id="list-user-account-issues-assigned-to-the-authenticated-user" title="List user account issues assigned to the authenticated user">List user account issues assigned to the authenticated user<a href="#list-user-account-issues-assigned-to-the-authenticated-user" aria-label="Link to heading 'List user account issues assigned to the authenticated user'" data-heading-content="List user account issues assigned to the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/issues
+</span></code></pre>
+<p>List issues across owned and member repositories assigned to the authenticated user.<br>
+Note</p>
+<p>GitHub's REST API considers every pull request an issue, but not every issue is a pull request. For this reason, "Issues" endpoints may return both issues and pull requests in the response. You can identify pull requests by the pull_request key. Be aware that the id of a pull request returned from "Issues" endpoints will be an issue id. To find out the pull request id, use the "List pull requests" endpoint.</p>
+<p>This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw markdown body. Response will include body. This is the default if you do not pass any specific media type.<br>
+application/vnd.github.text+json: Returns a text only representation of the markdown body. Response will include body_text.<br>
+application/vnd.github.html+json: Returns HTML rendered from the body's markdown. Response will include body_html.<br>
+application/vnd.github.full+json: Returns raw, text, and HTML representations. Response will include body, body_text, and body_html.</p>
+<h3 id="parameters-11" title="List user account issues assigned to the authenticated user / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>filter</code></strong> (string)<br>
+Indicates which sorts of issues to return. assigned means issues assigned to you. created means issues created by you. mentioned means issues mentioning you. subscribed means issues you're subscribed to updates for. all or repos means all issues you can see, regardless of participation or creation.<br>
+Default: <code>assigned</code><br>
+Can be one of: <code>assigned</code>, <code>created</code>, <code>mentioned</code>, <code>subscribed</code>, <code>repos</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Indicates the state of the issues to return.<br>
+Default: <code>open</code><br>
+Can be one of: <code>open</code>, <code>closed</code>, <code>all</code></p>
+</li>
+<li>
+<p><strong><code>labels</code></strong> (string)<br>
+A list of comma separated label names. Example: bug,ui,@high</p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+What to sort results by.<br>
+Default: <code>created</code><br>
+Can be one of: <code>created</code>, <code>updated</code>, <code>comments</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show results that were last updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="List user account issues assigned to the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="List user account issues assigned to the authenticated user / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/issues
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-issues-assigned-to-the-authenticated-user">List issues assigned to the authenticated user</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

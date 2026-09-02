@@ -1,0 +1,2849 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for protected branches</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Branches</a> / </nav><h1 id="rest-api-endpoints-for-protected-branches">REST API endpoints for protected branches<a href="#rest-api-endpoints-for-protected-branches" aria-label="Link to heading 'REST API endpoints for protected branches'" data-heading-content="REST API endpoints for protected branches" class="anchor"></a></h1>
+<p>Use the REST API to manage protected branches.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-branch-protection" title="Get branch protection">Get branch protection<a href="#get-branch-protection" aria-label="Link to heading 'Get branch protection'" data-heading-content="Get branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters" title="Get branch protection / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get branch protection / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: string</li>
+<li><code>enabled</code>: boolean</li>
+<li><code>required_status_checks</code>: <code>Protected Branch Required Status Check</code>:
+<ul>
+<li><code>url</code>: string</li>
+<li><code>enforcement_level</code>: string</li>
+<li><code>contexts</code>: required, array of string</li>
+<li><code>checks</code>: required, array of objects:
+<ul>
+<li><code>context</code>: required, string</li>
+<li><code>app_id</code>: required, integer or null</li>
+</ul>
+</li>
+<li><code>contexts_url</code>: string</li>
+<li><code>strict</code>: boolean</li>
+</ul>
+</li>
+<li><code>enforce_admins</code>: <code>Protected Branch Admin Enforced</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>required_pull_request_reviews</code>: <code>Protected Branch Pull Request Review</code>:
+<ul>
+<li><code>url</code>: string, format: uri</li>
+<li><code>dismissal_restrictions</code>: object:
+<ul>
+<li><code>users</code>: array of <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: array of <code>Team</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>apps</code>: array of <code>GitHub app</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+<li><code>url</code>: string</li>
+<li><code>users_url</code>: string</li>
+<li><code>teams_url</code>: string</li>
+</ul>
+</li>
+<li><code>bypass_pull_request_allowances</code>: object:
+<ul>
+<li><code>users</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>teams</code>: array of <code>Team</code> (see above)</li>
+<li><code>apps</code>: array of <code>GitHub app</code> (see above)</li>
+</ul>
+</li>
+<li><code>dismiss_stale_reviews</code>: required, boolean</li>
+<li><code>require_code_owner_reviews</code>: required, boolean</li>
+<li><code>required_approving_review_count</code>: integer, minimum: 0, maximum: 6</li>
+<li><code>require_last_push_approval</code>: boolean, default: <code>false</code></li>
+</ul>
+</li>
+<li><code>restrictions</code>: <code>Branch Restriction Policy</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>users_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>apps_url</code>: required, string, format: uri</li>
+<li><code>users</code>: required, array of objects:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer, format: int64</li>
+<li><code>node_id</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: required, array of <code>Team</code> (see above)</li>
+<li><code>apps</code>: required, array of objects:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: string</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer</li>
+<li><code>node_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>hooks_url</code>: string</li>
+<li><code>issues_url</code>: string</li>
+<li><code>members_url</code>: string</li>
+<li><code>public_members_url</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>name</code>: string</li>
+<li><code>client_id</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>external_url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>created_at</code>: string</li>
+<li><code>updated_at</code>: string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>issues</code>: string</li>
+<li><code>single_file</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: array of string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>required_linear_history</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>allow_force_pushes</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>allow_deletions</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>block_creations</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>required_conversation_resolution</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>name</code>: string</li>
+<li><code>protection_url</code>: string</li>
+<li><code>required_signatures</code>: object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>lock_branch</code>: object:
+<ul>
+<li><code>enabled</code>: boolean, default: <code>false</code></li>
+</ul>
+</li>
+<li><code>allow_fork_syncing</code>: object:
+<ul>
+<li><code>enabled</code>: boolean, default: <code>false</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="update-branch-protection" title="Update branch protection">Update branch protection<a href="#update-branch-protection" aria-label="Link to heading 'Update branch protection'" data-heading-content="Update branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/branches/{branch}/protection
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Protecting a branch requires admin or owner permissions to the repository.<br>
+Note</p>
+<p>Passing new arrays of users and teams replaces their previous values.</p>
+<p>Note</p>
+<p>The list of users, apps, and teams in total is limited to 100 items.</p>
+<h3 id="parameters-1" title="Update branch protection / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>required_status_checks</code></strong> (object or null) (required)<br>
+Require status checks to pass before merging. Set to null to disable.</p>
+<ul>
+<li><strong><code>strict</code></strong> (boolean) (required)<br>
+Require branches to be up to date before merging.</li>
+<li><strong><code>contexts</code></strong> (array of strings) (required)<br>
+Closing down notice: The list of status checks to require in order to merge into this branch. If any of these checks have recently been set by a particular GitHub App, they will be required to come from that app in future for the branch to merge. Use checks instead of contexts for more fine-grained control.</li>
+<li><strong><code>checks</code></strong> (array of objects)<br>
+The list of status checks to require in order to merge into this branch.
+<ul>
+<li><strong><code>context</code></strong> (string) (required)<br>
+The name of the required check</li>
+<li><strong><code>app_id</code></strong> (integer)<br>
+The ID of the GitHub App that must provide this check. Omit this field to automatically select the GitHub App that has recently provided this check, or any app if it was not set by a GitHub App. Pass -1 to explicitly allow any app to set the status.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>enforce_admins</code></strong> (boolean or null) (required)<br>
+Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.</p>
+</li>
+<li>
+<p><strong><code>required_pull_request_reviews</code></strong> (object or null) (required)<br>
+Require at least one approving review on a pull request, before merging. Set to null to disable.</p>
+<ul>
+<li><strong><code>dismissal_restrictions</code></strong> (object)<br>
+Specify which users, teams, and apps can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.
+<ul>
+<li><strong><code>users</code></strong> (array of strings)<br>
+The list of user logins with dismissal access</li>
+<li><strong><code>teams</code></strong> (array of strings)<br>
+The list of team slugs with dismissal access</li>
+<li><strong><code>apps</code></strong> (array of strings)<br>
+The list of app slugs with dismissal access</li>
+</ul>
+</li>
+<li><strong><code>dismiss_stale_reviews</code></strong> (boolean)<br>
+Set to true if you want to automatically dismiss approving reviews when someone pushes a new commit.</li>
+<li><strong><code>require_code_owner_reviews</code></strong> (boolean)<br>
+Blocks merging pull requests until code owners review them.</li>
+<li><strong><code>required_approving_review_count</code></strong> (integer)<br>
+Specify the number of reviewers required to approve pull requests. Use a number between 1 and 6 or 0 to not require reviewers.</li>
+<li><strong><code>require_last_push_approval</code></strong> (boolean)<br>
+Whether the most recent push must be approved by someone other than the person who pushed it. Default: false.<br>
+Default: <code>false</code></li>
+<li><strong><code>bypass_pull_request_allowances</code></strong> (object)<br>
+Allow specific users, teams, or apps to bypass pull request requirements.
+<ul>
+<li><strong><code>users</code></strong> (array of strings)<br>
+The list of user logins allowed to bypass pull request requirements.</li>
+<li><strong><code>teams</code></strong> (array of strings)<br>
+The list of team slugs allowed to bypass pull request requirements.</li>
+<li><strong><code>apps</code></strong> (array of strings)<br>
+The list of app slugs allowed to bypass pull request requirements.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>restrictions</code></strong> (object or null) (required)<br>
+Restrict who can push to the protected branch. User, app, and team restrictions are only available for organization-owned repositories. Set to null to disable.</p>
+<ul>
+<li><strong><code>users</code></strong> (array of strings) (required)<br>
+The list of user logins with push access</li>
+<li><strong><code>teams</code></strong> (array of strings) (required)<br>
+The list of team slugs with push access</li>
+<li><strong><code>apps</code></strong> (array of strings)<br>
+The list of app slugs with push access</li>
+</ul>
+</li>
+<li>
+<p><strong><code>required_linear_history</code></strong> (boolean)<br>
+Enforces a linear commit Git history, which prevents anyone from pushing merge commits to a branch. Set to true to enforce a linear commit history. Set to false to disable a linear commit Git history. Your repository must allow squash merging or rebase merging before you can enable a linear commit history. Default: false. For more information, see "Requiring a linear commit history" in the GitHub Help documentation.</p>
+</li>
+<li>
+<p><strong><code>allow_force_pushes</code></strong> (boolean or null)<br>
+Permits force pushes to the protected branch by anyone with write access to the repository. Set to true to allow force pushes. Set to false or null to block force pushes. Default: false. For more information, see "Enabling force pushes to a protected branch" in the GitHub Help documentation."</p>
+</li>
+<li>
+<p><strong><code>allow_deletions</code></strong> (boolean)<br>
+Allows deletion of the protected branch by anyone with write access to the repository. Set to false to prevent deletion of the protected branch. Default: false. For more information, see "Enabling force pushes to a protected branch" in the GitHub Help documentation.</p>
+</li>
+<li>
+<p><strong><code>block_creations</code></strong> (boolean)<br>
+If set to true, the restrictions branch protection settings which limits who can push will also block pushes which create new branches, unless the push is initiated by a user, team, or app which has the ability to push. Set to true to restrict new branch creation. Default: false.</p>
+</li>
+<li>
+<p><strong><code>required_conversation_resolution</code></strong> (boolean)<br>
+Requires all conversations on code to be resolved before a pull request can be merged into a branch that matches this rule. Set to false to disable. Default: false.</p>
+</li>
+<li>
+<p><strong><code>lock_branch</code></strong> (boolean)<br>
+Whether to set the branch as read-only. If this is true, users will not be able to push to the branch. Default: false.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>allow_fork_syncing</code></strong> (boolean)<br>
+Whether users can pull changes from upstream when the branch is locked. Set to true to allow fork syncing. Set to false to prevent fork syncing. Default: false.<br>
+Default: <code>false</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Update branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Update branch protection / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "required_status_checks": {
+</span><span style="color:#c0c5ce;">    "strict": true,
+</span><span style="color:#c0c5ce;">    "contexts": [
+</span><span style="color:#c0c5ce;">      "continuous-integration/travis-ci"
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "enforce_admins": true,
+</span><span style="color:#c0c5ce;">  "required_pull_request_reviews": {
+</span><span style="color:#c0c5ce;">    "dismissal_restrictions": {
+</span><span style="color:#c0c5ce;">      "users": [
+</span><span style="color:#c0c5ce;">        "octocat"
+</span><span style="color:#c0c5ce;">      ],
+</span><span style="color:#c0c5ce;">      "teams": [
+</span><span style="color:#c0c5ce;">        "justice-league"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    "dismiss_stale_reviews": true,
+</span><span style="color:#c0c5ce;">    "require_code_owner_reviews": true,
+</span><span style="color:#c0c5ce;">    "required_approving_review_count": 2,
+</span><span style="color:#c0c5ce;">    "require_last_push_approval": true,
+</span><span style="color:#c0c5ce;">    "bypass_pull_request_allowances": {
+</span><span style="color:#c0c5ce;">      "users": [
+</span><span style="color:#c0c5ce;">        "octocat"
+</span><span style="color:#c0c5ce;">      ],
+</span><span style="color:#c0c5ce;">      "teams": [
+</span><span style="color:#c0c5ce;">        "justice-league"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "restrictions": {
+</span><span style="color:#c0c5ce;">    "users": [
+</span><span style="color:#c0c5ce;">      "octocat"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "teams": [
+</span><span style="color:#c0c5ce;">      "justice-league"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "apps": [
+</span><span style="color:#c0c5ce;">      "super-ci"
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "required_linear_history": true,
+</span><span style="color:#c0c5ce;">  "allow_force_pushes": true,
+</span><span style="color:#c0c5ce;">  "allow_deletions": true,
+</span><span style="color:#c0c5ce;">  "block_creations": true,
+</span><span style="color:#c0c5ce;">  "required_conversation_resolution": true,
+</span><span style="color:#c0c5ce;">  "lock_branch": true,
+</span><span style="color:#c0c5ce;">  "allow_fork_syncing": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>required_status_checks</code>: <code>Status Check Policy</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>strict</code>: required, boolean</li>
+<li><code>contexts</code>: required, array of string</li>
+<li><code>checks</code>: required, array of objects:
+<ul>
+<li><code>context</code>: required, string</li>
+<li><code>app_id</code>: required, integer or null</li>
+</ul>
+</li>
+<li><code>contexts_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>required_pull_request_reviews</code>: object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>dismiss_stale_reviews</code>: boolean</li>
+<li><code>require_code_owner_reviews</code>: boolean</li>
+<li><code>required_approving_review_count</code>: integer</li>
+<li><code>require_last_push_approval</code>: boolean, default: <code>false</code></li>
+<li><code>dismissal_restrictions</code>: object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>users_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>users</code>: required, array of <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: required, array of <code>Team</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>apps</code>: array of <code>GitHub app</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>bypass_pull_request_allowances</code>: object:
+<ul>
+<li><code>users</code>: required, array of <code>Simple User</code> (see above)</li>
+<li><code>teams</code>: required, array of <code>Team</code> (see above)</li>
+<li><code>apps</code>: array of <code>GitHub app</code> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>required_signatures</code>: object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>enforce_admins</code>: object:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>required_linear_history</code>: object:
+<ul>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>allow_force_pushes</code>: object:
+<ul>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>allow_deletions</code>: object:
+<ul>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>restrictions</code>: <code>Branch Restriction Policy</code>:
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>users_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>apps_url</code>: required, string, format: uri</li>
+<li><code>users</code>: required, array of objects:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer, format: int64</li>
+<li><code>node_id</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: required, array of <code>Team</code> (see above)</li>
+<li><code>apps</code>: required, array of objects:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: string</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer</li>
+<li><code>node_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>hooks_url</code>: string</li>
+<li><code>issues_url</code>: string</li>
+<li><code>members_url</code>: string</li>
+<li><code>public_members_url</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>name</code>: string</li>
+<li><code>client_id</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>external_url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>created_at</code>: string</li>
+<li><code>updated_at</code>: string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>issues</code>: string</li>
+<li><code>single_file</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: array of string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>required_conversation_resolution</code>: object:
+<ul>
+<li><code>enabled</code>: boolean</li>
+</ul>
+</li>
+<li><code>block_creations</code>: object:
+<ul>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>lock_branch</code>: object:
+<ul>
+<li><code>enabled</code>: boolean, default: <code>false</code></li>
+</ul>
+</li>
+<li><code>allow_fork_syncing</code>: object:
+<ul>
+<li><code>enabled</code>: boolean, default: <code>false</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="delete-branch-protection" title="Delete branch protection">Delete branch protection<a href="#delete-branch-protection" aria-label="Link to heading 'Delete branch protection'" data-heading-content="Delete branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-2" title="Delete branch protection / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Delete branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Delete branch protection / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-admin-branch-protection" title="Get admin branch protection">Get admin branch protection<a href="#get-admin-branch-protection" aria-label="Link to heading 'Get admin branch protection'" data-heading-content="Get admin branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-3" title="Get admin branch protection / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get admin branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-3" title="Get admin branch protection / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/enforce_admins
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>enabled</code>: required, boolean</li>
+</ul>
+<h2 id="set-admin-branch-protection" title="Set admin branch protection">Set admin branch protection<a href="#set-admin-branch-protection" aria-label="Link to heading 'Set admin branch protection'" data-heading-content="Set admin branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Adding admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.</p>
+<h3 id="parameters-4" title="Set admin branch protection / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Set admin branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="Set admin branch protection / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/enforce_admins
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-admin-branch-protection">Get admin branch protection</a>.</p>
+<h2 id="delete-admin-branch-protection" title="Delete admin branch protection">Delete admin branch protection<a href="#delete-admin-branch-protection" aria-label="Link to heading 'Delete admin branch protection'" data-heading-content="Delete admin branch protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Removing admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.</p>
+<h3 id="parameters-5" title="Delete admin branch protection / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Delete admin branch protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Delete admin branch protection / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/enforce_admins
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-pull-request-review-protection" title="Get pull request review protection">Get pull request review protection<a href="#get-pull-request-review-protection" aria-label="Link to heading 'Get pull request review protection'" data-heading-content="Get pull request review protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-6" title="Get pull request review protection / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get pull request review protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-6" title="Get pull request review protection / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_pull_request_reviews
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: string, format: uri</li>
+<li><code>dismissal_restrictions</code>: object:
+<ul>
+<li><code>users</code>: array of <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: array of <code>Team</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>apps</code>: array of <code>GitHub app</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+<li><code>url</code>: string</li>
+<li><code>users_url</code>: string</li>
+<li><code>teams_url</code>: string</li>
+</ul>
+</li>
+<li><code>bypass_pull_request_allowances</code>: object:
+<ul>
+<li><code>users</code>: array of <code>Simple User</code> (see above)</li>
+<li><code>teams</code>: array of <code>Team</code> (see above)</li>
+<li><code>apps</code>: array of <code>GitHub app</code> (see above)</li>
+</ul>
+</li>
+<li><code>dismiss_stale_reviews</code>: required, boolean</li>
+<li><code>require_code_owner_reviews</code>: required, boolean</li>
+<li><code>required_approving_review_count</code>: integer, minimum: 0, maximum: 6</li>
+<li><code>require_last_push_approval</code>: boolean, default: <code>false</code></li>
+</ul>
+<h2 id="update-pull-request-review-protection" title="Update pull request review protection">Update pull request review protection<a href="#update-pull-request-review-protection" aria-label="Link to heading 'Update pull request review protection'" data-heading-content="Update pull request review protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Updating pull request review enforcement requires admin or owner permissions to the repository and branch protection to be enabled.<br>
+Note</p>
+<p>Passing new arrays of users and teams replaces their previous values.</p>
+<h3 id="parameters-7" title="Update pull request review protection / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>dismissal_restrictions</code></strong> (object)<br>
+Specify which users, teams, and apps can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.</p>
+<ul>
+<li><strong><code>users</code></strong> (array of strings)<br>
+The list of user logins with dismissal access</li>
+<li><strong><code>teams</code></strong> (array of strings)<br>
+The list of team slugs with dismissal access</li>
+<li><strong><code>apps</code></strong> (array of strings)<br>
+The list of app slugs with dismissal access</li>
+</ul>
+</li>
+<li>
+<p><strong><code>dismiss_stale_reviews</code></strong> (boolean)<br>
+Set to true if you want to automatically dismiss approving reviews when someone pushes a new commit.</p>
+</li>
+<li>
+<p><strong><code>require_code_owner_reviews</code></strong> (boolean)<br>
+Blocks merging pull requests until code owners have reviewed.</p>
+</li>
+<li>
+<p><strong><code>required_approving_review_count</code></strong> (integer)<br>
+Specifies the number of reviewers required to approve pull requests. Use a number between 1 and 6 or 0 to not require reviewers.</p>
+</li>
+<li>
+<p><strong><code>require_last_push_approval</code></strong> (boolean)<br>
+Whether the most recent push must be approved by someone other than the person who pushed it. Default: false<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>bypass_pull_request_allowances</code></strong> (object)<br>
+Allow specific users, teams, or apps to bypass pull request requirements.</p>
+<ul>
+<li><strong><code>users</code></strong> (array of strings)<br>
+The list of user logins allowed to bypass pull request requirements.</li>
+<li><strong><code>teams</code></strong> (array of strings)<br>
+The list of team slugs allowed to bypass pull request requirements.</li>
+<li><strong><code>apps</code></strong> (array of strings)<br>
+The list of app slugs allowed to bypass pull request requirements.</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Update pull request review protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Update pull request review protection / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_pull_request_reviews \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "dismissal_restrictions": {
+</span><span style="color:#c0c5ce;">    "users": [
+</span><span style="color:#c0c5ce;">      "octocat"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "teams": [
+</span><span style="color:#c0c5ce;">      "justice-league"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "apps": [
+</span><span style="color:#c0c5ce;">      "octoapp"
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "bypass_pull_request_allowances": {
+</span><span style="color:#c0c5ce;">    "users": [
+</span><span style="color:#c0c5ce;">      "octocat"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "teams": [
+</span><span style="color:#c0c5ce;">      "justice-league"
+</span><span style="color:#c0c5ce;">    ],
+</span><span style="color:#c0c5ce;">    "apps": [
+</span><span style="color:#c0c5ce;">      "octoapp"
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "dismiss_stale_reviews": true,
+</span><span style="color:#c0c5ce;">  "require_code_owner_reviews": true,
+</span><span style="color:#c0c5ce;">  "required_approving_review_count": 2,
+</span><span style="color:#c0c5ce;">  "require_last_push_approval": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-pull-request-review-protection">Get pull request review protection</a>.</p>
+<h2 id="delete-pull-request-review-protection" title="Delete pull request review protection">Delete pull request review protection<a href="#delete-pull-request-review-protection" aria-label="Link to heading 'Delete pull request review protection'" data-heading-content="Delete pull request review protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-8" title="Delete pull request review protection / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Delete pull request review protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Delete pull request review protection / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_pull_request_reviews
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-commit-signature-protection" title="Get commit signature protection">Get commit signature protection<a href="#get-commit-signature-protection" aria-label="Link to heading 'Get commit signature protection'" data-heading-content="Get commit signature protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+When authenticated with admin or owner permissions to the repository, you can use this endpoint to check whether a branch requires signed commits. An enabled status of true indicates you must sign commits on this branch. For more information, see Signing commits with GPG in GitHub Help.<br>
+Note</p>
+<p>You must enable branch protection to require signed commits.</p>
+<h3 id="parameters-9" title="Get commit signature protection / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Get commit signature protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Get commit signature protection / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_signatures
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-admin-branch-protection">Get admin branch protection</a>.</p>
+<h2 id="create-commit-signature-protection" title="Create commit signature protection">Create commit signature protection<a href="#create-commit-signature-protection" aria-label="Link to heading 'Create commit signature protection'" data-heading-content="Create commit signature protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+When authenticated with admin or owner permissions to the repository, you can use this endpoint to require signed commits on a branch. You must enable branch protection to require signed commits.</p>
+<h3 id="parameters-10" title="Create commit signature protection / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Create commit signature protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Create commit signature protection / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_signatures
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-admin-branch-protection">Get admin branch protection</a>.</p>
+<h2 id="delete-commit-signature-protection" title="Delete commit signature protection">Delete commit signature protection<a href="#delete-commit-signature-protection" aria-label="Link to heading 'Delete commit signature protection'" data-heading-content="Delete commit signature protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+When authenticated with admin or owner permissions to the repository, you can use this endpoint to disable required signed commits on a branch. You must enable branch protection to require signed commits.</p>
+<h3 id="parameters-11" title="Delete commit signature protection / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Delete commit signature protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Delete commit signature protection / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_signatures
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-status-checks-protection" title="Get status checks protection">Get status checks protection<a href="#get-status-checks-protection" aria-label="Link to heading 'Get status checks protection'" data-heading-content="Get status checks protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-12" title="Get status checks protection / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get status checks protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Get status checks protection / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>strict</code>: required, boolean</li>
+<li><code>contexts</code>: required, array of string</li>
+<li><code>checks</code>: required, array of objects:
+<ul>
+<li><code>context</code>: required, string</li>
+<li><code>app_id</code>: required, integer or null</li>
+</ul>
+</li>
+<li><code>contexts_url</code>: required, string, format: uri</li>
+</ul>
+<h2 id="update-status-check-protection" title="Update status check protection">Update status check protection<a href="#update-status-check-protection" aria-label="Link to heading 'Update status check protection'" data-heading-content="Update status check protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Updating required status checks requires admin or owner permissions to the repository and branch protection to be enabled.</p>
+<h3 id="parameters-13" title="Update status check protection / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>strict</code></strong> (boolean)<br>
+Require branches to be up to date before merging.</p>
+</li>
+<li>
+<p><strong><code>contexts</code></strong> (array of strings)<br>
+Closing down notice: The list of status checks to require in order to merge into this branch. If any of these checks have recently been set by a particular GitHub App, they will be required to come from that app in future for the branch to merge. Use checks instead of contexts for more fine-grained control.</p>
+</li>
+<li>
+<p><strong><code>checks</code></strong> (array of objects)<br>
+The list of status checks to require in order to merge into this branch.</p>
+<ul>
+<li><strong><code>context</code></strong> (string) (required)<br>
+The name of the required check</li>
+<li><strong><code>app_id</code></strong> (integer)<br>
+The ID of the GitHub App that must provide this check. Omit this field to automatically select the GitHub App that has recently provided this check, or any app if it was not set by a GitHub App. Pass -1 to explicitly allow any app to set the status.</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Update status check protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-13" title="Update status check protection / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "strict": true,
+</span><span style="color:#c0c5ce;">  "contexts": [
+</span><span style="color:#c0c5ce;">    "continuous-integration/travis-ci"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-status-checks-protection">Get status checks protection</a>.</p>
+<h2 id="remove-status-check-protection" title="Remove status check protection">Remove status check protection<a href="#remove-status-check-protection" aria-label="Link to heading 'Remove status check protection'" data-heading-content="Remove status check protection" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-14" title="Remove status check protection / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14" title="Remove status check protection / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-14" title="Remove status check protection / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-all-status-check-contexts" title="Get all status check contexts">Get all status check contexts<a href="#get-all-status-check-contexts" aria-label="Link to heading 'Get all status check contexts'" data-heading-content="Get all status check contexts" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-15" title="Get all status check contexts / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-15" title="Get all status check contexts / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-15" title="Get all status check contexts / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks/contexts
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of string</p>
+<h2 id="add-status-check-contexts" title="Add status check contexts">Add status check contexts<a href="#add-status-check-contexts" aria-label="Link to heading 'Add status check contexts'" data-heading-content="Add status check contexts" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-16" title="Add status check contexts / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>contexts</code></strong> (array of strings) (required)<br>
+The name of the status checks</li>
+</ul>
+<h3 id="http-response-status-codes-16" title="Add status check contexts / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-16" title="Add status check contexts / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-adding-status-checks-to-a-branch-protection-rule">Example adding status checks to a branch protection rule<a href="#example-adding-status-checks-to-a-branch-protection-rule" aria-label="Link to heading 'Example adding status checks to a branch protection rule'" data-heading-content="Example adding status checks to a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks/contexts \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "contexts": [
+</span><span style="color:#c0c5ce;">    "continuous-integration/travis-ci",
+</span><span style="color:#c0c5ce;">    "continuous-integration/jenkins"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-all-status-check-contexts">Get all status check contexts</a>.</p>
+<h2 id="set-status-check-contexts" title="Set status check contexts">Set status check contexts<a href="#set-status-check-contexts" aria-label="Link to heading 'Set status check contexts'" data-heading-content="Set status check contexts" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-17" title="Set status check contexts / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-17">Path and query parameters<a href="#path-and-query-parameters-17" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>contexts</code></strong> (array of strings) (required)<br>
+The name of the status checks</li>
+</ul>
+<h3 id="http-response-status-codes-17" title="Set status check contexts / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-17" title="Set status check contexts / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-updating-status-checks-for-a-branch-protection-rule">Example updating status checks for a branch protection rule<a href="#example-updating-status-checks-for-a-branch-protection-rule" aria-label="Link to heading 'Example updating status checks for a branch protection rule'" data-heading-content="Example updating status checks for a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks/contexts \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "contexts": [
+</span><span style="color:#c0c5ce;">    "continuous-integration/travis-ci"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-all-status-check-contexts">Get all status check contexts</a>.</p>
+<h2 id="remove-status-check-contexts" title="Remove status check contexts">Remove status check contexts<a href="#remove-status-check-contexts" aria-label="Link to heading 'Remove status check contexts'" data-heading-content="Remove status check contexts" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.</p>
+<h3 id="parameters-18" title="Remove status check contexts / Parameters">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-18">Headers<a href="#headers-18" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-18">Path and query parameters<a href="#path-and-query-parameters-18" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>contexts</code></strong> (array of strings) (required)<br>
+The name of the status checks</li>
+</ul>
+<h3 id="http-response-status-codes-18" title="Remove status check contexts / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-18" title="Remove status check contexts / Code examples">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-removing-status-checks-from-a-branch-protection-rule">Example removing status checks from a branch protection rule<a href="#example-removing-status-checks-from-a-branch-protection-rule" aria-label="Link to heading 'Example removing status checks from a branch protection rule'" data-heading-content="Example removing status checks from a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/required_status_checks/contexts \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "contexts": [
+</span><span style="color:#c0c5ce;">    "continuous-integration/jenkins"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-all-status-check-contexts">Get all status check contexts</a>.</p>
+<h2 id="get-access-restrictions" title="Get access restrictions">Get access restrictions<a href="#get-access-restrictions" aria-label="Link to heading 'Get access restrictions'" data-heading-content="Get access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Lists who has access to this protected branch.<br>
+Note</p>
+<p>Users, apps, and teams restrictions are only available for organization-owned repositories.</p>
+<h3 id="parameters-19" title="Get access restrictions / Parameters">Parameters<a href="#parameters-19" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-19">Headers<a href="#headers-19" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-19">Path and query parameters<a href="#path-and-query-parameters-19" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-19" title="Get access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-19" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-19" title="Get access restrictions / Code examples">Code examples<a href="#code-examples-19" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-16">Example<a href="#example-16" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>users_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>apps_url</code>: required, string, format: uri</li>
+<li><code>users</code>: required, array of objects:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer, format: int64</li>
+<li><code>node_id</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>teams</code>: required, array of <code>Team</code>:
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>apps</code>: required, array of objects:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: string</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>login</code>: string</li>
+<li><code>id</code>: integer</li>
+<li><code>node_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>repos_url</code>: string</li>
+<li><code>events_url</code>: string</li>
+<li><code>hooks_url</code>: string</li>
+<li><code>issues_url</code>: string</li>
+<li><code>members_url</code>: string</li>
+<li><code>public_members_url</code>: string</li>
+<li><code>avatar_url</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>gravatar_id</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>followers_url</code>: string</li>
+<li><code>following_url</code>: string</li>
+<li><code>gists_url</code>: string</li>
+<li><code>starred_url</code>: string</li>
+<li><code>subscriptions_url</code>: string</li>
+<li><code>organizations_url</code>: string</li>
+<li><code>received_events_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>site_admin</code>: boolean</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>name</code>: string</li>
+<li><code>client_id</code>: string</li>
+<li><code>description</code>: string</li>
+<li><code>external_url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>created_at</code>: string</li>
+<li><code>updated_at</code>: string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>issues</code>: string</li>
+<li><code>single_file</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: array of string</li>
+</ul>
+</li>
+</ul>
+<h2 id="delete-access-restrictions" title="Delete access restrictions">Delete access restrictions<a href="#delete-access-restrictions" aria-label="Link to heading 'Delete access restrictions'" data-heading-content="Delete access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Disables the ability to restrict who can push to this branch.</p>
+<h3 id="parameters-20" title="Delete access restrictions / Parameters">Parameters<a href="#parameters-20" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-20">Headers<a href="#headers-20" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-20">Path and query parameters<a href="#path-and-query-parameters-20" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-20" title="Delete access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-20" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-20" title="Delete access restrictions / Code examples">Code examples<a href="#code-examples-20" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-17">Example<a href="#example-17" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-apps-with-access-to-the-protected-branch" title="Get apps with access to the protected branch">Get apps with access to the protected branch<a href="#get-apps-with-access-to-the-protected-branch" aria-label="Link to heading 'Get apps with access to the protected branch'" data-heading-content="Get apps with access to the protected branch" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Lists the GitHub Apps that have push access to this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.</p>
+<h3 id="parameters-21" title="Get apps with access to the protected branch / Parameters">Parameters<a href="#parameters-21" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-21">Headers<a href="#headers-21" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-21">Path and query parameters<a href="#path-and-query-parameters-21" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-21" title="Get apps with access to the protected branch / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-21" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-21" title="Get apps with access to the protected branch / Code examples">Code examples<a href="#code-examples-21" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-18">Example<a href="#example-18" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/apps
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>GitHub app</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+<h2 id="add-app-access-restrictions" title="Add app access restrictions">Add app access restrictions<a href="#add-app-access-restrictions" aria-label="Link to heading 'Add app access restrictions'" data-heading-content="Add app access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Grants the specified apps push access for this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.</p>
+<h3 id="parameters-22" title="Add app access restrictions / Parameters">Parameters<a href="#parameters-22" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-22">Headers<a href="#headers-22" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-22">Path and query parameters<a href="#path-and-query-parameters-22" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-6">Body parameters<a href="#body-parameters-6" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>apps</code></strong> (array of strings) (required)<br>
+The GitHub Apps that have push access to this branch. Use the slugified version of the app name. Note: The list of users, apps, and teams in total is limited to 100 items.</li>
+</ul>
+<h3 id="http-response-status-codes-22" title="Add app access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-22" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-22" title="Add app access restrictions / Code examples">Code examples<a href="#code-examples-22" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-19">Example<a href="#example-19" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/apps \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "apps": [
+</span><span style="color:#c0c5ce;">    "octoapp"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-apps-with-access-to-the-protected-branch">Get apps with access to the protected branch</a>.</p>
+<h2 id="set-app-access-restrictions" title="Set app access restrictions">Set app access restrictions<a href="#set-app-access-restrictions" aria-label="Link to heading 'Set app access restrictions'" data-heading-content="Set app access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Replaces the list of apps that have push access to this branch. This removes all apps that previously had push access and grants push access to the new list of apps. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.</p>
+<h3 id="parameters-23" title="Set app access restrictions / Parameters">Parameters<a href="#parameters-23" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-23">Headers<a href="#headers-23" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-23">Path and query parameters<a href="#path-and-query-parameters-23" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-7">Body parameters<a href="#body-parameters-7" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>apps</code></strong> (array of strings) (required)<br>
+The GitHub Apps that have push access to this branch. Use the slugified version of the app name. Note: The list of users, apps, and teams in total is limited to 100 items.</li>
+</ul>
+<h3 id="http-response-status-codes-23" title="Set app access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-23" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-23" title="Set app access restrictions / Code examples">Code examples<a href="#code-examples-23" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-20">Example<a href="#example-20" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/apps \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "apps": [
+</span><span style="color:#c0c5ce;">    "octoapp"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-apps-with-access-to-the-protected-branch">Get apps with access to the protected branch</a>.</p>
+<h2 id="remove-app-access-restrictions" title="Remove app access restrictions">Remove app access restrictions<a href="#remove-app-access-restrictions" aria-label="Link to heading 'Remove app access restrictions'" data-heading-content="Remove app access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Removes the ability of an app to push to this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.</p>
+<h3 id="parameters-24" title="Remove app access restrictions / Parameters">Parameters<a href="#parameters-24" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-24">Headers<a href="#headers-24" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-24">Path and query parameters<a href="#path-and-query-parameters-24" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-8">Body parameters<a href="#body-parameters-8" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>apps</code></strong> (array of strings) (required)<br>
+The GitHub Apps that have push access to this branch. Use the slugified version of the app name. Note: The list of users, apps, and teams in total is limited to 100 items.</li>
+</ul>
+<h3 id="http-response-status-codes-24" title="Remove app access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-24" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-24" title="Remove app access restrictions / Code examples">Code examples<a href="#code-examples-24" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-21">Example<a href="#example-21" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/apps \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "apps": [
+</span><span style="color:#c0c5ce;">    "my-app"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-apps-with-access-to-the-protected-branch">Get apps with access to the protected branch</a>.</p>
+<h2 id="get-teams-with-access-to-the-protected-branch" title="Get teams with access to the protected branch">Get teams with access to the protected branch<a href="#get-teams-with-access-to-the-protected-branch" aria-label="Link to heading 'Get teams with access to the protected branch'" data-heading-content="Get teams with access to the protected branch" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Lists the teams who have push access to this branch. The list includes child teams.</p>
+<h3 id="parameters-25" title="Get teams with access to the protected branch / Parameters">Parameters<a href="#parameters-25" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-25">Headers<a href="#headers-25" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-25">Path and query parameters<a href="#path-and-query-parameters-25" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-25" title="Get teams with access to the protected branch / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-25" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-25" title="Get teams with access to the protected branch / Code examples">Code examples<a href="#code-examples-25" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-22">Example<a href="#example-22" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/teams
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Team</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>permission</code>: required, string</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: required, boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: required, boolean</li>
+<li><code>admin</code>: required, boolean</li>
+</ul>
+</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>access_source</code>: string, enum: <code>direct</code>, <code>organization</code>, <code>enterprise</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+<li><code>parent</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Team Simple</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>members_url</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>permission</code>: required, string</li>
+<li><code>privacy</code>: string</li>
+<li><code>notification_setting</code>: string</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>slug</code>: required, string</li>
+<li><code>ldap_dn</code>: string</li>
+<li><code>type</code>: required, string, enum: <code>enterprise</code>, <code>organization</code></li>
+<li><code>organization_id</code>: integer</li>
+<li><code>enterprise_id</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="add-team-access-restrictions" title="Add team access restrictions">Add team access restrictions<a href="#add-team-access-restrictions" aria-label="Link to heading 'Add team access restrictions'" data-heading-content="Add team access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Grants the specified teams push access for this branch. You can also give push access to child teams.</p>
+<h3 id="parameters-26" title="Add team access restrictions / Parameters">Parameters<a href="#parameters-26" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-26">Headers<a href="#headers-26" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-26">Path and query parameters<a href="#path-and-query-parameters-26" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-9">Body parameters<a href="#body-parameters-9" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>teams</code></strong> (array of strings) (required)<br>
+The slug values for teams</li>
+</ul>
+<h3 id="http-response-status-codes-26" title="Add team access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-26" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-26" title="Add team access restrictions / Code examples">Code examples<a href="#code-examples-26" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-adding-a-team-in-a-branch-protection-rule">Example adding a team in a branch protection rule<a href="#example-adding-a-team-in-a-branch-protection-rule" aria-label="Link to heading 'Example adding a team in a branch protection rule'" data-heading-content="Example adding a team in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "teams": [
+</span><span style="color:#c0c5ce;">    "justice-league"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-teams-with-access-to-the-protected-branch">Get teams with access to the protected branch</a>.</p>
+<h2 id="set-team-access-restrictions" title="Set team access restrictions">Set team access restrictions<a href="#set-team-access-restrictions" aria-label="Link to heading 'Set team access restrictions'" data-heading-content="Set team access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Replaces the list of teams that have push access to this branch. This removes all teams that previously had push access and grants push access to the new list of teams. Team restrictions include child teams.</p>
+<h3 id="parameters-27" title="Set team access restrictions / Parameters">Parameters<a href="#parameters-27" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-27">Headers<a href="#headers-27" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-27">Path and query parameters<a href="#path-and-query-parameters-27" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-10">Body parameters<a href="#body-parameters-10" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>teams</code></strong> (array of strings) (required)<br>
+The slug values for teams</li>
+</ul>
+<h3 id="http-response-status-codes-27" title="Set team access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-27" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-27" title="Set team access restrictions / Code examples">Code examples<a href="#code-examples-27" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-replacing-a-team-in-a-branch-protection-rule">Example replacing a team in a branch protection rule<a href="#example-replacing-a-team-in-a-branch-protection-rule" aria-label="Link to heading 'Example replacing a team in a branch protection rule'" data-heading-content="Example replacing a team in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "teams": [
+</span><span style="color:#c0c5ce;">    "justice-league"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-teams-with-access-to-the-protected-branch">Get teams with access to the protected branch</a>.</p>
+<h2 id="remove-team-access-restrictions" title="Remove team access restrictions">Remove team access restrictions<a href="#remove-team-access-restrictions" aria-label="Link to heading 'Remove team access restrictions'" data-heading-content="Remove team access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Removes the ability of a team to push to this branch. You can also remove push access for child teams.</p>
+<h3 id="parameters-28" title="Remove team access restrictions / Parameters">Parameters<a href="#parameters-28" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-28">Headers<a href="#headers-28" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-28">Path and query parameters<a href="#path-and-query-parameters-28" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-11">Body parameters<a href="#body-parameters-11" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>teams</code></strong> (array of strings) (required)<br>
+The slug values for teams</li>
+</ul>
+<h3 id="http-response-status-codes-28" title="Remove team access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-28" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-28" title="Remove team access restrictions / Code examples">Code examples<a href="#code-examples-28" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-removing-a-team-in-a-branch-protection-rule">Example removing a team in a branch protection rule<a href="#example-removing-a-team-in-a-branch-protection-rule" aria-label="Link to heading 'Example removing a team in a branch protection rule'" data-heading-content="Example removing a team in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/teams \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "teams": [
+</span><span style="color:#c0c5ce;">    "octocats"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-teams-with-access-to-the-protected-branch">Get teams with access to the protected branch</a>.</p>
+<h2 id="get-users-with-access-to-the-protected-branch" title="Get users with access to the protected branch">Get users with access to the protected branch<a href="#get-users-with-access-to-the-protected-branch" aria-label="Link to heading 'Get users with access to the protected branch'" data-heading-content="Get users with access to the protected branch" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Lists the people who have push access to this branch.</p>
+<h3 id="parameters-29" title="Get users with access to the protected branch / Parameters">Parameters<a href="#parameters-29" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-29">Headers<a href="#headers-29" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-29">Path and query parameters<a href="#path-and-query-parameters-29" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-29" title="Get users with access to the protected branch / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-29" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-29" title="Get users with access to the protected branch / Code examples">Code examples<a href="#code-examples-29" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-23">Example<a href="#example-23" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/users
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Simple User</code>:</p>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+<h2 id="add-user-access-restrictions" title="Add user access restrictions">Add user access restrictions<a href="#add-user-access-restrictions" aria-label="Link to heading 'Add user access restrictions'" data-heading-content="Add user access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Grants the specified people push access for this branch.</p>
+<p>TypeDescriptionarrayUsernames for people who can have push access. Note: The list of users, apps, and teams in total is limited to 100 items.</p>
+<h3 id="parameters-30" title="Add user access restrictions / Parameters">Parameters<a href="#parameters-30" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-30">Headers<a href="#headers-30" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-30">Path and query parameters<a href="#path-and-query-parameters-30" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-12">Body parameters<a href="#body-parameters-12" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>users</code></strong> (array of strings) (required)<br>
+The username for users</li>
+</ul>
+<h3 id="http-response-status-codes-30" title="Add user access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-30" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-30" title="Add user access restrictions / Code examples">Code examples<a href="#code-examples-30" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-adding-a-user-in-a-branch-protection-rule">Example adding a user in a branch protection rule<a href="#example-adding-a-user-in-a-branch-protection-rule" aria-label="Link to heading 'Example adding a user in a branch protection rule'" data-heading-content="Example adding a user in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/users \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "users": [
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-users-with-access-to-the-protected-branch">Get users with access to the protected branch</a>.</p>
+<h2 id="set-user-access-restrictions" title="Set user access restrictions">Set user access restrictions<a href="#set-user-access-restrictions" aria-label="Link to heading 'Set user access restrictions'" data-heading-content="Set user access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Replaces the list of people that have push access to this branch. This removes all people that previously had push access and grants push access to the new list of people.</p>
+<p>TypeDescriptionarrayUsernames for people who can have push access. Note: The list of users, apps, and teams in total is limited to 100 items.</p>
+<h3 id="parameters-31" title="Set user access restrictions / Parameters">Parameters<a href="#parameters-31" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-31">Headers<a href="#headers-31" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-31">Path and query parameters<a href="#path-and-query-parameters-31" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-13">Body parameters<a href="#body-parameters-13" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>users</code></strong> (array of strings) (required)<br>
+The username for users</li>
+</ul>
+<h3 id="http-response-status-codes-31" title="Set user access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-31" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-31" title="Set user access restrictions / Code examples">Code examples<a href="#code-examples-31" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-replacing-a-user-in-a-branch-protection-rule">Example replacing a user in a branch protection rule<a href="#example-replacing-a-user-in-a-branch-protection-rule" aria-label="Link to heading 'Example replacing a user in a branch protection rule'" data-heading-content="Example replacing a user in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/users \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "users": [
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-users-with-access-to-the-protected-branch">Get users with access to the protected branch</a>.</p>
+<h2 id="remove-user-access-restrictions" title="Remove user access restrictions">Remove user access restrictions<a href="#remove-user-access-restrictions" aria-label="Link to heading 'Remove user access restrictions'" data-heading-content="Remove user access restrictions" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+</span></code></pre>
+<p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
+Removes the ability of a user to push to this branch.</p>
+<p>TypeDescriptionarrayUsernames of the people who should no longer have push access. Note: The list of users, apps, and teams in total is limited to 100 items.</p>
+<h3 id="parameters-32" title="Remove user access restrictions / Parameters">Parameters<a href="#parameters-32" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-32">Headers<a href="#headers-32" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-32">Path and query parameters<a href="#path-and-query-parameters-32" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+</ul>
+<h4 id="body-parameters-14">Body parameters<a href="#body-parameters-14" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>users</code></strong> (array of strings) (required)<br>
+The username for users</li>
+</ul>
+<h3 id="http-response-status-codes-32" title="Remove user access restrictions / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-32" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-32" title="Remove user access restrictions / Code examples">Code examples<a href="#code-examples-32" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-removing-a-user-in-a-branch-protection-rule">Example removing a user in a branch protection rule<a href="#example-removing-a-user-in-a-branch-protection-rule" aria-label="Link to heading 'Example removing a user in a branch protection rule'" data-heading-content="Example removing a user in a branch protection rule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection/restrictions/users \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "users": [
+</span><span style="color:#c0c5ce;">    "octocat"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-users-with-access-to-the-protected-branch">Get users with access to the protected branch</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

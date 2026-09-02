@@ -1,0 +1,1045 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for repository contents</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Repositories</a> / </nav><h1 id="rest-api-endpoints-for-repository-contents">REST API endpoints for repository contents<a href="#rest-api-endpoints-for-repository-contents" aria-label="Link to heading 'REST API endpoints for repository contents'" data-heading-content="REST API endpoints for repository contents" class="anchor"></a></h1>
+<p>Use the REST API to create, modify, and delete Base64 encoded content in a repository.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-repository-content" title="Get repository content">Get repository content<a href="#get-repository-content" aria-label="Link to heading 'Get repository content'" data-heading-content="Get repository content" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/contents/{path}
+</span></code></pre>
+<p>Gets the contents of a file or directory in a repository. Specify the file path or directory with the path parameter. If you omit the path parameter, you will receive the contents of the repository's root directory.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw file contents for files and symlinks.<br>
+application/vnd.github.html+json: Returns the file contents in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.<br>
+application/vnd.github.object+json: Returns the contents in a consistent object format regardless of the content type. For example, instead of an array of objects for a directory, the response will be an object with an entries attribute containing the array of objects.</p>
+<p>If the content is a directory: The response will be an array of objects, one object for each item in the directory.<br>
+If the content is a symlink and the symlink's target is a normal file in the repository, then the API responds with the content of the file. Otherwise, the API responds with an object describing the symlink itself.<br>
+If the content is a submodule, the submodule_git_url field identifies the location of the submodule repository, and the sha identifies a specific commit within the submodule repository. Git uses the given URL when cloning the submodule repository, and checks out the submodule at that specific commit. If the submodule repository is not hosted on github.com, the Git URLs (git_url and _links["git"]) and the github.com URLs (html_url and _links["html"]) will have null values.<br>
+Notes:</p>
+<p>To get a repository's contents recursively, you can recursively get the tree.<br>
+This API has an upper limit of 1,000 files for a directory. If you need to retrieve<br>
+more files, use the Git Trees API.<br>
+Download URLs expire and are meant to be used just once. To ensure the download URL does not expire, please use the contents API to obtain a fresh download URL for each download.<br>
+If the requested file's size is:</p>
+<p>1 MB or smaller: All features of this endpoint are supported.<br>
+Between 1-100 MB: Only the raw or object custom media types are supported. Both will work as normal, except that when using the object media type, the content field will be an empty<br>
+string and the encoding field will be "none". To get the contents of these larger files, use the raw media type.<br>
+Greater than 100 MB: This endpoint is not supported.</p>
+<h3 id="parameters" title="Get repository content / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>path</code></strong> (string) (required)<br>
+path parameter</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The name of the commit/branch/tag. Default: the repository’s default branch.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get repository content / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>302</strong> - Found</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get repository content / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="content-is-a-file-using-the-object-media-type">Content is a file using the object media type<a href="#content-is-a-file-using-the-object-media-type" aria-label="Link to heading 'Content is a file using the object media type'" data-heading-content="Content is a file using the object media type" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>content</code>: string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>entries</code>: array of objects:
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>encoding</code>: string</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h4 id="content-is-a-directory-using-the-object-media-type">Content is a directory using the object media type<a href="#content-is-a-directory-using-the-object-media-type" aria-label="Link to heading 'Content is a directory using the object media type'" data-heading-content="Content is a directory using the object media type" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>content</code>: string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>entries</code>: array of objects:
+<ul>
+<li><code>type</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>encoding</code>: string</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+<h4 id="content-is-a-file">Content is a file<a href="#content-is-a-file" aria-label="Link to heading 'Content is a file'" data-heading-content="Content is a file" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>one of:
+<ul>
+<li><strong>Content Directory</strong></li>
+<li><strong>Content File</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>file</code></li>
+<li><code>encoding</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>target</code>: string</li>
+<li><code>submodule_git_url</code>: string</li>
+</ul>
+</li>
+<li><strong>Symlink Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>symlink</code></li>
+<li><code>target</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Submodule Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>submodule</code></li>
+<li><code>submodule_git_url</code>: required, string, format: uri</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="content-is-a-directory">Content is a directory<a href="#content-is-a-directory" aria-label="Link to heading 'Content is a directory'" data-heading-content="Content is a directory" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>one of:
+<ul>
+<li><strong>Content Directory</strong></li>
+<li><strong>Content File</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>file</code></li>
+<li><code>encoding</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>target</code>: string</li>
+<li><code>submodule_git_url</code>: string</li>
+</ul>
+</li>
+<li><strong>Symlink Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>symlink</code></li>
+<li><code>target</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Submodule Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>submodule</code></li>
+<li><code>submodule_git_url</code>: required, string, format: uri</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="content-is-a-symlink">Content is a symlink<a href="#content-is-a-symlink" aria-label="Link to heading 'Content is a symlink'" data-heading-content="Content is a symlink" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>one of:
+<ul>
+<li><strong>Content Directory</strong></li>
+<li><strong>Content File</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>file</code></li>
+<li><code>encoding</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>target</code>: string</li>
+<li><code>submodule_git_url</code>: string</li>
+</ul>
+</li>
+<li><strong>Symlink Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>symlink</code></li>
+<li><code>target</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Submodule Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>submodule</code></li>
+<li><code>submodule_git_url</code>: required, string, format: uri</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="content-is-a-submodule">Content is a submodule<a href="#content-is-a-submodule" aria-label="Link to heading 'Content is a submodule'" data-heading-content="Content is a submodule" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>one of:
+<ul>
+<li><strong>Content Directory</strong></li>
+<li><strong>Content File</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>file</code></li>
+<li><code>encoding</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>target</code>: string</li>
+<li><code>submodule_git_url</code>: string</li>
+</ul>
+</li>
+<li><strong>Symlink Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>symlink</code></li>
+<li><code>target</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Submodule Content</strong>
+<ul>
+<li><code>type</code>: required, string, enum: <code>submodule</code></li>
+<li><code>submodule_git_url</code>: required, string, format: uri</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-or-update-file-contents" title="Create or update file contents">Create or update file contents<a href="#create-or-update-file-contents" aria-label="Link to heading 'Create or update file contents'" data-heading-content="Create or update file contents" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/contents/{path}
+</span></code></pre>
+<p>Creates a new file or replaces an existing file in a repository.<br>
+Note</p>
+<p>If you use this endpoint and the "Delete a file" endpoint in parallel, the concurrent requests will conflict and you will receive errors. You must use these endpoints serially instead.</p>
+<p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint. The workflow scope is also required in order to modify files in the .github/workflows directory.</p>
+<h3 id="parameters-1" title="Create or update file contents / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>path</code></strong> (string) (required)<br>
+path parameter</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>message</code></strong> (string) (required)<br>
+The commit message.</p>
+</li>
+<li>
+<p><strong><code>content</code></strong> (string) (required)<br>
+The new file content, using Base64 encoding.</p>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string)<br>
+Required if you are updating a file. The blob SHA of the file being replaced.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string)<br>
+The branch name. Default: the repository’s default branch.</p>
+</li>
+<li>
+<p><strong><code>committer</code></strong> (object)<br>
+The person that committed the file. Default: the authenticated user.</p>
+<ul>
+<li><strong><code>name</code></strong> (string) (required)<br>
+The name of the author or committer of the commit. You'll receive a 422 status code if name is omitted.</li>
+<li><strong><code>email</code></strong> (string) (required)<br>
+The email of the author or committer of the commit. You'll receive a 422 status code if email is omitted.</li>
+<li><strong><code>date</code></strong> (string)</li>
+</ul>
+</li>
+<li>
+<p><strong><code>author</code></strong> (object)<br>
+The author of the file. Default: The committer or the authenticated user if you omit committer.</p>
+<ul>
+<li><strong><code>name</code></strong> (string) (required)<br>
+The name of the author or committer of the commit. You'll receive a 422 status code if name is omitted.</li>
+<li><strong><code>email</code></strong> (string) (required)<br>
+The email of the author or committer of the commit. You'll receive a 422 status code if email is omitted.</li>
+<li><strong><code>date</code></strong> (string)</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create or update file contents / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create or update file contents / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-for-creating-a-file">Example for creating a file<a href="#example-for-creating-a-file" aria-label="Link to heading 'Example for creating a file'" data-heading-content="Example for creating a file" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "message": "my commit message",
+</span><span style="color:#c0c5ce;">  "committer": {
+</span><span style="color:#c0c5ce;">    "name": "Monalisa Octocat",
+</span><span style="color:#c0c5ce;">    "email": "octocat@github.com"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "content": "bXkgbmV3IGZpbGUgY29udGVudHM="
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>content</code>: required, object or null:
+<ul>
+<li><code>name</code>: string</li>
+<li><code>path</code>: string</li>
+<li><code>sha</code>: string</li>
+<li><code>size</code>: integer</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>git_url</code>: string</li>
+<li><code>download_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>_links</code>: object:
+<ul>
+<li><code>self</code>: string</li>
+<li><code>git</code>: string</li>
+<li><code>html</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>commit</code>: required, object:
+<ul>
+<li><code>sha</code>: string</li>
+<li><code>node_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>author</code>: object:
+<ul>
+<li><code>date</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>email</code>: string</li>
+</ul>
+</li>
+<li><code>committer</code>: object:
+<ul>
+<li><code>date</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>email</code>: string</li>
+</ul>
+</li>
+<li><code>message</code>: string</li>
+<li><code>tree</code>: object:
+<ul>
+<li><code>url</code>: string</li>
+<li><code>sha</code>: string</li>
+</ul>
+</li>
+<li><code>parents</code>: array of objects:
+<ul>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>sha</code>: string</li>
+</ul>
+</li>
+<li><code>verification</code>: object:
+<ul>
+<li><code>verified</code>: boolean</li>
+<li><code>reason</code>: string</li>
+<li><code>signature</code>: string or null</li>
+<li><code>payload</code>: string or null</li>
+<li><code>verified_at</code>: string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="example-for-updating-a-file">Example for updating a file<a href="#example-for-updating-a-file" aria-label="Link to heading 'Example for updating a file'" data-heading-content="Example for updating a file" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "message": "a new commit message",
+</span><span style="color:#c0c5ce;">  "committer": {
+</span><span style="color:#c0c5ce;">    "name": "Monalisa Octocat",
+</span><span style="color:#c0c5ce;">    "email": "octocat@github.com"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "content": "bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz",
+</span><span style="color:#c0c5ce;">  "sha": "95b966ae1c166bd92f8ae7d1c313e738c731dfc3"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>content</code>: required, object or null:
+<ul>
+<li><code>name</code>: string</li>
+<li><code>path</code>: string</li>
+<li><code>sha</code>: string</li>
+<li><code>size</code>: integer</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>git_url</code>: string</li>
+<li><code>download_url</code>: string</li>
+<li><code>type</code>: string</li>
+<li><code>_links</code>: object:
+<ul>
+<li><code>self</code>: string</li>
+<li><code>git</code>: string</li>
+<li><code>html</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>commit</code>: required, object:
+<ul>
+<li><code>sha</code>: string</li>
+<li><code>node_id</code>: string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>author</code>: object:
+<ul>
+<li><code>date</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>email</code>: string</li>
+</ul>
+</li>
+<li><code>committer</code>: object:
+<ul>
+<li><code>date</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>email</code>: string</li>
+</ul>
+</li>
+<li><code>message</code>: string</li>
+<li><code>tree</code>: object:
+<ul>
+<li><code>url</code>: string</li>
+<li><code>sha</code>: string</li>
+</ul>
+</li>
+<li><code>parents</code>: array of objects:
+<ul>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>sha</code>: string</li>
+</ul>
+</li>
+<li><code>verification</code>: object:
+<ul>
+<li><code>verified</code>: boolean</li>
+<li><code>reason</code>: string</li>
+<li><code>signature</code>: string or null</li>
+<li><code>payload</code>: string or null</li>
+<li><code>verified_at</code>: string or null</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="delete-a-file" title="Delete a file">Delete a file<a href="#delete-a-file" aria-label="Link to heading 'Delete a file'" data-heading-content="Delete a file" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/contents/{path}
+</span></code></pre>
+<p>Deletes a file in a repository.<br>
+You can provide an additional committer parameter, which is an object containing information about the committer. Or, you can provide an author parameter, which is an object containing information about the author.<br>
+The author section is optional and is filled in with the committer information if omitted. If the committer information is omitted, the authenticated user's information is used.<br>
+You must provide values for both name and email, whether you choose to use author or committer. Otherwise, you'll receive a 422 status code.<br>
+Note</p>
+<p>If you use this endpoint and the "Create or update file contents" endpoint in parallel, the concurrent requests will conflict and you will receive errors. You must use these endpoints serially instead.</p>
+<h3 id="parameters-2" title="Delete a file / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>path</code></strong> (string) (required)<br>
+path parameter</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>message</code></strong> (string) (required)<br>
+The commit message.</p>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string) (required)<br>
+The blob SHA of the file being deleted.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string)<br>
+The branch name. Default: the repository’s default branch</p>
+</li>
+<li>
+<p><strong><code>committer</code></strong> (object)<br>
+object containing information about the committer.</p>
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+The name of the author (or committer) of the commit</li>
+<li><strong><code>email</code></strong> (string)<br>
+The email of the author (or committer) of the commit</li>
+</ul>
+</li>
+<li>
+<p><strong><code>author</code></strong> (object)<br>
+object containing information about the author.</p>
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+The name of the author (or committer) of the commit</li>
+<li><strong><code>email</code></strong> (string)<br>
+The email of the author (or committer) of the commit</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Delete a file / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>503</strong> - Service unavailable</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Delete a file / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/contents/PATH \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "message": "my commit message",
+</span><span style="color:#c0c5ce;">  "committer": {
+</span><span style="color:#c0c5ce;">    "name": "Monalisa Octocat",
+</span><span style="color:#c0c5ce;">    "email": "octocat@github.com"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "sha": "329688480d39049927147c162b9d2deaf885005f"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-or-update-file-contents">Create or update file contents</a>.</p>
+<h2 id="get-a-repository-readme" title="Get a repository README">Get a repository README<a href="#get-a-repository-readme" aria-label="Link to heading 'Get a repository README'" data-heading-content="Get a repository README" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/readme
+</span></code></pre>
+<p>Gets the preferred README for a repository.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw file contents. This is the default if you do not specify a media type.<br>
+application/vnd.github.html+json: Returns the README in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.</p>
+<h3 id="parameters-3" title="Get a repository README / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The name of the commit/branch/tag. Default: the repository’s default branch.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get a repository README / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get a repository README / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/readme
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>type</code>: required, string, enum: <code>file</code></li>
+<li><code>encoding</code>: required, string</li>
+<li><code>size</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+<li><code>content</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>git_url</code>: required, string or null, format: uri</li>
+<li><code>html_url</code>: required, string or null, format: uri</li>
+<li><code>download_url</code>: required, string or null, format: uri</li>
+<li><code>_links</code>: required, object:
+<ul>
+<li><code>git</code>: required, string or null, format: uri</li>
+<li><code>html</code>: required, string or null, format: uri</li>
+<li><code>self</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>target</code>: string</li>
+<li><code>submodule_git_url</code>: string</li>
+</ul>
+<h2 id="get-a-repository-readme-for-a-directory" title="Get a repository README for a directory">Get a repository README for a directory<a href="#get-a-repository-readme-for-a-directory" aria-label="Link to heading 'Get a repository README for a directory'" data-heading-content="Get a repository README for a directory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/readme/{dir}
+</span></code></pre>
+<p>Gets the README from a repository directory.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw file contents. This is the default if you do not specify a media type.<br>
+application/vnd.github.html+json: Returns the README in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.</p>
+<h3 id="parameters-4" title="Get a repository README for a directory / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>dir</code></strong> (string) (required)<br>
+The alternate path to look for a README file</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The name of the commit/branch/tag. Default: the repository’s default branch.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get a repository README for a directory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get a repository README for a directory / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/readme/DIR
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-repository-readme">Get a repository README</a>.</p>
+<h2 id="download-a-repository-archive-tar" title="Download a repository archive (tar)">Download a repository archive (tar)<a href="#download-a-repository-archive-tar" aria-label="Link to heading 'Download a repository archive (tar)'" data-heading-content="Download a repository archive (tar)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/tarball/{ref}
+</span></code></pre>
+<p>Gets a redirect URL to download a tar archive for a repository. If you omit :ref, the repository’s default branch (usually<br>
+main) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use<br>
+the Location header to make a second GET request.<br>
+Note</p>
+<p>For private repositories, these links are temporary and expire after five minutes.</p>
+<h3 id="parameters-5" title="Download a repository archive (tar) / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Download a repository archive (tar) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>302</strong> - Found</li>
+</ul>
+<h3 id="code-examples-5" title="Download a repository archive (tar) / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/tarball/REF
+</span></code></pre>
+<p><strong>Response schema (Status: 302):</strong></p>
+<h2 id="download-a-repository-archive-zip" title="Download a repository archive (zip)">Download a repository archive (zip)<a href="#download-a-repository-archive-zip" aria-label="Link to heading 'Download a repository archive (zip)'" data-heading-content="Download a repository archive (zip)" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/zipball/{ref}
+</span></code></pre>
+<p>Gets a redirect URL to download a zip archive for a repository. If you omit :ref, the repository’s default branch (usually<br>
+main) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use<br>
+the Location header to make a second GET request.<br>
+Note</p>
+<p>For private repositories, these links are temporary and expire after five minutes. If the repository is empty, you will receive a 404 when you follow the redirect.</p>
+<h3 id="parameters-6" title="Download a repository archive (zip) / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Download a repository archive (zip) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>302</strong> - Found</li>
+</ul>
+<h3 id="code-examples-6" title="Download a repository archive (zip) / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/zipball/REF
+</span></code></pre>
+<p><strong>Response schema (Status: 302):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

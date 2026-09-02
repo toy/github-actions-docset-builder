@@ -1,0 +1,248 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Actions concurrency groups</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Actions</a> / </nav><h1 id="rest-api-endpoints-for-actions-concurrency-groups">REST API endpoints for Actions concurrency groups<a href="#rest-api-endpoints-for-actions-concurrency-groups" aria-label="Link to heading 'REST API endpoints for Actions concurrency groups'" data-heading-content="REST API endpoints for Actions concurrency groups" class="anchor"></a></h1>
+<p>Use the REST API to view and manage concurrency groups for GitHub Actions workflows.</p>
+<h2 id="about-concurrency-groups-in-github-actions" title="About concurrency groups in GitHub Actions">About concurrency groups in GitHub Actions<a href="#about-concurrency-groups-in-github-actions" aria-label="Link to heading 'About concurrency groups in GitHub Actions'" data-heading-content="About concurrency groups in GitHub Actions" class="anchor"></a></h2>
+<p>You can use the REST API to read the state of GitHub Actions concurrency groups, which ensure that only a single job or workflow using the same group will run at a time while additional runs are pending or canceled depending on configuration. For more information, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency" class="external">Control the concurrency of workflows and jobs</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-concurrency-groups-for-a-repository" title="List concurrency groups for a repository">List concurrency groups for a repository<a href="#list-concurrency-groups-for-a-repository" aria-label="Link to heading 'List concurrency groups for a repository'" data-heading-content="List concurrency groups for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/concurrency_groups
+</span></code></pre>
+<p>Lists the active concurrency groups for a repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters" title="List concurrency groups for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List concurrency groups for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List concurrency groups for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/concurrency_groups
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>concurrency_groups</code>: required, array of objects:
+<ul>
+<li><code>group_name</code>: required, string</li>
+<li><code>group_url</code>: required, string, format: uri</li>
+<li><code>last_acquired_at</code>: required, string or null, format: date-time</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-concurrency-group-for-a-repository" title="Get a concurrency group for a repository">Get a concurrency group for a repository<a href="#get-a-concurrency-group-for-a-repository" aria-label="Link to heading 'Get a concurrency group for a repository'" data-heading-content="Get a concurrency group for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/concurrency_groups/{concurrency_group_name}
+</span></code></pre>
+<p>Gets a specific concurrency group for a repository, including all instances in the group's queue.<br>
+Returns 404 if the group is inactive or does not exist.<br>
+Optionally, pass ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>run or ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>job to filter the results to only the items<br>
+ahead of the specified workflow run or job in the queue, plus the specified item itself<br>
+(returned as the last element). This is useful for determining what is blocking a particular<br>
+run or job. Returns 422 if the specified run or job is not in this concurrency group.<br>
+When using ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>run, this matches workflow-level concurrency and any reusable-workflow<br>
+leases held on behalf of that run. Job-level leases within the run are not considered to<br>
+block the run as a whole. Use ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>job to match job-level concurrency and reusable-workflow<br>
+leases on the job's ancestor paths.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters-1" title="Get a concurrency group for a repository / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>concurrency_group_name</code></strong> (string) (required)<br>
+The name of the concurrency group.</p>
+</li>
+<li>
+<p><strong><code>ahead_of_run</code></strong> (integer)<br>
+Filter to items ahead of this workflow run ID in the queue, plus the run itself.<br>
+Matches workflow-level concurrency and reusable-workflow leases held on behalf of<br>
+the run. Mutually exclusive with ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>job.</p>
+</li>
+<li>
+<p><strong><code>ahead_of_job</code></strong> (integer)<br>
+Filter to items ahead of this job ID in the queue, plus the job itself.<br>
+Matches job-level concurrency and reusable-workflow leases on the job's<br>
+ancestor paths. Mutually exclusive with ahead<span data-escaped-char="">_</span>of<span data-escaped-char="">_</span>run.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a concurrency group for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a concurrency group for a repository / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/concurrency_groups/CONCURRENCY_GROUP_NAME
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>group_name</code>: required, string</li>
+<li><code>group_url</code>: required, string, format: uri</li>
+<li><code>total_count</code>: required, integer</li>
+<li><code>group_members</code>: required, array of objects:
+<ul>
+<li><code>run_id</code>: required, integer</li>
+<li><code>run_name</code>: required, string</li>
+<li><code>run_url</code>: required, string or null, format: uri</li>
+<li><code>run_html_url</code>: required, string or null, format: uri</li>
+<li><code>job_id</code>: integer</li>
+<li><code>job_name</code>: string</li>
+<li><code>job_url</code>: string or null, format: uri</li>
+<li><code>job_html_url</code>: string or null, format: uri</li>
+<li><code>status</code>: required, string, enum: <code>in_progress</code>, <code>pending</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="list-concurrency-groups-for-a-workflow-run" title="List concurrency groups for a workflow run">List concurrency groups for a workflow run<a href="#list-concurrency-groups-for-a-workflow-run" aria-label="Link to heading 'List concurrency groups for a workflow run'" data-heading-content="List concurrency groups for a workflow run" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runs/{run_id}/concurrency_groups
+</span></code></pre>
+<p>Lists all concurrency groups associated with a workflow run or its jobs.<br>
+The set of groups is derived from the run's configuration, so a group is<br>
+included even when the run no longer has any items currently holding or<br>
+waiting in it. In that case the group<span data-escaped-char="">_</span>members array will be empty.<br>
+total<span data-escaped-char="">_</span>count reflects the number of groups the run participates in by<br>
+configuration, not the number with active items.<br>
+This differs from GET /repos/{owner}/{repo}/actions/concurrency<span data-escaped-char="">_</span>groups/{group<span data-escaped-char="">_</span>name},<br>
+which returns 404 when a group has no active items. That endpoint reports<br>
+the live state of a group repo-wide, while this endpoint reports the<br>
+groups associated with a specific run by configuration.<br>
+Results are sorted by group name and support cursor-based pagination via<br>
+before and after. The after cursor paginates forward only and does<br>
+not emit a rel="prev" Link; use before to page backward from a<br>
+forward page's next cursor.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint with a private repository.</p>
+<h3 id="parameters-2" title="List concurrency groups for a workflow run / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>run_id</code></strong> (integer) (required)<br>
+The unique identifier of the workflow run.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List concurrency groups for a workflow run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List concurrency groups for a workflow run / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runs/RUN_ID/concurrency_groups
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>concurrency_groups</code>: required, array of objects:
+<ul>
+<li><code>group_name</code>: required, string</li>
+<li><code>group_url</code>: required, string, format: uri</li>
+<li><code>group_members</code>: required, array of objects:
+<ul>
+<li><code>run_id</code>: required, integer</li>
+<li><code>run_name</code>: required, string</li>
+<li><code>run_url</code>: required, string or null, format: uri</li>
+<li><code>run_html_url</code>: required, string or null, format: uri</li>
+<li><code>position</code>: required, integer</li>
+<li><code>position_url</code>: required, string, format: uri</li>
+<li><code>job_id</code>: integer or null</li>
+<li><code>job_name</code>: string or null</li>
+<li><code>job_url</code>: string or null, format: uri</li>
+<li><code>job_html_url</code>: string or null, format: uri</li>
+<li><code>status</code>: required, string, enum: <code>in_progress</code>, <code>pending</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

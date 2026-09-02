@@ -1,0 +1,689 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Commits</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Reference</a> / </nav><h1 id="commits">Commits<a href="#commits" aria-label="Link to heading 'Commits'" data-heading-content="Commits" class="anchor"></a></h1>
+<p>Reference documentation for GraphQL schema types in the Commits category.</p>
+<h2 id="commit---object" title="Commit - object">Commit - object<a href="#commit---object" aria-label="Link to heading 'Commit - object'" data-heading-content="Commit - object" class="anchor"></a></h2>
+<p>Represents a Git commit.</p>
+<p><strong>Implements:</strong> GitObject, Node, Subscribable, UniformResourceLocatable</p>
+<h3 id="fields-for-commit" title="Commit - object / Fields for Commit">Fields for <code>Commit</code><a href="#fields-for-commit" aria-label="Link to heading 'Fields for Commit'" data-heading-content="Fields for Commit" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>abbreviatedOid</code> (String!): An abbreviated version of the Git object ID.</p>
+</li>
+<li>
+<p><code>additions</code> (Int!): The number of additions in this commit.</p>
+</li>
+<li>
+<p><code>associatedPullRequests</code> (PullRequestConnection): The merged Pull Request that introduced the commit to the repository. If the<br>
+commit is not present in the default branch, additionally returns open Pull<br>
+Requests associated with the commit.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (PullRequestOrder): Ordering options for pull requests.</li>
+</ul>
+</li>
+<li>
+<p><code>author</code> (GitActor): Authorship details of the commit.</p>
+</li>
+<li>
+<p><code>authoredByCommitter</code> (Boolean!): Check if the committer and the author match.</p>
+</li>
+<li>
+<p><code>authoredDate</code> (DateTime!): The datetime when this commit was authored.</p>
+</li>
+<li>
+<p><code>authors</code> (GitActorConnection!): The list of authors for this commit based on the git author and the Co-authored-by<br>
+message trailer. The git author will always be first. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>blame</code> (Blame!): Fetches git blame information.</p>
+<ul>
+<li><code>path</code> (String!): The file whose Git blame information you want.</li>
+</ul>
+</li>
+<li>
+<p><code>changedFiles</code> (Int!): We recommend using the changedFilesIfAvailable field instead of<br>
+changedFiles, as changedFiles will cause your request to return an error<br>
+if GitHub is unable to calculate the number of changed files. <strong>Deprecated:</strong> changedFiles will be removed. Use changedFilesIfAvailable instead. Removal on 2023-01-01 UTC.</p>
+</li>
+<li>
+<p><code>changedFilesIfAvailable</code> (Int): The number of changed files in this commit. If GitHub is unable to calculate<br>
+the number of changed files (for example due to a timeout), this will return<br>
+null. We recommend using this field instead of changedFiles.</p>
+</li>
+<li>
+<p><code>checkSuites</code> (CheckSuiteConnection): The check suites associated with a commit.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>filterBy</code> (CheckSuiteFilter): Filters the check suites by this type.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+</ul>
+</li>
+<li>
+<p><code>comments</code> (CommitCommentConnection!): Comments made on the commit. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>commitResourcePath</code> (URI!): The HTTP path for this Git object.</p>
+</li>
+<li>
+<p><code>commitUrl</code> (URI!): The HTTP URL for this Git object.</p>
+</li>
+<li>
+<p><code>committedDate</code> (DateTime!): The datetime when this commit was committed.</p>
+</li>
+<li>
+<p><code>committedViaWeb</code> (Boolean!): Check if committed via GitHub web UI.</p>
+</li>
+<li>
+<p><code>committer</code> (GitActor): Committer details of the commit.</p>
+</li>
+<li>
+<p><code>deletions</code> (Int!): The number of deletions in this commit.</p>
+</li>
+<li>
+<p><code>deployments</code> (DeploymentConnection): The deployments associated with a commit.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>environments</code> ([String!]): Environments to list deployments for.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (DeploymentOrder): Ordering options for deployments returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>file</code> (TreeEntry): The tree entry representing the file located at the given path.</p>
+<ul>
+<li><code>path</code> (String!): The path for the file.</li>
+</ul>
+</li>
+<li>
+<p><code>history</code> (CommitHistoryConnection!): The linear commit history starting from (and including) this commit, in the same order as git log.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>author</code> (CommitAuthor): If non-null, filters history to only show commits with matching authorship.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>path</code> (String): If non-null, filters history to only show commits touching files under this path.</li>
+<li><code>since</code> (GitTimestamp): Allows specifying a beginning time or date for fetching commits. Unexpected<br>
+results may be returned for dates not between 1970-01-01 and 2099-12-13 (inclusive).</li>
+<li><code>until</code> (GitTimestamp): Allows specifying an ending time or date for fetching commits. Unexpected<br>
+results may be returned for dates not between 1970-01-01 and 2099-12-13 (inclusive).</li>
+</ul>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the Commit object.</p>
+</li>
+<li>
+<p><code>message</code> (String!): The Git commit message.</p>
+</li>
+<li>
+<p><code>messageBody</code> (String!): The Git commit message body.</p>
+</li>
+<li>
+<p><code>messageBodyHTML</code> (HTML!): The commit message body rendered to HTML.</p>
+</li>
+<li>
+<p><code>messageHeadline</code> (String!): The Git commit message headline.</p>
+</li>
+<li>
+<p><code>messageHeadlineHTML</code> (HTML!): The commit message headline rendered to HTML.</p>
+</li>
+<li>
+<p><code>oid</code> (GitObjectID!): The Git object ID.</p>
+</li>
+<li>
+<p><code>onBehalfOf</code> (Organization): The organization this commit was made on behalf of.</p>
+</li>
+<li>
+<p><code>parents</code> (CommitConnection!): The parents of a commit. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>pushedDate</code> (DateTime): The datetime when this commit was pushed. <strong>Deprecated:</strong> pushedDate is no longer supported. Removal on 2023-07-01 UTC.</p>
+</li>
+<li>
+<p><code>repository</code> (Repository!): The Repository this commit belongs to.</p>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path for this commit.</p>
+</li>
+<li>
+<p><code>signature</code> (GitSignature): Commit signing information, if present.</p>
+</li>
+<li>
+<p><code>status</code> (Status): Status information for this commit.</p>
+</li>
+<li>
+<p><code>statusCheckRollup</code> (StatusCheckRollup): Check and Status rollup information for this commit.</p>
+</li>
+<li>
+<p><code>submodules</code> (SubmoduleConnection!): Returns a list of all submodules in this repository as of this Commit parsed from the .gitmodules file. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>tarballUrl</code> (URI!): Returns a URL to download a tarball archive for a repository.<br>
+Note: For private repositories, these links are temporary and expire after five minutes.</p>
+</li>
+<li>
+<p><code>tree</code> (Tree!): Commit's root Tree.</p>
+</li>
+<li>
+<p><code>treeResourcePath</code> (URI!): The HTTP path for the tree of this commit.</p>
+</li>
+<li>
+<p><code>treeUrl</code> (URI!): The HTTP URL for the tree of this commit.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL for this commit.</p>
+</li>
+<li>
+<p><code>viewerCanSubscribe</code> (Boolean!): Check if the viewer is able to change their subscription status for the repository.</p>
+</li>
+<li>
+<p><code>viewerSubscription</code> (SubscriptionState): Identifies if the viewer is watching, not watching, or ignoring the subscribable entity.</p>
+</li>
+<li>
+<p><code>zipballUrl</code> (URI!): Returns a URL to download a zipball archive for a repository.<br>
+Note: For private repositories, these links are temporary and expire after five minutes.</p>
+</li>
+</ul>
+<h2 id="commitauthor---input-object" title="CommitAuthor - input object">CommitAuthor - input object<a href="#commitauthor---input-object" aria-label="Link to heading 'CommitAuthor - input object'" data-heading-content="CommitAuthor - input object" class="anchor"></a></h2>
+<p>Specifies an author for filtering Git commits.</p>
+<h3 id="input-fields-for-commitauthor" title="CommitAuthor - input object / Input fields for CommitAuthor">Input fields for <code>CommitAuthor</code><a href="#input-fields-for-commitauthor" aria-label="Link to heading 'Input fields for CommitAuthor'" data-heading-content="Input fields for CommitAuthor" class="anchor"></a></h3>
+<ul>
+<li><code>emails</code> ([String!]): Email addresses to filter by. Commits authored by any of the specified email addresses will be returned.</li>
+<li><code>id</code> (ID): ID of a User to filter by. If non-null, only commits authored by this user<br>
+will be returned. This field takes precedence over emails.</li>
+</ul>
+<h2 id="commitauthoremailpatternparameters---object" title="CommitAuthorEmailPatternParameters - object">CommitAuthorEmailPatternParameters - object<a href="#commitauthoremailpatternparameters---object" aria-label="Link to heading 'CommitAuthorEmailPatternParameters - object'" data-heading-content="CommitAuthorEmailPatternParameters - object" class="anchor"></a></h2>
+<p>Parameters to be used for the commit_author_email_pattern rule.</p>
+<h3 id="fields-for-commitauthoremailpatternparameters" title="CommitAuthorEmailPatternParameters - object / Fields for CommitAuthorEmailPatternParameters">Fields for <code>CommitAuthorEmailPatternParameters</code><a href="#fields-for-commitauthoremailpatternparameters" aria-label="Link to heading 'Fields for CommitAuthorEmailPatternParameters'" data-heading-content="Fields for CommitAuthorEmailPatternParameters" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean!): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="commitauthoremailpatternparametersinput---input-object" title="CommitAuthorEmailPatternParametersInput - input object">CommitAuthorEmailPatternParametersInput - input object<a href="#commitauthoremailpatternparametersinput---input-object" aria-label="Link to heading 'CommitAuthorEmailPatternParametersInput - input object'" data-heading-content="CommitAuthorEmailPatternParametersInput - input object" class="anchor"></a></h2>
+<p>Parameters to be used for the commit_author_email_pattern rule.</p>
+<h3 id="input-fields-for-commitauthoremailpatternparametersinput" title="CommitAuthorEmailPatternParametersInput - input object / Input fields for CommitAuthorEmailPatternParametersInput">Input fields for <code>CommitAuthorEmailPatternParametersInput</code><a href="#input-fields-for-commitauthoremailpatternparametersinput" aria-label="Link to heading 'Input fields for CommitAuthorEmailPatternParametersInput'" data-heading-content="Input fields for CommitAuthorEmailPatternParametersInput" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="commitcomment---object" title="CommitComment - object">CommitComment - object<a href="#commitcomment---object" aria-label="Link to heading 'CommitComment - object'" data-heading-content="CommitComment - object" class="anchor"></a></h2>
+<p>Represents a comment on a given Commit.</p>
+<p><strong>Implements:</strong> Comment, Deletable, Minimizable, Node, Reactable, RepositoryNode, Updatable, UpdatableComment</p>
+<h3 id="fields-for-commitcomment" title="CommitComment - object / Fields for CommitComment">Fields for <code>CommitComment</code><a href="#fields-for-commitcomment" aria-label="Link to heading 'Fields for CommitComment'" data-heading-content="Fields for CommitComment" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>author</code> (Actor): The actor who authored the comment.</p>
+</li>
+<li>
+<p><code>authorAssociation</code> (CommentAuthorAssociation!): Author's association with the subject of the comment.</p>
+</li>
+<li>
+<p><code>body</code> (String!): Identifies the comment body.</p>
+</li>
+<li>
+<p><code>bodyHTML</code> (HTML!): The body rendered to HTML.</p>
+</li>
+<li>
+<p><code>bodyText</code> (String!): The body rendered to text.</p>
+</li>
+<li>
+<p><code>commit</code> (Commit): Identifies the commit associated with the comment, if the commit exists.</p>
+</li>
+<li>
+<p><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</p>
+</li>
+<li>
+<p><code>createdViaEmail</code> (Boolean!): Check if this comment was created via an email reply.</p>
+</li>
+<li>
+<p><code>databaseId</code> (Int): Identifies the primary key from the database.</p>
+</li>
+<li>
+<p><code>editor</code> (Actor): The actor who edited the comment.</p>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the CommitComment object.</p>
+</li>
+<li>
+<p><code>includesCreatedEdit</code> (Boolean!): Check if this comment was edited and includes an edit with the creation data.</p>
+</li>
+<li>
+<p><code>isMinimized</code> (Boolean!): Returns whether or not a comment has been minimized.</p>
+</li>
+<li>
+<p><code>lastEditedAt</code> (DateTime): The moment the editor made the last edit.</p>
+</li>
+<li>
+<p><code>minimizedReason</code> (String): Returns why the comment was minimized. One of abuse, off-topic,<br>
+outdated, resolved, duplicate, spam, and low-quality. Note that the<br>
+case and formatting of these values differs from the inputs to the<br>
+MinimizeComment mutation.</p>
+</li>
+<li>
+<p><code>path</code> (String): Identifies the file path associated with the comment.</p>
+</li>
+<li>
+<p><code>position</code> (Int): Identifies the line position associated with the comment.</p>
+</li>
+<li>
+<p><code>publishedAt</code> (DateTime): Identifies when the comment was published at.</p>
+</li>
+<li>
+<p><code>reactionGroups</code> ([ReactionGroup!]): A list of reactions grouped by content left on the subject.</p>
+</li>
+<li>
+<p><code>reactions</code> (ReactionConnection!): A list of Reactions left on the Issue.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>content</code> (ReactionContent): Allows filtering Reactions by emoji.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (ReactionOrder): Allows specifying the order in which reactions are returned.</li>
+</ul>
+</li>
+<li>
+<p><code>repository</code> (Repository!): The repository associated with this node.</p>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path permalink for this commit comment.</p>
+</li>
+<li>
+<p><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL permalink for this commit comment.</p>
+</li>
+<li>
+<p><code>userContentEdits</code> (UserContentEditConnection): A list of edits to this content. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>viewerCanDelete</code> (Boolean!): Check if the current viewer can delete this object.</p>
+</li>
+<li>
+<p><code>viewerCanMinimize</code> (Boolean!): Check if the current viewer can minimize this object.</p>
+</li>
+<li>
+<p><code>viewerCanReact</code> (Boolean!): Can user react to this subject.</p>
+</li>
+<li>
+<p><code>viewerCanUnminimize</code> (Boolean!): Check if the current viewer can unminimize this object.</p>
+</li>
+<li>
+<p><code>viewerCanUpdate</code> (Boolean!): Check if the current viewer can update this object.</p>
+</li>
+<li>
+<p><code>viewerCannotUpdateReasons</code> ([CommentCannotUpdateReason!]!): Reasons why the current viewer can not update this comment.</p>
+</li>
+<li>
+<p><code>viewerDidAuthor</code> (Boolean!): Did the viewer author this comment.</p>
+</li>
+</ul>
+<h2 id="commitcommentconnection---object" title="CommitCommentConnection - object">CommitCommentConnection - object<a href="#commitcommentconnection---object" aria-label="Link to heading 'CommitCommentConnection - object'" data-heading-content="CommitCommentConnection - object" class="anchor"></a></h2>
+<p>The connection type for CommitComment.</p>
+<h3 id="fields-for-commitcommentconnection" title="CommitCommentConnection - object / Fields for CommitCommentConnection">Fields for <code>CommitCommentConnection</code><a href="#fields-for-commitcommentconnection" aria-label="Link to heading 'Fields for CommitCommentConnection'" data-heading-content="Fields for CommitCommentConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CommitCommentEdge]): A list of edges.</li>
+<li><code>nodes</code> ([CommitComment]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="commitcommentedge---object" title="CommitCommentEdge - object">CommitCommentEdge - object<a href="#commitcommentedge---object" aria-label="Link to heading 'CommitCommentEdge - object'" data-heading-content="CommitCommentEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-commitcommentedge" title="CommitCommentEdge - object / Fields for CommitCommentEdge">Fields for <code>CommitCommentEdge</code><a href="#fields-for-commitcommentedge" aria-label="Link to heading 'Fields for CommitCommentEdge'" data-heading-content="Fields for CommitCommentEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (CommitComment): The item at the end of the edge.</li>
+</ul>
+<h2 id="commitcommentthread---object" title="CommitCommentThread - object">CommitCommentThread - object<a href="#commitcommentthread---object" aria-label="Link to heading 'CommitCommentThread - object'" data-heading-content="CommitCommentThread - object" class="anchor"></a></h2>
+<p>A thread of comments on a commit.</p>
+<p><strong>Implements:</strong> Node, RepositoryNode</p>
+<h3 id="fields-for-commitcommentthread" title="CommitCommentThread - object / Fields for CommitCommentThread">Fields for <code>CommitCommentThread</code><a href="#fields-for-commitcommentthread" aria-label="Link to heading 'Fields for CommitCommentThread'" data-heading-content="Fields for CommitCommentThread" class="anchor"></a></h3>
+<ul>
+<li><code>comments</code> (CommitCommentConnection!): The comments that exist in this thread. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+<li><code>commit</code> (Commit): The commit the comments were made on.</li>
+<li><code>id</code> (ID!): The Node ID of the CommitCommentThread object.</li>
+<li><code>path</code> (String): The file the comments were made on.</li>
+<li><code>position</code> (Int): The position in the diff for the commit that the comment was made on.</li>
+<li><code>repository</code> (Repository!): The repository associated with this node.</li>
+</ul>
+<h2 id="commitconnection---object" title="CommitConnection - object">CommitConnection - object<a href="#commitconnection---object" aria-label="Link to heading 'CommitConnection - object'" data-heading-content="CommitConnection - object" class="anchor"></a></h2>
+<p>The connection type for Commit.</p>
+<h3 id="fields-for-commitconnection" title="CommitConnection - object / Fields for CommitConnection">Fields for <code>CommitConnection</code><a href="#fields-for-commitconnection" aria-label="Link to heading 'Fields for CommitConnection'" data-heading-content="Fields for CommitConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CommitEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Commit]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="commitcontributionorder---input-object" title="CommitContributionOrder - input object">CommitContributionOrder - input object<a href="#commitcontributionorder---input-object" aria-label="Link to heading 'CommitContributionOrder - input object'" data-heading-content="CommitContributionOrder - input object" class="anchor"></a></h2>
+<p>Ordering options for commit contribution connections.</p>
+<h3 id="input-fields-for-commitcontributionorder" title="CommitContributionOrder - input object / Input fields for CommitContributionOrder">Input fields for <code>CommitContributionOrder</code><a href="#input-fields-for-commitcontributionorder" aria-label="Link to heading 'Input fields for CommitContributionOrder'" data-heading-content="Input fields for CommitContributionOrder" class="anchor"></a></h3>
+<ul>
+<li><code>direction</code> (OrderDirection!): The ordering direction.</li>
+<li><code>field</code> (CommitContributionOrderField!): The field by which to order commit contributions.</li>
+</ul>
+<h2 id="commitcontributionorderfield---enum" title="CommitContributionOrderField - enum">CommitContributionOrderField - enum<a href="#commitcontributionorderfield---enum" aria-label="Link to heading 'CommitContributionOrderField - enum'" data-heading-content="CommitContributionOrderField - enum" class="anchor"></a></h2>
+<p>Properties by which commit contribution connections can be ordered.</p>
+<h3 id="values-for-commitcontributionorderfield" title="CommitContributionOrderField - enum / Values for CommitContributionOrderField">Values for <code>CommitContributionOrderField</code><a href="#values-for-commitcontributionorderfield" aria-label="Link to heading 'Values for CommitContributionOrderField'" data-heading-content="Values for CommitContributionOrderField" class="anchor"></a></h3>
+<ul>
+<li><code>COMMIT_COUNT</code>: Order commit contributions by how many commits they represent.</li>
+<li><code>OCCURRED_AT</code>: Order commit contributions by when they were made.</li>
+</ul>
+<h2 id="commitcontributionsbyrepository---object" title="CommitContributionsByRepository - object">CommitContributionsByRepository - object<a href="#commitcontributionsbyrepository---object" aria-label="Link to heading 'CommitContributionsByRepository - object'" data-heading-content="CommitContributionsByRepository - object" class="anchor"></a></h2>
+<p>This aggregates commits made by a user within one repository.</p>
+<h3 id="fields-for-commitcontributionsbyrepository" title="CommitContributionsByRepository - object / Fields for CommitContributionsByRepository">Fields for <code>CommitContributionsByRepository</code><a href="#fields-for-commitcontributionsbyrepository" aria-label="Link to heading 'Fields for CommitContributionsByRepository'" data-heading-content="Fields for CommitContributionsByRepository" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>contributions</code> (CreatedCommitContributionConnection!): The commit contributions, each representing a day.</p>
+<ul>
+<li><code>after</code> (String): Returns the elements in the list that come after the specified cursor.</li>
+<li><code>before</code> (String): Returns the elements in the list that come before the specified cursor.</li>
+<li><code>first</code> (Int): Returns the first n elements from the list.</li>
+<li><code>last</code> (Int): Returns the last n elements from the list.</li>
+<li><code>orderBy</code> (CommitContributionOrder): Ordering options for commit contributions returned from the connection.</li>
+</ul>
+</li>
+<li>
+<p><code>repository</code> (Repository!): The repository in which the commits were made.</p>
+</li>
+<li>
+<p><code>resourcePath</code> (URI!): The HTTP path for the user's commits to the repository in this time range.</p>
+</li>
+<li>
+<p><code>url</code> (URI!): The HTTP URL for the user's commits to the repository in this time range.</p>
+</li>
+</ul>
+<h2 id="commitedge---object" title="CommitEdge - object">CommitEdge - object<a href="#commitedge---object" aria-label="Link to heading 'CommitEdge - object'" data-heading-content="CommitEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-commitedge" title="CommitEdge - object / Fields for CommitEdge">Fields for <code>CommitEdge</code><a href="#fields-for-commitedge" aria-label="Link to heading 'Fields for CommitEdge'" data-heading-content="Fields for CommitEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (Commit): The item at the end of the edge.</li>
+</ul>
+<h2 id="commithistoryconnection---object" title="CommitHistoryConnection - object">CommitHistoryConnection - object<a href="#commithistoryconnection---object" aria-label="Link to heading 'CommitHistoryConnection - object'" data-heading-content="CommitHistoryConnection - object" class="anchor"></a></h2>
+<p>The connection type for Commit.</p>
+<h3 id="fields-for-commithistoryconnection" title="CommitHistoryConnection - object / Fields for CommitHistoryConnection">Fields for <code>CommitHistoryConnection</code><a href="#fields-for-commithistoryconnection" aria-label="Link to heading 'Fields for CommitHistoryConnection'" data-heading-content="Fields for CommitHistoryConnection" class="anchor"></a></h3>
+<ul>
+<li><code>edges</code> ([CommitEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Commit]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="commitmessage---input-object" title="CommitMessage - input object">CommitMessage - input object<a href="#commitmessage---input-object" aria-label="Link to heading 'CommitMessage - input object'" data-heading-content="CommitMessage - input object" class="anchor"></a></h2>
+<p>A message to include with a new commit.</p>
+<h3 id="input-fields-for-commitmessage" title="CommitMessage - input object / Input fields for CommitMessage">Input fields for <code>CommitMessage</code><a href="#input-fields-for-commitmessage" aria-label="Link to heading 'Input fields for CommitMessage'" data-heading-content="Input fields for CommitMessage" class="anchor"></a></h3>
+<ul>
+<li><code>body</code> (String): The body of the message.</li>
+<li><code>headline</code> (String!): The headline of the message.</li>
+</ul>
+<h2 id="commitmessagepatternparameters---object" title="CommitMessagePatternParameters - object">CommitMessagePatternParameters - object<a href="#commitmessagepatternparameters---object" aria-label="Link to heading 'CommitMessagePatternParameters - object'" data-heading-content="CommitMessagePatternParameters - object" class="anchor"></a></h2>
+<p>Parameters to be used for the commit_message_pattern rule.</p>
+<h3 id="fields-for-commitmessagepatternparameters" title="CommitMessagePatternParameters - object / Fields for CommitMessagePatternParameters">Fields for <code>CommitMessagePatternParameters</code><a href="#fields-for-commitmessagepatternparameters" aria-label="Link to heading 'Fields for CommitMessagePatternParameters'" data-heading-content="Fields for CommitMessagePatternParameters" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean!): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="commitmessagepatternparametersinput---input-object" title="CommitMessagePatternParametersInput - input object">CommitMessagePatternParametersInput - input object<a href="#commitmessagepatternparametersinput---input-object" aria-label="Link to heading 'CommitMessagePatternParametersInput - input object'" data-heading-content="CommitMessagePatternParametersInput - input object" class="anchor"></a></h2>
+<p>Parameters to be used for the commit_message_pattern rule.</p>
+<h3 id="input-fields-for-commitmessagepatternparametersinput" title="CommitMessagePatternParametersInput - input object / Input fields for CommitMessagePatternParametersInput">Input fields for <code>CommitMessagePatternParametersInput</code><a href="#input-fields-for-commitmessagepatternparametersinput" aria-label="Link to heading 'Input fields for CommitMessagePatternParametersInput'" data-heading-content="Input fields for CommitMessagePatternParametersInput" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="committeremailpatternparameters---object" title="CommitterEmailPatternParameters - object">CommitterEmailPatternParameters - object<a href="#committeremailpatternparameters---object" aria-label="Link to heading 'CommitterEmailPatternParameters - object'" data-heading-content="CommitterEmailPatternParameters - object" class="anchor"></a></h2>
+<p>Parameters to be used for the committer_email_pattern rule.</p>
+<h3 id="fields-for-committeremailpatternparameters" title="CommitterEmailPatternParameters - object / Fields for CommitterEmailPatternParameters">Fields for <code>CommitterEmailPatternParameters</code><a href="#fields-for-committeremailpatternparameters" aria-label="Link to heading 'Fields for CommitterEmailPatternParameters'" data-heading-content="Fields for CommitterEmailPatternParameters" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean!): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="committeremailpatternparametersinput---input-object" title="CommitterEmailPatternParametersInput - input object">CommitterEmailPatternParametersInput - input object<a href="#committeremailpatternparametersinput---input-object" aria-label="Link to heading 'CommitterEmailPatternParametersInput - input object'" data-heading-content="CommitterEmailPatternParametersInput - input object" class="anchor"></a></h2>
+<p>Parameters to be used for the committer_email_pattern rule.</p>
+<h3 id="input-fields-for-committeremailpatternparametersinput" title="CommitterEmailPatternParametersInput - input object / Input fields for CommitterEmailPatternParametersInput">Input fields for <code>CommitterEmailPatternParametersInput</code><a href="#input-fields-for-committeremailpatternparametersinput" aria-label="Link to heading 'Input fields for CommitterEmailPatternParametersInput'" data-heading-content="Input fields for CommitterEmailPatternParametersInput" class="anchor"></a></h3>
+<ul>
+<li><code>name</code> (String): How this rule appears when configuring it.</li>
+<li><code>negate</code> (Boolean): If true, the rule will fail if the pattern matches.</li>
+<li><code>operator</code> (String!): The operator to use for matching.</li>
+<li><code>pattern</code> (String!): The pattern to match with.</li>
+</ul>
+<h2 id="comparison---object" title="Comparison - object">Comparison - object<a href="#comparison---object" aria-label="Link to heading 'Comparison - object'" data-heading-content="Comparison - object" class="anchor"></a></h2>
+<p>Represents a comparison between two commit revisions.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-comparison" title="Comparison - object / Fields for Comparison">Fields for <code>Comparison</code><a href="#fields-for-comparison" aria-label="Link to heading 'Fields for Comparison'" data-heading-content="Fields for Comparison" class="anchor"></a></h3>
+<ul>
+<li><code>aheadBy</code> (Int!): The number of commits ahead of the base branch.</li>
+<li><code>baseTarget</code> (GitObject!): The base revision of this comparison.</li>
+<li><code>behindBy</code> (Int!): The number of commits behind the base branch.</li>
+<li><code>commits</code> (ComparisonCommitConnection!): The commits which compose this comparison. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+<li><code>headTarget</code> (GitObject!): The head revision of this comparison.</li>
+<li><code>id</code> (ID!): The Node ID of the Comparison object.</li>
+<li><code>status</code> (ComparisonStatus!): The status of this comparison.</li>
+</ul>
+<h2 id="comparisoncommitconnection---object" title="ComparisonCommitConnection - object">ComparisonCommitConnection - object<a href="#comparisoncommitconnection---object" aria-label="Link to heading 'ComparisonCommitConnection - object'" data-heading-content="ComparisonCommitConnection - object" class="anchor"></a></h2>
+<p>The connection type for Commit.</p>
+<h3 id="fields-for-comparisoncommitconnection" title="ComparisonCommitConnection - object / Fields for ComparisonCommitConnection">Fields for <code>ComparisonCommitConnection</code><a href="#fields-for-comparisoncommitconnection" aria-label="Link to heading 'Fields for ComparisonCommitConnection'" data-heading-content="Fields for ComparisonCommitConnection" class="anchor"></a></h3>
+<ul>
+<li><code>authorCount</code> (Int!): The total count of authors and co-authors across all commits.</li>
+<li><code>edges</code> ([CommitEdge]): A list of edges.</li>
+<li><code>nodes</code> ([Commit]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="comparisonstatus---enum" title="ComparisonStatus - enum">ComparisonStatus - enum<a href="#comparisonstatus---enum" aria-label="Link to heading 'ComparisonStatus - enum'" data-heading-content="ComparisonStatus - enum" class="anchor"></a></h2>
+<p>The status of a git comparison between two refs.</p>
+<h3 id="values-for-comparisonstatus" title="ComparisonStatus - enum / Values for ComparisonStatus">Values for <code>ComparisonStatus</code><a href="#values-for-comparisonstatus" aria-label="Link to heading 'Values for ComparisonStatus'" data-heading-content="Values for ComparisonStatus" class="anchor"></a></h3>
+<ul>
+<li><code>AHEAD</code>: The head ref is ahead of the base ref.</li>
+<li><code>BEHIND</code>: The head ref is behind the base ref.</li>
+<li><code>DIVERGED</code>: The head ref is both ahead and behind of the base ref, indicating git history has diverged.</li>
+<li><code>IDENTICAL</code>: The head ref and base ref are identical.</li>
+</ul>
+<h2 id="createcommitonbranch---mutation" title="createCommitOnBranch - mutation">createCommitOnBranch - mutation<a href="#createcommitonbranch---mutation" aria-label="Link to heading 'createCommitOnBranch - mutation'" data-heading-content="createCommitOnBranch - mutation" class="anchor"></a></h2>
+<p>Appends a commit to the given branch as the authenticated user.<br>
+This mutation creates a commit whose parent is the HEAD of the provided<br>
+branch and also updates that branch to point to the new commit.<br>
+It can be thought of as similar to git commit.<br>
+Locating a Branch<br>
+Commits are appended to a branch of type Ref.<br>
+This must refer to a git branch (i.e.  the fully qualified path must<br>
+begin with refs/heads/, although including this prefix is optional.<br>
+Callers may specify the branch to commit to either by its global node<br>
+ID or by passing both of repositoryNameWithOwner and refName.  For<br>
+more details see the documentation for CommittableBranch.<br>
+Describing Changes<br>
+fileChanges are specified as a FilesChanges object describing<br>
+FileAdditions and FileDeletions.<br>
+Please see the documentation for FileChanges for more information on<br>
+how to use this argument to describe any set of file changes.<br>
+Authorship<br>
+Similar to the web commit interface, this mutation does not support<br>
+specifying the author or committer of the commit and will not add<br>
+support for this in the future.<br>
+A commit created by a successful execution of this mutation will be<br>
+authored by the owner of the credential which authenticates the API<br>
+request.  The committer will be identical to that of commits authored<br>
+using the web interface.<br>
+If you need full control over author and committer information, please<br>
+use the Git Database REST API instead.<br>
+Commit Signing<br>
+Commits made using this mutation are automatically signed by GitHub if<br>
+supported and will be marked as verified in the user interface.</p>
+<h3 id="input-fields-for-createcommitonbranch" title="createCommitOnBranch - mutation / Input fields for createCommitOnBranch">Input fields for <code>createCommitOnBranch</code><a href="#input-fields-for-createcommitonbranch" aria-label="Link to heading 'Input fields for createCommitOnBranch'" data-heading-content="Input fields for createCommitOnBranch" class="anchor"></a></h3>
+<ul>
+<li><code>input</code> (CreateCommitOnBranchInput!):</li>
+</ul>
+<h3 id="return-fields-for-createcommitonbranch" title="createCommitOnBranch - mutation / Return fields for createCommitOnBranch">Return fields for <code>createCommitOnBranch</code><a href="#return-fields-for-createcommitonbranch" aria-label="Link to heading 'Return fields for createCommitOnBranch'" data-heading-content="Return fields for createCommitOnBranch" class="anchor"></a></h3>
+<ul>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>commit</code> (Commit): The new commit.</li>
+<li><code>ref</code> (Ref): The ref which has been updated to point to the new commit.</li>
+</ul>
+<h2 id="createcommitonbranchinput---input-object" title="CreateCommitOnBranchInput - input object">CreateCommitOnBranchInput - input object<a href="#createcommitonbranchinput---input-object" aria-label="Link to heading 'CreateCommitOnBranchInput - input object'" data-heading-content="CreateCommitOnBranchInput - input object" class="anchor"></a></h2>
+<p>Autogenerated input type of CreateCommitOnBranch.</p>
+<h3 id="input-fields-for-createcommitonbranchinput" title="CreateCommitOnBranchInput - input object / Input fields for CreateCommitOnBranchInput">Input fields for <code>CreateCommitOnBranchInput</code><a href="#input-fields-for-createcommitonbranchinput" aria-label="Link to heading 'Input fields for CreateCommitOnBranchInput'" data-heading-content="Input fields for CreateCommitOnBranchInput" class="anchor"></a></h3>
+<ul>
+<li><code>branch</code> (CommittableBranch!): The Ref to be updated.  Must be a branch.</li>
+<li><code>clientMutationId</code> (String): A unique identifier for the client performing the mutation.</li>
+<li><code>expectedHeadOid</code> (GitObjectID!): The git commit oid expected at the head of the branch prior to the commit.</li>
+<li><code>fileChanges</code> (FileChanges): A description of changes to files in this commit.</li>
+<li><code>message</code> (CommitMessage!): The commit message the be included with the commit.</li>
+</ul>
+<h2 id="status---object" title="Status - object">Status - object<a href="#status---object" aria-label="Link to heading 'Status - object'" data-heading-content="Status - object" class="anchor"></a></h2>
+<p>Represents a commit status.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-status" title="Status - object / Fields for Status">Fields for <code>Status</code><a href="#fields-for-status" aria-label="Link to heading 'Fields for Status'" data-heading-content="Fields for Status" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>combinedContexts</code> (StatusCheckRollupContextConnection!): A list of status contexts and check runs for this commit. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></p>
+</li>
+<li>
+<p><code>commit</code> (Commit): The commit this status is attached to.</p>
+</li>
+<li>
+<p><code>context</code> (StatusContext): Looks up an individual status context by context name.</p>
+<ul>
+<li><code>name</code> (String!): The context name.</li>
+</ul>
+</li>
+<li>
+<p><code>contexts</code> ([StatusContext!]!): The individual status contexts for this commit.</p>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the Status object.</p>
+</li>
+<li>
+<p><code>state</code> (StatusState!): The combined commit status.</p>
+</li>
+</ul>
+<h2 id="statuscheckconfiguration---object" title="StatusCheckConfiguration - object">StatusCheckConfiguration - object<a href="#statuscheckconfiguration---object" aria-label="Link to heading 'StatusCheckConfiguration - object'" data-heading-content="StatusCheckConfiguration - object" class="anchor"></a></h2>
+<p>Required status check.</p>
+<h3 id="fields-for-statuscheckconfiguration" title="StatusCheckConfiguration - object / Fields for StatusCheckConfiguration">Fields for <code>StatusCheckConfiguration</code><a href="#fields-for-statuscheckconfiguration" aria-label="Link to heading 'Fields for StatusCheckConfiguration'" data-heading-content="Fields for StatusCheckConfiguration" class="anchor"></a></h3>
+<ul>
+<li><code>context</code> (String!): The status check context name that must be present on the commit.</li>
+<li><code>integrationId</code> (Int): The optional integration ID that this status check must originate from.</li>
+</ul>
+<h2 id="statuscheckconfigurationinput---input-object" title="StatusCheckConfigurationInput - input object">StatusCheckConfigurationInput - input object<a href="#statuscheckconfigurationinput---input-object" aria-label="Link to heading 'StatusCheckConfigurationInput - input object'" data-heading-content="StatusCheckConfigurationInput - input object" class="anchor"></a></h2>
+<p>Required status check.</p>
+<h3 id="input-fields-for-statuscheckconfigurationinput" title="StatusCheckConfigurationInput - input object / Input fields for StatusCheckConfigurationInput">Input fields for <code>StatusCheckConfigurationInput</code><a href="#input-fields-for-statuscheckconfigurationinput" aria-label="Link to heading 'Input fields for StatusCheckConfigurationInput'" data-heading-content="Input fields for StatusCheckConfigurationInput" class="anchor"></a></h3>
+<ul>
+<li><code>context</code> (String!): The status check context name that must be present on the commit.</li>
+<li><code>integrationId</code> (Int): The optional integration ID that this status check must originate from.</li>
+</ul>
+<h2 id="statuscheckrollup---object" title="StatusCheckRollup - object">StatusCheckRollup - object<a href="#statuscheckrollup---object" aria-label="Link to heading 'StatusCheckRollup - object'" data-heading-content="StatusCheckRollup - object" class="anchor"></a></h2>
+<p>Represents the rollup for both the check runs and status for a commit.</p>
+<p><strong>Implements:</strong> Node</p>
+<h3 id="fields-for-statuscheckrollup" title="StatusCheckRollup - object / Fields for StatusCheckRollup">Fields for <code>StatusCheckRollup</code><a href="#fields-for-statuscheckrollup" aria-label="Link to heading 'Fields for StatusCheckRollup'" data-heading-content="Fields for StatusCheckRollup" class="anchor"></a></h3>
+<ul>
+<li><code>commit</code> (Commit): The commit the status and check runs are attached to.</li>
+<li><code>contexts</code> (StatusCheckRollupContextConnection!): A list of status contexts and check runs for this commit. <em>(Pagination: <code>after</code>, <code>before</code>, <code>first</code>, <code>last</code>)</em></li>
+<li><code>id</code> (ID!): The Node ID of the StatusCheckRollup object.</li>
+<li><code>state</code> (StatusState!): The combined status for the commit.</li>
+</ul>
+<h2 id="statuscheckrollupcontext---union" title="StatusCheckRollupContext - union">StatusCheckRollupContext - union<a href="#statuscheckrollupcontext---union" aria-label="Link to heading 'StatusCheckRollupContext - union'" data-heading-content="StatusCheckRollupContext - union" class="anchor"></a></h2>
+<p>Types that can be inside a StatusCheckRollup context.</p>
+<h3 id="possible-types-for-statuscheckrollupcontext" title="StatusCheckRollupContext - union / Possible types for StatusCheckRollupContext">Possible types for <code>StatusCheckRollupContext</code><a href="#possible-types-for-statuscheckrollupcontext" aria-label="Link to heading 'Possible types for StatusCheckRollupContext'" data-heading-content="Possible types for StatusCheckRollupContext" class="anchor"></a></h3>
+<ul>
+<li>CheckRun</li>
+<li>StatusContext</li>
+</ul>
+<h2 id="statuscheckrollupcontextconnection---object" title="StatusCheckRollupContextConnection - object">StatusCheckRollupContextConnection - object<a href="#statuscheckrollupcontextconnection---object" aria-label="Link to heading 'StatusCheckRollupContextConnection - object'" data-heading-content="StatusCheckRollupContextConnection - object" class="anchor"></a></h2>
+<p>The connection type for StatusCheckRollupContext.</p>
+<h3 id="fields-for-statuscheckrollupcontextconnection" title="StatusCheckRollupContextConnection - object / Fields for StatusCheckRollupContextConnection">Fields for <code>StatusCheckRollupContextConnection</code><a href="#fields-for-statuscheckrollupcontextconnection" aria-label="Link to heading 'Fields for StatusCheckRollupContextConnection'" data-heading-content="Fields for StatusCheckRollupContextConnection" class="anchor"></a></h3>
+<ul>
+<li><code>checkRunCount</code> (Int!): The number of check runs in this rollup.</li>
+<li><code>checkRunCountsByState</code> ([CheckRunStateCount!]): Counts of check runs by state.</li>
+<li><code>edges</code> ([StatusCheckRollupContextEdge]): A list of edges.</li>
+<li><code>nodes</code> ([StatusCheckRollupContext]): A list of nodes.</li>
+<li><code>pageInfo</code> (PageInfo!): Information to aid in pagination.</li>
+<li><code>statusContextCount</code> (Int!): The number of status contexts in this rollup.</li>
+<li><code>statusContextCountsByState</code> ([StatusContextStateCount!]): Counts of status contexts by state.</li>
+<li><code>totalCount</code> (Int!): Identifies the total count of items in the connection.</li>
+</ul>
+<h2 id="statuscheckrollupcontextedge---object" title="StatusCheckRollupContextEdge - object">StatusCheckRollupContextEdge - object<a href="#statuscheckrollupcontextedge---object" aria-label="Link to heading 'StatusCheckRollupContextEdge - object'" data-heading-content="StatusCheckRollupContextEdge - object" class="anchor"></a></h2>
+<p>An edge in a connection.</p>
+<h3 id="fields-for-statuscheckrollupcontextedge" title="StatusCheckRollupContextEdge - object / Fields for StatusCheckRollupContextEdge">Fields for <code>StatusCheckRollupContextEdge</code><a href="#fields-for-statuscheckrollupcontextedge" aria-label="Link to heading 'Fields for StatusCheckRollupContextEdge'" data-heading-content="Fields for StatusCheckRollupContextEdge" class="anchor"></a></h3>
+<ul>
+<li><code>cursor</code> (String!): A cursor for use in pagination.</li>
+<li><code>node</code> (StatusCheckRollupContext): The item at the end of the edge.</li>
+</ul>
+<h2 id="statuscontext---object" title="StatusContext - object">StatusContext - object<a href="#statuscontext---object" aria-label="Link to heading 'StatusContext - object'" data-heading-content="StatusContext - object" class="anchor"></a></h2>
+<p>Represents an individual commit status context.</p>
+<p><strong>Implements:</strong> Node, RequirableByPullRequest</p>
+<h3 id="fields-for-statuscontext" title="StatusContext - object / Fields for StatusContext">Fields for <code>StatusContext</code><a href="#fields-for-statuscontext" aria-label="Link to heading 'Fields for StatusContext'" data-heading-content="Fields for StatusContext" class="anchor"></a></h3>
+<ul>
+<li>
+<p><code>avatarUrl</code> (URI): The avatar of the OAuth application or the user that created the status.</p>
+<ul>
+<li><code>size</code> (Int): The size of the resulting square image. Default: <code>40</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>commit</code> (Commit): This commit this status context is attached to.</p>
+</li>
+<li>
+<p><code>context</code> (String!): The name of this status context.</p>
+</li>
+<li>
+<p><code>createdAt</code> (DateTime!): Identifies the date and time when the object was created.</p>
+</li>
+<li>
+<p><code>creator</code> (Actor): The actor who created this status context.</p>
+</li>
+<li>
+<p><code>description</code> (String): The description for this status context.</p>
+</li>
+<li>
+<p><code>id</code> (ID!): The Node ID of the StatusContext object.</p>
+</li>
+<li>
+<p><code>isRequired</code> (Boolean!): Whether this is required to pass before merging for a specific pull request.</p>
+<ul>
+<li><code>pullRequestId</code> (ID): The id of the pull request this is required for.</li>
+<li><code>pullRequestNumber</code> (Int): The number of the pull request this is required for.</li>
+</ul>
+</li>
+<li>
+<p><code>state</code> (StatusState!): The state of this status context.</p>
+</li>
+<li>
+<p><code>targetUrl</code> (URI): The URL for this status context.</p>
+</li>
+<li>
+<p><code>updatedAt</code> (DateTime!): Identifies the date and time when the object was last updated.</p>
+</li>
+</ul>
+<h2 id="statuscontextstatecount---object" title="StatusContextStateCount - object">StatusContextStateCount - object<a href="#statuscontextstatecount---object" aria-label="Link to heading 'StatusContextStateCount - object'" data-heading-content="StatusContextStateCount - object" class="anchor"></a></h2>
+<p>Represents a count of the state of a status context.</p>
+<h3 id="fields-for-statuscontextstatecount" title="StatusContextStateCount - object / Fields for StatusContextStateCount">Fields for <code>StatusContextStateCount</code><a href="#fields-for-statuscontextstatecount" aria-label="Link to heading 'Fields for StatusContextStateCount'" data-heading-content="Fields for StatusContextStateCount" class="anchor"></a></h3>
+<ul>
+<li><code>count</code> (Int!): The number of statuses with this state.</li>
+<li><code>state</code> (StatusState!): The state of a status context.</li>
+</ul>
+<h2 id="statusstate---enum" title="StatusState - enum">StatusState - enum<a href="#statusstate---enum" aria-label="Link to heading 'StatusState - enum'" data-heading-content="StatusState - enum" class="anchor"></a></h2>
+<p>The possible commit status states.</p>
+<h3 id="values-for-statusstate" title="StatusState - enum / Values for StatusState">Values for <code>StatusState</code><a href="#values-for-statusstate" aria-label="Link to heading 'Values for StatusState'" data-heading-content="Values for StatusState" class="anchor"></a></h3>
+<ul>
+<li><code>ERROR</code>: Status is errored.</li>
+<li><code>EXPECTED</code>: Status is expected.</li>
+<li><code>FAILURE</code>: Status is failing.</li>
+<li><code>PENDING</code>: Status is pending.</li>
+<li><code>SUCCESS</code>: Status is successful.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

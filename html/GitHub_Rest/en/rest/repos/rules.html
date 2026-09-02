@@ -1,0 +1,1530 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for rules</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Repositories</a> / </nav><h1 id="rest-api-endpoints-for-rules">REST API endpoints for rules<a href="#rest-api-endpoints-for-rules" aria-label="Link to heading 'REST API endpoints for rules'" data-heading-content="REST API endpoints for rules" class="anchor"></a></h1>
+<p>Use the REST API to manage rulesets for repositories. Rulesets control how people can interact with selected branches and tags in a repository.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-rules-for-a-branch" title="Get rules for a branch">Get rules for a branch<a href="#get-rules-for-a-branch" aria-label="Link to heading 'Get rules for a branch'" data-heading-content="Get rules for a branch" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/rules/branches/{branch}
+</span></code></pre>
+<p>Returns all active rules that apply to the specified branch. The branch does not need to exist; rules that would apply<br>
+to a branch with that name will be returned. All active rules that apply will be returned, regardless of the level<br>
+at which they are configured (e.g. repository or organization). Rules in rulesets with "evaluate" or "disabled"<br>
+enforcement statuses are not returned.</p>
+<h3 id="parameters" title="Get rules for a branch / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>branch</code></strong> (string) (required)<br>
+The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use the GraphQL API.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get rules for a branch / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get rules for a branch / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rules/branches/BRANCH
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Repository Rule</code> objects: one of:</p>
+<ul>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+<li><strong>object</strong></li>
+</ul>
+<h2 id="get-all-repository-rulesets" title="Get all repository rulesets">Get all repository rulesets<a href="#get-all-repository-rulesets" aria-label="Link to heading 'Get all repository rulesets'" data-heading-content="Get all repository rulesets" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/rulesets
+</span></code></pre>
+<p>Get all the rulesets for a repository.</p>
+<h3 id="parameters-1" title="Get all repository rulesets / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>includes_parents</code></strong> (boolean)<br>
+Include rulesets configured at higher levels that apply to this repository<br>
+Default: <code>true</code></p>
+</li>
+<li>
+<p><strong><code>targets</code></strong> (string)<br>
+A comma-separated list of rule targets to filter by.<br>
+If provided, only rulesets that apply to the specified targets will be returned.<br>
+For example, branch,tag,push.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get all repository rulesets / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get all repository rulesets / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Repository ruleset</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>target</code>: string, enum: <code>branch</code>, <code>tag</code>, <code>push</code>, <code>repository</code></li>
+<li><code>source_type</code>: string, enum: <code>Repository</code>, <code>Organization</code>, <code>Enterprise</code></li>
+<li><code>source</code>: required, string</li>
+<li><code>enforcement</code>: required, string, enum: <code>disabled</code>, <code>active</code>, <code>evaluate</code></li>
+<li><code>bypass_actors</code>: array of <code>Repository Ruleset Bypass Actor</code>:
+<ul>
+<li><code>actor_id</code>: integer or null</li>
+<li><code>actor_type</code>: required, string, enum: <code>Integration</code>, <code>OrganizationAdmin</code>, <code>RepositoryRole</code>, <code>Team</code>, <code>DeployKey</code>, <code>User</code></li>
+<li><code>bypass_mode</code>: string, enum: <code>always</code>, <code>pull_request</code>, <code>exempt</code>, default: <code>"always"</code></li>
+</ul>
+</li>
+<li><code>current_user_can_bypass</code>: string, enum: <code>always</code>, <code>pull_requests_only</code>, <code>never</code>, <code>exempt</code></li>
+<li><code>node_id</code>: string</li>
+<li><code>_links</code>: object:
+<ul>
+<li><code>self</code>: object:
+<ul>
+<li><code>href</code>: string</li>
+</ul>
+</li>
+<li><code>html</code>: object or null:
+<ul>
+<li><code>href</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>conditions</code>: any of:
+<ul>
+<li><strong>Repository ruleset conditions for ref names</strong>
+<ul>
+<li><code>ref_name</code>: object:
+<ul>
+<li><code>include</code>: array of string</li>
+<li><code>exclude</code>: array of string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Organization ruleset conditions</strong></li>
+</ul>
+</li>
+<li><code>rules</code>: array of object</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="create-a-repository-ruleset" title="Create a repository ruleset">Create a repository ruleset<a href="#create-a-repository-ruleset" aria-label="Link to heading 'Create a repository ruleset'" data-heading-content="Create a repository ruleset" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/rulesets
+</span></code></pre>
+<p>Create a ruleset for a repository.</p>
+<h3 id="parameters-2" title="Create a repository ruleset / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of the ruleset.</p>
+</li>
+<li>
+<p><strong><code>target</code></strong> (string)<br>
+The target of the ruleset<br>
+Default: <code>branch</code><br>
+Can be one of: <code>branch</code>, <code>tag</code>, <code>push</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string) (required)<br>
+The enforcement level of the ruleset. evaluate allows admins to test rules before enforcing them. Admins can view insights on the Rule Insights page (evaluate is only available with GitHub Enterprise).<br>
+Can be one of: <code>disabled</code>, <code>active</code>, <code>evaluate</code></p>
+</li>
+<li>
+<p><strong><code>bypass_actors</code></strong> (array of objects)<br>
+The actors that can bypass the rules in this ruleset</p>
+<ul>
+<li><strong><code>actor_id</code></strong> (integer or null)<br>
+The ID of the actor that can bypass a ruleset. Required for Integration, RepositoryRole, Team, and User actor types. If actor_type is OrganizationAdmin, actor_id is ignored. If actor_type is DeployKey, this should be null. OrganizationAdmin is not applicable for personal repositories.</li>
+<li><strong><code>actor_type</code></strong> (string) (required)<br>
+The type of actor that can bypass a ruleset.<br>
+Can be one of: <code>Integration</code>, <code>OrganizationAdmin</code>, <code>RepositoryRole</code>, <code>Team</code>, <code>DeployKey</code>, <code>User</code></li>
+<li><strong><code>bypass_mode</code></strong> (string)<br>
+When the specified actor can bypass the ruleset. pull_request means that an actor can only bypass rules on pull requests. pull_request is not applicable for the DeployKey actor type. Also, pull_request is only applicable to branch rulesets. When bypass_mode is exempt, rules will not be run for that actor and a bypass audit entry will not be created.<br>
+Default: <code>always</code><br>
+Can be one of: <code>always</code>, <code>pull_request</code>, <code>exempt</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>conditions</code></strong> (object)<br>
+Parameters for a repository ruleset ref name condition</p>
+<ul>
+<li><strong><code>ref_name</code></strong> (object)
+<ul>
+<li><strong><code>include</code></strong> (array of strings)<br>
+Array of ref names or patterns to include. One of these patterns must match for the condition to pass. Also accepts ~DEFAULT_BRANCH to include the default branch or ~ALL to include all branches.</li>
+<li><strong><code>exclude</code></strong> (array of strings)<br>
+Array of ref names or patterns to exclude. The condition will not pass if any of these patterns match.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>rules</code></strong> (array of objects)<br>
+An array of rules within the ruleset.</p>
+<ul>
+<li><strong><code>creation</code></strong> (object)<br>
+Only allow users with bypass permission to create matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>creation</code></li>
+</ul>
+</li>
+<li><strong><code>update</code></strong> (object)<br>
+Only allow users with bypass permission to update matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>update</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>update_allows_fetch_and_merge</code></strong> (boolean) (required)<br>
+Branch can pull changes from its upstream repository</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>deletion</code></strong> (object)<br>
+Only allow users with bypass permissions to delete matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>deletion</code></li>
+</ul>
+</li>
+<li><strong><code>required_linear_history</code></strong> (object)<br>
+Prevent merge commits from being pushed to matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_linear_history</code></li>
+</ul>
+</li>
+<li><strong><code>merge_queue</code></strong> (object)<br>
+Merges must be performed via a merge queue.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>merge_queue</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>check_response_timeout_minutes</code></strong> (integer) (required)<br>
+Maximum time for a required status check to report a conclusion. After this much time has elapsed, checks that have not reported a conclusion will be assumed to have failed</li>
+<li><strong><code>grouping_strategy</code></strong> (string) (required)<br>
+When set to ALLGREEN, the merge commit created by merge queue for each PR in the group must pass all required checks to merge. When set to HEADGREEN, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge.<br>
+Can be one of: <code>ALLGREEN</code>, <code>HEADGREEN</code></li>
+<li><strong><code>max_entries_to_build</code></strong> (integer) (required)<br>
+Limit the number of queued pull requests requesting checks and workflow runs at the same time.</li>
+<li><strong><code>max_entries_to_merge</code></strong> (integer) (required)<br>
+The maximum number of PRs that will be merged together in a group.</li>
+<li><strong><code>merge_method</code></strong> (string) (required)<br>
+Method to use when merging changes from queued pull requests.<br>
+Can be one of: <code>MERGE</code>, <code>SQUASH</code>, <code>REBASE</code></li>
+<li><strong><code>min_entries_to_merge</code></strong> (integer) (required)<br>
+The minimum number of PRs that will be merged together in a group.</li>
+<li><strong><code>min_entries_to_merge_wait_minutes</code></strong> (integer) (required)<br>
+The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>required_deployments</code></strong> (object)<br>
+Choose which environments must be successfully deployed to before refs can be pushed into a ref that matches this rule.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_deployments</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>required_deployment_environments</code></strong> (array of strings) (required)<br>
+The environments that must be successfully deployed to before branches can be merged.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>required_signatures</code></strong> (object)<br>
+Commits pushed to matching refs must have verified signatures.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_signatures</code></li>
+</ul>
+</li>
+<li><strong><code>pull_request</code></strong> (object)<br>
+Require all commits be made to a non-target branch and submitted via a pull request before they can be merged.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>pull_request</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>allowed_merge_methods</code></strong> (array of strings)<br>
+Array of allowed merge methods. Allowed values include merge, squash, and rebase. At least one option must be enabled.<br>
+Supported values are: merge, squash, rebase</li>
+<li><strong><code>dismiss_stale_reviews_on_push</code></strong> (boolean) (required)<br>
+New, reviewable commits pushed will dismiss previous pull request review approvals.</li>
+<li><strong><code>dismissal_restriction</code></strong> (object)<br>
+Specify people, teams, or apps allowed to dismiss pull request reviews.
+<ul>
+<li><strong><code>allowed_actors</code></strong> (array of objects)<br>
+Specify people, teams, or apps allowed to dismiss pull request reviews.
+<ul>
+<li><strong><code>id</code></strong> (integer) (required)<br>
+ID of the actor that can dismiss reviews.</li>
+<li><strong><code>type</code></strong> (string) (required)<br>
+The type of the actor<br>
+Can be one of: <code>User</code>, <code>Team</code>, <code>IntegrationInstallation</code>, <code>RepositoryRole</code></li>
+</ul>
+</li>
+<li><strong><code>enabled</code></strong> (boolean) (required)<br>
+Whether to restrict review dismissal to specific actors.</li>
+</ul>
+</li>
+<li><strong><code>require_code_owner_review</code></strong> (boolean) (required)<br>
+Require an approving review in pull requests that modify files that have a designated code owner.</li>
+<li><strong><code>require_last_push_approval</code></strong> (boolean) (required)<br>
+Whether the most recent reviewable push must be approved by someone other than the person who pushed it.</li>
+<li><strong><code>required_approving_review_count</code></strong> (integer) (required)<br>
+The number of approving reviews that are required before a pull request can be merged.</li>
+<li><strong><code>required_review_thread_resolution</code></strong> (boolean) (required)<br>
+All conversations on code must be resolved before a pull request can be merged.</li>
+<li><strong><code>required_reviewers</code></strong> (array of objects)<br>
+Note</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>required_reviewers is in beta and subject to change.</p>
+<p>A collection of reviewers and associated file patterns. Each reviewer has a list of file patterns which determine the files that reviewer is required to review.<br>
+- <strong><code>file_patterns</code></strong> (array of strings) (required)<br>
+Array of file patterns. Pull requests which change matching files must be approved by the specified team. File patterns use fnmatch syntax.<br>
+- <strong><code>minimum_approvals</code></strong> (integer) (required)<br>
+Minimum number of approvals required from the specified team. If set to zero, the team will be added to the pull request but approval is optional.<br>
+- <strong><code>reviewer</code></strong> (object) (required)<br>
+A required reviewing team<br>
+- <strong><code>id</code></strong> (integer) (required)<br>
+ID of the reviewer which must review changes to matching files.<br>
+- <strong><code>type</code></strong> (string) (required)<br>
+The type of the reviewer<br>
+Can be one of: <code>Team</code></p>
+<ul>
+<li><strong><code>required_status_checks</code></strong> (object)<br>
+Choose which status checks must pass before the ref is updated. When enabled, commits must first be pushed to another ref where the checks pass.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_status_checks</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>do_not_enforce_on_create</code></strong> (boolean)<br>
+Allow repositories and branches to be created if a check would otherwise prohibit it.</li>
+<li><strong><code>required_status_checks</code></strong> (array of objects) (required)<br>
+Status checks that are required.
+<ul>
+<li><strong><code>context</code></strong> (string) (required)<br>
+The status check context name that must be present on the commit.</li>
+<li><strong><code>integration_id</code></strong> (integer)<br>
+The optional integration ID that this status check must originate from.</li>
+</ul>
+</li>
+<li><strong><code>strict_required_status_checks_policy</code></strong> (boolean) (required)<br>
+Whether pull requests targeting a matching branch must be tested with the latest code. This setting will not take effect unless at least one status check is enabled.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>non_fast_forward</code></strong> (object)<br>
+Prevent users with push access from force pushing to refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>non_fast_forward</code></li>
+</ul>
+</li>
+<li><strong><code>commit_message_pattern</code></strong> (object)<br>
+Parameters to be used for the commit_message_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>commit_message_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>commit_author_email_pattern</code></strong> (object)<br>
+Parameters to be used for the commit_author_email_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>commit_author_email_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>committer_email_pattern</code></strong> (object)<br>
+Parameters to be used for the committer_email_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>committer_email_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>branch_name_pattern</code></strong> (object)<br>
+Parameters to be used for the branch_name_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>branch_name_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>tag_name_pattern</code></strong> (object)<br>
+Parameters to be used for the tag_name_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>tag_name_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>workflows</code></strong> (object)<br>
+Require all changes made to a targeted branch to pass the specified workflows before they can be merged.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>workflows</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>do_not_enforce_on_create</code></strong> (boolean)<br>
+Allow repositories and branches to be created if a check would otherwise prohibit it.</li>
+<li><strong><code>workflows</code></strong> (array of objects) (required)<br>
+Workflows that must pass for this rule to pass.
+<ul>
+<li><strong><code>path</code></strong> (string) (required)<br>
+The path to the workflow file</li>
+<li><strong><code>ref</code></strong> (string)<br>
+The ref (branch or tag) of the workflow file to use</li>
+<li><strong><code>repository_id</code></strong> (integer) (required)<br>
+The ID of the repository where the workflow is defined</li>
+<li><strong><code>sha</code></strong> (string)<br>
+The commit SHA of the workflow file to use</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>code_scanning</code></strong> (object)<br>
+Choose which tools must provide code scanning results before the reference is updated. When configured, code scanning must be enabled and have results for both the commit and the reference being updated.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>code_scanning</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>code_scanning_tools</code></strong> (array of objects) (required)<br>
+Tools that must provide code scanning results for this rule to pass.
+<ul>
+<li><strong><code>alerts_threshold</code></strong> (string) (required)<br>
+The severity level at which code scanning results that raise alerts block a reference update. For more information on alert severity levels, see "About code scanning alerts."<br>
+Can be one of: <code>none</code>, <code>errors</code>, <code>errors_and_warnings</code>, <code>all</code></li>
+<li><strong><code>security_alerts_threshold</code></strong> (string) (required)<br>
+The severity level at which code scanning results that raise security alerts block a reference update. For more information on security severity levels, see "About code scanning alerts."<br>
+Can be one of: <code>none</code>, <code>critical</code>, <code>high_or_higher</code>, <code>medium_or_higher</code>, <code>all</code></li>
+<li><strong><code>tool</code></strong> (string) (required)<br>
+The name of a code scanning tool</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>copilot_code_review</code></strong> (object)<br>
+Request Copilot code review for new pull requests automatically if the author has access to Copilot code review and their premium requests quota has not reached the limit.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>copilot_code_review</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>review_draft_pull_requests</code></strong> (boolean)<br>
+Copilot automatically reviews draft pull requests before they are marked as ready for review.</li>
+<li><strong><code>review_on_push</code></strong> (boolean)<br>
+Copilot automatically reviews each new push to the pull request.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>license_compliance_scanning</code></strong> (object)<br>
+Enforce any added or changed dependencies to comply with the organization's license policy.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>license_compliance_scanning</code></li>
+</ul>
+</li>
+<li><strong><code>file_path_restriction</code></strong> (object)<br>
+Prevent commits that include changes in specified file and folder paths from being pushed to the commit graph. This includes absolute paths that contain file names.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>file_path_restriction</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>restricted_file_paths</code></strong> (array of strings) (required)<br>
+The file paths that are restricted from being pushed to the commit graph.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>max_file_path_length</code></strong> (object)<br>
+Prevent commits that include file paths that exceed the specified character limit from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>max_file_path_length</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>max_file_path_length</code></strong> (integer) (required)<br>
+The maximum amount of characters allowed in file paths.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>file_extension_restriction</code></strong> (object)<br>
+Prevent commits that include files with specified file extensions from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>file_extension_restriction</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>restricted_file_extensions</code></strong> (array of strings) (required)<br>
+The file extensions that are restricted from being pushed to the commit graph.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>max_file_size</code></strong> (object)<br>
+Prevent commits with individual files that exceed the specified limit from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>max_file_size</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>max_file_size</code></strong> (integer) (required)<br>
+The maximum file size allowed in megabytes. This limit does not apply to Git Large File Storage (Git LFS).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Create a repository ruleset / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Create a repository ruleset / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "super cool ruleset",
+</span><span style="color:#c0c5ce;">  "target": "branch",
+</span><span style="color:#c0c5ce;">  "enforcement": "active",
+</span><span style="color:#c0c5ce;">  "bypass_actors": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "actor_id": 234,
+</span><span style="color:#c0c5ce;">      "actor_type": "Team",
+</span><span style="color:#c0c5ce;">      "bypass_mode": "always"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "conditions": {
+</span><span style="color:#c0c5ce;">    "ref_name": {
+</span><span style="color:#c0c5ce;">      "include": [
+</span><span style="color:#c0c5ce;">        "refs/heads/main",
+</span><span style="color:#c0c5ce;">        "refs/heads/master"
+</span><span style="color:#c0c5ce;">      ],
+</span><span style="color:#c0c5ce;">      "exclude": [
+</span><span style="color:#c0c5ce;">        "refs/heads/dev*"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "rules": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "type": "commit_author_email_pattern",
+</span><span style="color:#c0c5ce;">      "parameters": {
+</span><span style="color:#c0c5ce;">        "operator": "contains",
+</span><span style="color:#c0c5ce;">        "pattern": "github"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>target</code>: string, enum: <code>branch</code>, <code>tag</code>, <code>push</code>, <code>repository</code></li>
+<li><code>source_type</code>: string, enum: <code>Repository</code>, <code>Organization</code>, <code>Enterprise</code></li>
+<li><code>source</code>: required, string</li>
+<li><code>enforcement</code>: required, string, enum: <code>disabled</code>, <code>active</code>, <code>evaluate</code></li>
+<li><code>bypass_actors</code>: array of <code>Repository Ruleset Bypass Actor</code>:
+<ul>
+<li><code>actor_id</code>: integer or null</li>
+<li><code>actor_type</code>: required, string, enum: <code>Integration</code>, <code>OrganizationAdmin</code>, <code>RepositoryRole</code>, <code>Team</code>, <code>DeployKey</code>, <code>User</code></li>
+<li><code>bypass_mode</code>: string, enum: <code>always</code>, <code>pull_request</code>, <code>exempt</code>, default: <code>"always"</code></li>
+</ul>
+</li>
+<li><code>current_user_can_bypass</code>: string, enum: <code>always</code>, <code>pull_requests_only</code>, <code>never</code>, <code>exempt</code></li>
+<li><code>node_id</code>: string</li>
+<li><code>_links</code>: object:
+<ul>
+<li><code>self</code>: object:
+<ul>
+<li><code>href</code>: string</li>
+</ul>
+</li>
+<li><code>html</code>: object or null:
+<ul>
+<li><code>href</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>conditions</code>: any of:
+<ul>
+<li><strong>Repository ruleset conditions for ref names</strong>
+<ul>
+<li><code>ref_name</code>: object:
+<ul>
+<li><code>include</code>: array of string</li>
+<li><code>exclude</code>: array of string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Organization ruleset conditions</strong></li>
+</ul>
+</li>
+<li><code>rules</code>: array of object</li>
+<li><code>created_at</code>: string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+</ul>
+<h2 id="get-a-repository-ruleset" title="Get a repository ruleset">Get a repository ruleset<a href="#get-a-repository-ruleset" aria-label="Link to heading 'Get a repository ruleset'" data-heading-content="Get a repository ruleset" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/rulesets/{ruleset_id}
+</span></code></pre>
+<p>Get a ruleset for a repository.<br>
+Note: To prevent leaking sensitive information, the bypass_actors property is only returned if the user<br>
+making the API request has write access to the ruleset.</p>
+<h3 id="parameters-3" title="Get a repository ruleset / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ruleset_id</code></strong> (integer) (required)<br>
+The ID of the ruleset.</p>
+</li>
+<li>
+<p><strong><code>includes_parents</code></strong> (boolean)<br>
+Include rulesets configured at higher levels that apply to this repository<br>
+Default: <code>true</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Get a repository ruleset / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Get a repository ruleset / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets/RULESET_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-ruleset">Create a repository ruleset</a>.</p>
+<h2 id="update-a-repository-ruleset" title="Update a repository ruleset">Update a repository ruleset<a href="#update-a-repository-ruleset" aria-label="Link to heading 'Update a repository ruleset'" data-heading-content="Update a repository ruleset" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/rulesets/{ruleset_id}
+</span></code></pre>
+<p>Update a ruleset for a repository.</p>
+<h3 id="parameters-4" title="Update a repository ruleset / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ruleset_id</code></strong> (integer) (required)<br>
+The ID of the ruleset.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>name</code></strong> (string)<br>
+The name of the ruleset.</p>
+</li>
+<li>
+<p><strong><code>target</code></strong> (string)<br>
+The target of the ruleset<br>
+Can be one of: <code>branch</code>, <code>tag</code>, <code>push</code></p>
+</li>
+<li>
+<p><strong><code>enforcement</code></strong> (string)<br>
+The enforcement level of the ruleset. evaluate allows admins to test rules before enforcing them. Admins can view insights on the Rule Insights page (evaluate is only available with GitHub Enterprise).<br>
+Can be one of: <code>disabled</code>, <code>active</code>, <code>evaluate</code></p>
+</li>
+<li>
+<p><strong><code>bypass_actors</code></strong> (array of objects)<br>
+The actors that can bypass the rules in this ruleset</p>
+<ul>
+<li><strong><code>actor_id</code></strong> (integer or null)<br>
+The ID of the actor that can bypass a ruleset. Required for Integration, RepositoryRole, Team, and User actor types. If actor_type is OrganizationAdmin, actor_id is ignored. If actor_type is DeployKey, this should be null. OrganizationAdmin is not applicable for personal repositories.</li>
+<li><strong><code>actor_type</code></strong> (string) (required)<br>
+The type of actor that can bypass a ruleset.<br>
+Can be one of: <code>Integration</code>, <code>OrganizationAdmin</code>, <code>RepositoryRole</code>, <code>Team</code>, <code>DeployKey</code>, <code>User</code></li>
+<li><strong><code>bypass_mode</code></strong> (string)<br>
+When the specified actor can bypass the ruleset. pull_request means that an actor can only bypass rules on pull requests. pull_request is not applicable for the DeployKey actor type. Also, pull_request is only applicable to branch rulesets. When bypass_mode is exempt, rules will not be run for that actor and a bypass audit entry will not be created.<br>
+Default: <code>always</code><br>
+Can be one of: <code>always</code>, <code>pull_request</code>, <code>exempt</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>conditions</code></strong> (object)<br>
+Parameters for a repository ruleset ref name condition</p>
+<ul>
+<li><strong><code>ref_name</code></strong> (object)
+<ul>
+<li><strong><code>include</code></strong> (array of strings)<br>
+Array of ref names or patterns to include. One of these patterns must match for the condition to pass. Also accepts ~DEFAULT_BRANCH to include the default branch or ~ALL to include all branches.</li>
+<li><strong><code>exclude</code></strong> (array of strings)<br>
+Array of ref names or patterns to exclude. The condition will not pass if any of these patterns match.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>rules</code></strong> (array of objects)<br>
+An array of rules within the ruleset.</p>
+<ul>
+<li><strong><code>creation</code></strong> (object)<br>
+Only allow users with bypass permission to create matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>creation</code></li>
+</ul>
+</li>
+<li><strong><code>update</code></strong> (object)<br>
+Only allow users with bypass permission to update matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>update</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>update_allows_fetch_and_merge</code></strong> (boolean) (required)<br>
+Branch can pull changes from its upstream repository</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>deletion</code></strong> (object)<br>
+Only allow users with bypass permissions to delete matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>deletion</code></li>
+</ul>
+</li>
+<li><strong><code>required_linear_history</code></strong> (object)<br>
+Prevent merge commits from being pushed to matching refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_linear_history</code></li>
+</ul>
+</li>
+<li><strong><code>merge_queue</code></strong> (object)<br>
+Merges must be performed via a merge queue.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>merge_queue</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>check_response_timeout_minutes</code></strong> (integer) (required)<br>
+Maximum time for a required status check to report a conclusion. After this much time has elapsed, checks that have not reported a conclusion will be assumed to have failed</li>
+<li><strong><code>grouping_strategy</code></strong> (string) (required)<br>
+When set to ALLGREEN, the merge commit created by merge queue for each PR in the group must pass all required checks to merge. When set to HEADGREEN, only the commit at the head of the merge group, i.e. the commit containing changes from all of the PRs in the group, must pass its required checks to merge.<br>
+Can be one of: <code>ALLGREEN</code>, <code>HEADGREEN</code></li>
+<li><strong><code>max_entries_to_build</code></strong> (integer) (required)<br>
+Limit the number of queued pull requests requesting checks and workflow runs at the same time.</li>
+<li><strong><code>max_entries_to_merge</code></strong> (integer) (required)<br>
+The maximum number of PRs that will be merged together in a group.</li>
+<li><strong><code>merge_method</code></strong> (string) (required)<br>
+Method to use when merging changes from queued pull requests.<br>
+Can be one of: <code>MERGE</code>, <code>SQUASH</code>, <code>REBASE</code></li>
+<li><strong><code>min_entries_to_merge</code></strong> (integer) (required)<br>
+The minimum number of PRs that will be merged together in a group.</li>
+<li><strong><code>min_entries_to_merge_wait_minutes</code></strong> (integer) (required)<br>
+The time merge queue should wait after the first PR is added to the queue for the minimum group size to be met. After this time has elapsed, the minimum group size will be ignored and a smaller group will be merged.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>required_deployments</code></strong> (object)<br>
+Choose which environments must be successfully deployed to before refs can be pushed into a ref that matches this rule.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_deployments</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>required_deployment_environments</code></strong> (array of strings) (required)<br>
+The environments that must be successfully deployed to before branches can be merged.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>required_signatures</code></strong> (object)<br>
+Commits pushed to matching refs must have verified signatures.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_signatures</code></li>
+</ul>
+</li>
+<li><strong><code>pull_request</code></strong> (object)<br>
+Require all commits be made to a non-target branch and submitted via a pull request before they can be merged.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>pull_request</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>allowed_merge_methods</code></strong> (array of strings)<br>
+Array of allowed merge methods. Allowed values include merge, squash, and rebase. At least one option must be enabled.<br>
+Supported values are: merge, squash, rebase</li>
+<li><strong><code>dismiss_stale_reviews_on_push</code></strong> (boolean) (required)<br>
+New, reviewable commits pushed will dismiss previous pull request review approvals.</li>
+<li><strong><code>dismissal_restriction</code></strong> (object)<br>
+Specify people, teams, or apps allowed to dismiss pull request reviews.
+<ul>
+<li><strong><code>allowed_actors</code></strong> (array of objects)<br>
+Specify people, teams, or apps allowed to dismiss pull request reviews.
+<ul>
+<li><strong><code>id</code></strong> (integer) (required)<br>
+ID of the actor that can dismiss reviews.</li>
+<li><strong><code>type</code></strong> (string) (required)<br>
+The type of the actor<br>
+Can be one of: <code>User</code>, <code>Team</code>, <code>IntegrationInstallation</code>, <code>RepositoryRole</code></li>
+</ul>
+</li>
+<li><strong><code>enabled</code></strong> (boolean) (required)<br>
+Whether to restrict review dismissal to specific actors.</li>
+</ul>
+</li>
+<li><strong><code>require_code_owner_review</code></strong> (boolean) (required)<br>
+Require an approving review in pull requests that modify files that have a designated code owner.</li>
+<li><strong><code>require_last_push_approval</code></strong> (boolean) (required)<br>
+Whether the most recent reviewable push must be approved by someone other than the person who pushed it.</li>
+<li><strong><code>required_approving_review_count</code></strong> (integer) (required)<br>
+The number of approving reviews that are required before a pull request can be merged.</li>
+<li><strong><code>required_review_thread_resolution</code></strong> (boolean) (required)<br>
+All conversations on code must be resolved before a pull request can be merged.</li>
+<li><strong><code>required_reviewers</code></strong> (array of objects)<br>
+Note</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>required_reviewers is in beta and subject to change.</p>
+<p>A collection of reviewers and associated file patterns. Each reviewer has a list of file patterns which determine the files that reviewer is required to review.<br>
+- <strong><code>file_patterns</code></strong> (array of strings) (required)<br>
+Array of file patterns. Pull requests which change matching files must be approved by the specified team. File patterns use fnmatch syntax.<br>
+- <strong><code>minimum_approvals</code></strong> (integer) (required)<br>
+Minimum number of approvals required from the specified team. If set to zero, the team will be added to the pull request but approval is optional.<br>
+- <strong><code>reviewer</code></strong> (object) (required)<br>
+A required reviewing team<br>
+- <strong><code>id</code></strong> (integer) (required)<br>
+ID of the reviewer which must review changes to matching files.<br>
+- <strong><code>type</code></strong> (string) (required)<br>
+The type of the reviewer<br>
+Can be one of: <code>Team</code></p>
+<ul>
+<li><strong><code>required_status_checks</code></strong> (object)<br>
+Choose which status checks must pass before the ref is updated. When enabled, commits must first be pushed to another ref where the checks pass.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>required_status_checks</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>do_not_enforce_on_create</code></strong> (boolean)<br>
+Allow repositories and branches to be created if a check would otherwise prohibit it.</li>
+<li><strong><code>required_status_checks</code></strong> (array of objects) (required)<br>
+Status checks that are required.
+<ul>
+<li><strong><code>context</code></strong> (string) (required)<br>
+The status check context name that must be present on the commit.</li>
+<li><strong><code>integration_id</code></strong> (integer)<br>
+The optional integration ID that this status check must originate from.</li>
+</ul>
+</li>
+<li><strong><code>strict_required_status_checks_policy</code></strong> (boolean) (required)<br>
+Whether pull requests targeting a matching branch must be tested with the latest code. This setting will not take effect unless at least one status check is enabled.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>non_fast_forward</code></strong> (object)<br>
+Prevent users with push access from force pushing to refs.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>non_fast_forward</code></li>
+</ul>
+</li>
+<li><strong><code>commit_message_pattern</code></strong> (object)<br>
+Parameters to be used for the commit_message_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>commit_message_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>commit_author_email_pattern</code></strong> (object)<br>
+Parameters to be used for the commit_author_email_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>commit_author_email_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>committer_email_pattern</code></strong> (object)<br>
+Parameters to be used for the committer_email_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>committer_email_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>branch_name_pattern</code></strong> (object)<br>
+Parameters to be used for the branch_name_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>branch_name_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>tag_name_pattern</code></strong> (object)<br>
+Parameters to be used for the tag_name_pattern rule
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>tag_name_pattern</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>name</code></strong> (string)<br>
+How this rule appears when configuring it.</li>
+<li><strong><code>negate</code></strong> (boolean)<br>
+If true, the rule will fail if the pattern matches.</li>
+<li><strong><code>operator</code></strong> (string) (required)<br>
+The operator to use for matching.<br>
+Can be one of: <code>starts_with</code>, <code>ends_with</code>, <code>contains</code>, <code>regex</code></li>
+<li><strong><code>pattern</code></strong> (string) (required)<br>
+The pattern to match with.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>workflows</code></strong> (object)<br>
+Require all changes made to a targeted branch to pass the specified workflows before they can be merged.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>workflows</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>do_not_enforce_on_create</code></strong> (boolean)<br>
+Allow repositories and branches to be created if a check would otherwise prohibit it.</li>
+<li><strong><code>workflows</code></strong> (array of objects) (required)<br>
+Workflows that must pass for this rule to pass.
+<ul>
+<li><strong><code>path</code></strong> (string) (required)<br>
+The path to the workflow file</li>
+<li><strong><code>ref</code></strong> (string)<br>
+The ref (branch or tag) of the workflow file to use</li>
+<li><strong><code>repository_id</code></strong> (integer) (required)<br>
+The ID of the repository where the workflow is defined</li>
+<li><strong><code>sha</code></strong> (string)<br>
+The commit SHA of the workflow file to use</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>code_scanning</code></strong> (object)<br>
+Choose which tools must provide code scanning results before the reference is updated. When configured, code scanning must be enabled and have results for both the commit and the reference being updated.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>code_scanning</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>code_scanning_tools</code></strong> (array of objects) (required)<br>
+Tools that must provide code scanning results for this rule to pass.
+<ul>
+<li><strong><code>alerts_threshold</code></strong> (string) (required)<br>
+The severity level at which code scanning results that raise alerts block a reference update. For more information on alert severity levels, see "About code scanning alerts."<br>
+Can be one of: <code>none</code>, <code>errors</code>, <code>errors_and_warnings</code>, <code>all</code></li>
+<li><strong><code>security_alerts_threshold</code></strong> (string) (required)<br>
+The severity level at which code scanning results that raise security alerts block a reference update. For more information on security severity levels, see "About code scanning alerts."<br>
+Can be one of: <code>none</code>, <code>critical</code>, <code>high_or_higher</code>, <code>medium_or_higher</code>, <code>all</code></li>
+<li><strong><code>tool</code></strong> (string) (required)<br>
+The name of a code scanning tool</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>copilot_code_review</code></strong> (object)<br>
+Request Copilot code review for new pull requests automatically if the author has access to Copilot code review and their premium requests quota has not reached the limit.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>copilot_code_review</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>review_draft_pull_requests</code></strong> (boolean)<br>
+Copilot automatically reviews draft pull requests before they are marked as ready for review.</li>
+<li><strong><code>review_on_push</code></strong> (boolean)<br>
+Copilot automatically reviews each new push to the pull request.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>license_compliance_scanning</code></strong> (object)<br>
+Enforce any added or changed dependencies to comply with the organization's license policy.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>license_compliance_scanning</code></li>
+</ul>
+</li>
+<li><strong><code>file_path_restriction</code></strong> (object)<br>
+Prevent commits that include changes in specified file and folder paths from being pushed to the commit graph. This includes absolute paths that contain file names.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>file_path_restriction</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>restricted_file_paths</code></strong> (array of strings) (required)<br>
+The file paths that are restricted from being pushed to the commit graph.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>max_file_path_length</code></strong> (object)<br>
+Prevent commits that include file paths that exceed the specified character limit from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>max_file_path_length</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>max_file_path_length</code></strong> (integer) (required)<br>
+The maximum amount of characters allowed in file paths.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>file_extension_restriction</code></strong> (object)<br>
+Prevent commits that include files with specified file extensions from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>file_extension_restriction</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>restricted_file_extensions</code></strong> (array of strings) (required)<br>
+The file extensions that are restricted from being pushed to the commit graph.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><code>max_file_size</code></strong> (object)<br>
+Prevent commits with individual files that exceed the specified limit from being pushed to the commit graph.
+<ul>
+<li><strong><code>type</code></strong> (string) (required)<br>
+Can be one of: <code>max_file_size</code></li>
+<li><strong><code>parameters</code></strong> (object)
+<ul>
+<li><strong><code>max_file_size</code></strong> (integer) (required)<br>
+The maximum file size allowed in megabytes. This limit does not apply to Git Large File Storage (Git LFS).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Update a repository ruleset / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Update a repository ruleset / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets/RULESET_ID \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "name": "super cool ruleset",
+</span><span style="color:#c0c5ce;">  "target": "branch",
+</span><span style="color:#c0c5ce;">  "enforcement": "active",
+</span><span style="color:#c0c5ce;">  "bypass_actors": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "actor_id": 234,
+</span><span style="color:#c0c5ce;">      "actor_type": "Team",
+</span><span style="color:#c0c5ce;">      "bypass_mode": "always"
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "conditions": {
+</span><span style="color:#c0c5ce;">    "ref_name": {
+</span><span style="color:#c0c5ce;">      "include": [
+</span><span style="color:#c0c5ce;">        "refs/heads/main",
+</span><span style="color:#c0c5ce;">        "refs/heads/master"
+</span><span style="color:#c0c5ce;">      ],
+</span><span style="color:#c0c5ce;">      "exclude": [
+</span><span style="color:#c0c5ce;">        "refs/heads/dev*"
+</span><span style="color:#c0c5ce;">      ]
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "rules": [
+</span><span style="color:#c0c5ce;">    {
+</span><span style="color:#c0c5ce;">      "type": "commit_author_email_pattern",
+</span><span style="color:#c0c5ce;">      "parameters": {
+</span><span style="color:#c0c5ce;">        "operator": "contains",
+</span><span style="color:#c0c5ce;">        "pattern": "github"
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-repository-ruleset">Create a repository ruleset</a>.</p>
+<h2 id="delete-a-repository-ruleset" title="Delete a repository ruleset">Delete a repository ruleset<a href="#delete-a-repository-ruleset" aria-label="Link to heading 'Delete a repository ruleset'" data-heading-content="Delete a repository ruleset" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/rulesets/{ruleset_id}
+</span></code></pre>
+<p>Delete a ruleset for a repository.</p>
+<h3 id="parameters-5" title="Delete a repository ruleset / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ruleset_id</code></strong> (integer) (required)<br>
+The ID of the ruleset.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Delete a repository ruleset / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Delete a repository ruleset / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets/RULESET_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-repository-ruleset-history" title="Get repository ruleset history">Get repository ruleset history<a href="#get-repository-ruleset-history" aria-label="Link to heading 'Get repository ruleset history'" data-heading-content="Get repository ruleset history" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/rulesets/{ruleset_id}/history
+</span></code></pre>
+<p>Get the history of a repository ruleset.</p>
+<h3 id="parameters-6" title="Get repository ruleset history / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>ruleset_id</code></strong> (integer) (required)<br>
+The ID of the ruleset.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get repository ruleset history / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Get repository ruleset history / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets/RULESET_ID/history
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Ruleset version</code>:</p>
+<ul>
+<li><code>version_id</code>: required, integer</li>
+<li><code>actor</code>: required, object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>type</code>: string</li>
+</ul>
+</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="get-repository-ruleset-version" title="Get repository ruleset version">Get repository ruleset version<a href="#get-repository-ruleset-version" aria-label="Link to heading 'Get repository ruleset version'" data-heading-content="Get repository ruleset version" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/rulesets/{ruleset_id}/history/{version_id}
+</span></code></pre>
+<p>Get a version of a repository ruleset.</p>
+<h3 id="parameters-7" title="Get repository ruleset version / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>ruleset_id</code></strong> (integer) (required)<br>
+The ID of the ruleset.</p>
+</li>
+<li>
+<p><strong><code>version_id</code></strong> (integer) (required)<br>
+The ID of the version</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Get repository ruleset version / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Get repository ruleset version / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/rulesets/RULESET_ID/history/VERSION_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>all of:
+<ul>
+<li><strong>Ruleset version</strong>
+<ul>
+<li><code>version_id</code>: required, integer</li>
+<li><code>actor</code>: required, object:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>type</code>: string</li>
+</ul>
+</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>state</code>: required, object</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

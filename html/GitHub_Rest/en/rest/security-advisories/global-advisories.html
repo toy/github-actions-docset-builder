@@ -1,0 +1,355 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for global security advisories</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Security advisories</a> / </nav><h1 id="rest-api-endpoints-for-global-security-advisories">REST API endpoints for global security advisories<a href="#rest-api-endpoints-for-global-security-advisories" aria-label="Link to heading 'REST API endpoints for global security advisories'" data-heading-content="REST API endpoints for global security advisories" class="anchor"></a></h1>
+<p>Use the REST API to view global security advisories.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-global-security-advisories" title="List global security advisories">List global security advisories<a href="#list-global-security-advisories" aria-label="Link to heading 'List global security advisories'" data-heading-content="List global security advisories" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /advisories
+</span></code></pre>
+<p>Lists all global security advisories that match the specified parameters. If no other parameters are defined, the request will return only GitHub-reviewed advisories that are not malware.<br>
+By default, all responses will exclude advisories for malware, because malware are not standard vulnerabilities. To list advisories for malware, you must include the type parameter in your request, with the value malware. For more information about the different types of security advisories, see "About the GitHub Advisory database."</p>
+<h3 id="parameters" title="List global security advisories / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>ghsa_id</code></strong> (string)<br>
+If specified, only advisories with this GHSA (GitHub Security Advisory) identifier will be returned.</p>
+</li>
+<li>
+<p><strong><code>type</code></strong> (string)<br>
+If specified, only advisories of this type will be returned. By default, a request with no other parameters defined will only return reviewed advisories that are not malware.<br>
+Default: <code>reviewed</code><br>
+Can be one of: <code>reviewed</code>, <code>malware</code>, <code>unreviewed</code></p>
+</li>
+<li>
+<p><strong><code>cve_id</code></strong> (string)<br>
+If specified, only advisories with this CVE (Common Vulnerabilities and Exposures) identifier will be returned.</p>
+</li>
+<li>
+<p><strong><code>ecosystem</code></strong> (string)<br>
+If specified, only advisories for these ecosystems will be returned.<br>
+Can be one of: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></p>
+</li>
+<li>
+<p><strong><code>severity</code></strong> (string)<br>
+If specified, only advisories with these severities will be returned.<br>
+Can be one of: <code>unknown</code>, <code>low</code>, <code>medium</code>, <code>high</code>, <code>critical</code></p>
+</li>
+<li>
+<p><strong><code>cwes</code></strong> (string)<br>
+If specified, only advisories with these Common Weakness Enumerations (CWEs) will be returned.<br>
+Example: cwes=79,284,22 or cwes[]=79&amp;cwes[]=284&amp;cwes[]=22</p>
+</li>
+<li>
+<p><strong><code>is_withdrawn</code></strong> (boolean)<br>
+Whether to only return advisories that have been withdrawn.</p>
+</li>
+<li>
+<p><strong><code>affects</code></strong> (string)<br>
+If specified, only return advisories that affect any of package or package@version. A maximum of 1000 packages can be specified.<br>
+If the query parameter causes the URL to exceed the maximum URL length supported by your client, you must specify fewer packages.<br>
+Example: affects=package1,package2@1.0.0,package3@2.0.0 or affects[]=package1&amp;affects[]=package2@1.0.0</p>
+</li>
+<li>
+<p><strong><code>published</code></strong> (string)<br>
+If specified, only return advisories that were published on a date or date range.<br>
+For more information on the syntax of the date range, see "Understanding the search syntax."</p>
+</li>
+<li>
+<p><strong><code>updated</code></strong> (string)<br>
+If specified, only return advisories that were updated on a date or date range.<br>
+For more information on the syntax of the date range, see "Understanding the search syntax."</p>
+</li>
+<li>
+<p><strong><code>modified</code></strong> (string)<br>
+If specified, only show advisories that were updated or published on a date or date range.<br>
+For more information on the syntax of the date range, see "Understanding the search syntax."</p>
+</li>
+<li>
+<p><strong><code>epss_percentage</code></strong> (string)<br>
+If specified, only return advisories that have an EPSS percentage score that matches the provided value.<br>
+The EPSS percentage represents the likelihood of a CVE being exploited.</p>
+</li>
+<li>
+<p><strong><code>epss_percentile</code></strong> (string)<br>
+If specified, only return advisories that have an EPSS percentile score that matches the provided value.<br>
+The EPSS percentile represents the relative rank of the CVE's likelihood of being exploited compared to other CVEs.</p>
+</li>
+<li>
+<p><strong><code>before</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results before this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>after</code></strong> (string)<br>
+A cursor, as given in the Link header. If specified, the query only searches for results after this cursor. For more information, see "Using pagination in the REST API."</p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort the results by.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The property to sort the results by.<br>
+Default: <code>published</code><br>
+Can be one of: <code>updated</code>, <code>published</code>, <code>epss_percentage</code>, <code>epss_percentile</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List global security advisories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+<li>
+<p><strong>429</strong> - Too many requests</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List global security advisories / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/advisories
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of objects:</p>
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null, read-only</li>
+<li><code>url</code>: required, string, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>repository_advisory_url</code>: required, string or null, format: uri, read-only</li>
+<li><code>summary</code>: required, string, maxLength: 1024</li>
+<li><code>description</code>: required, string or null, maxLength: 65535</li>
+<li><code>type</code>: required, string, enum: <code>reviewed</code>, <code>unreviewed</code>, <code>malware</code>, read-only</li>
+<li><code>severity</code>: required, string, enum: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>unknown</code></li>
+<li><code>source_code_location</code>: required, string or null, format: uri</li>
+<li><code>identifiers</code>: required, array of objects or null:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code></li>
+<li><code>value</code>: required, string</li>
+</ul>
+</li>
+<li><code>references</code>: required, array of string or null</li>
+<li><code>published_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>github_reviewed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>nvd_published_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>vulnerabilities</code>: required, array of objects or null:
+<ul>
+<li><code>package</code>: required, object or null:
+<ul>
+<li><code>ecosystem</code>: required, string, enum: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><code>name</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>vulnerable_version_range</code>: required, string or null</li>
+<li><code>first_patched_version</code>: required, string or null</li>
+<li><code>vulnerable_functions</code>: required, array of string or null</li>
+</ul>
+</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>epss</code>: object or null, read-only:
+<ul>
+<li><code>percentage</code>: number, minimum: 0, maximum: 100</li>
+<li><code>percentile</code>: number, minimum: 0, maximum: 100</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects or null:
+<ul>
+<li><code>cwe_id</code>: required, string</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>credits</code>: required, array of objects or null:
+<ul>
+<li><code>user</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>type</code>: required, string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-global-security-advisory" title="Get a global security advisory">Get a global security advisory<a href="#get-a-global-security-advisory" aria-label="Link to heading 'Get a global security advisory'" data-heading-content="Get a global security advisory" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /advisories/{ghsa_id}
+</span></code></pre>
+<p>Gets a global security advisory using its GitHub Security Advisory (GHSA) identifier.</p>
+<h3 id="parameters-1" title="Get a global security advisory / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>ghsa_id</code></strong> (string) (required)<br>
+The GHSA (GitHub Security Advisory) identifier of the advisory.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a global security advisory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a global security advisory / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/advisories/GHSA_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>ghsa_id</code>: required, string, read-only</li>
+<li><code>cve_id</code>: required, string or null, read-only</li>
+<li><code>url</code>: required, string, read-only</li>
+<li><code>html_url</code>: required, string, format: uri, read-only</li>
+<li><code>repository_advisory_url</code>: required, string or null, format: uri, read-only</li>
+<li><code>summary</code>: required, string, maxLength: 1024</li>
+<li><code>description</code>: required, string or null, maxLength: 65535</li>
+<li><code>type</code>: required, string, enum: <code>reviewed</code>, <code>unreviewed</code>, <code>malware</code>, read-only</li>
+<li><code>severity</code>: required, string, enum: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>unknown</code></li>
+<li><code>source_code_location</code>: required, string or null, format: uri</li>
+<li><code>identifiers</code>: required, array of objects or null:
+<ul>
+<li><code>type</code>: required, string, enum: <code>CVE</code>, <code>GHSA</code></li>
+<li><code>value</code>: required, string</li>
+</ul>
+</li>
+<li><code>references</code>: required, array of string or null</li>
+<li><code>published_at</code>: required, string, format: date-time, read-only</li>
+<li><code>updated_at</code>: required, string, format: date-time, read-only</li>
+<li><code>github_reviewed_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>nvd_published_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>withdrawn_at</code>: required, string or null, format: date-time, read-only</li>
+<li><code>vulnerabilities</code>: required, array of objects or null:
+<ul>
+<li><code>package</code>: required, object or null:
+<ul>
+<li><code>ecosystem</code>: required, string, enum: <code>rubygems</code>, <code>npm</code>, <code>pip</code>, <code>maven</code>, <code>nuget</code>, <code>composer</code>, <code>go</code>, <code>rust</code>, <code>erlang</code>, <code>actions</code>, <code>pub</code>, <code>other</code>, <code>swift</code></li>
+<li><code>name</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>vulnerable_version_range</code>: required, string or null</li>
+<li><code>first_patched_version</code>: required, string or null</li>
+<li><code>vulnerable_functions</code>: required, array of string or null</li>
+</ul>
+</li>
+<li><code>cvss_severities</code>: object or null:
+<ul>
+<li><code>cvss_v3</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+<li><code>cvss_v4</code>: object or null:
+<ul>
+<li><code>vector_string</code>: required, string or null</li>
+<li><code>score</code>: required, number or null, read-only, minimum: 0, maximum: 10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>epss</code>: object or null, read-only:
+<ul>
+<li><code>percentage</code>: number, minimum: 0, maximum: 100</li>
+<li><code>percentile</code>: number, minimum: 0, maximum: 100</li>
+</ul>
+</li>
+<li><code>cwes</code>: required, array of objects or null:
+<ul>
+<li><code>cwe_id</code>: required, string</li>
+<li><code>name</code>: required, string, read-only</li>
+</ul>
+</li>
+<li><code>credits</code>: required, array of objects or null:
+<ul>
+<li><code>user</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>type</code>: required, string, enum: <code>analyst</code>, <code>finder</code>, <code>reporter</code>, <code>coordinator</code>, <code>remediation_developer</code>, <code>remediation_reviewer</code>, <code>remediation_verifier</code>, <code>tool</code>, <code>sponsor</code>, <code>other</code></li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

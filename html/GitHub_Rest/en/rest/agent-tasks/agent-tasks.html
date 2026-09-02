@@ -1,0 +1,718 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for agent tasks</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Agent tasks</a> / </nav><h1 id="rest-api-endpoints-for-agent-tasks">REST API endpoints for agent tasks<a href="#rest-api-endpoints-for-agent-tasks" aria-label="Link to heading 'REST API endpoints for agent tasks'" data-heading-content="REST API endpoints for agent tasks" class="anchor"></a></h1>
+<p>Use the REST API to start and manage Copilot cloud agent tasks</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-tasks-for-repository" title="List tasks for repository">List tasks for repository<a href="#list-tasks-for-repository" aria-label="Link to heading 'List tasks for repository'" data-heading-content="List tasks for repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /agents/repos/{owner}/{repo}/tasks
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Returns a list of tasks for a specific repository<br>
+Fine-grained access tokens for "List tasks for repository"<br>
+This endpoint works with the following fine-grained token types:</p>
+<p>GitHub App user access tokens<br>
+Fine-grained personal access tokens</p>
+<p>The fine-grained token must have the following permission set:</p>
+<p>"Agent tasks" repository permissions (read)</p>
+<p>GitHub App installation access tokens are not supported for this endpoint.</p>
+<h3 id="parameters" title="List tasks for repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100).<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch.<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The field to sort results by. Can be updated_at or created_at.<br>
+Default: <code>updated_at</code><br>
+Can be one of: <code>updated_at</code>, <code>created_at</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort results. Can be asc or desc.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Comma-separated list of task states to filter by. Can be any combination of: queued, in_progress, completed, failed, idle, waiting_for_user, timed_out, cancelled.</p>
+</li>
+<li>
+<p><strong><code>is_archived</code></strong> (boolean)<br>
+Filter by archived status. When true, returns only archived tasks. When false or omitted, returns only non-archived tasks. Defaults to false.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show tasks updated at or after this time (ISO 8601 timestamp)</p>
+</li>
+<li>
+<p><strong><code>creator_id</code></strong> (array)<br>
+Filter tasks by creator user ID. Accepts one or more user IDs.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List tasks for repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Tasks retrieved successfully</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad request</p>
+</li>
+<li>
+<p><strong>401</strong> - Authentication required</p>
+</li>
+<li>
+<p><strong>403</strong> - Insufficient permissions</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation Failed</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List tasks for repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/repos/OWNER/REPO/tasks
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>tasks</code>: required, array of objects:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>creator</code>: one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator_type</code>: string, enum: <code>user</code>, <code>organization</code></li>
+<li><code>user_collaborators</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>repository</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>failed</code>, <code>idle</code>, <code>waiting_for_user</code>, <code>timed_out</code>, <code>cancelled</code></li>
+<li><code>session_count</code>: integer, format: int32</li>
+<li><code>artifacts</code>: array of objects:
+<ul>
+<li><code>provider</code>: required, string, enum: <code>github</code></li>
+<li><code>type</code>: required, string, enum: <code>pull</code>, <code>branch</code></li>
+<li><code>data</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>global_id</code>: string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>head_ref</code>: required, string</li>
+<li><code>base_ref</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>archived_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>custom_agent</code>: object:
+<ul>
+<li><code>id</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>total_active_count</code>: integer, format: int32</li>
+<li><code>total_archived_count</code>: integer, format: int32</li>
+</ul>
+<h2 id="start-a-task" title="Start a task">Start a task<a href="#start-a-task" aria-label="Link to heading 'Start a task'" data-heading-content="Start a task" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /agents/repos/{owner}/{repo}/tasks
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Starts a new Copilot cloud agent task for a repository.<br>
+This endpoint is only available to users with a Copilot Business or Copilot Enterprise subscription.<br>
+Fine-grained access tokens for "Start a task"<br>
+This endpoint works with the following fine-grained token types:</p>
+<p>GitHub App user access tokens<br>
+Fine-grained personal access tokens</p>
+<p>The fine-grained token must have the following permission set:</p>
+<p>"Agent tasks" repository permissions (read and write)</p>
+<p>GitHub App installation access tokens are not supported for this endpoint.</p>
+<h3 id="parameters-1" title="Start a task / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>prompt</code></strong> (string) (required)<br>
+The user's prompt for the agent</p>
+</li>
+<li>
+<p><strong><code>model</code></strong> (string)<br>
+The model to use for this task. The allowed models may change over time and depend on the user's GitHub Copilot plan and organization policies. Currently supported values: claude-sonnet-4.6, claude-opus-4.6, gpt-5.2-codex, gpt-5.3-codex, gpt-5.4, claude-sonnet-4.5, claude-opus-4.5</p>
+</li>
+<li>
+<p><strong><code>custom_agent</code></strong> (string)<br>
+Optional identifier for a custom agent to use for this task. Use the custom agent's filename without the extension - for example, for a .github/agents/performance-optimizer.agent.md custom agent, use performance-optimizer.</p>
+</li>
+<li>
+<p><strong><code>create_pull_request</code></strong> (boolean)<br>
+Whether to create a PR.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>base_ref</code></strong> (string)<br>
+Base ref for new branch/PR</p>
+</li>
+<li>
+<p><strong><code>head_ref</code></strong> (string)<br>
+Head ref for existing branch/PR. If provided with base_ref, the agent looks up open PR context for head_ref targeting base_ref and commits to head_ref instead of creating a new branch.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Start a task / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Task created successfully</p>
+</li>
+<li>
+<p><strong>400</strong> - Problems parsing JSON</p>
+</li>
+<li>
+<p><strong>401</strong> - Authentication required</p>
+</li>
+<li>
+<p><strong>403</strong> - Insufficient permissions</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation Failed</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Start a task / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/repos/OWNER/REPO/tasks \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "prompt": "Fix the login button on the homepage",
+</span><span style="color:#c0c5ce;">  "base_ref": "main"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>creator</code>: one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator_type</code>: string, enum: <code>user</code>, <code>organization</code></li>
+<li><code>user_collaborators</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>repository</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>failed</code>, <code>idle</code>, <code>waiting_for_user</code>, <code>timed_out</code>, <code>cancelled</code></li>
+<li><code>session_count</code>: integer, format: int32</li>
+<li><code>artifacts</code>: array of objects:
+<ul>
+<li><code>provider</code>: required, string, enum: <code>github</code></li>
+<li><code>type</code>: required, string, enum: <code>pull</code>, <code>branch</code></li>
+<li><code>data</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>global_id</code>: string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>head_ref</code>: required, string</li>
+<li><code>base_ref</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>archived_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>custom_agent</code>: object:
+<ul>
+<li><code>id</code>: string</li>
+</ul>
+</li>
+</ul>
+<h4 id="task-with-a-custom-agent">Task with a custom agent<a href="#task-with-a-custom-agent" aria-label="Link to heading 'Task with a custom agent'" data-heading-content="Task with a custom agent" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/repos/OWNER/REPO/tasks \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "prompt": "Fix the login button on the homepage",
+</span><span style="color:#c0c5ce;">  "base_ref": "main",
+</span><span style="color:#c0c5ce;">  "custom_agent": "my-custom-agent"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>creator</code>: one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator_type</code>: string, enum: <code>user</code>, <code>organization</code></li>
+<li><code>user_collaborators</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>repository</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>failed</code>, <code>idle</code>, <code>waiting_for_user</code>, <code>timed_out</code>, <code>cancelled</code></li>
+<li><code>session_count</code>: integer, format: int32</li>
+<li><code>artifacts</code>: array of objects:
+<ul>
+<li><code>provider</code>: required, string, enum: <code>github</code></li>
+<li><code>type</code>: required, string, enum: <code>pull</code>, <code>branch</code></li>
+<li><code>data</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>global_id</code>: string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>head_ref</code>: required, string</li>
+<li><code>base_ref</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>archived_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>custom_agent</code>: object:
+<ul>
+<li><code>id</code>: string</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-task-by-repo" title="Get a task by repo">Get a task by repo<a href="#get-a-task-by-repo" aria-label="Link to heading 'Get a task by repo'" data-heading-content="Get a task by repo" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /agents/repos/{owner}/{repo}/tasks/{task_id}
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Returns a task by ID scoped to an owner/repo path<br>
+Fine-grained access tokens for "Get a task by repo"<br>
+This endpoint works with the following fine-grained token types:</p>
+<p>GitHub App user access tokens<br>
+Fine-grained personal access tokens</p>
+<p>The fine-grained token must have the following permission set:</p>
+<p>"Agent tasks" repository permissions (read)</p>
+<p>GitHub App installation access tokens are not supported for this endpoint.</p>
+<h3 id="parameters-2" title="Get a task by repo / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>task_id</code></strong> (string) (required)<br>
+The unique identifier of the task.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a task by repo / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Task retrieved successfully</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad request</p>
+</li>
+<li>
+<p><strong>401</strong> - Authentication required</p>
+</li>
+<li>
+<p><strong>403</strong> - Insufficient permissions</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation Failed</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a task by repo / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/repos/OWNER/REPO/tasks/TASK_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li>all of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>url</code>: string</li>
+<li><code>html_url</code>: string</li>
+<li><code>name</code>: string</li>
+<li><code>creator</code>: one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>creator_type</code>: string, enum: <code>user</code>, <code>organization</code></li>
+<li><code>user_collaborators</code>: array of objects:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>repository</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>state</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>failed</code>, <code>idle</code>, <code>waiting_for_user</code>, <code>timed_out</code>, <code>cancelled</code></li>
+<li><code>session_count</code>: integer, format: int32</li>
+<li><code>artifacts</code>: array of objects:
+<ul>
+<li><code>provider</code>: required, string, enum: <code>github</code></li>
+<li><code>type</code>: required, string, enum: <code>pull</code>, <code>branch</code></li>
+<li><code>data</code>: required, one of:
+<ul>
+<li><strong>object</strong>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>global_id</code>: string</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>head_ref</code>: required, string</li>
+<li><code>base_ref</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>archived_at</code>: string or null, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>custom_agent</code>: object:
+<ul>
+<li><code>id</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>object</strong>
+<ul>
+<li><code>sessions</code>: array of objects:
+<ul>
+<li><code>id</code>: required, string</li>
+<li><code>name</code>: string</li>
+<li><code>user</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>owner</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>repository</code>: object:
+<ul>
+<li><code>id</code>: integer, format: int64</li>
+</ul>
+</li>
+<li><code>task_id</code>: string</li>
+<li><code>state</code>: required, string, enum: <code>queued</code>, <code>in_progress</code>, <code>completed</code>, <code>failed</code>, <code>idle</code>, <code>waiting_for_user</code>, <code>timed_out</code>, <code>cancelled</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: string, format: date-time</li>
+<li><code>completed_at</code>: string, format: date-time</li>
+<li><code>prompt</code>: string</li>
+<li><code>head_ref</code>: string</li>
+<li><code>base_ref</code>: string</li>
+<li><code>model</code>: string</li>
+<li><code>usage</code>: object:
+<ul>
+<li><code>type</code>: required, string, enum: <code>ai_credits</code>, <code>premium_requests</code></li>
+<li><code>amount</code>: required, number, format: double</li>
+</ul>
+</li>
+<li><code>error</code>: object:
+<ul>
+<li><code>message</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-tasks" title="List tasks">List tasks<a href="#list-tasks" aria-label="Link to heading 'List tasks'" data-heading-content="List tasks" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /agents/tasks
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Returns a list of tasks for the authenticated user<br>
+Fine-grained access tokens for "List tasks"<br>
+This endpoint works with the following fine-grained token types:</p>
+<p>GitHub App user access tokens<br>
+Fine-grained personal access tokens</p>
+<p>The fine-grained token must have the following permission set:</p>
+<p>"Agent tasks" repository permissions (read)</p>
+<p>GitHub App installation access tokens are not supported for this endpoint.</p>
+<h3 id="parameters-3" title="List tasks / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100).<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch.<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>sort</code></strong> (string)<br>
+The field to sort results by. Can be updated_at or created_at.<br>
+Default: <code>updated_at</code><br>
+Can be one of: <code>updated_at</code>, <code>created_at</code></p>
+</li>
+<li>
+<p><strong><code>direction</code></strong> (string)<br>
+The direction to sort results. Can be asc or desc.<br>
+Default: <code>desc</code><br>
+Can be one of: <code>asc</code>, <code>desc</code></p>
+</li>
+<li>
+<p><strong><code>state</code></strong> (string)<br>
+Comma-separated list of task states to filter by. Can be any combination of: queued, in_progress, completed, failed, idle, waiting_for_user, timed_out, cancelled.</p>
+</li>
+<li>
+<p><strong><code>is_archived</code></strong> (boolean)<br>
+Filter by archived status. When true, returns only archived tasks. When false or omitted, returns only non-archived tasks. Defaults to false.<br>
+Default: <code>false</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show tasks updated at or after this time (ISO 8601 timestamp)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="List tasks / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Tasks retrieved successfully</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad request</p>
+</li>
+<li>
+<p><strong>401</strong> - Authentication required</p>
+</li>
+<li>
+<p><strong>403</strong> - Insufficient permissions</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation Failed</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="List tasks / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/tasks
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-tasks-for-repository">List tasks for repository</a>.</p>
+<h2 id="get-a-task-by-id" title="Get a task by ID">Get a task by ID<a href="#get-a-task-by-id" aria-label="Link to heading 'Get a task by ID'" data-heading-content="Get a task by ID" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /agents/tasks/{task_id}
+</span></code></pre>
+<p>Note</p>
+<p>This endpoint is in public preview and is subject to change.</p>
+<p>Returns a task by ID with its associated sessions<br>
+Fine-grained access tokens for "Get a task by ID"<br>
+This endpoint works with the following fine-grained token types:</p>
+<p>GitHub App user access tokens<br>
+Fine-grained personal access tokens</p>
+<p>The fine-grained token must have the following permission set:</p>
+<p>"Agent tasks" repository permissions (read)</p>
+<p>GitHub App installation access tokens are not supported for this endpoint.</p>
+<h3 id="parameters-4" title="Get a task by ID / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>task_id</code></strong> (string) (required)<br>
+The unique identifier of the task.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get a task by ID / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Task retrieved successfully</p>
+</li>
+<li>
+<p><strong>400</strong> - Problems parsing request</p>
+</li>
+<li>
+<p><strong>401</strong> - Authentication required</p>
+</li>
+<li>
+<p><strong>403</strong> - Insufficient permissions</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation Failed</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get a task by ID / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/agents/tasks/TASK_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-a-task-by-repo">Get a task by repo</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

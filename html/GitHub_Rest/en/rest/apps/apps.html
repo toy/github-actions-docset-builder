@@ -1,0 +1,1705 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Apps</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Apps</a> / </nav><h1 id="rest-api-endpoints-for--data-variablesproductprodname_github_apps-">REST API endpoints for {% data variables.product.prodname<span data-escaped-char="">_</span>github<span data-escaped-char="">_</span>apps %}<a href="#rest-api-endpoints-for--data-variablesproductprodname_github_apps-" aria-label="Link to heading 'REST API endpoints for {% data variables.product.prodname_github_apps %}'" data-heading-content="REST API endpoints for {% data variables.product.prodname_github_apps %}" class="anchor"></a></h1>
+<p>Use the REST API to interact with GitHub Apps</p>
+<h2 id="about-github-apps" title="About GitHub Apps">About GitHub Apps<a href="#about-github-apps" aria-label="Link to heading 'About GitHub Apps'" data-heading-content="About GitHub Apps" class="anchor"></a></h2>
+<p>If you are using your app with GitHub Actions and want to modify workflow files, you must authenticate on behalf of the user with an OAuth token that includes the <code>workflow</code> scope. The user must have admin or write permission to the repository that contains the workflow file. For more information, see <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes" class="external">Scopes for OAuth apps</a>.</p>
+<p>This page lists endpoints that you can access while authenticated as a GitHub App. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app" class="external">Authenticating as a GitHub App</a>.</p>
+<p>See <a href="installations.html">REST API endpoints for GitHub App installations</a> for a list of endpoints that require authentication as a GitHub App installation.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-the-authenticated-app" title="Get the authenticated app">Get the authenticated app<a href="#get-the-authenticated-app" aria-label="Link to heading 'Get the authenticated app'" data-heading-content="Get the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app
+</span></code></pre>
+<p>Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this GitHub App, see the installations<span data-escaped-char="">_</span>count in the response. For more details about your app's installations, see the "List installations for the authenticated app" endpoint.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="http-response-status-codes" title="Get the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get the authenticated app / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+<h2 id="create-a-github-app-from-a-manifest" title="Create a GitHub App from a manifest">Create a GitHub App from a manifest<a href="#create-a-github-app-from-a-manifest" aria-label="Link to heading 'Create a GitHub App from a manifest'" data-heading-content="Create a GitHub App from a manifest" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /app-manifests/{code}/conversions
+</span></code></pre>
+<p>Use this endpoint to complete the handshake necessary when implementing the GitHub App Manifest flow. When you create a GitHub App with the manifest flow, you receive a temporary code used to retrieve the GitHub App's id, pem (private key), and webhook<span data-escaped-char="">_</span>secret.</p>
+<h3 id="parameters" title="Create a GitHub App from a manifest / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>code</code></strong> (string) (required)</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a GitHub App from a manifest / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a GitHub App from a manifest / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app-manifests/CODE/conversions
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li>all of:
+<ul>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+<li><strong>object, additional properties allowed</strong>
+<ul>
+<li><code>client_id</code>: required, string</li>
+<li><code>client_secret</code>: required, string</li>
+<li><code>webhook_secret</code>: required, string or null</li>
+<li><code>pem</code>: required, string</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="list-installation-requests-for-the-authenticated-app" title="List installation requests for the authenticated app">List installation requests for the authenticated app<a href="#list-installation-requests-for-the-authenticated-app" aria-label="Link to heading 'List installation requests for the authenticated app'" data-heading-content="List installation requests for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installation-requests
+</span></code></pre>
+<p>Lists all the pending installation requests for the authenticated GitHub App.</p>
+<h3 id="parameters-1" title="List installation requests for the authenticated app / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="List installation requests for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - List of integration installation requests</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="List installation requests for the authenticated app / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installation-requests
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Integration Installation Request</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: string</li>
+<li><code>account</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>requester</code>: required, <code>Simple User</code> (see above)</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="list-installations-for-the-authenticated-app" title="List installations for the authenticated app">List installations for the authenticated app<a href="#list-installations-for-the-authenticated-app" aria-label="Link to heading 'List installations for the authenticated app'" data-heading-content="List installations for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installations
+</span></code></pre>
+<p>The permissions the installation has are included under the permissions key.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-2" title="List installations for the authenticated app / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+<li>
+<p><strong><code>since</code></strong> (string)<br>
+Only show results that were last updated after the given time. This is a timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ.</p>
+</li>
+<li>
+<p><strong><code>outdated</code></strong> (string)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="List installations for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - The permissions the installation has are included under the permissions key.</li>
+</ul>
+<h3 id="code-examples-3" title="List installations for the authenticated app / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Installation</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>account</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>access_tokens_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>app_id</code>: required, integer</li>
+<li><code>client_id</code>: string</li>
+<li><code>target_id</code>: required, integer</li>
+<li><code>target_type</code>: required, string</li>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>app_slug</code>: required, string</li>
+<li><code>suspended_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>suspended_at</code>: required, string or null, format: date-time</li>
+<li><code>contact_email</code>: string or null</li>
+</ul>
+<h2 id="get-an-installation-for-the-authenticated-app" title="Get an installation for the authenticated app">Get an installation for the authenticated app<a href="#get-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an installation for the authenticated app'" data-heading-content="Get an installation for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installations/{installation_id}
+</span></code></pre>
+<p>Enables an authenticated GitHub App to find an installation's information using the installation id.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-3" title="Get an installation for the authenticated app / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="Get an installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="Get an installation for the authenticated app / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>account</code>: required, any of:
+<ul>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>access_tokens_url</code>: required, string, format: uri</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>app_id</code>: required, integer</li>
+<li><code>client_id</code>: string</li>
+<li><code>target_id</code>: required, integer</li>
+<li><code>target_type</code>: required, string</li>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>app_slug</code>: required, string</li>
+<li><code>suspended_by</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong> (see above)</li>
+</ul>
+</li>
+<li><code>suspended_at</code>: required, string or null, format: date-time</li>
+<li><code>contact_email</code>: string or null</li>
+</ul>
+<h2 id="delete-an-installation-for-the-authenticated-app" title="Delete an installation for the authenticated app">Delete an installation for the authenticated app<a href="#delete-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Delete an installation for the authenticated app'" data-heading-content="Delete an installation for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /app/installations/{installation_id}
+</span></code></pre>
+<p>Uninstalls a GitHub App on a user, organization, or enterprise account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "Suspend an app installation" endpoint.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-4" title="Delete an installation for the authenticated app / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Delete an installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>202</strong> - Accepted</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-5" title="Delete an installation for the authenticated app / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1
+</span></code></pre>
+<p><strong>Response schema (Status: 202):</strong></p>
+<h2 id="create-an-installation-access-token-for-an-app" title="Create an installation access token for an app">Create an installation access token for an app<a href="#create-an-installation-access-token-for-an-app" aria-label="Link to heading 'Create an installation access token for an app'" data-heading-content="Create an installation access token for an app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /app/installations/{installation_id}/access_tokens
+</span></code></pre>
+<p>Creates an installation access token that enables a GitHub App to make authenticated API requests for the app's installation on an organization or individual account. Installation tokens expire one hour from the time you create them. Using an expired token produces a status code of 401 - Unauthorized, and requires creating a new installation token. By default the installation token has access to all repositories that the installation can access.<br>
+Note</p>
+<p>Starting April 27, 2026, GitHub began a staged rollout of a stateless format (ghs<span data-escaped-char="">_</span>APPID<span data-escaped-char="">_</span>JWT) to all newly minted GitHub App installation tokens, making them more performant and improving the reliability of our API surface. If your application expects or relies on installation tokens being exactly 40 characters long, it may not handle this new token format correctly. You can now validate your apps and workflows using a temporary request header that lets you enable the token format on demand. For more information about the temporary header, see the GitHub blog.</p>
+<p>Optionally, you can use the repositories or repository<span data-escaped-char="">_</span>ids body parameters to specify individual repositories that the installation access token can access. If you don't use repositories or repository<span data-escaped-char="">_</span>ids to grant access to specific repositories, the installation access token will have access to all repositories that the installation was granted access to. The installation access token cannot be granted access to repositories that the installation was not granted access to. Up to 500 repositories can be listed in this manner.<br>
+Optionally, use the permissions body parameter to specify the permissions that the installation access token should have. If permissions is not specified, the installation access token will have all of the permissions that were granted to the app. The installation access token cannot be granted permissions that the app was not granted.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-5" title="Create an installation access token for an app / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>repositories</code></strong> (array of strings)<br>
+List of repository names that the token should have access to</p>
+</li>
+<li>
+<p><strong><code>repository_ids</code></strong> (array of integers)<br>
+List of repository IDs that the token should have access to</p>
+</li>
+<li>
+<p><strong><code>permissions</code></strong> (object)<br>
+The permissions granted to the fine-grained access token.</p>
+<ul>
+<li><strong><code>actions</code></strong> (string)<br>
+The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>administration</code></strong> (string)<br>
+The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>artifact_metadata</code></strong> (string)<br>
+The level of permission to grant the access token to create and retrieve build artifact metadata records.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>attestations</code></strong> (string)<br>
+The level of permission to create and retrieve the access token for repository attestations.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>checks</code></strong> (string)<br>
+The level of permission to grant the access token for checks on code.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>code_quality</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage code quality data.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>codespaces</code></strong> (string)<br>
+The level of permission to grant the access token to create, edit, delete, and list Codespaces.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>contents</code></strong> (string)<br>
+The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>dependabot_secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage Dependabot secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>deployments</code></strong> (string)<br>
+The level of permission to grant the access token for deployments and deployment statuses.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>discussions</code></strong> (string)<br>
+The level of permission to grant the access token for discussions and related comments and labels.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>environments</code></strong> (string)<br>
+The level of permission to grant the access token for managing repository environments.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>issues</code></strong> (string)<br>
+The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>merge_queues</code></strong> (string)<br>
+The level of permission to grant the access token to manage the merge queues for a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>metadata</code></strong> (string)<br>
+The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>packages</code></strong> (string)<br>
+The level of permission to grant the access token for packages published to GitHub Packages.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>pages</code></strong> (string)<br>
+The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>pull_requests</code></strong> (string)<br>
+The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_custom_properties</code></strong> (string)<br>
+The level of permission to grant the access token to view and edit custom properties for a repository, when allowed by the property.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_hooks</code></strong> (string)<br>
+The level of permission to grant the access token to manage the post-receive hooks for a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_projects</code></strong> (string)<br>
+The level of permission to grant the access token to manage repository projects, columns, and cards.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>secret_scanning_alerts</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage secret scanning alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage repository secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>security_events</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage security events like code scanning alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>single_file</code></strong> (string)<br>
+The level of permission to grant the access token to manage just a single file.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>statuses</code></strong> (string)<br>
+The level of permission to grant the access token for commit statuses.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>vulnerability_alerts</code></strong> (string)<br>
+The level of permission to grant the access token to manage Dependabot alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>workflows</code></strong> (string)<br>
+The level of permission to grant the access token to update GitHub Actions workflow files.<br>
+Can be one of: <code>write</code></li>
+<li><strong><code>custom_properties_for_organizations</code></strong> (string)<br>
+The level of permission to grant the access token to view and edit custom properties for an organization, when allowed by the property.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>members</code></strong> (string)<br>
+The level of permission to grant the access token for organization teams and members.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_administration</code></strong> (string)<br>
+The level of permission to grant the access token to manage access to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_roles</code></strong> (string)<br>
+The level of permission to grant the access token for custom repository roles management.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_org_roles</code></strong> (string)<br>
+The level of permission to grant the access token for custom organization roles management.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_properties</code></strong> (string)<br>
+The level of permission to grant the access token for repository custom properties management at the organization level.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>organization_copilot_seat_management</code></strong> (string)<br>
+The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in public preview and is subject to change.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_copilot_agent_settings</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage Copilot cloud agent settings for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_announcement_banners</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage announcement banners for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_events</code></strong> (string)<br>
+The level of permission to grant the access token to view events triggered by an activity in an organization.<br>
+Can be one of: <code>read</code></li>
+<li><strong><code>organization_hooks</code></strong> (string)<br>
+The level of permission to grant the access token to manage the post-receive hooks for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_personal_access_tokens</code></strong> (string)<br>
+The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_personal_access_token_requests</code></strong> (string)<br>
+The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_plan</code></strong> (string)<br>
+The level of permission to grant the access token for viewing an organization's plan.<br>
+Can be one of: <code>read</code></li>
+<li><strong><code>organization_projects</code></strong> (string)<br>
+The level of permission to grant the access token to manage organization projects and projects public preview (where available).<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>organization_packages</code></strong> (string)<br>
+The level of permission to grant the access token for organization packages published to GitHub Packages.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage organization secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_self_hosted_runners</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_user_blocking</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage users blocked by the organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>email_addresses</code></strong> (string)<br>
+The level of permission to grant the access token to manage the email addresses belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>followers</code></strong> (string)<br>
+The level of permission to grant the access token to manage the followers belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>git_ssh_keys</code></strong> (string)<br>
+The level of permission to grant the access token to manage git SSH keys.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>gpg_keys</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage GPG keys belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>interaction_limits</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage interaction limits on a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>profile</code></strong> (string)<br>
+The level of permission to grant the access token to manage the profile settings belonging to a user.<br>
+Can be one of: <code>write</code></li>
+<li><strong><code>starring</code></strong> (string)<br>
+The level of permission to grant the access token to list and manage repositories a user is starring.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>enterprise_custom_properties_for_organizations</code></strong> (string)<br>
+The level of permission to grant the access token for organization custom properties management at the enterprise level.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Create an installation access token for an app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-6" title="Create an installation access token for an app / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1/access_tokens \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "repositories": [
+</span><span style="color:#c0c5ce;">    "Hello-World"
+</span><span style="color:#c0c5ce;">  ],
+</span><span style="color:#c0c5ce;">  "permissions": {
+</span><span style="color:#c0c5ce;">    "issues": "write",
+</span><span style="color:#c0c5ce;">    "contents": "read"
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>token</code>: required, string</li>
+<li><code>expires_at</code>: required, string</li>
+<li><code>permissions</code>: <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>repository_selection</code>: string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>repositories</code>: array of <code>Repository</code>:
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>full_name</code>: required, string</li>
+<li><code>license</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>License Simple</strong>
+<ul>
+<li><code>key</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string or null, format: uri</li>
+<li><code>spdx_id</code>: required, string or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>html_url</code>: string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>forks</code>: required, integer</li>
+<li><code>permissions</code>: object:
+<ul>
+<li><code>admin</code>: required, boolean</li>
+<li><code>pull</code>: required, boolean</li>
+<li><code>triage</code>: boolean</li>
+<li><code>push</code>: required, boolean</li>
+<li><code>maintain</code>: boolean</li>
+</ul>
+</li>
+<li><code>owner</code>: required, <code>Simple User</code>:
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+<li><code>private</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>fork</code>: required, boolean</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>archive_url</code>: required, string</li>
+<li><code>assignees_url</code>: required, string</li>
+<li><code>blobs_url</code>: required, string</li>
+<li><code>branches_url</code>: required, string</li>
+<li><code>collaborators_url</code>: required, string</li>
+<li><code>comments_url</code>: required, string</li>
+<li><code>commits_url</code>: required, string</li>
+<li><code>compare_url</code>: required, string</li>
+<li><code>contents_url</code>: required, string</li>
+<li><code>contributors_url</code>: required, string, format: uri</li>
+<li><code>deployments_url</code>: required, string, format: uri</li>
+<li><code>downloads_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string, format: uri</li>
+<li><code>forks_url</code>: required, string, format: uri</li>
+<li><code>git_commits_url</code>: required, string</li>
+<li><code>git_refs_url</code>: required, string</li>
+<li><code>git_tags_url</code>: required, string</li>
+<li><code>git_url</code>: required, string</li>
+<li><code>issue_comment_url</code>: required, string</li>
+<li><code>issue_events_url</code>: required, string</li>
+<li><code>issues_url</code>: required, string</li>
+<li><code>keys_url</code>: required, string</li>
+<li><code>labels_url</code>: required, string</li>
+<li><code>languages_url</code>: required, string, format: uri</li>
+<li><code>merges_url</code>: required, string, format: uri</li>
+<li><code>milestones_url</code>: required, string</li>
+<li><code>notifications_url</code>: required, string</li>
+<li><code>pulls_url</code>: required, string</li>
+<li><code>releases_url</code>: required, string</li>
+<li><code>ssh_url</code>: required, string</li>
+<li><code>stargazers_url</code>: required, string, format: uri</li>
+<li><code>statuses_url</code>: required, string</li>
+<li><code>subscribers_url</code>: required, string, format: uri</li>
+<li><code>subscription_url</code>: required, string, format: uri</li>
+<li><code>tags_url</code>: required, string, format: uri</li>
+<li><code>teams_url</code>: required, string, format: uri</li>
+<li><code>trees_url</code>: required, string</li>
+<li><code>clone_url</code>: required, string</li>
+<li><code>mirror_url</code>: required, string or null, format: uri</li>
+<li><code>hooks_url</code>: required, string, format: uri</li>
+<li><code>svn_url</code>: required, string, format: uri</li>
+<li><code>homepage</code>: required, string or null, format: uri</li>
+<li><code>language</code>: required, string or null</li>
+<li><code>forks_count</code>: required, integer</li>
+<li><code>stargazers_count</code>: required, integer</li>
+<li><code>watchers_count</code>: required, integer</li>
+<li><code>size</code>: required, integer</li>
+<li><code>default_branch</code>: required, string</li>
+<li><code>open_issues_count</code>: required, integer</li>
+<li><code>is_template</code>: boolean, default: <code>false</code></li>
+<li><code>topics</code>: array of string</li>
+<li><code>has_issues</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_projects</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_wiki</code>: required, boolean, default: <code>true</code></li>
+<li><code>has_pages</code>: required, boolean</li>
+<li><code>has_discussions</code>: boolean, default: <code>false</code></li>
+<li><code>has_pull_requests</code>: boolean, default: <code>true</code></li>
+<li><code>pull_request_creation_policy</code>: string, enum: <code>all</code>, <code>collaborators_only</code></li>
+<li><code>archived</code>: required, boolean, default: <code>false</code></li>
+<li><code>disabled</code>: required, boolean</li>
+<li><code>visibility</code>: string, default: <code>"public"</code></li>
+<li><code>pushed_at</code>: required, string or null, format: date-time</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>allow_rebase_merge</code>: boolean, default: <code>true</code></li>
+<li><code>temp_clone_token</code>: string</li>
+<li><code>allow_squash_merge</code>: boolean, default: <code>true</code></li>
+<li><code>allow_auto_merge</code>: boolean, default: <code>false</code></li>
+<li><code>delete_branch_on_merge</code>: boolean, default: <code>false</code></li>
+<li><code>allow_update_branch</code>: boolean, default: <code>false</code></li>
+<li><code>squash_merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>COMMIT_OR_PR_TITLE</code></li>
+<li><code>squash_merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>COMMIT_MESSAGES</code>, <code>BLANK</code></li>
+<li><code>merge_commit_title</code>: string, enum: <code>PR_TITLE</code>, <code>MERGE_MESSAGE</code></li>
+<li><code>merge_commit_message</code>: string, enum: <code>PR_BODY</code>, <code>PR_TITLE</code>, <code>BLANK</code></li>
+<li><code>allow_merge_commit</code>: boolean, default: <code>true</code></li>
+<li><code>allow_forking</code>: boolean</li>
+<li><code>web_commit_signoff_required</code>: boolean, default: <code>false</code></li>
+<li><code>open_issues</code>: required, integer</li>
+<li><code>watchers</code>: required, integer</li>
+<li><code>starred_at</code>: string</li>
+<li><code>anonymous_access_enabled</code>: boolean</li>
+<li><code>code_search_index_status</code>: object:
+<ul>
+<li><code>lexical_search_ok</code>: boolean</li>
+<li><code>lexical_commit_sha</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>single_file</code>: string</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+</ul>
+<h2 id="suspend-an-app-installation" title="Suspend an app installation">Suspend an app installation<a href="#suspend-an-app-installation" aria-label="Link to heading 'Suspend an app installation'" data-heading-content="Suspend an app installation" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /app/installations/{installation_id}/suspended
+</span></code></pre>
+<p>Suspends a GitHub App on a user, organization, or enterprise account, which blocks the app from accessing the account's resources. When a GitHub App is suspended, the app's access to the GitHub API or webhook events is blocked for that account.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-6" title="Suspend an app installation / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Suspend an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-7" title="Suspend an app installation / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1/suspended
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="unsuspend-an-app-installation" title="Unsuspend an app installation">Unsuspend an app installation<a href="#unsuspend-an-app-installation" aria-label="Link to heading 'Unsuspend an app installation'" data-heading-content="Unsuspend an app installation" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /app/installations/{installation_id}/suspended
+</span></code></pre>
+<p>Removes a GitHub App installation suspension.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-7" title="Unsuspend an app installation / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>installation_id</code></strong> (integer) (required)<br>
+The unique identifier of the installation.</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Unsuspend an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Unsuspend an app installation / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1/suspended
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="create-a-scoped-access-token" title="Create a scoped access token">Create a scoped access token<a href="#create-a-scoped-access-token" aria-label="Link to heading 'Create a scoped access token'" data-heading-content="Create a scoped access token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /applications/{client_id}/token/scoped
+</span></code></pre>
+<p>Use a non-scoped user access token to create a repository-scoped and/or permission-scoped user access token. You can specify<br>
+which repositories the token can access and which permissions are granted to the<br>
+token.<br>
+Invalid tokens will return 404 NOT FOUND.</p>
+<h3 id="parameters-8" title="Create a scoped access token / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>client_id</code></strong> (string) (required)<br>
+The client ID of the GitHub app.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>access_token</code></strong> (string) (required)<br>
+The access token used to authenticate to the GitHub API.</p>
+</li>
+<li>
+<p><strong><code>target</code></strong> (string)<br>
+The name of the user or organization to scope the user access token to. Required unless target<span data-escaped-char="">_</span>id is specified.</p>
+</li>
+<li>
+<p><strong><code>target_id</code></strong> (integer)<br>
+The ID of the user or organization to scope the user access token to. Required unless target is specified.</p>
+</li>
+<li>
+<p><strong><code>repositories</code></strong> (array of strings)<br>
+The list of repository names to scope the user access token to. repositories may not be specified if repository<span data-escaped-char="">_</span>ids is specified.</p>
+</li>
+<li>
+<p><strong><code>repository_ids</code></strong> (array of integers)<br>
+The list of repository IDs to scope the user access token to. repository<span data-escaped-char="">_</span>ids may not be specified if repositories is specified.</p>
+</li>
+<li>
+<p><strong><code>permissions</code></strong> (object)<br>
+The permissions granted to the fine-grained access token.</p>
+<ul>
+<li><strong><code>actions</code></strong> (string)<br>
+The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>administration</code></strong> (string)<br>
+The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>artifact_metadata</code></strong> (string)<br>
+The level of permission to grant the access token to create and retrieve build artifact metadata records.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>attestations</code></strong> (string)<br>
+The level of permission to create and retrieve the access token for repository attestations.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>checks</code></strong> (string)<br>
+The level of permission to grant the access token for checks on code.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>code_quality</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage code quality data.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>codespaces</code></strong> (string)<br>
+The level of permission to grant the access token to create, edit, delete, and list Codespaces.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>contents</code></strong> (string)<br>
+The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>dependabot_secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage Dependabot secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>deployments</code></strong> (string)<br>
+The level of permission to grant the access token for deployments and deployment statuses.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>discussions</code></strong> (string)<br>
+The level of permission to grant the access token for discussions and related comments and labels.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>environments</code></strong> (string)<br>
+The level of permission to grant the access token for managing repository environments.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>issues</code></strong> (string)<br>
+The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>merge_queues</code></strong> (string)<br>
+The level of permission to grant the access token to manage the merge queues for a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>metadata</code></strong> (string)<br>
+The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>packages</code></strong> (string)<br>
+The level of permission to grant the access token for packages published to GitHub Packages.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>pages</code></strong> (string)<br>
+The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>pull_requests</code></strong> (string)<br>
+The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_custom_properties</code></strong> (string)<br>
+The level of permission to grant the access token to view and edit custom properties for a repository, when allowed by the property.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_hooks</code></strong> (string)<br>
+The level of permission to grant the access token to manage the post-receive hooks for a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>repository_projects</code></strong> (string)<br>
+The level of permission to grant the access token to manage repository projects, columns, and cards.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>secret_scanning_alerts</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage secret scanning alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage repository secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>security_events</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage security events like code scanning alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>single_file</code></strong> (string)<br>
+The level of permission to grant the access token to manage just a single file.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>statuses</code></strong> (string)<br>
+The level of permission to grant the access token for commit statuses.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>vulnerability_alerts</code></strong> (string)<br>
+The level of permission to grant the access token to manage Dependabot alerts.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>workflows</code></strong> (string)<br>
+The level of permission to grant the access token to update GitHub Actions workflow files.<br>
+Can be one of: <code>write</code></li>
+<li><strong><code>custom_properties_for_organizations</code></strong> (string)<br>
+The level of permission to grant the access token to view and edit custom properties for an organization, when allowed by the property.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>members</code></strong> (string)<br>
+The level of permission to grant the access token for organization teams and members.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_administration</code></strong> (string)<br>
+The level of permission to grant the access token to manage access to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_roles</code></strong> (string)<br>
+The level of permission to grant the access token for custom repository roles management.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_org_roles</code></strong> (string)<br>
+The level of permission to grant the access token for custom organization roles management.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_custom_properties</code></strong> (string)<br>
+The level of permission to grant the access token for repository custom properties management at the organization level.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>organization_copilot_seat_management</code></strong> (string)<br>
+The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in public preview and is subject to change.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_copilot_agent_settings</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage Copilot cloud agent settings for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_announcement_banners</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage announcement banners for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_events</code></strong> (string)<br>
+The level of permission to grant the access token to view events triggered by an activity in an organization.<br>
+Can be one of: <code>read</code></li>
+<li><strong><code>organization_hooks</code></strong> (string)<br>
+The level of permission to grant the access token to manage the post-receive hooks for an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_personal_access_tokens</code></strong> (string)<br>
+The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_personal_access_token_requests</code></strong> (string)<br>
+The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_plan</code></strong> (string)<br>
+The level of permission to grant the access token for viewing an organization's plan.<br>
+Can be one of: <code>read</code></li>
+<li><strong><code>organization_projects</code></strong> (string)<br>
+The level of permission to grant the access token to manage organization projects and projects public preview (where available).<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><strong><code>organization_packages</code></strong> (string)<br>
+The level of permission to grant the access token for organization packages published to GitHub Packages.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_secrets</code></strong> (string)<br>
+The level of permission to grant the access token to manage organization secrets.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_self_hosted_runners</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>organization_user_blocking</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage users blocked by the organization.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>email_addresses</code></strong> (string)<br>
+The level of permission to grant the access token to manage the email addresses belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>followers</code></strong> (string)<br>
+The level of permission to grant the access token to manage the followers belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>git_ssh_keys</code></strong> (string)<br>
+The level of permission to grant the access token to manage git SSH keys.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>gpg_keys</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage GPG keys belonging to a user.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>interaction_limits</code></strong> (string)<br>
+The level of permission to grant the access token to view and manage interaction limits on a repository.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>profile</code></strong> (string)<br>
+The level of permission to grant the access token to manage the profile settings belonging to a user.<br>
+Can be one of: <code>write</code></li>
+<li><strong><code>starring</code></strong> (string)<br>
+The level of permission to grant the access token to list and manage repositories a user is starring.<br>
+Can be one of: <code>read</code>, <code>write</code></li>
+<li><strong><code>enterprise_custom_properties_for_organizations</code></strong> (string)<br>
+The level of permission to grant the access token for organization custom properties management at the enterprise level.<br>
+Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Create a scoped access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Create a scoped access token / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/applications/Iv1.8a61f9b3a7aba766/token/scoped \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_token": "e72e16c7e42f292c6912e7710c838347ae178b4a",
+</span><span style="color:#c0c5ce;">  "target": "octocat",
+</span><span style="color:#c0c5ce;">  "permissions": {
+</span><span style="color:#c0c5ce;">    "metadata": "read",
+</span><span style="color:#c0c5ce;">    "issues": "write",
+</span><span style="color:#c0c5ce;">    "contents": "read"
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>scopes</code>: required, array of string or null</li>
+<li><code>token</code>: required, string</li>
+<li><code>token_last_eight</code>: required, string or null</li>
+<li><code>hashed_token</code>: required, string or null</li>
+<li><code>app</code>: required, object:
+<ul>
+<li><code>client_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>note</code>: required, string or null</li>
+<li><code>note_url</code>: required, string or null, format: uri</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>fingerprint</code>: required, string or null</li>
+<li><code>user</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>installation</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Scoped Installation</strong>
+<ul>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>account</code>: required, <code>Simple User</code> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>expires_at</code>: required, string or null, format: date-time</li>
+</ul>
+<h2 id="get-an-app" title="Get an app">Get an app<a href="#get-an-app" aria-label="Link to heading 'Get an app'" data-heading-content="Get an app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /apps/{app_slug}
+</span></code></pre>
+<p>Note</p>
+<p>The :app<span data-escaped-char="">_</span>slug is just the URL-friendly name of your GitHub App. You can find this on the settings page for your GitHub App (e.g., <a href="https://github.com/settings/apps/:app_slug" class="external">https://github.com/settings/apps/:app_slug</a>).</p>
+<h3 id="parameters-9" title="Get an app / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>app_slug</code></strong> (string) (required)</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Get an app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Get an app / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/apps/APP_SLUG
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-the-authenticated-app">Get the authenticated app</a>.</p>
+<h2 id="get-an-organization-installation-for-the-authenticated-app" title="Get an organization installation for the authenticated app">Get an organization installation for the authenticated app<a href="#get-an-organization-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an organization installation for the authenticated app'" data-heading-content="Get an organization installation for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/installation
+</span></code></pre>
+<p>Enables an authenticated GitHub App to find the organization's installation information.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-10" title="Get an organization installation for the authenticated app / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Get an organization installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-11" title="Get an organization installation for the authenticated app / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/installation
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-an-installation-for-the-authenticated-app">Get an installation for the authenticated app</a>.</p>
+<h2 id="get-a-repository-installation-for-the-authenticated-app" title="Get a repository installation for the authenticated app">Get a repository installation for the authenticated app<a href="#get-a-repository-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a repository installation for the authenticated app'" data-heading-content="Get a repository installation for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/installation
+</span></code></pre>
+<p>Enables an authenticated GitHub App to find the repository's installation information. The installation's account type will be either an organization or a user account, depending which account the repository belongs to.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-11" title="Get a repository installation for the authenticated app / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-12" title="Get a repository installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>301</strong> - Moved permanently</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-12" title="Get a repository installation for the authenticated app / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/installation
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-an-installation-for-the-authenticated-app">Get an installation for the authenticated app</a>.</p>
+<h2 id="get-a-user-installation-for-the-authenticated-app" title="Get a user installation for the authenticated app">Get a user installation for the authenticated app<a href="#get-a-user-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a user installation for the authenticated app'" data-heading-content="Get a user installation for the authenticated app" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/installation
+</span></code></pre>
+<p>Enables an authenticated GitHub App to find the user’s installation information.<br>
+You must use a JWT to access this endpoint.</p>
+<h3 id="parameters-12" title="Get a user installation for the authenticated app / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>username</code></strong> (string) (required)<br>
+The handle for the GitHub user account.</li>
+</ul>
+<h3 id="http-response-status-codes-13" title="Get a user installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-13" title="Get a user installation for the authenticated app / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/installation
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-an-installation-for-the-authenticated-app">Get an installation for the authenticated app</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

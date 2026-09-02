@@ -1,0 +1,133 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Codespaces machines</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Codespaces</a> / </nav><h1 id="rest-api-endpoints-for-codespaces-machines">REST API endpoints for Codespaces machines<a href="#rest-api-endpoints-for-codespaces-machines" aria-label="Link to heading 'REST API endpoints for Codespaces machines'" data-heading-content="REST API endpoints for Codespaces machines" class="anchor"></a></h1>
+<p>Use the REST API to manage availability of machine types for a codespace.</p>
+<h2 id="about-codespaces-machines" title="About Codespaces machines">About Codespaces machines<a href="#about-codespaces-machines" aria-label="Link to heading 'About Codespaces machines'" data-heading-content="About Codespaces machines" class="anchor"></a></h2>
+<p>You can determine which machine types are available to create a codespace, either on a given repository or as an authenticated user. For more information, see <a href="https://docs.github.com/en/codespaces/customizing-your-codespace/changing-the-machine-type-for-your-codespace#about-machine-types" class="external">Changing the machine type for your codespace</a>.</p>
+<p>You can also use this information when changing the machine of an existing codespace by updating its <code>machine</code> property. The machine update will take place the next time the codespace is restarted. For more information, see <a href="https://docs.github.com/en/codespaces/customizing-your-codespace/changing-the-machine-type-for-your-codespace" class="external">Changing the machine type for your codespace</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-available-machine-types-for-a-repository" title="List available machine types for a repository">List available machine types for a repository<a href="#list-available-machine-types-for-a-repository" aria-label="Link to heading 'List available machine types for a repository'" data-heading-content="List available machine types for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/codespaces/machines
+</span></code></pre>
+<p>List the machine types available for a given repository based on its configuration.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters" title="List available machine types for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>location</code></strong> (string)<br>
+The location to check for available machines. Assigned by IP if not provided.</p>
+</li>
+<li>
+<p><strong><code>client_ip</code></strong> (string)<br>
+IP for location auto-detection when proxying a request</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string)<br>
+The branch or commit to check for prebuild availability and devcontainer restrictions.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List available machine types for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List available machine types for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/codespaces/machines
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>machines</code>: required, array of <code>Codespace machine</code>:
+<ul>
+<li><code>name</code>: required, string</li>
+<li><code>display_name</code>: required, string</li>
+<li><code>operating_system</code>: required, string</li>
+<li><code>storage_in_bytes</code>: required, integer</li>
+<li><code>memory_in_bytes</code>: required, integer</li>
+<li><code>cpus</code>: required, integer</li>
+<li><code>prebuild_availability</code>: required, string or null, enum: <code>none</code>, <code>ready</code>, <code>in_progress</code>, <code>null</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="list-machine-types-for-a-codespace" title="List machine types for a codespace">List machine types for a codespace<a href="#list-machine-types-for-a-codespace" aria-label="Link to heading 'List machine types for a codespace'" data-heading-content="List machine types for a codespace" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/codespaces/{codespace_name}/machines
+</span></code></pre>
+<p>List the machine types a codespace can transition to use.<br>
+OAuth app tokens and personal access tokens (classic) need the codespace scope to use this endpoint.</p>
+<h3 id="parameters-1" title="List machine types for a codespace / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>codespace_name</code></strong> (string) (required)<br>
+The name of the codespace.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List machine types for a codespace / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>500</strong> - Internal Error</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List machine types for a codespace / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/codespaces/CODESPACE_NAME/machines
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-available-machine-types-for-a-repository">List available machine types for a repository</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

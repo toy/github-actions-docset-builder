@@ -1,0 +1,301 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for OAuth authorizations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Apps</a> / </nav><h1 id="rest-api-endpoints-for-oauth-authorizations">REST API endpoints for OAuth authorizations<a href="#rest-api-endpoints-for-oauth-authorizations" aria-label="Link to heading 'REST API endpoints for OAuth authorizations'" data-heading-content="REST API endpoints for OAuth authorizations" class="anchor"></a></h1>
+<p>Use the REST API to interact with OAuth apps and OAuth authorizations of GitHub Apps</p>
+<h2 id="about-oauth-apps-and-oauth-authorizations-of-github-apps" title="About OAuth apps and OAuth authorizations of GitHub Apps">About OAuth apps and OAuth authorizations of GitHub Apps<a href="#about-oauth-apps-and-oauth-authorizations-of-github-apps" aria-label="Link to heading 'About OAuth apps and OAuth authorizations of GitHub Apps'" data-heading-content="About OAuth apps and OAuth authorizations of GitHub Apps" class="anchor"></a></h2>
+<p>You can use these endpoints to manage the OAuth tokens that OAuth apps or GitHub Apps use to access people's accounts on GitHub.</p>
+<p>Tokens for OAuth apps have the prefix <code>gho_</code>, while OAuth tokens for GitHub Apps, used for authenticating on behalf of the user, have the prefix <code>ghu_</code>. You can use the following endpoints for both types of OAuth tokens.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="delete-an-app-authorization" title="Delete an app authorization">Delete an app authorization<a href="#delete-an-app-authorization" aria-label="Link to heading 'Delete an app authorization'" data-heading-content="Delete an app authorization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /applications/{client_id}/grant
+</span></code></pre>
+<p>OAuth and GitHub application owners can revoke a grant for their application and a specific user. You must provide a valid OAuth access_token as an input parameter and the grant for the token's owner will be deleted.<br>
+Deleting an application's grant will also delete all OAuth tokens associated with the application for the user. Once deleted, the application will have no access to the user's account and will no longer be listed on the application authorizations settings screen within GitHub.</p>
+<h3 id="parameters" title="Delete an app authorization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>client_id</code></strong> (string) (required)<br>
+The client ID of the GitHub app.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>access_token</code></strong> (string) (required)<br>
+The OAuth access token used to authenticate to the GitHub API.</li>
+</ul>
+<h3 id="http-response-status-codes" title="Delete an app authorization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Delete an app authorization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/applications/Iv1.8a61f9b3a7aba766/grant \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_token": "e72e16c7e42f292c6912e7710c838347ae178b4a"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="check-a-token" title="Check a token">Check a token<a href="#check-a-token" aria-label="Link to heading 'Check a token'" data-heading-content="Check a token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /applications/{client_id}/token
+</span></code></pre>
+<p>OAuth applications and GitHub applications with OAuth authorizations can use this API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. Invalid tokens will return 404 NOT FOUND.</p>
+<h3 id="parameters-1" title="Check a token / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>client_id</code></strong> (string) (required)<br>
+The client ID of the GitHub app.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>access_token</code></strong> (string) (required)<br>
+The access_token of the OAuth or GitHub application.</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Check a token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Check a token / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/applications/Iv1.8a61f9b3a7aba766/token \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_token": "e72e16c7e42f292c6912e7710c838347ae178b4a"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>scopes</code>: required, array of string or null</li>
+<li><code>token</code>: required, string</li>
+<li><code>token_last_eight</code>: required, string or null</li>
+<li><code>hashed_token</code>: required, string or null</li>
+<li><code>app</code>: required, object:
+<ul>
+<li><code>client_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+</ul>
+</li>
+<li><code>note</code>: required, string or null</li>
+<li><code>note_url</code>: required, string or null, format: uri</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>fingerprint</code>: required, string or null</li>
+<li><code>user</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>installation</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Scoped Installation</strong>
+<ul>
+<li><code>permissions</code>: required, <code>App Permissions</code>:
+<ul>
+<li><code>actions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>artifact_metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>attestations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>checks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>code_quality</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>codespaces</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>contents</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>dependabot_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>deployments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>discussions</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>environments</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>issues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>merge_queues</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>metadata</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>pull_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_custom_properties</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>repository_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>secret_scanning_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>security_events</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>single_file</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>statuses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>vulnerability_alerts</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>workflows</code>: string, enum: <code>write</code></li>
+<li><code>custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>members</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_administration</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_org_roles</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_custom_properties</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_copilot_seat_management</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_copilot_agent_settings</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_announcement_banners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_events</code>: string, enum: <code>read</code></li>
+<li><code>organization_hooks</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_tokens</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_personal_access_token_requests</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_plan</code>: string, enum: <code>read</code></li>
+<li><code>organization_projects</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+<li><code>organization_packages</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_secrets</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_self_hosted_runners</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>organization_user_blocking</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>email_addresses</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>followers</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>git_ssh_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>gpg_keys</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>interaction_limits</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>profile</code>: string, enum: <code>write</code></li>
+<li><code>starring</code>: string, enum: <code>read</code>, <code>write</code></li>
+<li><code>enterprise_custom_properties_for_organizations</code>: string, enum: <code>read</code>, <code>write</code>, <code>admin</code></li>
+</ul>
+</li>
+<li><code>repository_selection</code>: required, string, enum: <code>all</code>, <code>selected</code></li>
+<li><code>single_file_name</code>: required, string or null</li>
+<li><code>has_multiple_single_files</code>: boolean</li>
+<li><code>single_file_paths</code>: array of string</li>
+<li><code>repositories_url</code>: required, string, format: uri</li>
+<li><code>account</code>: required, <code>Simple User</code> (see above)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>expires_at</code>: required, string or null, format: date-time</li>
+</ul>
+<h2 id="reset-a-token" title="Reset a token">Reset a token<a href="#reset-a-token" aria-label="Link to heading 'Reset a token'" data-heading-content="Reset a token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /applications/{client_id}/token
+</span></code></pre>
+<p>OAuth applications and GitHub applications with OAuth authorizations can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. Invalid tokens will return 404 NOT FOUND.</p>
+<h3 id="parameters-2" title="Reset a token / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>client_id</code></strong> (string) (required)<br>
+The client ID of the GitHub app.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>access_token</code></strong> (string) (required)<br>
+The access_token of the OAuth or GitHub application.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Reset a token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Reset a token / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/applications/Iv1.8a61f9b3a7aba766/token \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_token": "e72e16c7e42f292c6912e7710c838347ae178b4a"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#check-a-token">Check a token</a>.</p>
+<h2 id="delete-an-app-token" title="Delete an app token">Delete an app token<a href="#delete-an-app-token" aria-label="Link to heading 'Delete an app token'" data-heading-content="Delete an app token" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /applications/{client_id}/token
+</span></code></pre>
+<p>OAuth  or GitHub application owners can revoke a single token for an OAuth application or a GitHub application with an OAuth authorization.</p>
+<h3 id="parameters-3" title="Delete an app token / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>client_id</code></strong> (string) (required)<br>
+The client ID of the GitHub app.</li>
+</ul>
+<h4 id="body-parameters-3">Body parameters<a href="#body-parameters-3" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>access_token</code></strong> (string) (required)<br>
+The OAuth access token used to authenticate to the GitHub API.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete an app token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete an app token / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/applications/Iv1.8a61f9b3a7aba766/token \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "access_token": "e72e16c7e42f292c6912e7710c838347ae178b4a"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

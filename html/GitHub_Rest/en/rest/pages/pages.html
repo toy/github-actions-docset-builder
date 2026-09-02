@@ -1,0 +1,803 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Pages</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Pages</a> / </nav><h1 id="rest-api-endpoints-for-github-pages">REST API endpoints for GitHub Pages<a href="#rest-api-endpoints-for-github-pages" aria-label="Link to heading 'REST API endpoints for GitHub Pages'" data-heading-content="REST API endpoints for GitHub Pages" class="anchor"></a></h1>
+<p>Use the REST API to interact with GitHub Pages sites and builds.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-a-github-pages-site" title="Get a GitHub Pages site">Get a GitHub Pages site<a href="#get-a-github-pages-site" aria-label="Link to heading 'Get a GitHub Pages site'" data-heading-content="Get a GitHub Pages site" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages
+</span></code></pre>
+<p>Gets information about a GitHub Pages site.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters" title="Get a GitHub Pages site / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get a GitHub Pages site / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Get a GitHub Pages site / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>status</code>: required, string or null, enum: <code>built</code>, <code>building</code>, <code>errored</code>, <code>null</code></li>
+<li><code>cname</code>: required, string or null</li>
+<li><code>protected_domain_state</code>: string or null, enum: <code>pending</code>, <code>verified</code>, <code>unverified</code>, <code>null</code></li>
+<li><code>pending_domain_unverified_at</code>: string or null, format: date-time</li>
+<li><code>custom_404</code>: required, boolean, default: <code>false</code></li>
+<li><code>html_url</code>: string, format: uri</li>
+<li><code>build_type</code>: string or null, enum: <code>legacy</code>, <code>workflow</code>, <code>null</code></li>
+<li><code>source</code>: <code>Pages Source Hash</code>:
+<ul>
+<li><code>branch</code>: required, string</li>
+<li><code>path</code>: required, string</li>
+</ul>
+</li>
+<li><code>public</code>: required, boolean</li>
+<li><code>https_certificate</code>: <code>Pages Https Certificate</code>:
+<ul>
+<li><code>state</code>: required, string, enum: <code>new</code>, <code>authorization_created</code>, <code>authorization_pending</code>, <code>authorized</code>, <code>authorization_revoked</code>, <code>issued</code>, <code>uploaded</code>, <code>approved</code>, <code>errored</code>, <code>bad_authz</code>, <code>destroy_pending</code>, <code>dns_changed</code></li>
+<li><code>description</code>: required, string</li>
+<li><code>domains</code>: required, array of string</li>
+<li><code>expires_at</code>: string, format: date</li>
+</ul>
+</li>
+<li><code>https_enforced</code>: boolean</li>
+</ul>
+<h2 id="create-a-github-pages-site" title="Create a GitHub Pages site">Create a GitHub Pages site<a href="#create-a-github-pages-site" aria-label="Link to heading 'Create a GitHub Pages site'" data-heading-content="Create a GitHub Pages site" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pages
+</span></code></pre>
+<p>Configures a GitHub Pages site. For more information, see "About GitHub Pages."<br>
+The authenticated user must be a repository administrator, maintainer, or have the 'manage GitHub Pages settings' permission.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a GitHub Pages site / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>build_type</code></strong> (string)<br>
+The process in which the Page will be built. Possible values are "legacy" and "workflow".<br>
+Can be one of: <code>legacy</code>, <code>workflow</code></p>
+</li>
+<li>
+<p><strong><code>source</code></strong> (object)<br>
+The source branch and directory used to publish your Pages site.</p>
+<ul>
+<li><strong><code>branch</code></strong> (string) (required)<br>
+The repository branch used to publish your site's source files.</li>
+<li><strong><code>path</code></strong> (string)<br>
+The repository directory that includes the source files for the Pages site. Allowed paths are / or /docs. Default: /<br>
+Default: <code>/</code><br>
+Can be one of: <code>/</code>, <code>/docs</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a GitHub Pages site / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a GitHub Pages site / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "source": {
+</span><span style="color:#c0c5ce;">    "branch": "main",
+</span><span style="color:#c0c5ce;">    "path": "/docs"
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#get-a-github-pages-site">Get a GitHub Pages site</a>.</p>
+<h2 id="update-information-about-a-github-pages-site" title="Update information about a GitHub Pages site">Update information about a GitHub Pages site<a href="#update-information-about-a-github-pages-site" aria-label="Link to heading 'Update information about a GitHub Pages site'" data-heading-content="Update information about a GitHub Pages site" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/pages
+</span></code></pre>
+<p>Updates information for a GitHub Pages site. For more information, see "About GitHub Pages.<br>
+The authenticated user must be a repository administrator, maintainer, or have the 'manage GitHub Pages settings' permission.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Update information about a GitHub Pages site / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>cname</code></strong> (string or null)<br>
+Specify a custom domain for the repository. Sending a null value will remove the custom domain. For more about custom domains, see "Using a custom domain with GitHub Pages."</p>
+</li>
+<li>
+<p><strong><code>https_enforced</code></strong> (boolean)<br>
+Specify whether HTTPS should be enforced for the repository.</p>
+</li>
+<li>
+<p><strong><code>build_type</code></strong> (string)<br>
+The process by which the GitHub Pages site will be built. workflow means that the site is built by a custom GitHub Actions workflow. legacy means that the site is built by GitHub when changes are pushed to a specific branch.<br>
+Can be one of: <code>legacy</code>, <code>workflow</code></p>
+</li>
+<li>
+<p><strong><code>source</code></strong> (object)<br>
+Update the source for the repository. Must include the branch name and path.</p>
+<ul>
+<li><strong><code>branch</code></strong> (string) (required)<br>
+The repository branch used to publish your site's source files.</li>
+<li><strong><code>path</code></strong> (string) (required)<br>
+The repository directory that includes the source files for the Pages site. Allowed paths are / or /docs.<br>
+Can be one of: <code>/</code>, <code>/docs</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Update information about a GitHub Pages site / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Update information about a GitHub Pages site / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "cname": "octocatblog.com",
+</span><span style="color:#c0c5ce;">  "source": {
+</span><span style="color:#c0c5ce;">    "branch": "main",
+</span><span style="color:#c0c5ce;">    "path": "/"
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="delete-a-github-pages-site" title="Delete a GitHub Pages site">Delete a GitHub Pages site<a href="#delete-a-github-pages-site" aria-label="Link to heading 'Delete a GitHub Pages site'" data-heading-content="Delete a GitHub Pages site" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/pages
+</span></code></pre>
+<p>Deletes a GitHub Pages site. For more information, see "About GitHub Pages.<br>
+The authenticated user must be a repository administrator, maintainer, or have the 'manage GitHub Pages settings' permission.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Delete a GitHub Pages site / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete a GitHub Pages site / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete a GitHub Pages site / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-github-pages-builds" title="List GitHub Pages builds">List GitHub Pages builds<a href="#list-github-pages-builds" aria-label="Link to heading 'List GitHub Pages builds'" data-heading-content="List GitHub Pages builds" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages/builds
+</span></code></pre>
+<p>Lists builts of a GitHub Pages site.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-4" title="List GitHub Pages builds / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List GitHub Pages builds / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-4" title="List GitHub Pages builds / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/builds
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Page Build</code>:</p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>status</code>: required, string</li>
+<li><code>error</code>: required, object:
+<ul>
+<li><code>message</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>pusher</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>commit</code>: required, string</li>
+<li><code>duration</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="request-a-github-pages-build" title="Request a GitHub Pages build">Request a GitHub Pages build<a href="#request-a-github-pages-build" aria-label="Link to heading 'Request a GitHub Pages build'" data-heading-content="Request a GitHub Pages build" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pages/builds
+</span></code></pre>
+<p>You can request that your site be built from the latest revision on the default branch. This has the same effect as pushing a commit to your default branch, but does not require an additional commit. Manually triggering page builds can be helpful when diagnosing build warnings and failures.<br>
+Build requests are limited to one concurrent build per repository and one concurrent build per requester. If you request a build while another is still in progress, the second request will be queued until the first completes.</p>
+<h3 id="parameters-5" title="Request a GitHub Pages build / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-5" title="Request a GitHub Pages build / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>201</strong> - Created</li>
+</ul>
+<h3 id="code-examples-5" title="Request a GitHub Pages build / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/builds
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>status</code>: required, string</li>
+</ul>
+<h2 id="get-latest-pages-build" title="Get latest Pages build">Get latest Pages build<a href="#get-latest-pages-build" aria-label="Link to heading 'Get latest Pages build'" data-heading-content="Get latest Pages build" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages/builds/latest
+</span></code></pre>
+<p>Gets information about the single most recent build of a GitHub Pages site.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-6" title="Get latest Pages build / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6" title="Get latest Pages build / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-6" title="Get latest Pages build / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/builds/latest
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>status</code>: required, string</li>
+<li><code>error</code>: required, object:
+<ul>
+<li><code>message</code>: required, string or null</li>
+</ul>
+</li>
+<li><code>pusher</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>commit</code>: required, string</li>
+<li><code>duration</code>: required, integer</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+</ul>
+<h2 id="get-github-pages-build" title="Get GitHub Pages build">Get GitHub Pages build<a href="#get-github-pages-build" aria-label="Link to heading 'Get GitHub Pages build'" data-heading-content="Get GitHub Pages build" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages/builds/{build_id}
+</span></code></pre>
+<p>Gets information about a GitHub Pages build.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-7" title="Get GitHub Pages build / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>build_id</code></strong> (integer) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-7" title="Get GitHub Pages build / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-7" title="Get GitHub Pages build / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/builds/BUILD_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-latest-pages-build">Get latest Pages build</a>.</p>
+<h2 id="create-a-github-pages-deployment" title="Create a GitHub Pages deployment">Create a GitHub Pages deployment<a href="#create-a-github-pages-deployment" aria-label="Link to heading 'Create a GitHub Pages deployment'" data-heading-content="Create a GitHub Pages deployment" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pages/deployments
+</span></code></pre>
+<p>Create a GitHub Pages deployment for a repository.<br>
+The authenticated user must have write permission to the repository.</p>
+<h3 id="parameters-8" title="Create a GitHub Pages deployment / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-8">Path and query parameters<a href="#path-and-query-parameters-8" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>artifact_id</code></strong> (number)<br>
+The ID of an artifact that contains the .zip or .tar of static assets to deploy. The artifact belongs to the repository. Either artifact_id or artifact_url are required.</p>
+</li>
+<li>
+<p><strong><code>artifact_url</code></strong> (string)<br>
+The URL of an artifact that contains the .zip or .tar of static assets to deploy. The artifact belongs to the repository. Either artifact_id or artifact_url are required.</p>
+</li>
+<li>
+<p><strong><code>environment</code></strong> (string)<br>
+The target environment for this GitHub Pages deployment.<br>
+Default: <code>github-pages</code></p>
+</li>
+<li>
+<p><strong><code>pages_build_version</code></strong> (string) (required)<br>
+A unique string that represents the version of the build for this deployment.<br>
+Default: <code>GITHUB_SHA</code></p>
+</li>
+<li>
+<p><strong><code>oidc_token</code></strong> (string) (required)<br>
+The OIDC token issued by GitHub Actions certifying the origin of the deployment.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-8" title="Create a GitHub Pages deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>400</strong> - Bad Request</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-8" title="Create a GitHub Pages deployment / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/deployments \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "artifact_url": "https://downloadcontent/",
+</span><span style="color:#c0c5ce;">  "environment": "github-pages",
+</span><span style="color:#c0c5ce;">  "pages_build_version": "4fd754f7e594640989b406850d0bc8f06a121251",
+</span><span style="color:#c0c5ce;">  "oidc_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IlV2R1h4SUhlY0JFc1JCdEttemUxUEhfUERiVSIsImtpZCI6IjUyRjE5N0M0ODFERTcwMTEyQzQ0MUI0QTlCMzdCNTNDN0ZDRjBEQjUifQ.eyJqdGkiOiJhMWIwNGNjNy0zNzZiLTQ1N2QtOTMzNS05NTY5YmVjZDExYTIiLCJzdWIiOiJyZXBvOnBhcGVyLXNwYS9taW55aTplbnZpcm9ubWVudDpQcm9kdWN0aW9uIiwiYXVkIjoiaHR0cHM6Ly9naXRodWIuY29tL3BhcGVyLXNwYSIsInJlZiI6InJlZnMvaGVhZHMvbWFpbiIsInNoYSI6ImEyODU1MWJmODdiZDk3NTFiMzdiMmM0YjM3M2MxZjU3NjFmYWM2MjYiLCJyZXBvc2l0b3J5IjoicGFwZXItc3BhL21pbnlpIiwicmVwb3NpdG9yeV9vd25lciI6InBhcGVyLXNwYSIsInJ1bl9pZCI6IjE1NDY0NTkzNjQiLCJydW5fbnVtYmVyIjoiMzQiLCJydW5fYXR0ZW1wdCI6IjYiLCJhY3RvciI6IllpTXlzdHkiLCJ3b3JrZmxvdyI6IkNJIiwiaGVhZF9yZWYiOiIiLCJiYXNlX3JlZiI6IiIsImV2ZW50X25hbWUiOiJwdXNoIiwicmVmX3R5cGUiOiJicmFuY2giLCJlbnZpcm9ubWVudCI6IlByb2R1Y3Rpb24iLCJqb2Jfd29ya2Zsb3dfcmVmIjoicGFwZXItc3BhL21pbnlpLy5naXRodWIvd29ya2Zsb3dzL2JsYW5rLnltbEByZWZzL2hlYWRzL21haW4iLCJpc3MiOiJodHRwczovL3Rva2VuLmFjdGlvbnMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwibmJmIjoxNjM5MDAwODU2LCJleHAiOjE2MzkwMDE3NTYsImlhdCI6MTYzOTAwMTQ1Nn0.VP8WictbQECKozE2SgvKb2FqJ9hisWsoMkYRTqfBrQfZTCXi5IcFEdgDMB2X7a99C2DeUuTvHh9RMKXLL2a0zg3-Sd7YrO7a2ll2kNlnvyIypcN6AeIc7BxHsTTnZN9Ud_xmEsTrSRGOEKmzCFkULQ6N4zlVD0sidypmXlMemmWEcv_ZHqhioEI_VMp5vwXQurketWH7qX4oDgG4okyYtPrv5RQHbfQcVo9izaPJ_jnsDd0CBA0QOx9InjPidtIkMYQLyUgJy33HLJy86EFNUnAf8UhBQuQi5mAsEpEzBBuKpG3PDiPtYCHOk64JZkZGd5mR888a5sbHRiaF8hm8YA"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>id</code>: required, one of:
+<ul>
+<li><strong>integer</strong></li>
+<li><strong>string</strong></li>
+</ul>
+</li>
+<li><code>status_url</code>: required, string, format: uri</li>
+<li><code>page_url</code>: required, string, format: uri</li>
+<li><code>preview_url</code>: string, format: uri</li>
+</ul>
+<h2 id="get-the-status-of-a-github-pages-deployment" title="Get the status of a GitHub Pages deployment">Get the status of a GitHub Pages deployment<a href="#get-the-status-of-a-github-pages-deployment" aria-label="Link to heading 'Get the status of a GitHub Pages deployment'" data-heading-content="Get the status of a GitHub Pages deployment" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}
+</span></code></pre>
+<p>Gets the current status of a GitHub Pages deployment.<br>
+The authenticated user must have read permission for the GitHub Pages site.</p>
+<h3 id="parameters-9" title="Get the status of a GitHub Pages deployment / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-9">Path and query parameters<a href="#path-and-query-parameters-9" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pages_deployment_id</code></strong> (string) (required)<br>
+The ID of the Pages deployment. You can also give the commit SHA of the deployment.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-9" title="Get the status of a GitHub Pages deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-9" title="Get the status of a GitHub Pages deployment / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/deployments/PAGES_DEPLOYMENT_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>status</code>: string, enum: <code>deployment_in_progress</code>, <code>syncing_files</code>, <code>finished_file_sync</code>, <code>updating_pages</code>, <code>purging_cdn</code>, <code>deployment_cancelled</code>, <code>deployment_failed</code>, <code>deployment_content_failed</code>, <code>deployment_attempt_error</code>, <code>deployment_lost</code>, <code>succeed</code></li>
+</ul>
+<h2 id="cancel-a-github-pages-deployment" title="Cancel a GitHub Pages deployment">Cancel a GitHub Pages deployment<a href="#cancel-a-github-pages-deployment" aria-label="Link to heading 'Cancel a GitHub Pages deployment'" data-heading-content="Cancel a GitHub Pages deployment" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel
+</span></code></pre>
+<p>Cancels a GitHub Pages deployment.<br>
+The authenticated user must have write permissions for the GitHub Pages site.</p>
+<h3 id="parameters-10" title="Cancel a GitHub Pages deployment / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-10">Path and query parameters<a href="#path-and-query-parameters-10" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>pages_deployment_id</code></strong> (string) (required)<br>
+The ID of the Pages deployment. You can also give the commit SHA of the deployment.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-10" title="Cancel a GitHub Pages deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - A header with no content is returned.</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-10" title="Cancel a GitHub Pages deployment / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/deployments/PAGES_DEPLOYMENT_ID/cancel
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="get-a-dns-health-check-for-github-pages" title="Get a DNS health check for GitHub Pages">Get a DNS health check for GitHub Pages<a href="#get-a-dns-health-check-for-github-pages" aria-label="Link to heading 'Get a DNS health check for GitHub Pages'" data-heading-content="Get a DNS health check for GitHub Pages" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/pages/health
+</span></code></pre>
+<p>Gets a health check of the DNS settings for the CNAME record configured for a repository's GitHub Pages.<br>
+The first request to this endpoint returns a 202 Accepted status and starts an asynchronous background task to get the results for the domain. After the background task completes, subsequent requests to this endpoint return a 200 OK status with the health check results in the response.<br>
+The authenticated user must be a repository administrator, maintainer, or have the 'manage GitHub Pages settings' permission to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-11" title="Get a DNS health check for GitHub Pages / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-11">Path and query parameters<a href="#path-and-query-parameters-11" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-11" title="Get a DNS health check for GitHub Pages / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>202</strong> - Empty response</p>
+</li>
+<li>
+<p><strong>400</strong> - Custom domains are not available for GitHub Pages</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - There isn't a CNAME for this page</p>
+</li>
+</ul>
+<h3 id="code-examples-11" title="Get a DNS health check for GitHub Pages / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/pages/health
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>domain</code>: object:
+<ul>
+<li><code>host</code>: string</li>
+<li><code>uri</code>: string</li>
+<li><code>nameservers</code>: string</li>
+<li><code>dns_resolves</code>: boolean</li>
+<li><code>is_proxied</code>: boolean or null</li>
+<li><code>is_cloudflare_ip</code>: boolean or null</li>
+<li><code>is_fastly_ip</code>: boolean or null</li>
+<li><code>is_old_ip_address</code>: boolean or null</li>
+<li><code>is_a_record</code>: boolean or null</li>
+<li><code>has_cname_record</code>: boolean or null</li>
+<li><code>has_mx_records_present</code>: boolean or null</li>
+<li><code>is_valid_domain</code>: boolean</li>
+<li><code>is_apex_domain</code>: boolean</li>
+<li><code>should_be_a_record</code>: boolean or null</li>
+<li><code>is_cname_to_github_user_domain</code>: boolean or null</li>
+<li><code>is_cname_to_pages_dot_github_dot_com</code>: boolean or null</li>
+<li><code>is_cname_to_fastly</code>: boolean or null</li>
+<li><code>is_pointed_to_github_pages_ip</code>: boolean or null</li>
+<li><code>is_non_github_pages_ip_present</code>: boolean or null</li>
+<li><code>is_pages_domain</code>: boolean</li>
+<li><code>is_served_by_pages</code>: boolean or null</li>
+<li><code>is_valid</code>: boolean</li>
+<li><code>reason</code>: string or null</li>
+<li><code>responds_to_https</code>: boolean</li>
+<li><code>enforces_https</code>: boolean</li>
+<li><code>https_error</code>: string or null</li>
+<li><code>is_https_eligible</code>: boolean or null</li>
+<li><code>caa_error</code>: string or null</li>
+</ul>
+</li>
+<li><code>alt_domain</code>: object or null:
+<ul>
+<li><code>host</code>: string</li>
+<li><code>uri</code>: string</li>
+<li><code>nameservers</code>: string</li>
+<li><code>dns_resolves</code>: boolean</li>
+<li><code>is_proxied</code>: boolean or null</li>
+<li><code>is_cloudflare_ip</code>: boolean or null</li>
+<li><code>is_fastly_ip</code>: boolean or null</li>
+<li><code>is_old_ip_address</code>: boolean or null</li>
+<li><code>is_a_record</code>: boolean or null</li>
+<li><code>has_cname_record</code>: boolean or null</li>
+<li><code>has_mx_records_present</code>: boolean or null</li>
+<li><code>is_valid_domain</code>: boolean</li>
+<li><code>is_apex_domain</code>: boolean</li>
+<li><code>should_be_a_record</code>: boolean or null</li>
+<li><code>is_cname_to_github_user_domain</code>: boolean or null</li>
+<li><code>is_cname_to_pages_dot_github_dot_com</code>: boolean or null</li>
+<li><code>is_cname_to_fastly</code>: boolean or null</li>
+<li><code>is_pointed_to_github_pages_ip</code>: boolean or null</li>
+<li><code>is_non_github_pages_ip_present</code>: boolean or null</li>
+<li><code>is_pages_domain</code>: boolean</li>
+<li><code>is_served_by_pages</code>: boolean or null</li>
+<li><code>is_valid</code>: boolean</li>
+<li><code>reason</code>: string or null</li>
+<li><code>responds_to_https</code>: boolean</li>
+<li><code>enforces_https</code>: boolean</li>
+<li><code>https_error</code>: string or null</li>
+<li><code>is_https_eligible</code>: boolean or null</li>
+<li><code>caa_error</code>: string or null</li>
+</ul>
+</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

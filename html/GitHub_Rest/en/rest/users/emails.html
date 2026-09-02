@@ -1,0 +1,271 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for emails</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Users</a> / </nav><h1 id="rest-api-endpoints-for-emails">REST API endpoints for emails<a href="#rest-api-endpoints-for-emails" aria-label="Link to heading 'REST API endpoints for emails'" data-heading-content="REST API endpoints for emails" class="anchor"></a></h1>
+<p>Use the REST API to manage email addresses of authenticated users.</p>
+<h2 id="about-email-administration" title="About email administration">About email administration<a href="#about-email-administration" aria-label="Link to heading 'About email administration'" data-heading-content="About email administration" class="anchor"></a></h2>
+<p>If a request URL does not include a <code>{username}</code> parameter then the response will be for the signed-in user (and you must pass <a href="../authentication/authenticating-to-the-rest-api.html">authentication information</a> with your request). Additional private information, such as whether a user has two-factor authentication enabled, is included when authenticated through OAuth with the <code>user</code> scope.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="set-primary-email-visibility-for-the-authenticated-user" title="Set primary email visibility for the authenticated user">Set primary email visibility for the authenticated user<a href="#set-primary-email-visibility-for-the-authenticated-user" aria-label="Link to heading 'Set primary email visibility for the authenticated user'" data-heading-content="Set primary email visibility for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /user/email/visibility
+</span></code></pre>
+<p>Sets the visibility for your primary email addresses.</p>
+<h3 id="parameters" title="Set primary email visibility for the authenticated user / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>visibility</code></strong> (string) (required)<br>
+Denotes whether an email is publicly visible.<br>
+Can be one of: <code>public</code>, <code>private</code></li>
+</ul>
+<h3 id="http-response-status-codes" title="Set primary email visibility for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Set primary email visibility for the authenticated user / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-setting-the-primary-email-address-to-private">Example setting the primary email address to private<a href="#example-setting-the-primary-email-address-to-private" aria-label="Link to heading 'Example setting the primary email address to private'" data-heading-content="Example setting the primary email address to private" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PATCH \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/email/visibility \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "visibility": "private"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Email</code>:</p>
+<ul>
+<li><code>email</code>: required, string, format: email</li>
+<li><code>primary</code>: required, boolean</li>
+<li><code>verified</code>: required, boolean</li>
+<li><code>visibility</code>: required, string or null</li>
+</ul>
+<h2 id="list-email-addresses-for-the-authenticated-user" title="List email addresses for the authenticated user">List email addresses for the authenticated user<a href="#list-email-addresses-for-the-authenticated-user" aria-label="Link to heading 'List email addresses for the authenticated user'" data-heading-content="List email addresses for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/emails
+</span></code></pre>
+<p>Lists all of your email addresses, and specifies which one is visible<br>
+to the public.<br>
+OAuth app tokens and personal access tokens (classic) need the user:email scope to use this endpoint.</p>
+<h3 id="parameters-1" title="List email addresses for the authenticated user / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="List email addresses for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="List email addresses for the authenticated user / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/emails
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#set-primary-email-visibility-for-the-authenticated-user">Set primary email visibility for the authenticated user</a>.</p>
+<h2 id="add-an-email-address-for-the-authenticated-user" title="Add an email address for the authenticated user">Add an email address for the authenticated user<a href="#add-an-email-address-for-the-authenticated-user" aria-label="Link to heading 'Add an email address for the authenticated user'" data-heading-content="Add an email address for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/emails
+</span></code></pre>
+<p>OAuth app tokens and personal access tokens (classic) need the user scope to use this endpoint.</p>
+<h3 id="parameters-2" title="Add an email address for the authenticated user / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>emails</code></strong> (array of strings) (required)<br>
+Adds one or more email addresses to your GitHub account. Must contain at least one email address. Note: Alternatively, you can pass a single email address or an array of emails addresses directly, but we recommend that you pass an object using the emails key.</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Add an email address for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Add an email address for the authenticated user / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-adding-multiple-email-addresses">Example adding multiple email addresses<a href="#example-adding-multiple-email-addresses" aria-label="Link to heading 'Example adding multiple email addresses'" data-heading-content="Example adding multiple email addresses" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/emails \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "emails": [
+</span><span style="color:#c0c5ce;">    "octocat@github.com",
+</span><span style="color:#c0c5ce;">    "mona@github.com",
+</span><span style="color:#c0c5ce;">    "octocat@octocat.org"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#set-primary-email-visibility-for-the-authenticated-user">Set primary email visibility for the authenticated user</a>.</p>
+<h2 id="delete-an-email-address-for-the-authenticated-user" title="Delete an email address for the authenticated user">Delete an email address for the authenticated user<a href="#delete-an-email-address-for-the-authenticated-user" aria-label="Link to heading 'Delete an email address for the authenticated user'" data-heading-content="Delete an email address for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/emails
+</span></code></pre>
+<p>OAuth app tokens and personal access tokens (classic) need the user scope to use this endpoint.</p>
+<h3 id="parameters-3" title="Delete an email address for the authenticated user / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>emails</code></strong> (array of strings) (required)<br>
+Email addresses associated with the GitHub user account.</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete an email address for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete an email address for the authenticated user / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-deleting-multiple-email-accounts">Example deleting multiple email accounts<a href="#example-deleting-multiple-email-accounts" aria-label="Link to heading 'Example deleting multiple email accounts'" data-heading-content="Example deleting multiple email accounts" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/emails \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "emails": [
+</span><span style="color:#c0c5ce;">    "octocat@github.com",
+</span><span style="color:#c0c5ce;">    "mona@github.com"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-public-email-addresses-for-the-authenticated-user" title="List public email addresses for the authenticated user">List public email addresses for the authenticated user<a href="#list-public-email-addresses-for-the-authenticated-user" aria-label="Link to heading 'List public email addresses for the authenticated user'" data-heading-content="List public email addresses for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/public_emails
+</span></code></pre>
+<p>Lists your publicly visible email address, which you can set with the<br>
+Set primary email visibility for the authenticated user<br>
+endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the user:email scope to use this endpoint.</p>
+<h3 id="parameters-4" title="List public email addresses for the authenticated user / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-4" title="List public email addresses for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-4" title="List public email addresses for the authenticated user / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/public_emails
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#set-primary-email-visibility-for-the-authenticated-user">Set primary email visibility for the authenticated user</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for deploy keys</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Deploy keys</a> / </nav><h1 id="rest-api-endpoints-for-deploy-keys">REST API endpoints for deploy keys<a href="#rest-api-endpoints-for-deploy-keys" aria-label="Link to heading 'REST API endpoints for deploy keys'" data-heading-content="REST API endpoints for deploy keys" class="anchor"></a></h1>
+<p>Use the REST API to create and manage deploy keys.</p>
+<h2 id="about-deploy-keys" title="About deploy keys">About deploy keys<a href="#about-deploy-keys" aria-label="Link to heading 'About deploy keys'" data-heading-content="About deploy keys" class="anchor"></a></h2>
+<p>You can launch projects from a repository on GitHub.com to your server by using a deploy key, which is an SSH key that grants access to a single repository. GitHub attaches the public part of the key directly to your repository instead of a personal account, and the private part of the key remains on your server. For more information, see <a href="../guides/delivering-deployments.html">Delivering deployments</a>.</p>
+<p>Deploy keys can either be set up using the following API endpoints, or by using the GitHub web interface. To learn how to set deploy keys up in the web interface, see <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys" class="external">Managing deploy keys</a>.</p>
+<p>There are a few cases when a deploy key will be deleted by other activity:</p>
+<ul>
+<li>If the deploy key is created with a personal access token, deleting the personal access token will also delete the deploy key. Regenerating the personal access token will not delete the deploy key.</li>
+<li>If the deploy key is created with an OAuth app token, revoking the token will also delete the deploy key.</li>
+</ul>
+<p>Conversely, these activities will not delete a deploy key:</p>
+<ul>
+<li>If the deploy key is created with a GitHub App user access token, revoking the token will not delete the deploy key.</li>
+<li>If the deploy key is created with a GitHub App installation access token, uninstalling or deleting the app will not delete the deploy key.</li>
+<li>If the deploy key is created with a personal access token, regenerating the personal access token will not delete the deploy key.</li>
+</ul>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-deploy-keys" title="List deploy keys">List deploy keys<a href="#list-deploy-keys" aria-label="Link to heading 'List deploy keys'" data-heading-content="List deploy keys" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/keys
+</span></code></pre>
+<h3 id="parameters" title="List deploy keys / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List deploy keys / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="List deploy keys / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/keys
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Deploy Key</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>key</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>title</code>: required, string</li>
+<li><code>verified</code>: required, boolean</li>
+<li><code>created_at</code>: required, string</li>
+<li><code>read_only</code>: required, boolean</li>
+<li><code>added_by</code>: string or null</li>
+<li><code>last_used</code>: string or null, format: date-time</li>
+<li><code>enabled</code>: boolean</li>
+</ul>
+<h2 id="create-a-deploy-key" title="Create a deploy key">Create a deploy key<a href="#create-a-deploy-key" aria-label="Link to heading 'Create a deploy key'" data-heading-content="Create a deploy key" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/keys
+</span></code></pre>
+<p>You can create a read-only deploy key.</p>
+<h3 id="parameters-1" title="Create a deploy key / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>title</code></strong> (string)<br>
+A name for the key.</p>
+</li>
+<li>
+<p><strong><code>key</code></strong> (string) (required)<br>
+The contents of the key.</p>
+</li>
+<li>
+<p><strong><code>read_only</code></strong> (boolean)<br>
+If true, the key will only be able to read repository contents. Otherwise, the key will be able to read and write.<br>
+Deploy keys with write access can perform the same actions as an organization member with admin access, or a collaborator on a personal repository. For more information, see "Repository permission levels for an organization" and "Permission levels for a user account repository."</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a deploy key / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a deploy key / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/keys \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "title": "octocat@octomac",
+</span><span style="color:#c0c5ce;">  "key": "ssh-rsa AAA...",
+</span><span style="color:#c0c5ce;">  "read_only": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>key</code>: required, string</li>
+<li><code>url</code>: required, string</li>
+<li><code>title</code>: required, string</li>
+<li><code>verified</code>: required, boolean</li>
+<li><code>created_at</code>: required, string</li>
+<li><code>read_only</code>: required, boolean</li>
+<li><code>added_by</code>: string or null</li>
+<li><code>last_used</code>: string or null, format: date-time</li>
+<li><code>enabled</code>: boolean</li>
+</ul>
+<h2 id="get-a-deploy-key" title="Get a deploy key">Get a deploy key<a href="#get-a-deploy-key" aria-label="Link to heading 'Get a deploy key'" data-heading-content="Get a deploy key" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/keys/{key_id}
+</span></code></pre>
+<h3 id="parameters-2" title="Get a deploy key / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>key_id</code></strong> (integer) (required)<br>
+The unique identifier of the key.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a deploy key / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a deploy key / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/keys/KEY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-deploy-key">Create a deploy key</a>.</p>
+<h2 id="delete-a-deploy-key" title="Delete a deploy key">Delete a deploy key<a href="#delete-a-deploy-key" aria-label="Link to heading 'Delete a deploy key'" data-heading-content="Delete a deploy key" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/keys/{key_id}
+</span></code></pre>
+<p>Deploy keys are immutable. If you need to update a key, remove the key and create a new one instead.</p>
+<h3 id="parameters-3" title="Delete a deploy key / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>key_id</code></strong> (integer) (required)<br>
+The unique identifier of the key.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete a deploy key / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>204</strong> - No Content</li>
+</ul>
+<h3 id="code-examples-3" title="Delete a deploy key / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/keys/KEY_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

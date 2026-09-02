@@ -1,0 +1,126 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Building a CI server</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Guides</a> / </nav><h1 id="building-a-ci-server">Building a CI server<a href="#building-a-ci-server" aria-label="Link to heading 'Building a CI server'" data-heading-content="Building a CI server" class="anchor"></a></h1>
+<p>Build your own CI system using the Status API.</p>
+<p>You can use the REST API to tie together commits with<br>
+a testing service, so that every push you make can be tested and represented<br>
+in a GitHub pull request. For more information about the relevant endpoints, see <a href="../commits/statuses.html">REST API endpoints for commit statuses</a>.</p>
+<p>This guide will use that API to demonstrate a setup that you can use.<br>
+In our scenario, we will:</p>
+<ul>
+<li>Run our CI suite when a Pull Request is opened (we'll set the CI status to pending).</li>
+<li>When the CI is finished, we'll set the Pull Request's status accordingly.</li>
+</ul>
+<p>Our CI system and host server will be figments of our imagination. They could be<br>
+Travis, Jenkins, or something else entirely. The crux of this guide will be setting up<br>
+and configuring the server managing the communication.</p>
+<p>If you haven't already, <a href="https://ngrok.com/" class="external">download <code>ngrok</code></a>, and learn how<br>
+to <a href="https://ngrok.com/docs/getting-started/" class="external">use it</a>. We find it to be a very useful tool for exposing local<br>
+applications to the internet.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Alternatively, you can use webhook forwarding to set up your local environment to receive webhooks. For more information, see <a href="https://docs.github.com/en/webhooks/testing-and-troubleshooting-webhooks/using-the-github-cli-to-forward-webhooks-for-testing" class="external">Using the GitHub CLI to forward webhooks for testing</a>.</p>
+</div>
+<p>Note: you can download the complete source code for this project<br>
+<a href="https://github.com/github/platform-samples/tree/master/api/ruby/building-a-ci-server" class="external">from the platform-samples repo</a>.</p>
+<h2 id="writing-your-server" title="Writing your server">Writing your server<a href="#writing-your-server" aria-label="Link to heading 'Writing your server'" data-heading-content="Writing your server" class="anchor"></a></h2>
+<p>We'll write a quick Sinatra app to prove that our local connections are working.<br>
+Let's start with this:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">sinatra</span><span style="color:#c0c5ce;">'
+</span><span style="color:#8fa1b3;">require </span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">json</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">post '</span><span style="color:#a3be8c;">/event_handler</span><span style="color:#c0c5ce;">' </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  payload = </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.parse(params[</span><span style="color:#a3be8c;">:payload</span><span style="color:#c0c5ce;">])
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">Well, it worked!</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>(If you're unfamiliar with how Sinatra works, we recommend <a href="http://www.sinatrarb.com/" class="external">reading the Sinatra guide</a>.)</p>
+<p>Start this server up. By default, Sinatra starts on port <code>4567</code>, so you'll want<br>
+to configure <code>ngrok</code> to start listening for that, too.</p>
+<p>In order for this server to work, we'll need to set a repository up with a webhook. The webhook should be configured to fire whenever a pull request is created, or merged.</p>
+<p>Go ahead and create a repository you're comfortable playing around in. Might we suggest <a href="https://github.com/octocat/Spoon-Knife" class="external">@octocat's Spoon/Knife repository</a>?</p>
+<p>After that, you'll create a new webhook in your repository, feeding it the URL that <code>ngrok</code> gave you, and choosing <code>application/x-www-form-urlencoded</code> as the content type.</p>
+<p>Click <strong>Update webhook</strong>. You should see a body response of <code>Well, it worked!</code>.<br>
+Great! Click on <strong>Let me select individual events</strong>, and select the following:</p>
+<ul>
+<li>Status</li>
+<li>Pull Request</li>
+</ul>
+<p>These are the events GitHub will send to our server whenever the relevant action<br>
+occurs. Let's update our server to <em>just</em> handle the Pull Request scenario right now:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">post '</span><span style="color:#a3be8c;">/event_handler</span><span style="color:#c0c5ce;">' </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">payload </span><span style="color:#c0c5ce;">= </span><span style="color:#ebcb8b;">JSON</span><span style="color:#c0c5ce;">.parse(params[</span><span style="color:#a3be8c;">:payload</span><span style="color:#c0c5ce;">])
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">case</span><span style="color:#c0c5ce;"> request.env['</span><span style="color:#a3be8c;">HTTP_X_GITHUB_EVENT</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">when </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">action</span><span style="color:#c0c5ce;">"] == "</span><span style="color:#a3be8c;">opened</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">      process_pull_request(@</span><span style="color:#bf616a;">payload</span><span style="color:#c0c5ce;">["</span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">"])
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">end
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">end
+</span><span style="color:#b48ead;">end
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">helpers </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">process_pull_request</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">pull_request</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">    </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">It's </span><span style="color:#ab7967;">#{</span><span style="color:#a3be8c;">pull_request[</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">title</span><span style="color:#c0c5ce;">'</span><span style="color:#a3be8c;">]</span><span style="color:#ab7967;">}</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">end
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>What's going on? Every event that GitHub sends out attached a <code>X-GitHub-Event</code><br>
+HTTP header. We'll only care about the PR events for now. From there, we'll<br>
+take the payload of information, and return the title field. In an ideal scenario,<br>
+our server would be concerned with every time a pull request is updated, not just<br>
+when it's opened. That would make sure that every new push passes the CI tests.<br>
+But for this demo, we'll just worry about when it's opened.</p>
+<p>To test out this proof-of-concept, make some changes in a branch in your test<br>
+repository, and open a pull request. Your server should respond accordingly!</p>
+<h2 id="working-with-statuses" title="Working with statuses">Working with statuses<a href="#working-with-statuses" aria-label="Link to heading 'Working with statuses'" data-heading-content="Working with statuses" class="anchor"></a></h2>
+<p>With our server in place, we're ready to start our first requirement, which is<br>
+setting (and updating) CI statuses. Note that at any time you update your server,<br>
+you can click <strong>Redeliver</strong> to send the same payload. There's no need to make a<br>
+new pull request every time you make a change!</p>
+<p>Since we're interacting with the GitHub API, we'll use <a href="https://github.com/octokit/octokit.rb" class="external">Octokit.rb</a><br>
+to manage our interactions. We'll configure that client with<br>
+<a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">a personal access token</a>:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#65737e;"># !!! DO NOT EVER USE HARD-CODED VALUES IN A REAL APP !!!
+</span><span style="color:#65737e;"># Instead, set and test environment variables, like below
+</span><span style="color:#c0c5ce;">ACCESS_TOKEN = </span><span style="color:#bf616a;">ENV</span><span style="color:#c0c5ce;">['</span><span style="color:#a3be8c;">MY_PERSONAL_TOKEN</span><span style="color:#c0c5ce;">']
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">before </span><span style="color:#b48ead;">do
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client </span><span style="color:#c0c5ce;">||= </span><span style="color:#ebcb8b;">Octokit</span><span style="color:#c0c5ce;">::</span><span style="color:#ebcb8b;">Client</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">new</span><span style="color:#c0c5ce;">(</span><span style="color:#a3be8c;">:access_token </span><span style="color:#c0c5ce;">=&gt; </span><span style="color:#bf616a;">ACCESS_TOKEN</span><span style="color:#c0c5ce;">)
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>After that, we'll just need to update the pull request on GitHub to make clear<br>
+that we're processing on the CI:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">process_pull_request</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">pull_request</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">Processing pull request...</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_status(pull_request['</span><span style="color:#a3be8c;">base</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">repo</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'], pull_request['</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">sha</span><span style="color:#c0c5ce;">'], '</span><span style="color:#a3be8c;">pending</span><span style="color:#c0c5ce;">')
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<p>We're doing three very basic things here:</p>
+<ul>
+<li>We're looking up the full name of the repository</li>
+<li>We're looking up the last SHA of the pull request</li>
+<li>We're setting the status to "pending"</li>
+</ul>
+<p>That's it! From here, you can run whatever process you need to in order to execute<br>
+your test suite. Maybe you're going to pass off your code to Jenkins, or call<br>
+on another web service via its API, like <a href="https://api.travis-ci.com/docs/" class="external">Travis</a>. After that, you'd<br>
+be sure to update the status once more. In our example, we'll just set it to <code>"success"</code>:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">process_pull_request</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">pull_request</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_status(pull_request['</span><span style="color:#a3be8c;">base</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">repo</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'], pull_request['</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">sha</span><span style="color:#c0c5ce;">'], '</span><span style="color:#a3be8c;">pending</span><span style="color:#c0c5ce;">')
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">sleep </span><span style="color:#d08770;">2 </span><span style="color:#65737e;"># do busy work...
+</span><span style="color:#c0c5ce;">  @</span><span style="color:#bf616a;">client</span><span style="color:#c0c5ce;">.create_status(pull_request['</span><span style="color:#a3be8c;">base</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">repo</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">full_name</span><span style="color:#c0c5ce;">'], pull_request['</span><span style="color:#a3be8c;">head</span><span style="color:#c0c5ce;">']['</span><span style="color:#a3be8c;">sha</span><span style="color:#c0c5ce;">'], '</span><span style="color:#a3be8c;">success</span><span style="color:#c0c5ce;">')
+</span><span style="color:#c0c5ce;">  </span><span style="color:#96b5b4;">puts </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">Pull request processed!</span><span style="color:#c0c5ce;">"
+</span><span style="color:#b48ead;">end
+</span></code></pre>
+<h2 id="conclusion" title="Conclusion">Conclusion<a href="#conclusion" aria-label="Link to heading 'Conclusion'" data-heading-content="Conclusion" class="anchor"></a></h2>
+<p>At GitHub, we've used a version of <a href="https://github.com/github/janky" class="external">Janky</a> to manage our CI for years.<br>
+The basic flow is essentially the exact same as the server we've built above.<br>
+At GitHub, we:</p>
+<ul>
+<li>Fire to Jenkins when a pull request is created or updated (via Janky)</li>
+<li>Wait for a response on the state of the CI</li>
+<li>If the code is green, we merge the pull request</li>
+</ul>
+<p>All of this communication is funneled back to our chat rooms. You don't need to<br>
+build your own CI setup to use this example.<br>
+You can always rely on <a href="https://github.com/integrations" class="external">GitHub integrations</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

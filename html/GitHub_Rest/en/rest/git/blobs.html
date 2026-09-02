@@ -1,0 +1,139 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for Git blobs</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Git database</a> / </nav><h1 id="rest-api-endpoints-for-git-blobs">REST API endpoints for Git blobs<a href="#rest-api-endpoints-for-git-blobs" aria-label="Link to heading 'REST API endpoints for Git blobs'" data-heading-content="REST API endpoints for Git blobs" class="anchor"></a></h1>
+<p>Use the REST API to interact with a Git blob (binary large object), the object type used to store the contents of each file in a repository.</p>
+<h2 id="about-git-blobs" title="About Git blobs">About Git blobs<a href="#about-git-blobs" aria-label="Link to heading 'About Git blobs'" data-heading-content="About Git blobs" class="anchor"></a></h2>
+<p>A Git blob (binary large object) is the object type used to store the contents of each file in a repository. The file's SHA-1 hash is computed and stored in the blob object. These endpoints allow you to read and write <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" class="external">blob objects</a><br>
+to your Git database on GitHub. Blobs leverage custom media types. For more information about the use of media types in the API, see <a href="../using-the-rest-api/getting-started-with-the-rest-api.html#media-types">Getting started with the REST API</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="create-a-blob" title="Create a blob">Create a blob<a href="#create-a-blob" aria-label="Link to heading 'Create a blob'" data-heading-content="Create a blob" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/git/blobs
+</span></code></pre>
+<h3 id="parameters" title="Create a blob / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>content</code></strong> (string) (required)<br>
+The new blob's content.</p>
+</li>
+<li>
+<p><strong><code>encoding</code></strong> (string)<br>
+The encoding used for content. Currently, "utf-8" and "base64" are supported.<br>
+Default: <code>utf-8</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Create a blob / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed</p>
+</li>
+</ul>
+<h3 id="code-examples" title="Create a blob / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/blobs \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "content": "Content of the blob",
+</span><span style="color:#c0c5ce;">  "encoding": "utf-8"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>url</code>: required, string</li>
+<li><code>sha</code>: required, string</li>
+</ul>
+<h2 id="get-a-blob" title="Get a blob">Get a blob<a href="#get-a-blob" aria-label="Link to heading 'Get a blob'" data-heading-content="Get a blob" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/blobs/{file_sha}
+</span></code></pre>
+<p>The content in the response will always be Base64 encoded.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.raw+json: Returns the raw blob data.<br>
+application/vnd.github+json: Returns a JSON representation of the blob with content as a base64 encoded string. This is the default if no media type is specified.</p>
+<p>Note This endpoint supports blobs up to 100 megabytes in size.</p>
+<h3 id="parameters-1" title="Get a blob / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>file_sha</code></strong> (string) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Get a blob / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>409</strong> - Conflict</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Get a blob / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/git/blobs/FILE_SHA
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>content</code>: required, string</li>
+<li><code>encoding</code>: required, string</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>sha</code>: required, string</li>
+<li><code>size</code>: required, integer or null</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>highlighted_content</code>: string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Using GraphQL Clients</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="using-graphql-clients">Using GraphQL Clients<a href="#using-graphql-clients" aria-label="Link to heading 'Using GraphQL Clients'" data-heading-content="Using GraphQL Clients" class="anchor"></a></h1>
+<p>You can run queries on real GitHub data using various GraphQL clients and libraries.</p>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>The GraphQL Explorer was removed from the documentation on November 11, 2025. See our <a href="https://github.blog/changelog/2025-11-07-graphql-explorer-removal-from-api-documentation-on-november-7-2025" class="external">changelog announcement</a>.</p>
+</div>
+<h2 id="using-graphql-client-ides" title="Using GraphQL client IDEs">Using GraphQL client IDEs<a href="#using-graphql-client-ides" aria-label="Link to heading 'Using GraphQL client IDEs'" data-heading-content="Using GraphQL client IDEs" class="anchor"></a></h2>
+<p>There are many open-source GraphQL client IDEs you can use to access GitHub's GraphQL API.</p>
+<p>See <a href="forming-calls-with-graphql.html">Forming calls with GraphQL</a> for extensive information on HTTP methods, authentication, and GraphQL call structure.</p>
+<p>First, choose a client. Common options include GraphiQL, Insomnia, and Altair (desktop/web/extension). You can see the full list of clients in the <a href="https://graphql.org/community/tools-and-libraries/?tags=services" class="external">GraphQL organization's tool directory</a>.</p>
+<p>The following generic instructions will work with most GraphQL clients:</p>
+<ol>
+<li>
+<p>Point the client at the GraphQL endpoint: <code>https://api.github.com/graphql</code>.</p>
+</li>
+<li>
+<p>Add an <code>Authorization</code> header: <code>Authorization: Bearer TOKEN</code> (replace <code>TOKEN</code> with your GitHub personal access token. For more information, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a>).</p>
+</li>
+<li>
+<p>Set the request method to <code>POST</code> or if it's available, use the client-provided GraphQL mode.</p>
+</li>
+<li>
+<p>Enter your query or mutation in the editor and, if needed, provide variables in the "Variables" panel.</p>
+<p>Example:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
+</span><span style="color:#c0c5ce;">  viewer {
+</span><span style="color:#c0c5ce;">    login
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</li>
+<li>
+<p>If your client needs a schema for documentation rendering or autocomplete, fetch it via a GraphQL introspection query. Many clients can do this automatically from the "Docs" panel.</p>
+<p>Minimal introspection query:</p>
+<pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query IntrospectionQuery {
+</span><span style="color:#c0c5ce;">  __schema {
+</span><span style="color:#c0c5ce;">    types {
+</span><span style="color:#c0c5ce;">      name
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</li>
+<li>
+<p>Run the request and inspect the JSON response. Query from example should return the login associated with the GitHub personal access token you authenticated with.</p>
+</li>
+</ol>
+<p>Use the client UI to explore docs, run queries, and save requests as needed.</p>
+<h2 id="github-cli" title="GitHub CLI">GitHub CLI<a href="#github-cli" aria-label="Link to heading 'GitHub CLI'" data-heading-content="GitHub CLI" class="anchor"></a></h2>
+<p>You can also use the command line with GitHub CLI to run GraphQL queries.</p>
+<ol>
+<li>Install and <a href="https://cli.github.com/manual/gh_auth_login" class="external">authenticate with GitHub CLI</a>.</li>
+<li>Run a query against <code>https://api.github.com/graphql</code> using the GraphQL endpoint with the <a href="https://cli.github.com/manual/gh_api" class="external"><code>gh api</code> subcommand</a>.</li>
+</ol>
+<p>Example:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api graphql -f query='query { viewer { login } }'
+</span></code></pre>
+<p>This should return the login associated with the GitHub personal access token you authenticated with.</p>
+<h2 id="requesting-support" title="Requesting support">Requesting support<a href="#requesting-support" aria-label="Link to heading 'Requesting support'" data-heading-content="Requesting support" class="anchor"></a></h2>
+<p>For questions, bug reports, and discussions about GitHub Apps, OAuth apps, and API development, explore the <a href="https://github.com/orgs/community/discussions/categories/api-and-webhooks" class="external">API and Webhooks category in GitHub's Community Discussions</a>. The discussions are moderated and maintained by GitHub staff, and answered by the GitHub community.</p>
+<p>Consider reaching out to <a href="https://support.github.com/" class="external">GitHub Support</a> directly using the contact form for:</p>
+<ul>
+<li>Guaranteed response from GitHub staff</li>
+<li>Support requests involving sensitive data or private concerns</li>
+<li>Feature requests</li>
+<li>Feedback about GitHub products</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

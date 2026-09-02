@@ -1,0 +1,329 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Scripting with the REST API and JavaScript</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Guides</a> / </nav><h1 id="scripting-with-the-rest-api-and-javascript">Scripting with the REST API and JavaScript<a href="#scripting-with-the-rest-api-and-javascript" aria-label="Link to heading 'Scripting with the REST API and JavaScript'" data-heading-content="Scripting with the REST API and JavaScript" class="anchor"></a></h1>
+<p>Write a script using the Octokit.js SDK to interact with the REST API.</p>
+<h2 id="about-octokitjs" title="About Octokit.js">About Octokit.js<a href="#about-octokitjs" aria-label="Link to heading 'About Octokit.js'" data-heading-content="About Octokit.js" class="anchor"></a></h2>
+<p>If you want to write a script using JavaScript to interact with GitHub's REST API, GitHub recommends that you use the Octokit.js SDK. Octokit.js is maintained by GitHub. The SDK implements best practices and makes it easier for you to interact with the REST API via JavaScript. Octokit.js works with all modern browsers, Node.js, and Deno. For more information about Octokit.js, see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js README</a>.</p>
+<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<p>This guide assumes that you are familiar with JavaScript and the GitHub REST API. For more information about the REST API, see <a href="../using-the-rest-api/getting-started-with-the-rest-api.html">Getting started with the REST API</a>.</p>
+<p>You must install and import <code>octokit</code> in order to use the Octokit.js library. This guide uses import statements in accordance with ES6. For more information about different installation and import methods, see <a href="https://github.com/octokit/octokit.js/#usage" class="external">the Octokit.js README's Usage section</a>.</p>
+<h2 id="instantiating-and-authenticating" title="Instantiating and authenticating">Instantiating and authenticating<a href="#instantiating-and-authenticating" aria-label="Link to heading 'Instantiating and authenticating'" data-heading-content="Instantiating and authenticating" class="anchor"></a></h2>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>Treat your authentication credentials like a password.</p>
+<p>To keep your credentials secure, you can store your credentials as a secret and run your script through GitHub Actions. For more information, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+</div>
+<blockquote>
+<p>You can also store your credentials as a Codespaces secret and run your script in Codespaces. For more information, see <a href="https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces" class="external">Managing your account-specific secrets for GitHub Codespaces</a>.</p>
+</blockquote>
+<blockquote>
+<p>If these options are not possible, consider using another CLI service to store your credentials securely.</p>
+</blockquote>
+<h3 id="authenticating-with-a-personal-access-token" title="Instantiating and authenticating / Authenticating with a personal access token">Authenticating with a personal access token<a href="#authenticating-with-a-personal-access-token" aria-label="Link to heading 'Authenticating with a personal access token'" data-heading-content="Authenticating with a personal access token" class="anchor"></a></h3>
+<p>If you want to use the GitHub REST API for personal use, you can create a personal access token. For more information about creating a personal access token, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a>.</p>
+<p>First, import <code>Octokit</code> from <code>octokit</code>. Then, pass your personal access token when you create an instance of <code>Octokit</code>. In the following example, replace <code>YOUR-TOKEN</code> with a reference to your personal access token.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">Octokit </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">";
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: '</span><span style="color:#a3be8c;">YOUR-TOKEN</span><span style="color:#c0c5ce;">',
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<h3 id="authenticating-with-a-github-app" title="Instantiating and authenticating / Authenticating with a GitHub App">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
+<p>If you want to use the API on behalf of an organization or another user, GitHub recommends that you use a GitHub App. If an endpoint is available to GitHub Apps, the REST reference documentation for that endpoint will indicate what type of GitHub App token is required. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app" class="external">Registering a GitHub App</a> and <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app" class="external">About authentication with a GitHub App</a>.</p>
+<p>Instead of importing <code>Octokit</code> from <code>octokit</code>, import <code>App</code>. In the following example, replace <code>APP_ID</code> with a reference to your app's ID. Replace <code>PRIVATE_KEY</code> with a reference to your app's private key. Replace <code>INSTALLATION_ID</code> with the ID of the installation of your app that you want to authenticate on behalf of. You can find your app's ID and generate a private key on the settings page for your app. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/managing-private-keys-for-github-apps" class="external">Managing private keys for GitHub Apps</a>. You can get an installation ID with the <code>GET /users/{username}/installation</code>, <code>GET /repos/{owner}/{repo}/installation</code>, or <code>GET /orgs/{org}/installation</code> endpoints. For more information, see <a href="../apps/apps.html">REST API endpoints for GitHub Apps</a>.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">App </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">";
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">app </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">App</span><span style="color:#c0c5ce;">({
+</span><span style="color:#c0c5ce;">  appId: </span><span style="color:#bf616a;">APP_ID</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  privateKey: </span><span style="color:#bf616a;">PRIVATE_KEY</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await app</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">getInstallationOctokit</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">INSTALLATION_ID</span><span style="color:#c0c5ce;">);
+</span></code></pre>
+<h3 id="authenticating-in-github-actions" title="Instantiating and authenticating / Authenticating in GitHub Actions">Authenticating in GitHub Actions<a href="#authenticating-in-github-actions" aria-label="Link to heading 'Authenticating in GitHub Actions'" data-heading-content="Authenticating in GitHub Actions" class="anchor"></a></h3>
+<p>If you want to use the API in a GitHub Actions workflow, GitHub recommends that you authenticate with the built-in <code>GITHUB_TOKEN</code> instead of creating a token. You can grant permissions to the <code>GITHUB_TOKEN</code> with the <code>permissions</code> key. For more information about <code>GITHUB_TOKEN</code>, see <a href="https://docs.github.com/en/actions/concepts/security/github_token" class="external">GITHUB<span data-escaped-char="">_</span>TOKEN</a>.</p>
+<p>If your workflow needs to access resources outside of the workflow's repository, then you will not be able to use <code>GITHUB_TOKEN</code>. In that case, store your credentials as a secret and replace <code>GITHUB_TOKEN</code> in the examples below with the name of your secret. For more information about secrets, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets" class="external">Using secrets in GitHub Actions</a>.</p>
+<p>If you use the <code>run</code> keyword to execute your JavaScript script in your GitHub Actions workflows, you can store the value of <code>GITHUB_TOKEN</code> as an environment variable. Your script can access the environment variable as <code>process.env.VARIABLE_NAME</code>.</p>
+<p>For example, this workflow step stores <code>GITHUB_TOKEN</code> in an environment variable called <code>TOKEN</code>:</p>
+<pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run script
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">TOKEN</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ secrets.GITHUB_TOKEN }}
+</span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
+</span><span style="color:#a3be8c;">    node .github/actions-scripts/use-the-api.mjs
+</span></code></pre>
+<p>The script that the workflow runs uses <code>process.env.TOKEN</code> to authenticate:</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">Octokit </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">";
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: process.env.TOKEN,
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<h3 id="instantiating-without-authentication" title="Instantiating and authenticating / Instantiating without authentication">Instantiating without authentication<a href="#instantiating-without-authentication" aria-label="Link to heading 'Instantiating without authentication'" data-heading-content="Instantiating without authentication" class="anchor"></a></h3>
+<p>You can use the REST API without authentication, although you will have a lower rate limit and will not be able to use some endpoints. To create an instance of <code>Octokit</code> without authenticating, do not pass the <code>auth</code> argument.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">Octokit </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">";
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ });
+</span></code></pre>
+<h2 id="making-requests" title="Making requests">Making requests<a href="#making-requests" aria-label="Link to heading 'Making requests'" data-heading-content="Making requests" class="anchor"></a></h2>
+<p>Octokit supports multiple ways of making requests. You can use the <code>request</code> method to make requests if you know the HTTP verb and path for the endpoint. You can use the <code>rest</code> method if you want to take advantage of autocompletion in your IDE and typing. For paginated endpoints, you can use the <code>paginate</code> method to request multiple pages of data.</p>
+<h3 id="using-the-request-method-to-make-requests" title="Making requests / Using the request method to make requests">Using the <code>request</code> method to make requests<a href="#using-the-request-method-to-make-requests" aria-label="Link to heading 'Using the request method to make requests'" data-heading-content="Using the request method to make requests" class="anchor"></a></h3>
+<p>To use the <code>request</code> method to make requests, pass the HTTP method and path as the first argument. Pass any body, query, or path parameters in an object as the second argument. For example, to make a <code>GET</code> request to <code>/repos/{owner}/{repo}/issues</code> and pass the <code>owner</code>, <code>repo</code>, and <code>per_page</code> parameters:</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">2
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<p>The <code>request</code> method automatically passes the <code>Accept: application/vnd.github+json</code> header. To pass additional headers or a different <code>Accept</code> header, add a <code>headers</code> property to the object that is passed as a second argument. The value of the <code>headers</code> property is an object with the header names as keys and header values as values. For example, to send a <code>content-type</code> header with a value of <code>text/plain</code> and a <code>x-github-api-version</code> header with a value of <code>2026-03-10</code>:</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">POST /markdown/raw</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  text: "</span><span style="color:#a3be8c;">Hello **world**</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">content-type</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">text/plain</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<h3 id="using-rest-endpoint-methods-to-make-requests" title="Making requests / Using rest endpoint methods to make requests">Using <code>rest</code> endpoint methods to make requests<a href="#using-rest-endpoint-methods-to-make-requests" aria-label="Link to heading 'Using rest endpoint methods to make requests'" data-heading-content="Using rest endpoint methods to make requests" class="anchor"></a></h3>
+<p>Every REST API endpoint has an associated <code>rest</code> endpoint method in Octokit. These methods generally autocomplete in your IDE for convenience. You can pass any parameters as an object to the method.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.rest.issues.</span><span style="color:#8fa1b3;">listForRepo</span><span style="color:#c0c5ce;">({
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">2
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<p>Additionally, if you are using a typed language such as TypeScript, you can import types to use with these methods. For more information, see <a href="https://github.com/octokit/plugin-rest-endpoint-methods.js/#typescript" class="external">the TypeScript section in the plugin-rest-endpoint-methods.js README</a>.</p>
+<h3 id="making-paginated-requests" title="Making requests / Making paginated requests">Making paginated requests<a href="#making-paginated-requests" aria-label="Link to heading 'Making paginated requests'" data-heading-content="Making paginated requests" class="anchor"></a></h3>
+<p>If the endpoint is paginated and you want to fetch more than one page of results, you can use the <code>paginate</code> method. <code>paginate</code> will fetch the next page of results until it reaches the last page and then return all of the results as a single array. A few endpoints return paginated results as array in an object, as opposed to returning the paginated results as an array. <code>paginate</code> always returns an array of items even if the raw result was an object.</p>
+<p>For example, the following example gets all of the issues from the <code>github/docs</code> repository. Although it requests 100 issues at a time, the function won't return until the last page of data is reached.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">issueData </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">paginate</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<p>The <code>paginate</code> method accepts an optional map function, which you can use to collect only the data that you want from the response. This reduces memory usage by your script. The map function can take a second argument, <code>done</code>, which you can call to end the pagination before the last page is reached. This lets you fetch a subset of pages. For example, the following example continues to fetch results until an issue that includes "test" in the title is returned. For the pages of data that were returned, only the issue title and author are stored.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">issueData </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">paginate</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">},
+</span><span style="color:#c0c5ce;">    (response, done) </span><span style="color:#b48ead;">=&gt; </span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.data.</span><span style="color:#8fa1b3;">map</span><span style="color:#c0c5ce;">((issue) </span><span style="color:#b48ead;">=&gt; </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title.</span><span style="color:#8fa1b3;">includes</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">test</span><span style="color:#c0c5ce;">")) {
+</span><span style="color:#c0c5ce;">      </span><span style="color:#8fa1b3;">done</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">({title: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title, author: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.user.login})
+</span><span style="color:#c0c5ce;">  })
+</span><span style="color:#c0c5ce;">);
+</span></code></pre>
+<p>Instead of fetching all of the results at once, you can use <code>octokit.paginate.iterator()</code> to iterate through a single page at a time. For example, the following example fetches one page of results at a time and processes each object from the page before fetching the next page. Once an issue that includes "test" in the title is reached, the script stops the iteration and returns the issue title and issue author of each object that was processed. The iterator is the most memory efficient method for fetching paginated data.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">iterator </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.paginate.</span><span style="color:#8fa1b3;">iterator</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">issueData </span><span style="color:#c0c5ce;">= []
+</span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">breakLoop </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">false
+</span><span style="color:#b48ead;">for await </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">const </span><span style="color:#c0c5ce;">{</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">} of </span><span style="color:#bf616a;">iterator</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">breakLoop</span><span style="color:#c0c5ce;">) </span><span style="color:#b48ead;">break
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">issue </span><span style="color:#c0c5ce;">of </span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title.</span><span style="color:#8fa1b3;">includes</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">test</span><span style="color:#c0c5ce;">")) {
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">breakLoop </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">true
+</span><span style="color:#c0c5ce;">      </span><span style="color:#b48ead;">break
+</span><span style="color:#c0c5ce;">    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">issueData </span><span style="color:#c0c5ce;">= [...</span><span style="color:#bf616a;">issueData</span><span style="color:#c0c5ce;">, {title: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title, author: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.user.login}];
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>You can use the <code>paginate</code> method with the <code>rest</code> endpoint methods as well. Pass the <code>rest</code> endpoint method as the first argument. Pass any parameters as the second argument.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">iterator </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.paginate.</span><span style="color:#8fa1b3;">iterator</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.rest.issues.listForRepo, {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<p>For more information about pagination, see <a href="../using-the-rest-api/using-pagination-in-the-rest-api.html">Using pagination in the REST API</a>.</p>
+<h2 id="catching-errors" title="Catching errors">Catching errors<a href="#catching-errors" aria-label="Link to heading 'Catching errors'" data-heading-content="Catching errors" class="anchor"></a></h2>
+<h3 id="catching-all-errors" title="Catching errors / Catching all errors">Catching all errors<a href="#catching-all-errors" aria-label="Link to heading 'Catching all errors'" data-heading-content="Catching all errors" class="anchor"></a></h3>
+<p>Sometimes, the GitHub REST API will return an error. For example, you will get an error if your access token is expired or if you omitted a required parameter. Octokit.js automatically retries the request when it gets an error other than <code>400 Bad Request</code>, <code>401 Unauthorized</code>, <code>403 Forbidden</code>, <code>404 Not Found</code>, and <code>422 Unprocessable Entity</code>. If an API error occurs even after retries, Octokit.js throws an error that includes the HTTP status code of the response (<code>response.status</code>) and the response headers (<code>response.headers</code>). You should handle these errors in your code. For example, you can use a try/catch block to catch errors:</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">let </span><span style="color:#bf616a;">filesChanged </span><span style="color:#c0c5ce;">= []
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">iterator </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.paginate.</span><span style="color:#8fa1b3;">iterator</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/pulls/{pull_number}/files</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">    owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    pull_number: </span><span style="color:#d08770;">22809</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">    per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">    headers: {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">  });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">for await </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">const </span><span style="color:#c0c5ce;">{</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">} of </span><span style="color:#bf616a;">iterator</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">filesChanged </span><span style="color:#c0c5ce;">= [...</span><span style="color:#bf616a;">filesChanged</span><span style="color:#c0c5ce;">, ...</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">map</span><span style="color:#c0c5ce;">(fileData </span><span style="color:#b48ead;">=&gt; </span><span style="color:#bf616a;">fileData</span><span style="color:#c0c5ce;">.filename)];
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response) {
+</span><span style="color:#c0c5ce;">    console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.status}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="handling-intended-error-codes" title="Catching errors / Handling intended error codes">Handling intended error codes<a href="#handling-intended-error-codes" aria-label="Link to heading 'Handling intended error codes'" data-heading-content="Handling intended error codes" class="anchor"></a></h3>
+<p>Sometimes, GitHub uses a 4xx status code to indicate a non-error response. If the endpoint you are using does this, you can add additional handling for specific errors. For example, the <code>GET /user/starred/{owner}/{repo}</code> endpoint will return a <code>404</code> if the repository is not starred. The following example uses the <code>404</code> response to indicate that the repository was not starred; all other errors codes are treated as errors.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /user/starred/{owner}/{repo}</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">    owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    headers: {
+</span><span style="color:#c0c5ce;">      "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">  });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The repository is starred by me</span><span style="color:#c0c5ce;">`);
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.status === </span><span style="color:#d08770;">404</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The repository is not starred by me</span><span style="color:#c0c5ce;">`);
+</span><span style="color:#c0c5ce;">  } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">    console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">An error occurred while checking if the repository is starred: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">?.response?.data?.message}`);
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<h3 id="handling-rate-limit-errors" title="Catching errors / Handling rate limit errors">Handling rate limit errors<a href="#handling-rate-limit-errors" aria-label="Link to heading 'Handling rate limit errors'" data-heading-content="Handling rate limit errors" class="anchor"></a></h3>
+<p>If you receive a rate limit error, you may want to retry your request after waiting. When you are rate limited, GitHub responds with a <code>403 Forbidden</code> error and the <code>x-ratelimit-remaining</code> response header value will be <code>"0"</code>. The response headers will include a <code>x-ratelimit-reset</code> header, which tells you the time at which the current rate limit window resets, in UTC epoch seconds. You can retry your request after the time specified by <code>x-ratelimit-reset</code>.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">async function </span><span style="color:#8fa1b3;">requestRetry</span><span style="color:#c0c5ce;">(route, parameters) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">response </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">route</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">parameters</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">response
+</span><span style="color:#c0c5ce;">  } </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response &amp;&amp; </span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.status === </span><span style="color:#d08770;">403 </span><span style="color:#c0c5ce;">&amp;&amp; </span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.headers['</span><span style="color:#a3be8c;">x-ratelimit-remaining</span><span style="color:#c0c5ce;">'] === '</span><span style="color:#a3be8c;">0</span><span style="color:#c0c5ce;">') {
+</span><span style="color:#c0c5ce;">      </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">resetTimeEpochSeconds </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.headers['</span><span style="color:#a3be8c;">x-ratelimit-reset</span><span style="color:#c0c5ce;">'];
+</span><span style="color:#c0c5ce;">      </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">currentTimeEpochSeconds </span><span style="color:#c0c5ce;">= </span><span style="color:#ebcb8b;">Math</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">floor</span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">Date</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">now</span><span style="color:#c0c5ce;">() / </span><span style="color:#d08770;">1000</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">      </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">secondsToWait </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">resetTimeEpochSeconds </span><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">currentTimeEpochSeconds</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">      console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">You have exceeded your rate limit. Retrying in </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">secondsToWait</span><span style="color:#c0c5ce;">}</span><span style="color:#a3be8c;"> seconds.</span><span style="color:#c0c5ce;">`);
+</span><span style="color:#c0c5ce;">      </span><span style="color:#96b5b4;">setTimeout</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">requestRetry</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">secondsToWait </span><span style="color:#c0c5ce;">* </span><span style="color:#d08770;">1000</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">route</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">parameters</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">    } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">      console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">);
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">response </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await </span><span style="color:#8fa1b3;">requestRetry</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">    owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    per_page: </span><span style="color:#d08770;">2
+</span><span style="color:#c0c5ce;">  })
+</span></code></pre>
+<h2 id="using-the-response" title="Using the response">Using the response<a href="#using-the-response" aria-label="Link to heading 'Using the response'" data-heading-content="Using the response" class="anchor"></a></h2>
+<p>The <code>request</code> method returns a promise that resolves to an object if the request was successful. The object properties are <code>data</code> (the response body returned by the endpoint), <code>status</code> (the HTTP response code), <code>url</code> (the URL of the request), and <code>headers</code> (an object containing the response headers). Unless otherwise specified, the response body is in JSON format. Some endpoints do not return a response body; in those cases, the <code>data</code> property is omitted.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">response </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues/{issue_number}</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  issue_number: </span><span style="color:#d08770;">11901</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The status of the response is: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.status}`)
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The request URL was: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.url}`)
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The x-ratelimit-remaining response header is: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.headers["</span><span style="color:#a3be8c;">x-ratelimit-remaining</span><span style="color:#c0c5ce;">"]}`)
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The issue title is: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">response</span><span style="color:#c0c5ce;">.data.title}`)
+</span></code></pre>
+<p>Similarly, the <code>paginate</code> method returns a promise. If the request was successful, the promise resolves to an array of data returned by the endpoint. Unlike the <code>request</code> method, the <code>paginate</code> method does not return the status code, URL, or headers.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">data </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">paginate</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`${</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">.length}</span><span style="color:#a3be8c;"> issues were returned</span><span style="color:#c0c5ce;">`)
+</span><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">The title of the first issue is: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">[</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">].title}`)
+</span></code></pre>
+<h2 id="example-script" title="Example script">Example script<a href="#example-script" aria-label="Link to heading 'Example script'" data-heading-content="Example script" class="anchor"></a></h2>
+<p>Here is a full example script that uses Octokit.js. The script imports <code>Octokit</code> and creates a new instance of <code>Octokit</code>. If you wanted to authenticate with a GitHub App instead of a personal access token, you would import and instantiate <code>App</code> instead of <code>Octokit</code>. For more information, see <a href="#authenticating-with-a-github-app">Authenticating with a GitHub App</a>.</p>
+<p>The <code>getChangedFiles</code> function gets all of the files changed for a pull request. The <code>commentIfDataFilesChanged</code> function calls the <code>getChangedFiles</code> function. If any of the files that the pull request changed include <code>/data/</code> in the file path, then the function will comment on the pull request.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">{ </span><span style="color:#bf616a;">Octokit </span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">from </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">octokit</span><span style="color:#c0c5ce;">";
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: '</span><span style="color:#a3be8c;">YOUR-TOKEN</span><span style="color:#c0c5ce;">',
+</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">async function </span><span style="color:#8fa1b3;">getChangedFiles</span><span style="color:#c0c5ce;">({owner, repo, pullNumber}) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">let </span><span style="color:#bf616a;">filesChanged </span><span style="color:#c0c5ce;">= []
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">iterator </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.paginate.</span><span style="color:#8fa1b3;">iterator</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/pulls/{pull_number}/files</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">      owner: </span><span style="color:#bf616a;">owner</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      repo: </span><span style="color:#bf616a;">repo</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      pull_number: </span><span style="color:#bf616a;">pullNumber</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      per_page: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      headers: {
+</span><span style="color:#c0c5ce;">        "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      },
+</span><span style="color:#c0c5ce;">    });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">for await </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">const </span><span style="color:#c0c5ce;">{</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">} of </span><span style="color:#bf616a;">iterator</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">filesChanged </span><span style="color:#c0c5ce;">= [...</span><span style="color:#bf616a;">filesChanged</span><span style="color:#c0c5ce;">, ...</span><span style="color:#bf616a;">data</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">map</span><span style="color:#c0c5ce;">(fileData </span><span style="color:#b48ead;">=&gt; </span><span style="color:#bf616a;">fileData</span><span style="color:#c0c5ce;">.filename)];
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  } </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response) {
+</span><span style="color:#c0c5ce;">      console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.status}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">    console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">filesChanged
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">async function </span><span style="color:#8fa1b3;">commentIfDataFilesChanged</span><span style="color:#c0c5ce;">({owner, repo, pullNumber}) {
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">changedFiles </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await </span><span style="color:#8fa1b3;">getChangedFiles</span><span style="color:#c0c5ce;">({</span><span style="color:#bf616a;">owner</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">repo</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">pullNumber</span><span style="color:#c0c5ce;">});
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">filePathRegex </span><span style="color:#c0c5ce;">= new </span><span style="color:#ebcb8b;">RegExp</span><span style="color:#c0c5ce;">(/</span><span style="color:#96b5b4;">\/data\/</span><span style="color:#c0c5ce;">/, "</span><span style="color:#a3be8c;">i</span><span style="color:#c0c5ce;">");
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(!</span><span style="color:#bf616a;">changedFiles</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">some</span><span style="color:#c0c5ce;">(fileName </span><span style="color:#b48ead;">=&gt; </span><span style="color:#bf616a;">filePathRegex</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">test</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">fileName</span><span style="color:#c0c5ce;">))) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;">;
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">const </span><span style="color:#c0c5ce;">{data: </span><span style="color:#bf616a;">comment</span><span style="color:#c0c5ce;">} = </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">POST /repos/{owner}/{repo}/issues/{issue_number}/comments</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">      owner: </span><span style="color:#bf616a;">owner</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      repo: </span><span style="color:#bf616a;">repo</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      issue_number: </span><span style="color:#bf616a;">pullNumber</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">      body: `</span><span style="color:#a3be8c;">It looks like you changed a data file. These files are auto-generated. </span><span style="color:#96b5b4;">\n\n</span><span style="color:#a3be8c;">You must revert any changes to data files before your pull request will be reviewed.</span><span style="color:#c0c5ce;">`,
+</span><span style="color:#c0c5ce;">      headers: {
+</span><span style="color:#c0c5ce;">        "</span><span style="color:#a3be8c;">x-github-api-version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">      },
+</span><span style="color:#c0c5ce;">    });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">return </span><span style="color:#bf616a;">comment</span><span style="color:#c0c5ce;">.html_url;
+</span><span style="color:#c0c5ce;">  } </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response) {
+</span><span style="color:#c0c5ce;">      console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.status}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">    console.</span><span style="color:#96b5b4;">error</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">await </span><span style="color:#8fa1b3;">commentIfDataFilesChanged</span><span style="color:#c0c5ce;">({owner: "</span><span style="color:#a3be8c;">github</span><span style="color:#c0c5ce;">", repo: "</span><span style="color:#a3be8c;">docs</span><span style="color:#c0c5ce;">", pullNumber: </span><span style="color:#d08770;">191</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<ul>
+<li>To learn more about Octokit.js see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js documentation</a>.</li>
+<li>For some real life examples, look at how GitHub Docs uses Octokit.js by <a href="https://github.com/search?q=repo%3Agithub%2Fdocs%20path%3A.github%20octokit&amp;type=code" class="external">searching the GitHub Docs repository</a>.</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for deployment statuses</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Deployments</a> / </nav><h1 id="rest-api-endpoints-for-deployment-statuses">REST API endpoints for deployment statuses<a href="#rest-api-endpoints-for-deployment-statuses" aria-label="Link to heading 'REST API endpoints for deployment statuses'" data-heading-content="REST API endpoints for deployment statuses" class="anchor"></a></h1>
+<p>Use the REST API to manage deployment statuses.</p>
+<h2 id="about-deployment-statuses" title="About deployment statuses">About deployment statuses<a href="#about-deployment-statuses" aria-label="Link to heading 'About deployment statuses'" data-heading-content="About deployment statuses" class="anchor"></a></h2>
+<p>Deployment statuses allow external services to mark deployments with an <code>error</code>, <code>failure</code>, <code>inactive</code>, <code>in_progress</code>, <code>queued</code>, <code>pending</code>, or <code>success</code> state. Systems listening to <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#deployment_status" class="external"><code>deployment_status</code> events</a> can consume and respond to these statuses. A deployment status can also include an optional <code>description</code> and <code>log_url</code>.</p>
+<p>A deployment can accumulate multiple statuses over time as it progresses, for example from <code>pending</code> to <code>in_progress</code> to <code>success</code>. GitHub tracks the most recent status for each deployment and uses it to display the deployment's current state.</p>
+<h3 id="data-retention" title="About deployment statuses / Data retention">Data retention<a href="#data-retention" aria-label="Link to heading 'Data retention'" data-heading-content="Data retention" class="anchor"></a></h3>
+<p>GitHub retains records of previous deployment statuses for <strong>90 days</strong>. Previous statuses older than 90 days are automatically deleted and are no longer returned by the REST API or GraphQL API.</p>
+<p>This retention policy applies to all deployment status endpoints, including <a href="#list-deployment-statuses">List deployment statuses</a> and <a href="#get-a-deployment-status">Get a deployment status</a>. The current status of a deployment is not affected, because it is stored on the deployment itself and remains available regardless of the deployment's age.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="list-deployment-statuses" title="List deployment statuses">List deployment statuses<a href="#list-deployment-statuses" aria-label="Link to heading 'List deployment statuses'" data-heading-content="List deployment statuses" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+</span></code></pre>
+<p>Users with pull access can view deployment statuses for a deployment:</p>
+<h3 id="parameters" title="List deployment statuses / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>deployment_id</code></strong> (integer) (required)<br>
+deployment<span data-escaped-char="">_</span>id parameter</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="List deployment statuses / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples" title="List deployment statuses / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/deployments/DEPLOYMENT_ID/statuses
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Deployment Status</code>:</p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>state</code>: required, string, enum: <code>error</code>, <code>failure</code>, <code>inactive</code>, <code>pending</code>, <code>success</code>, <code>queued</code>, <code>in_progress</code></li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>description</code>: required, string, default: <code>""</code>, maxLength: 140</li>
+<li><code>environment</code>: string, default: <code>""</code></li>
+<li><code>target_url</code>: required, string, format: uri, default: <code>""</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>deployment_url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+<li><code>environment_url</code>: string, format: uri, default: <code>""</code></li>
+<li><code>log_url</code>: string, format: uri, default: <code>""</code></li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="create-a-deployment-status" title="Create a deployment status">Create a deployment status<a href="#create-a-deployment-status" aria-label="Link to heading 'Create a deployment status'" data-heading-content="Create a deployment status" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+</span></code></pre>
+<p>Users with push access can create deployment statuses for a given deployment.<br>
+OAuth app tokens and personal access tokens (classic) need the repo<span data-escaped-char="">_</span>deployment scope to use this endpoint.</p>
+<h3 id="parameters-1" title="Create a deployment status / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>deployment_id</code></strong> (integer) (required)<br>
+deployment<span data-escaped-char="">_</span>id parameter</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>state</code></strong> (string) (required)<br>
+The state of the status. When you set a transient deployment to inactive, the deployment will be shown as destroyed in GitHub.<br>
+Can be one of: <code>error</code>, <code>failure</code>, <code>inactive</code>, <code>in_progress</code>, <code>queued</code>, <code>pending</code>, <code>success</code></p>
+</li>
+<li>
+<p><strong><code>target_url</code></strong> (string)<br>
+The target URL to associate with this status. This URL should contain output to keep the user updated while the task is running or serve as historical information for what happened in the deployment.<br>
+Note</p>
+</li>
+</ul>
+<p>It's recommended to use the log<span data-escaped-char="">_</span>url parameter, which replaces target<span data-escaped-char="">_</span>url.<br>
+Default: <span data-escaped-char="">`</span><span data-escaped-char="">`</span></p>
+<ul>
+<li>
+<p><strong><code>log_url</code></strong> (string)<br>
+The full URL of the deployment's output. This parameter replaces target<span data-escaped-char="">_</span>url. We will continue to accept target<span data-escaped-char="">_</span>url to support legacy uses, but we recommend replacing target<span data-escaped-char="">_</span>url with log<span data-escaped-char="">_</span>url. Setting log<span data-escaped-char="">_</span>url will automatically set target<span data-escaped-char="">_</span>url to the same value. Default: ""<br>
+Default: <span data-escaped-char="">`</span><span data-escaped-char="">`</span></p>
+</li>
+<li>
+<p><strong><code>description</code></strong> (string)<br>
+A short description of the status. The maximum description length is 140 characters.<br>
+Default: <span data-escaped-char="">`</span><span data-escaped-char="">`</span></p>
+</li>
+<li>
+<p><strong><code>environment</code></strong> (string)<br>
+Name for the target deployment environment, which can be changed when setting a deploy status. For example, production, staging, or qa. If not defined, the environment of the previous status on the deployment will be used, if it exists. Otherwise, the environment of the deployment will be used.</p>
+</li>
+<li>
+<p><strong><code>environment_url</code></strong> (string)<br>
+Sets the URL for accessing your environment. Default: ""<br>
+Default: <span data-escaped-char="">`</span><span data-escaped-char="">`</span></p>
+</li>
+<li>
+<p><strong><code>auto_inactive</code></strong> (boolean)<br>
+Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state. Default: true</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create a deployment status / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create a deployment status / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/deployments/DEPLOYMENT_ID/statuses \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "environment": "production",
+</span><span style="color:#c0c5ce;">  "state": "success",
+</span><span style="color:#c0c5ce;">  "log_url": "https://example.com/deployment/42/output",
+</span><span style="color:#c0c5ce;">  "description": "Deployment finished successfully."
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>state</code>: required, string, enum: <code>error</code>, <code>failure</code>, <code>inactive</code>, <code>pending</code>, <code>success</code>, <code>queued</code>, <code>in_progress</code></li>
+<li><code>creator</code>: required, any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>Simple User</strong>
+<ul>
+<li><code>name</code>: string or null</li>
+<li><code>email</code>: string or null</li>
+<li><code>login</code>: required, string</li>
+<li><code>id</code>: required, integer, format: int64</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+<li><code>gravatar_id</code>: required, string or null</li>
+<li><code>url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>followers_url</code>: required, string, format: uri</li>
+<li><code>following_url</code>: required, string</li>
+<li><code>gists_url</code>: required, string</li>
+<li><code>starred_url</code>: required, string</li>
+<li><code>subscriptions_url</code>: required, string, format: uri</li>
+<li><code>organizations_url</code>: required, string, format: uri</li>
+<li><code>repos_url</code>: required, string, format: uri</li>
+<li><code>events_url</code>: required, string</li>
+<li><code>received_events_url</code>: required, string, format: uri</li>
+<li><code>type</code>: required, string</li>
+<li><code>site_admin</code>: required, boolean</li>
+<li><code>starred_at</code>: string</li>
+<li><code>user_view_type</code>: string</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>description</code>: required, string, default: <code>""</code>, maxLength: 140</li>
+<li><code>environment</code>: string, default: <code>""</code></li>
+<li><code>target_url</code>: required, string, format: uri, default: <code>""</code></li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>deployment_url</code>: required, string, format: uri</li>
+<li><code>repository_url</code>: required, string, format: uri</li>
+<li><code>environment_url</code>: string, format: uri, default: <code>""</code></li>
+<li><code>log_url</code>: string, format: uri, default: <code>""</code></li>
+<li><code>performed_via_github_app</code>: any of:
+<ul>
+<li><strong>null</strong></li>
+<li><strong>GitHub app</strong>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>slug</code>: string</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>client_id</code>: string</li>
+<li><code>owner</code>: required, one of:
+<ul>
+<li><strong>Simple User</strong> (see above)</li>
+<li><strong>Enterprise</strong>
+<ul>
+<li><code>description</code>: string or null</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>website_url</code>: string or null, format: uri</li>
+<li><code>id</code>: required, integer</li>
+<li><code>node_id</code>: required, string</li>
+<li><code>name</code>: required, string</li>
+<li><code>slug</code>: required, string</li>
+<li><code>created_at</code>: required, string or null, format: date-time</li>
+<li><code>updated_at</code>: required, string or null, format: date-time</li>
+<li><code>avatar_url</code>: required, string, format: uri</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>name</code>: required, string</li>
+<li><code>description</code>: required, string or null</li>
+<li><code>external_url</code>: required, string, format: uri</li>
+<li><code>html_url</code>: required, string, format: uri</li>
+<li><code>created_at</code>: required, string, format: date-time</li>
+<li><code>updated_at</code>: required, string, format: date-time</li>
+<li><code>permissions</code>: required, object, additional properties: string:
+<ul>
+<li><code>issues</code>: string</li>
+<li><code>checks</code>: string</li>
+<li><code>metadata</code>: string</li>
+<li><code>contents</code>: string</li>
+<li><code>deployments</code>: string</li>
+</ul>
+</li>
+<li><code>events</code>: required, array of string</li>
+<li><code>installations_count</code>: integer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="get-a-deployment-status" title="Get a deployment status">Get a deployment status<a href="#get-a-deployment-status" aria-label="Link to heading 'Get a deployment status'" data-heading-content="Get a deployment status" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}
+</span></code></pre>
+<p>Users with pull access can view a deployment status for a deployment:</p>
+<h3 id="parameters-2" title="Get a deployment status / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>deployment_id</code></strong> (integer) (required)<br>
+deployment<span data-escaped-char="">_</span>id parameter</p>
+</li>
+<li>
+<p><strong><code>status_id</code></strong> (integer) (required)</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get a deployment status / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get a deployment status / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/deployments/DEPLOYMENT_ID/statuses/STATUS_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-a-deployment-status">Create a deployment status</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

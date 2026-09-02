@@ -1,0 +1,515 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Getting started with the REST API</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Using the REST API</a> / </nav><h1 id="getting-started-with-the-rest-api">Getting started with the REST API<a href="#getting-started-with-the-rest-api" aria-label="Link to heading 'Getting started with the REST API'" data-heading-content="Getting started with the REST API" class="anchor"></a></h1>
+<p>Learn how to use the GitHub REST API.</p>
+<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<p>This article describes how to use the GitHub REST API with GitHub CLI, <code>curl</code>, or JavaScript. For a quickstart guide, see <a href="../quickstart.html">Quickstart for GitHub REST API</a>.</p>
+<div class="ghd-tool curl">
+</div>
+<h2 id="about-requests-to-the-rest-api" title="About requests to the REST API">About requests to the REST API<a href="#about-requests-to-the-rest-api" aria-label="Link to heading 'About requests to the REST API'" data-heading-content="About requests to the REST API" class="anchor"></a></h2>
+<p>This section describes the elements that make up an API request:</p>
+<ul>
+<li><a href="#http-method">HTTP method</a></li>
+<li><a href="#path">Path</a></li>
+<li><a href="#headers">Headers</a></li>
+<li><a href="#media-types">Media types</a></li>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#parameters">Parameters</a></li>
+</ul>
+<p>Every request to the REST API includes an HTTP method and a path. Depending on the REST API endpoint, you might also need to specify request headers, authentication information, query parameters, or body parameters.</p>
+<p>The REST API reference documentation describes the HTTP method, path, and parameters for every endpoint. It also displays example requests and responses for each endpoint. For more information, see the <a href="../index.html">REST reference documentation</a>.</p>
+<h3 id="http-method" title="About requests to the REST API / HTTP method">HTTP method<a href="#http-method" aria-label="Link to heading 'HTTP method'" data-heading-content="HTTP method" class="anchor"></a></h3>
+<p>The HTTP method of an endpoint defines the type of action it performs on a given resource. Some common HTTP methods are <code>GET</code>, <code>POST</code>, <code>DELETE</code>, and <code>PATCH</code>. The REST API reference documentation provides the HTTP method for every endpoint.</p>
+<p>For example, the HTTP method for the <a href="../issues/issues.html#list-repository-issues">"List repository issues" endpoint</a> is <code>GET</code>."</p>
+<p>Where possible, the GitHub REST API strives to use an appropriate HTTP method for each action.</p>
+<ul>
+<li><code>GET</code>: Used for retrieving resources.</li>
+<li><code>POST</code>: Used for creating resources.</li>
+<li><code>PATCH</code>: Used for updating properties of resources.</li>
+<li><code>PUT</code>: Used for replacing resources or collections of resources.</li>
+<li><code>DELETE</code>: Used for deleting resources.</li>
+</ul>
+<h3 id="path" title="About requests to the REST API / Path">Path<a href="#path" aria-label="Link to heading 'Path'" data-heading-content="Path" class="anchor"></a></h3>
+<p>Each endpoint has a path. The REST API reference documentation gives the path for every endpoint. For example, the path for the <a href="../issues/issues.html#list-repository-issues">"List repository issues" endpoint</a> is <code>/repos/{owner}/{repo}/issues</code>.</p>
+<p>The curly brackets <code>{}</code> in a path denote path parameters that you need to specify. Path parameters modify the endpoint path and are required in your request. For example, the path parameters for the <a href="../issues/issues.html#list-repository-issues">"List repository issues" endpoint</a> are <code>{owner}</code> and <code>{repo}</code>. To use this path in your API request, replace <code>{repo}</code> with the name of the repository where you would like to request a list of issues, and replace <code>{owner}</code> with the name of the account that owns the repository.</p>
+<h3 id="headers" title="About requests to the REST API / Headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h3>
+<p>Headers provide extra information about the request and the desired response. Following are some examples of headers that you can use in your requests to the GitHub REST API. For an example of a request that uses headers, see <a href="#making-a-request">Making a request</a>.</p>
+<h4 id="accept"><code>Accept</code><a href="#accept" aria-label="Link to heading 'Accept'" data-heading-content="Accept" class="anchor"></a></h4>
+<p>Most GitHub REST API endpoints specify that you should pass an <code>Accept</code> header with a value of <code>application/vnd.github+json</code>. The value of the <code>Accept</code> header is a media type. For more information about media types, see <a href="#media-types">Media types</a>.</p>
+<h4 id="x-github-api-version"><code>X-GitHub-Api-Version</code><a href="#x-github-api-version" aria-label="Link to heading 'X-GitHub-Api-Version'" data-heading-content="X-GitHub-Api-Version" class="anchor"></a></h4>
+<p>You should use this header to specify a version of the REST API to use for your request. For more information, see <a href="../about-the-rest-api/api-versions.html">API Versions</a>.</p>
+<h4 id="user-agent"><code>User-Agent</code><a href="#user-agent" aria-label="Link to heading 'User-Agent'" data-heading-content="User-Agent" class="anchor"></a></h4>
+<p>All API requests must include a valid <code>User-Agent</code> header. The <code>User-Agent</code> header identifies the user or application that is making the request.</p>
+<div class="ghd-tool cli">
+<p>By default, GitHub CLI sends a valid <code>User-Agent</code> header. However, GitHub recommends using your GitHub username, or the name of your application, for the <code>User-Agent</code> header value. This allows GitHub to contact you if there are problems.</p>
+</div>
+<div class="ghd-tool curl">
+<p>By default, <code>curl</code> sends a valid <code>User-Agent</code> header. However GitHub recommends using your GitHub username, or the name of your application, for the <code>User-Agent</code> header value. This allows GitHub to contact you if there are problems.</p>
+</div>
+<div class="ghd-tool javascript">
+<p>If you use the Octokit.js SDK, the SDK will send a valid <code>User-Agent</code> header for you. However, GitHub recommends using your GitHub username, or the name of your application, for the <code>User-Agent</code> header value. This allows GitHub to contact you if there are problems.</p>
+</div>
+<p>The following is an example <code>User-Agent</code> for an app named <code>Awesome-Octocat-App</code>:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">User-Agent: Awesome-Octocat-App
+</span></code></pre>
+<p>Requests with no <code>User-Agent</code> header will be rejected. If you provide an invalid <code>User-Agent</code> header, you will receive a <code>403 Forbidden</code> response.</p>
+<!-- Anchor to maintain links to this heading -->
+<p><a name="media-types"></a></p>
+<h3 id="media-types" title="About requests to the REST API / Media types">Media types<a href="#media-types" aria-label="Link to heading 'Media types'" data-heading-content="Media types" class="anchor"></a></h3>
+<p>You can specify one or more media types by adding them to the <code>Accept</code> header of your request. For more information about the <code>Accept</code> header, see <a href="#accept"><code>Accept</code></a>.</p>
+<p>Media types specify the format of the data you want to consume from the API. Media types are specific to resources, allowing them to change independently and support formats that other resources don't. The documentation for each GitHub REST API endpoint will describe the media types that it supports. For more information, see the <a href="../index.html">GitHub REST API documentation</a>.</p>
+<p>The most common media types supported by the GitHub REST API are <code>application/vnd.github+json</code> and <code>application/json</code>.</p>
+<p>There are custom media types that you can use with some endpoints. For example, the REST API to manage <a href="../commits/commits.html#get-a-commit">commits</a> and <a href="../pulls/pulls.html">pull requests</a> support the media types <code>diff</code>, <code>patch</code>, and <code>sha</code>. The media types <code>full</code>, <code>raw</code>, <code>text</code>, or <code>html</code> are used by some other endpoints.</p>
+<p>All custom media types for GitHub look like this: <code>application/vnd.github.PARAM+json</code>, where <code>PARAM</code> is the name of the media type. For example, to specify the <code>raw</code> media type, you would use <code>application/vnd.github.raw+json</code>.</p>
+<p>For an example of a request that uses media types, see <a href="#making-a-request">Making a request</a>.</p>
+<h3 id="authentication" title="About requests to the REST API / Authentication">Authentication<a href="#authentication" aria-label="Link to heading 'Authentication'" data-heading-content="Authentication" class="anchor"></a></h3>
+<p>Many endpoints require authentication or return additional information if you are authenticated. Additionally, you can make more requests per hour when you are authenticated.</p>
+<div class="ghd-tool curl">
+<p>To authenticate your request, you will need to provide an authentication token with the required scopes or permissions. There a few different ways to get a token: You can create a personal access token, generate a token with a GitHub App, or use the built-in <code>GITHUB_TOKEN</code> in a GitHub Actions workflow. For more information, see <a href="../authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a>.</p>
+<p>For an example of a request that uses an authentication token, see <a href="#making-a-request">Making a request</a>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>If you don't want to create a token, you can use GitHub CLI. GitHub CLI will take care of authentication for you, and help keep your account secure. For more information, see the <a href="/en/rest/using-the-rest-api/getting-started-with-the-rest-api?tool=cli">GitHub CLI version of this page</a>.</p>
+</div>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>Treat your access token the same way you would treat your passwords or other sensitive credentials. For more information, see <a href="../authentication/keeping-your-api-credentials-secure.html">Keeping your API credentials secure</a>.</p>
+</div>
+</div>
+<div class="ghd-tool cli">
+<p>Although some REST API endpoints are accessible without authentication, GitHub CLI requires you to authenticate before you can use the <code>api</code> subcommand to make an API request. Use the <code>auth login</code> subcommand to authenticate to GitHub. For more information, see <a href="#making-a-request">Making a request</a>.</p>
+</div>
+<div class="ghd-tool javascript">
+<p>To authenticate your request, you will need to provide an authentication token with the required scopes or permissions. There a few different ways to get a token: You can create a personal access token, generate a token with a GitHub App, or use the built-in <code>GITHUB_TOKEN</code> in a GitHub Actions workflow. For more information, see <a href="../authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a>.</p>
+<p>For an example of a request that uses an authentication token, see <a href="#making-a-request">Making a request</a>.</p>
+<div class="markdown-alert markdown-alert-warning">
+<p class="markdown-alert-title">Warning</p>
+<p>Treat your access token the same way you would treat your passwords or other sensitive credentials. For more information, see <a href="../authentication/keeping-your-api-credentials-secure.html">Keeping your API credentials secure</a>.</p>
+</div>
+</div>
+<h3 id="parameters" title="About requests to the REST API / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<p>Many API methods require or allow you to send additional information in parameters in your request. There are a few different types of parameters: Path parameters, body parameters, and query parameters.</p>
+<h4 id="path-parameters">Path parameters<a href="#path-parameters" aria-label="Link to heading 'Path parameters'" data-heading-content="Path parameters" class="anchor"></a></h4>
+<p>Path parameters modify the endpoint path. These parameters are required in your request. For more information, see <a href="#path">Path</a>.</p>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<p>Body parameters allow you to pass additional data to the API. These parameters can be optional or required, depending on the endpoint. For example, a body parameter may allow you to specify an issue title when creating a new issue, or specify certain settings when enabling or disabling a feature. The documentation for each GitHub REST API endpoint will describe the body parameters that it supports. For more information, see the <a href="../index.html">GitHub REST API documentation</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> requires that you specify a title for the new issue in your request. It also allows you to optionally specify other information, such as text to put in the issue body, users to assign to the new issue, or labels to apply to the new issue. For an example of a request that uses body parameters, see <a href="#making-a-request">Making a request</a>.</p>
+<p>You must authenticate your request to pass body parameters. For more information, see <a href="#authentication">Authentication</a>.</p>
+<h4 id="query-parameters">Query parameters<a href="#query-parameters" aria-label="Link to heading 'Query parameters'" data-heading-content="Query parameters" class="anchor"></a></h4>
+<p>Query parameters allow you to control what data is returned for a request. These parameters are usually optional. The documentation for each GitHub REST API endpoint will describe any query parameters that it supports. For more information, see the <a href="../index.html">GitHub REST API documentation</a>.</p>
+<p>For example, the <a href="../activity/events.html#list-public-events">"List public events" endpoint</a> returns thirty issues by default. You can use the <code>per_page</code> query parameter to return two issues instead of 30. You can use the <code>page</code> query parameter to fetch only the first page of results. For an example of a request that uses query parameters, see <a href="#making-a-request">Making a request</a>.</p>
+<h2 id="making-a-request" title="Making a request">Making a request<a href="#making-a-request" aria-label="Link to heading 'Making a request'" data-heading-content="Making a request" class="anchor"></a></h2>
+<div class="ghd-tool cli">
+<p>This section demonstrates how to make an authenticated request to the GitHub REST API using GitHub CLI.</p>
+<h3 id="1-setup" title="Making a request / 1. Setup">1. Setup<a href="#1-setup" aria-label="Link to heading '1. Setup'" data-heading-content="1. Setup" class="anchor"></a></h3>
+<p>Install GitHub CLI on macOS, Windows, or Linux. For more information, see <a href="https://github.com/cli/cli#installation" class="external">Installation</a> in the GitHub CLI repository.</p>
+<h3 id="2-authenticate" title="Making a request / 2. Authenticate">2. Authenticate<a href="#2-authenticate" aria-label="Link to heading '2. Authenticate'" data-heading-content="2. Authenticate" class="anchor"></a></h3>
+<ol>
+<li>
+<p>To authenticate to GitHub, run the following command from your terminal.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh auth login
+</span></code></pre>
+<p>You can use the <code>--scopes</code> option to specify what scopes you want. If you want to authenticate with a token that you created, you can use the <code>--with-token</code> option. For more information, see the <a href="https://cli.github.com/manual/gh_auth_login" class="external">GitHub CLI <code>auth login</code> documentation</a>.</p>
+</li>
+<li>
+<p>Select where you want to authenticate to:</p>
+<ul>
+<li>If you access GitHub at GitHub.com, select <strong>GitHub.com</strong>.</li>
+<li>If you access GitHub at a different domain, select <strong>Other</strong>, then enter your hostname (for example: <code>octocorp.ghe.com</code>).</li>
+</ul>
+</li>
+<li>
+<p>Follow the rest of the on-screen prompts.</p>
+<p>GitHub CLI automatically stores your Git credentials for you when you choose HTTPS as your preferred protocol for Git operations and answer "yes" to the prompt asking if you would like to authenticate to Git with your GitHub credentials. This can be useful as it allows you to use Git commands like <code>git push</code> and <code>git pull</code> without needing to set up a separate credential manager or use SSH.</p>
+</li>
+</ol>
+<h3 id="3-choose-an-endpoint-for-your-request" title="Making a request / 3. Choose an endpoint for your request">3. Choose an endpoint for your request<a href="#3-choose-an-endpoint-for-your-request" aria-label="Link to heading '3. Choose an endpoint for your request'" data-heading-content="3. Choose an endpoint for your request" class="anchor"></a></h3>
+<ol>
+<li>
+<p>Choose an endpoint to make a request to. You can explore GitHub's <a href="../index.html">REST API documentation</a> to discover endpoints that you can use to interact with GitHub.</p>
+</li>
+<li>
+<p>Identify the HTTP method and path of the endpoint. You will send these with your request. For more information, see <a href="#http-method">HTTP method</a> and <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the HTTP method <code>POST</code> and the path <code>/repos/{owner}/{repo}/issues</code>.</p>
+</li>
+<li>
+<p>Identify any required path parameters. Required path parameters appear in curly brackets <code>{}</code> in the path of the endpoint. Replace each parameter placeholder with the desired value. For more information, see <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the path <code>/repos/{owner}/{repo}/issues</code>, and the path parameters are <code>{owner}</code> and <code>{repo}</code>. To use this path in your API request, replace <code>{repo}</code> with the name of the repository where you would like to create a new issue, and replace <code>{owner}</code> with the name of the account that owns the repository.</p>
+</li>
+</ol>
+<h3 id="4-make-a-request-with-github-cli" title="Making a request / 4. Make a request with GitHub CLI">4. Make a request with GitHub CLI<a href="#4-make-a-request-with-github-cli" aria-label="Link to heading '4. Make a request with GitHub CLI'" data-heading-content="4. Make a request with GitHub CLI" class="anchor"></a></h3>
+<p>Use the GitHub CLI <code>api</code> subcommand to make your API request. For more information, see the <a href="https://cli.github.com/manual/gh_api" class="external">GitHub CLI <code>api</code> documentation</a>.</p>
+<p>In your request, specify the following options and values:</p>
+<ul>
+<li>
+<p><strong>--method</strong> followed by the HTTP method and the path of the endpoint. For more information, see <a href="#http-method">HTTP method</a> and <a href="#path">Path</a>.</p>
+</li>
+<li>
+<p><strong>--header:</strong></p>
+<ul>
+<li><strong><code>Accept</code>:</strong> Pass the media type in an <code>Accept</code> header. To pass multiple media types in an <code>Accept</code> header, separate the media types with a comma: <code>Accept: application/vnd.github+json,application/vnd.github.diff</code>. For more information, see <a href="#accept"><code>Accept</code></a> and <a href="#media-types">Media types</a>.</li>
+<li><strong><code>X-GitHub-Api-Version</code>:</strong> Pass the API version in a <code>X-GitHub-Api-Version</code> header. For more information, see <a href="#x-github-api-version"><code>X-GitHub-Api-Version</code></a>.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>-f</code></strong> or <strong><code>-F</code></strong> followed by any body parameters or query parameters in <code>key=value</code> format. Use the <code>-F</code> option to pass a parameter that is a number, Boolean, or null. Use the <code>-f</code> option to pass string parameters.</p>
+<p>Some endpoints use query parameters that are arrays. To send an array in the query string, use the query parameter once per array item, and append <code>[]</code> after the query parameter name. For example, to provide an array of two repository IDs, use <code>-f repository_ids[]=REPOSITORY_A_ID -f repository_ids[]=REPOSITORY_B_ID</code>.</p>
+<p>If you do not need to specify any body parameters or query parameters in your request, omit this option. For more information, see <a href="#body-parameters">Body parameters</a> and <a href="#query-parameters">Query parameters</a>. For examples, see <a href="#example-request-using-body-parameters">Example request using body parameters</a> and <a href="#example-request-using-query-parameters">Example request using query parameters</a>.</p>
+</li>
+</ul>
+<h4 id="example-request">Example request<a href="#example-request" aria-label="Link to heading 'Example request'" data-heading-content="Example request" class="anchor"></a></h4>
+<p>The following example request uses the <a href="../meta/meta.html#get-octocat">"Get Octocat" endpoint</a> to return the octocat as ASCII art.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api --method GET /octocat \
+</span><span style="color:#c0c5ce;">--header 'Accept: application/vnd.github+json' \
+</span><span style="color:#c0c5ce;">--header "X-GitHub-Api-Version: 2022-11-28"
+</span></code></pre>
+<h4 id="example-request-using-query-parameters">Example request using query parameters<a href="#example-request-using-query-parameters" aria-label="Link to heading 'Example request using query parameters'" data-heading-content="Example request using query parameters" class="anchor"></a></h4>
+<p>The <a href="../activity/events.html#list-public-events">"List public events" endpoint</a> returns thirty issues by default. The following example uses the <code>per_page</code> query parameter to return two issues instead of 30, and the <code>page</code> query parameter to fetch only the first page of results.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api --method GET /events -F per_page=2 -F page=1
+</span><span style="color:#c0c5ce;">--header 'Accept: application/vnd.github+json' \
+</span></code></pre>
+<h4 id="example-request-using-body-parameters">Example request using body parameters<a href="#example-request-using-body-parameters" aria-label="Link to heading 'Example request using body parameters'" data-heading-content="Example request using body parameters" class="anchor"></a></h4>
+<p>The following example uses the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> to create a new issue in the octocat/Spoon-Knife repository. In the response, find the <code>html_url</code> of your issue, and navigate to your issue in the browser.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api --method POST /repos/octocat/Spoon-Knife/issues \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "X-GitHub-Api-Version: 2022-11-28" \
+</span><span style="color:#c0c5ce;">-f title='Created with the REST API' \
+</span><span style="color:#c0c5ce;">-f body='This is a test issue created by the REST API' \
+</span></code></pre>
+</div>
+<div class="ghd-tool curl">
+<p>This section demonstrates how to make an authenticated request to the GitHub REST API using <code>curl</code>.</p>
+<h3 id="1-setup-1" title="Making a request / 1. Setup">1. Setup<a href="#1-setup-1" aria-label="Link to heading '1. Setup'" data-heading-content="1. Setup" class="anchor"></a></h3>
+<p>You must have <code>curl</code> installed on your machine. To check if <code>curl</code> is already installed, run <code>curl --version</code> on the command line.</p>
+<ul>
+<li>If the output provides information about the version of <code>curl</code>, that means <code>curl</code> is installed.</li>
+<li>If you get a message similar to <code>command not found: curl</code>, that means <code>curl</code> is not installed. Download and install <code>curl</code>. For more information, see <a href="https://curl.se/download.html" class="external">the curl download page</a>.</li>
+</ul>
+<h3 id="2-choose-an-endpoint-for-your-request" title="Making a request / 2. Choose an endpoint for your request">2. Choose an endpoint for your request<a href="#2-choose-an-endpoint-for-your-request" aria-label="Link to heading '2. Choose an endpoint for your request'" data-heading-content="2. Choose an endpoint for your request" class="anchor"></a></h3>
+<ol>
+<li>
+<p>Choose an endpoint to make a request to. You can explore GitHub's <a href="../index.html">REST API documentation</a> to discover endpoints that you can use to interact with GitHub.</p>
+</li>
+<li>
+<p>Identify the HTTP method and path of the endpoint. You will send these with your request. For more information, see <a href="#http-method">HTTP method</a> and <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the HTTP method <code>POST</code> and the path <code>/repos/{owner}/{repo}/issues</code>.</p>
+</li>
+<li>
+<p>Identify any required path parameters. Required path parameters appear in curly brackets <code>{}</code> in the path of the endpoint. Replace each parameter placeholder with the desired value. For more information, see <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the path <code>/repos/{owner}/{repo}/issues</code>, and the path parameters are <code>{owner}</code> and <code>{repo}</code>. To use this path in your API request, replace <code>{repo}</code> with the name of the repository where you would like to create a new issue, and replace <code>{owner}</code> with the name of the account that owns the repository.</p>
+</li>
+</ol>
+<h3 id="3-create-authentication-credentials" title="Making a request / 3. Create authentication credentials">3. Create authentication credentials<a href="#3-create-authentication-credentials" aria-label="Link to heading '3. Create authentication credentials'" data-heading-content="3. Create authentication credentials" class="anchor"></a></h3>
+<p>Create an access token to authenticate your request. You can save your token and use it for multiple requests. Give the token any scopes or permissions that are required to access the endpoint. You will send this token in an <code>Authorization</code> header with your request. For more information, see <a href="#authentication">Authentication</a>.</p>
+<h3 id="4-make-a-curl-request" title="Making a request / 4. Make a curl request">4. Make a <code>curl</code> request<a href="#4-make-a-curl-request" aria-label="Link to heading '4. Make a curl request'" data-heading-content="4. Make a curl request" class="anchor"></a></h3>
+<p>Use the <code>curl</code> command to make your request. For more information, see <a href="https://curl.se/docs/manpage.html" class="external">the curl documentation</a>.</p>
+<p>Specify the following options and values in your request:</p>
+<ul>
+<li>
+<p><strong><code>--request</code> or <code>-X</code></strong> followed by the HTTP method as the value. For more information, see <a href="#http-method">HTTP method</a>.</p>
+</li>
+<li>
+<p><strong><code>--url</code></strong> followed by the full path as the value. The full path is a URL that includes the base URL for the GitHub REST API (<code>https://api.github.com</code>) and the path of the endpoint, like this: <code>https://api.github.com/PATH</code>. Replace <code>PATH</code> with the path of the endpoint. For more information, see <a href="#path">Path</a>.</p>
+<p>To use query parameters, add a <code>?</code> to the end of the path, then append your query parameter name and value in the form <code>parameter_name=value</code>. Separate multiple query parameters with <code>&amp;</code>. If you need to send an array in the query string, use the query parameter once per array item, and append <code>[]</code> after the query parameter name. For example, to provide an array of two repository IDs, use <code>?repository_ids[]=REPOSITORY_A_ID&amp;repository_ids[]=REPOSITORY_B_ID</code>. For more information, see <a href="#query-parameters">Query parameters</a>. For an example, see <a href="#example-request-using-query-parameters-1">Example request using query parameters</a>.</p>
+</li>
+<li>
+<p><strong><code>--header</code> or <code>-H</code>:</strong></p>
+<ul>
+<li><strong><code>Accept</code>:</strong> Pass the media type in an <code>Accept</code> header. To pass multiple media types in an <code>Accept</code> header, separate the media types with a comma, for example: <code>Accept: application/vnd.github+json,application/vnd.github.diff</code>. For more information, see <a href="#accept"><code>Accept</code></a> and <a href="#media-types">Media types</a>.</li>
+<li><strong><code>X-GitHub-Api-Version</code>:</strong> Pass the API version in a <code>X-GitHub-Api-Version</code> header. For more information, see <a href="#x-github-api-version"><code>X-GitHub-Api-Version</code></a>.</li>
+<li><strong><code>Authorization</code>:</strong> Pass your authentication token in an <code>Authorization</code> header. Note that in most cases you can use <code>Authorization: Bearer</code> or <code>Authorization: token</code> to pass a token. However, if you are passing a JSON web token (JWT), you must use <code>Authorization: Bearer</code>. For more information, see <a href="#authentication">Authentication</a>. For an example of a request that uses an <code>Authorization</code> header, see <a href="#example-request-using-body-parameters-1">Example request using body parameters</a>.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>--data</code> or <code>-d</code></strong> followed by any body parameters within a JSON object. If you do not need to specify any body parameters in your request, omit this option. For more information, see <a href="#body-parameters">Body parameters</a>. For an example, see <a href="#example-request-using-body-parameters-1">Example request using body parameters</a>.</p>
+</li>
+</ul>
+<h4 id="example-request-1">Example request<a href="#example-request-1" aria-label="Link to heading 'Example request'" data-heading-content="Example request" class="anchor"></a></h4>
+<p>The following example request uses the <a href="../meta/meta.html#get-octocat">"Get Octocat" endpoint</a> to return the octocat as ASCII art.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --request GET \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/octocat" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "X-GitHub-Api-Version: 2022-11-28"
+</span></code></pre>
+<h4 id="example-request-using-query-parameters-1">Example request using query parameters<a href="#example-request-using-query-parameters-1" aria-label="Link to heading 'Example request using query parameters'" data-heading-content="Example request using query parameters" class="anchor"></a></h4>
+<p>The <a href="../activity/events.html#list-public-events">"List public events" endpoint</a> returns thirty issues by default. The following example uses the <code>per_page</code> query parameter to return two issues instead of 30, and the <code>page</code> query parameter to fetch only the first page of results.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --request GET \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/events?per_page=2&amp;page=1" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "X-GitHub-Api-Version: 2022-11-28" \
+</span><span style="color:#c0c5ce;">  https://api.github.com/events
+</span></code></pre>
+<h4 id="example-request-using-body-parameters-1">Example request using body parameters<a href="#example-request-using-body-parameters-1" aria-label="Link to heading 'Example request using body parameters'" data-heading-content="Example request using body parameters" class="anchor"></a></h4>
+<p>The following example uses the <a href="../issues/issues.html#create-an-issue">Create an issue</a> endpoint to create a new issue in the octocat/Spoon-Knife repository. Replace <code>YOUR-TOKEN</code> with the authentication token you created in a previous step.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>If you are using a fine-grained personal access token, you must replace <code>octocat/Spoon-Knife</code> with a repository that you own or that is owned by an organization that you are a member of. Your token must have access to that repository and have read and write permissions for repository issues. For more information, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a>.</p>
+</div>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl \
+</span><span style="color:#c0c5ce;">--request POST \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/repos/octocat/Spoon-Knife/issues" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "X-GitHub-Api-Version: 2022-11-28" \
+</span><span style="color:#c0c5ce;">--header "Authorization: Bearer YOUR-TOKEN" \
+</span><span style="color:#c0c5ce;">--data '{
+</span><span style="color:#c0c5ce;">  "title": "Created with the REST API",
+</span><span style="color:#c0c5ce;">  "body": "This is a test issue created by the REST API"
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+</div>
+<div class="ghd-tool javascript">
+<p>This section demonstrates how to make a request to the GitHub REST API using JavaScript and <a href="https://github.com/octokit/octokit.js" class="external">Octokit.js</a>. For a more detailed guide, see <a href="../guides/scripting-with-the-rest-api-and-javascript.html">Scripting with the REST API and JavaScript</a>.</p>
+<h3 id="1-setup-2" title="Making a request / 1. Setup">1. Setup<a href="#1-setup-2" aria-label="Link to heading '1. Setup'" data-heading-content="1. Setup" class="anchor"></a></h3>
+<p>You must install <code>octokit</code> to use the Octokit.js library shown in the following examples.</p>
+<ul>
+<li>Install <code>octokit</code>. For example, <code>npm install octokit</code>. For other ways to install or load <code>octokit</code>, see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js README</a>.</li>
+</ul>
+<h3 id="2-choose-an-endpoint-for-your-request-1" title="Making a request / 2. Choose an endpoint for your request">2. Choose an endpoint for your request<a href="#2-choose-an-endpoint-for-your-request-1" aria-label="Link to heading '2. Choose an endpoint for your request'" data-heading-content="2. Choose an endpoint for your request" class="anchor"></a></h3>
+<ol>
+<li>
+<p>Choose an endpoint to make a request to. You can explore GitHub's <a href="../index.html">REST API documentation</a> to discover endpoints that you can use to interact with GitHub.</p>
+</li>
+<li>
+<p>Identify the HTTP method and path of the endpoint. You will send these with your request. For more information, see <a href="#http-method">HTTP method</a> and <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the HTTP method <code>POST</code> and the path <code>/repos/{owner}/{repo}/issues</code>.</p>
+</li>
+<li>
+<p>Identify any required path parameters. Required path parameters appear in curly brackets <code>{}</code> in the path of the endpoint. Replace each parameter placeholder with the desired value. For more information, see <a href="#path">Path</a>.</p>
+<p>For example, the <a href="../issues/issues.html#create-an-issue">"Create an issue" endpoint</a> uses the path <code>/repos/{owner}/{repo}/issues</code>, and the path parameters are <code>{owner}</code> and <code>{repo}</code>. To use this path in your API request, replace <code>{repo}</code> with the name of the repository where you would like to create a new issue, and replace <code>{owner}</code> with the name of the account that owns the repository.</p>
+</li>
+</ol>
+<h3 id="3-create-an-access-token" title="Making a request / 3. Create an access token">3. Create an access token<a href="#3-create-an-access-token" aria-label="Link to heading '3. Create an access token'" data-heading-content="3. Create an access token" class="anchor"></a></h3>
+<p>Create an access token to authenticate your request. You can save your token and use it for multiple requests. Give the token any scopes or permissions that are required to access the endpoint. You will send this token in an <code>Authorization</code> header with your request. For more information, see <a href="#authentication">Authentication</a>.</p>
+<h3 id="4-make-a-request-with-octokitjs" title="Making a request / 4. Make a request with Octokit.js">4. Make a request with Octokit.js<a href="#4-make-a-request-with-octokitjs" aria-label="Link to heading '4. Make a request with Octokit.js'" data-heading-content="4. Make a request with Octokit.js" class="anchor"></a></h3>
+<ol>
+<li>
+<p>Import <code>octokit</code> in your script. For example, <code>import { Octokit } from "octokit";</code>. For other ways to import <code>octokit</code>, see <a href="https://github.com/octokit/octokit.js/#readme" class="external">the Octokit.js README</a>.</p>
+</li>
+<li>
+<p>Create an instance of <code>Octokit</code> with your token. Replace <code>YOUR-TOKEN</code> with your token.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">const </span><span style="color:#bf616a;">octokit </span><span style="color:#c0c5ce;">= new </span><span style="color:#bf616a;">Octokit</span><span style="color:#c0c5ce;">({ 
+</span><span style="color:#c0c5ce;">  auth: '</span><span style="color:#a3be8c;">YOUR-TOKEN</span><span style="color:#c0c5ce;">'
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+</li>
+<li>
+<p>Use <code>octokit.request</code> to execute your request.</p>
+<ul>
+<li>Send the HTTP method and path as the first argument to the <code>request</code> method. For more information, see <a href="#http-method">HTTP method</a> and <a href="#path">Path</a>.</li>
+<li>Specify all path, query, and body parameters in an object as the second argument to the <code>request</code> method. For more information, see <a href="#parameters">Parameters</a>.</li>
+</ul>
+<p>In the following example request, the HTTP method is <code>POST</code>, the path is <code>/repos/{owner}/{repo}/issues</code>, the path parameters are <code>owner: "octocat"</code> and <code>repo: "Spoon-Knife"</code>, and the body parameters are <code>title: "Created with the REST API"</code> and <code>body: "This is a test issue created by the REST API"</code>.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>If you are using a fine-grained personal access token, you must replace <code>octocat/Spoon-Knife</code> with a repository that you own or that is owned by an organization that you are a member of. Your token must have access to that repository and have read and write permissions for repository issues. For more information, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a>.</p>
+</div>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">POST /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  owner: "</span><span style="color:#a3be8c;">octocat</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  repo: "</span><span style="color:#a3be8c;">Spoon-Knife</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  title: "</span><span style="color:#a3be8c;">Created with the REST API</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  body: "</span><span style="color:#a3be8c;">This is a test issue created by the REST API</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+<p>The <code>request</code> method automatically passes the <code>Accept: application/vnd.github+json</code> header. To pass additional headers or a different <code>Accept</code> header, add a <code>headers</code> property to the object that is passed as a second argument. The value of the <code>headers</code> property is an object with the header names as keys and header values as values.</p>
+<p>For example, the following code will send a <code>content-type</code> header with a value of <code>text/plain</code> and a <code>X-GitHub-Api-Version</code> header with a value of <code>2026-03-10</code>.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">await </span><span style="color:#bf616a;">octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /octocat</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">  headers: {
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">content-type</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">text/plain</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    "</span><span style="color:#a3be8c;">X-GitHub-Api-Version</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">2026-03-10</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">});
+</span></code></pre>
+</li>
+</ol>
+</div>
+<h2 id="using-the-response" title="Using the response">Using the response<a href="#using-the-response" aria-label="Link to heading 'Using the response'" data-heading-content="Using the response" class="anchor"></a></h2>
+<p>After you make a request, the API will return the response status code, response headers, and potentially a response body.</p>
+<h3 id="about-the-response-code-and-headers" title="Using the response / About the response code and headers">About the response code and headers<a href="#about-the-response-code-and-headers" aria-label="Link to heading 'About the response code and headers'" data-heading-content="About the response code and headers" class="anchor"></a></h3>
+<p>Every request will return an HTTP status code that indicates the success of the response. For more information about response codes, see <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status" class="external">the MDN HTTP response status code documentation</a>.</p>
+<p>Additionally, the response will include headers that give more details about the response. Headers that start with <code>X-</code> or <code>x-</code> are custom to GitHub. For example, the <code>x-ratelimit-remaining</code> and <code>x-ratelimit-reset</code> headers tell you how many requests you can make in a time period.</p>
+<div class="ghd-tool cli">
+<p>To view the status code and headers, use the <code>--include</code> or <code>--i</code> option when you send your request.</p>
+<p>For example, this request gets a list of issues in the octocat/Spoon-Knife repository:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api \
+</span><span style="color:#c0c5ce;">--header 'Accept: application/vnd.github+json' \
+</span><span style="color:#c0c5ce;">--method GET /repos/octocat/Spoon-Knife/issues \
+</span><span style="color:#c0c5ce;">-F per_page=2 --include
+</span></code></pre>
+<p>And it returns a response code and headers that look something like this:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">HTTP/2.0 200 OK
+</span><span style="color:#c0c5ce;">Access-Control-Allow-Origin: *
+</span><span style="color:#c0c5ce;">Access-Control-Expose-Headers: ETag, Link, Location, Retry-After, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset
+</span><span style="color:#c0c5ce;">Cache-Control: private, max-age=60, s-maxage=60
+</span><span style="color:#c0c5ce;">Content-Security-Policy: default-src 'none'
+</span><span style="color:#c0c5ce;">Content-Type: application/json; charset=utf-8
+</span><span style="color:#c0c5ce;">Date: Thu, 04 Aug 2022 19:56:41 GMT
+</span><span style="color:#c0c5ce;">Etag: W/"a63dfbcfdb73621e9d2e89551edcf9856731ced534bd7f1e114a5da1f5f73418"
+</span><span style="color:#c0c5ce;">Link: &lt;https://api.github.com/repositories/1300192/issues?per_page=1&amp;page=2&gt;; rel="next", &lt;https://api.github.com/repositories/1300192/issues?per_page=1&amp;page=14817&gt;; rel="last"
+</span><span style="color:#c0c5ce;">Referrer-Policy: origin-when-cross-origin, strict-origin-when-cross-origin
+</span><span style="color:#c0c5ce;">Server: GitHub.com
+</span><span style="color:#c0c5ce;">Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
+</span><span style="color:#c0c5ce;">Vary: Accept, Authorization, Cookie, Accept-Encoding, Accept, X-Requested-With
+</span><span style="color:#c0c5ce;">X-Accepted-Oauth-Scopes: repo
+</span><span style="color:#c0c5ce;">X-Content-Type-Options: nosniff
+</span><span style="color:#c0c5ce;">X-Frame-Options: deny
+</span><span style="color:#c0c5ce;">X-Github-Api-Version-Selected: 2022-08-09
+</span><span style="color:#c0c5ce;">X-Github-Media-Type: github.v3; format=json
+</span><span style="color:#c0c5ce;">X-Github-Request-Id: 1C73:26D4:E2E500:1EF78F4:62EC2479
+</span><span style="color:#c0c5ce;">X-Oauth-Client-Id: 178c6fc778ccc68e1d6a
+</span><span style="color:#c0c5ce;">X-Oauth-Scopes: gist, read:org, repo, workflow
+</span><span style="color:#c0c5ce;">X-Ratelimit-Limit: 15000
+</span><span style="color:#c0c5ce;">X-Ratelimit-Remaining: 14996
+</span><span style="color:#c0c5ce;">X-Ratelimit-Reset: 1659645499
+</span><span style="color:#c0c5ce;">X-Ratelimit-Resource: core
+</span><span style="color:#c0c5ce;">X-Ratelimit-Used: 4
+</span><span style="color:#c0c5ce;">X-Xss-Protection: 0
+</span></code></pre>
+<p>In this example, the response code is <code>200</code>, which indicates a successful request.</p>
+</div>
+<div class="ghd-tool javascript">
+<p>When you make a request with Octokit.js, the <code>request</code> method returns a promise. If the request was successful, the promise resolves to an object that includes the HTTP status code of the response (<code>status</code>) and the response headers (<code>headers</code>). If an error occurs, the promise resolves to an object that includes the HTTP status code of the response (<code>status</code>) and the response headers (<code>response.headers</code>).</p>
+<p>You can use a <code>try/catch</code> block to catch an error if it occurs. For example, if the request in the following script is successful, the script will log the status code and the value of the <code>x-ratelimit-remaining</code> header. If the request was not successful, the script will log the status code, the value of the <code>x-ratelimit-remaining</code> header, and the error message.</p>
+<p>In the following example, replace <code>REPO-OWNER</code> with the name of the account that owns the repository, and <code>REPO-NAME</code> with the name of the repository.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">result </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">    owner: "</span><span style="color:#a3be8c;">REPO-OWNER</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    repo: "</span><span style="color:#a3be8c;">REPO-NAME</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    per_page: </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Success! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">result</span><span style="color:#c0c5ce;">.status}</span><span style="color:#a3be8c;">. Rate limit remaining: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">result</span><span style="color:#c0c5ce;">.headers["</span><span style="color:#a3be8c;">x-ratelimit-remaining</span><span style="color:#c0c5ce;">"]}`)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.status}</span><span style="color:#a3be8c;">. Rate limit remaining: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.headers["</span><span style="color:#a3be8c;">x-ratelimit-remaining</span><span style="color:#c0c5ce;">"]}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</div>
+<div class="ghd-tool curl">
+<p>To view the status code and headers, use the <code>--include</code> or <code>--i</code> option when you send your request.</p>
+<p>For example, this request gets a list of issues in the octocat/Spoon-Knife repository:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --request GET \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/repos/octocat/Spoon-Knife/issues?per_page=2" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "Authorization: Bearer YOUR-TOKEN" \
+</span><span style="color:#c0c5ce;">--include
+</span></code></pre>
+<p>And it returns a response code and headers that look something like this:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">HTTP/2 200
+</span><span style="color:#c0c5ce;">server: GitHub.com
+</span><span style="color:#c0c5ce;">date: Thu, 04 Aug 2022 20:07:51 GMT
+</span><span style="color:#c0c5ce;">content-type: application/json; charset=utf-8
+</span><span style="color:#c0c5ce;">cache-control: public, max-age=60, s-maxage=60
+</span><span style="color:#c0c5ce;">vary: Accept, Accept-Encoding, Accept, X-Requested-With
+</span><span style="color:#c0c5ce;">etag: W/"7fceb7e8c958d3ec4d02524b042578dcc7b282192e6c939070f4a70390962e18"
+</span><span style="color:#c0c5ce;">x-github-media-type: github.v3; format=json
+</span><span style="color:#c0c5ce;">link: &lt;https://api.github.com/repositories/1300192/issues?per_page=2&amp;sort=updated&amp;direction=asc&amp;page=2&gt;; rel="next", &lt;https://api.github.com/repositories/1300192/issues?per_page=2&amp;sort=updated&amp;direction=asc&amp;page=7409&gt;; rel="last"
+</span><span style="color:#c0c5ce;">access-control-expose-headers: ETag, Link, Location, Retry-After, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset
+</span><span style="color:#c0c5ce;">access-control-allow-origin: *
+</span><span style="color:#c0c5ce;">strict-transport-security: max-age=31536000; includeSubdomains; preload
+</span><span style="color:#c0c5ce;">x-frame-options: deny
+</span><span style="color:#c0c5ce;">x-content-type-options: nosniff
+</span><span style="color:#c0c5ce;">x-xss-protection: 0
+</span><span style="color:#c0c5ce;">referrer-policy: origin-when-cross-origin, strict-origin-when-cross-origin
+</span><span style="color:#c0c5ce;">content-security-policy: default-src 'none'
+</span><span style="color:#c0c5ce;">x-ratelimit-limit: 15000
+</span><span style="color:#c0c5ce;">x-ratelimit-remaining: 14996
+</span><span style="color:#c0c5ce;">x-ratelimit-reset: 1659645535
+</span><span style="color:#c0c5ce;">x-ratelimit-resource: core
+</span><span style="color:#c0c5ce;">x-ratelimit-used: 4
+</span><span style="color:#c0c5ce;">accept-ranges: bytes
+</span><span style="color:#c0c5ce;">content-length: 4936
+</span><span style="color:#c0c5ce;">x-github-request-id: 14E0:4BC6:F1B8BA:208E317:62EC2715
+</span></code></pre>
+<p>In this example, the response code is <code>200</code>, which indicates a successful request.</p>
+</div>
+<h3 id="about-the-response-body" title="Using the response / About the response body">About the response body<a href="#about-the-response-body" aria-label="Link to heading 'About the response body'" data-heading-content="About the response body" class="anchor"></a></h3>
+<p>Many endpoints will return a response body. Unless otherwise specified, the response body is in JSON format. Blank fields are included as <code>null</code> instead of being omitted. All timestamps return in UTC time, ISO 8601 format: <code>YYYY-MM-DDTHH:MM:SSZ</code>.</p>
+<p>Unlike the GraphQL API where you specify what information you want, the REST API typically returns more information than you need. If desired, you can parse the response to pull out specific pieces of information.</p>
+<div class="ghd-tool cli">
+<p>For example, you can use <code>&gt;</code> to redirect the response to a file. In the following example, replace <code>REPO-OWNER</code> with the name of the account that owns the repository, and <code>REPO-NAME</code> with the name of the repository.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">gh api \
+</span><span style="color:#c0c5ce;">--header 'Accept: application/vnd.github+json' \
+</span><span style="color:#c0c5ce;">--method GET /repos/REPO-OWNER/REPO-NAME/issues \
+</span><span style="color:#c0c5ce;">-F per_page=2 &gt; data.json
+</span></code></pre>
+<p>Then you can use jq to get the title and author ID of each issue:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">jq '.[] | {title: .title, authorID: .user.id}' data.json
+</span></code></pre>
+<p>The previous two commands return something like:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">title</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Update index.html</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">authorID</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">10701255
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">title</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Edit index file</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">authorID</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">53709285
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>For more information about jq, see <a href="https://stedolan.github.io/jq/" class="external">the jq documentation</a>.</p>
+</div>
+<div class="ghd-tool javascript">
+<p>For example, you can get the title and author ID of each issue. In the following example, replace <code>REPO-OWNER</code> with the name of the account that owns the repository, and <code>REPO-NAME</code> with the name of the repository.</p>
+<pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">result </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">await octokit</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">request</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">GET /repos/{owner}/{repo}/issues</span><span style="color:#c0c5ce;">", {
+</span><span style="color:#c0c5ce;">    owner: "</span><span style="color:#a3be8c;">REPO-OWNER</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    repo: "</span><span style="color:#a3be8c;">REPO-NAME</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">    per_page: </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">  });
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">const </span><span style="color:#bf616a;">titleAndAuthor </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">result</span><span style="color:#c0c5ce;">.data.</span><span style="color:#8fa1b3;">map</span><span style="color:#c0c5ce;">(issue </span><span style="color:#b48ead;">=&gt; </span><span style="color:#c0c5ce;">{title: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.title, </span><span style="color:#bf616a;">authorID</span><span style="color:#c0c5ce;">: </span><span style="color:#bf616a;">issue</span><span style="color:#c0c5ce;">.user.id})
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">titleAndAuthor</span><span style="color:#c0c5ce;">)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">catch </span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">) {
+</span><span style="color:#c0c5ce;">  console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">(`</span><span style="color:#a3be8c;">Error! Status: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.status}</span><span style="color:#a3be8c;">. Message: </span><span style="color:#c0c5ce;">${</span><span style="color:#bf616a;">error</span><span style="color:#c0c5ce;">.response.data.message}`)
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+</div>
+<div class="ghd-tool curl">
+<p>For example, you can use <code>&gt;</code> to redirect the response to a file. In the following example, replace <code>REPO-OWNER</code> with the name of the account that owns the repository, and <code>REPO-NAME</code> with the name of the repository.</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl --request GET \
+</span><span style="color:#c0c5ce;">--url "https://api.github.com/repos/REPO-OWNER/REPO-NAME/issues?per_page=2" \
+</span><span style="color:#c0c5ce;">--header "Accept: application/vnd.github+json" \
+</span><span style="color:#c0c5ce;">--header "Authorization: Bearer YOUR-TOKEN" &gt; data.json
+</span></code></pre>
+<p>Then you can use jq to get the title and author ID of each issue:</p>
+<pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">jq '.[] | {title: .title, authorID: .user.id}' data.json
+</span></code></pre>
+<p>The previous two commands return something like:</p>
+<pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">title</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Update index.html</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">authorID</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">10701255
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">title</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Edit index file</span><span style="color:#c0c5ce;">",
+</span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">authorID</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">53709285
+</span><span style="color:#c0c5ce;">}
+</span></code></pre>
+<p>For more information about jq, see <a href="https://stedolan.github.io/jq/" class="external">the jq documentation</a>.</p>
+</div>
+<h4 id="detailed-versus-summary-representations">Detailed versus summary representations<a href="#detailed-versus-summary-representations" aria-label="Link to heading 'Detailed versus summary representations'" data-heading-content="Detailed versus summary representations" class="anchor"></a></h4>
+<p>A response can include all attributes for a resource or only a subset of attributes, depending on whether you fetch an individual resource or a list of resources.</p>
+<ul>
+<li>When you fetch an <em>individual resource</em>, like a specific repository, the response will typically include all attributes for that resource. This is the "detailed" representation of the resource.</li>
+<li>When you fetch a <em>list of resources</em>, like a list of multiple repositories, the response will only include a subset of the attributes for each resource. This is the "summary" representation of the resource.</li>
+</ul>
+<p>Note that authorization sometimes influences the amount of detail included in a representation.</p>
+<p>The reason for this is because some attributes are computationally expensive for the API to provide, so GitHub excludes those attributes from the summary representation. To obtain those attributes, you can fetch the detailed representation.</p>
+<p>The documentation provides an example response for each API method. The example response illustrates all attributes that are returned by that method.</p>
+<h4 id="hypermedia">Hypermedia<a href="#hypermedia" aria-label="Link to heading 'Hypermedia'" data-heading-content="Hypermedia" class="anchor"></a></h4>
+<p>All resources may have one or more <code>*_url</code> properties linking to other resources. These are meant to provide explicit URLs so that proper API clients don't need to construct URLs on their own. It is highly recommended that API clients use these. Doing so will make future upgrades of the API easier for developers. All URLs are expected to be proper <a href="https://datatracker.ietf.org/doc/html/rfc6570" class="external">RFC 6570</a> URI templates.</p>
+<p>You can then expand these templates using something like the <a href="https://github.com/hannesg/uri_template" class="external">uri<span data-escaped-char="">_</span>template</a> gem:</p>
+<pre lang="ruby" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">&gt;&gt; tmpl = </span><span style="color:#ebcb8b;">URITemplate</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">new</span><span style="color:#c0c5ce;">('</span><span style="color:#a3be8c;">/notifications{?since,all,participating}</span><span style="color:#c0c5ce;">')
+</span><span style="color:#c0c5ce;">&gt;&gt; tmpl.expand
+</span><span style="color:#c0c5ce;">=&gt; "</span><span style="color:#a3be8c;">/notifications</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">&gt;&gt; tmpl.expand </span><span style="color:#a3be8c;">all: </span><span style="color:#d08770;">1
+</span><span style="color:#c0c5ce;">=&gt; "</span><span style="color:#a3be8c;">/notifications?all=1</span><span style="color:#c0c5ce;">"
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">&gt;&gt; tmpl.expand </span><span style="color:#a3be8c;">all: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">participating: </span><span style="color:#d08770;">1
+</span><span style="color:#c0c5ce;">=&gt; "</span><span style="color:#a3be8c;">/notifications?all=1&amp;participating=1</span><span style="color:#c0c5ce;">"
+</span></code></pre>
+<h2 id="rate-limiting" title="Rate limiting">Rate limiting<a href="#rate-limiting" aria-label="Link to heading 'Rate limiting'" data-heading-content="Rate limiting" class="anchor"></a></h2>
+<p>The GitHub REST API limits the number of requests you can make within a given time period. For more information about rate limits and how to check your current rate limit status, see <a href="rate-limits-for-the-rest-api.html">Rate limits for the REST API</a>.</p>
+<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<p>This article demonstrated how to list and create issues in a repository. For more practice, try to comment on an issue, edit the title of an issue, or close an issue. For more information, see the <a href="../issues/comments.html#create-an-issue-comment">"Create an issue comment" endpoint</a> and the <a href="../issues/issues.html#update-an-issue">"Update an issue" endpoint</a>.</p>
+<p>For more information about other endpoints that you can use, see the <a href="../index.html">REST reference documentation</a>.</p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

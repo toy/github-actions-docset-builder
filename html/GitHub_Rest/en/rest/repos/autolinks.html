@@ -1,0 +1,205 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for repository autolinks</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Repositories</a> / </nav><h1 id="rest-api-endpoints-for-repository-autolinks">REST API endpoints for repository autolinks<a href="#rest-api-endpoints-for-repository-autolinks" aria-label="Link to heading 'REST API endpoints for repository autolinks'" data-heading-content="REST API endpoints for repository autolinks" class="anchor"></a></h1>
+<p>Use the REST API to add autolinks to external resources.</p>
+<h2 id="about-repository-autolinks" title="About repository autolinks">About repository autolinks<a href="#about-repository-autolinks" aria-label="Link to heading 'About repository autolinks'" data-heading-content="About repository autolinks" class="anchor"></a></h2>
+<p>To help streamline your workflow, you can use the REST API to add autolinks to external resources like JIRA issues and Zendesk tickets. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/configuring-autolinks-to-reference-external-resources" class="external">Configuring autolinks to reference external resources</a>.</p>
+<p>GitHub Apps require repository administration permissions with read or write access to use these endpoints.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="get-all-autolinks-of-a-repository" title="Get all autolinks of a repository">Get all autolinks of a repository<a href="#get-all-autolinks-of-a-repository" aria-label="Link to heading 'Get all autolinks of a repository'" data-heading-content="Get all autolinks of a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/autolinks
+</span></code></pre>
+<p>Gets all autolinks that are configured for a repository.<br>
+Information about autolinks are only available to repository administrators.</p>
+<h3 id="parameters" title="Get all autolinks of a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Get all autolinks of a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples" title="Get all autolinks of a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/autolinks
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array of <code>Autolink reference</code>:</p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>key_prefix</code>: required, string</li>
+<li><code>url_template</code>: required, string</li>
+<li><code>is_alphanumeric</code>: required, boolean</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+</ul>
+<h2 id="create-an-autolink-reference-for-a-repository" title="Create an autolink reference for a repository">Create an autolink reference for a repository<a href="#create-an-autolink-reference-for-a-repository" aria-label="Link to heading 'Create an autolink reference for a repository'" data-heading-content="Create an autolink reference for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/autolinks
+</span></code></pre>
+<p>Users with admin access to the repository can create an autolink.</p>
+<h3 id="parameters-1" title="Create an autolink reference for a repository / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>key_prefix</code></strong> (string) (required)<br>
+This prefix appended by certain characters will generate a link any time it is found in an issue, pull request, or commit.</p>
+</li>
+<li>
+<p><strong><code>url_template</code></strong> (string) (required)<br>
+The URL must contain <num> for the reference number. <num> matches different characters depending on the value of is<span data-escaped-char="">_</span>alphanumeric.</num></num></p>
+</li>
+<li>
+<p><strong><code>is_alphanumeric</code></strong> (boolean)<br>
+Whether this autolink reference matches alphanumeric characters. If true, the <num> parameter of the url<span data-escaped-char="">_</span>template matches alphanumeric characters A-Z (case insensitive), 0-9, and -. If false, this autolink reference only matches numeric characters.<br>
+Default: <code>true</code></num></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-1" title="Create an autolink reference for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>201</strong> - Created</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-1" title="Create an autolink reference for a repository / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/autolinks \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "key_prefix": "TICKET-",
+</span><span style="color:#c0c5ce;">  "url_template": "https://example.com/TICKET?query=&lt;num&gt;",
+</span><span style="color:#c0c5ce;">  "is_alphanumeric": true
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>key_prefix</code>: required, string</li>
+<li><code>url_template</code>: required, string</li>
+<li><code>is_alphanumeric</code>: required, boolean</li>
+<li><code>updated_at</code>: string or null, format: date-time</li>
+</ul>
+<h2 id="get-an-autolink-reference-of-a-repository" title="Get an autolink reference of a repository">Get an autolink reference of a repository<a href="#get-an-autolink-reference-of-a-repository" aria-label="Link to heading 'Get an autolink reference of a repository'" data-heading-content="Get an autolink reference of a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/autolinks/{autolink_id}
+</span></code></pre>
+<p>This returns a single autolink reference by ID that was configured for the given repository.<br>
+Information about autolinks are only available to repository administrators.</p>
+<h3 id="parameters-2" title="Get an autolink reference of a repository / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>autolink_id</code></strong> (integer) (required)<br>
+The unique identifier of the autolink.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2" title="Get an autolink reference of a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-2" title="Get an autolink reference of a repository / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/autolinks/AUTOLINK_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#create-an-autolink-reference-for-a-repository">Create an autolink reference for a repository</a>.</p>
+<h2 id="delete-an-autolink-reference-from-a-repository" title="Delete an autolink reference from a repository">Delete an autolink reference from a repository<a href="#delete-an-autolink-reference-from-a-repository" aria-label="Link to heading 'Delete an autolink reference from a repository'" data-heading-content="Delete an autolink reference from a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}
+</span></code></pre>
+<p>This deletes a single autolink reference by ID that was configured for the given repository.<br>
+Information about autolinks are only available to repository administrators.</p>
+<h3 id="parameters-3" title="Delete an autolink reference from a repository / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>autolink_id</code></strong> (integer) (required)<br>
+The unique identifier of the autolink.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-3" title="Delete an autolink reference from a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-3" title="Delete an autolink reference from a repository / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/autolinks/AUTOLINK_ID
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

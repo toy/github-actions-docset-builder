@@ -1,0 +1,201 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for dependency submission</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Dependency graph</a> / </nav><h1 id="rest-api-endpoints-for-dependency-submission">REST API endpoints for dependency submission<a href="#rest-api-endpoints-for-dependency-submission" aria-label="Link to heading 'REST API endpoints for dependency submission'" data-heading-content="REST API endpoints for dependency submission" class="anchor"></a></h1>
+<p>Use the REST API to submit dependencies.</p>
+<h2 id="about-dependency-submissions" title="About dependency submissions">About dependency submissions<a href="#about-dependency-submissions" aria-label="Link to heading 'About dependency submissions'" data-heading-content="About dependency submissions" class="anchor"></a></h2>
+<p>You can use the REST API to submit dependencies for a project. This enables you to add dependencies, such as those resolved when software is compiled or built, to GitHub's dependency graph feature, providing a more complete picture of all of your project's dependencies.</p>
+<p>The dependency graph shows any dependencies you submit using the API in addition to any dependencies that are identified from manifest or lock files in the repository (for example, a <code>package-lock.json</code> file in a JavaScript project). For more information about viewing the dependency graph, see <a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/explore-dependencies#viewing-the-dependency-graph" class="external">Exploring the dependencies of a repository</a>.</p>
+<p>Submitted dependencies will receive Dependabot alerts and Dependabot security updates for any known vulnerabilities. You will only get Dependabot alerts for dependencies that are from one of the supported ecosystems for the GitHub Advisory Database. For more information about these ecosystems, see <a href="https://docs.github.com/en/code-security/concepts/vulnerability-reporting-and-management/github-advisory-database#github-reviewed-vulnerability-advisories" class="external">GitHub Advisory database</a>. For transitive dependencies submitted via the dependency submission API, Dependabot will automatically open pull requests to update the parent dependency, if an update is available.</p>
+<p>Submitted dependencies will be shown in dependency review, but are <em>not</em> available in your organization's dependency insights.</p>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>The dependency review API and the dependency submission API work together. This means that the dependency review API will include dependencies submitted via the dependency submission API.</p>
+</div>
+<p>You can submit dependencies in the form of a snapshot. A snapshot is a set of dependencies associated with a commit SHA and other metadata, that reflects the current state of your repository for a commit. You can choose to use pre-made actions or create your own actions to submit your dependencies in the required format each time your project is built. For more information, see <a href="https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/use-dependency-submission-api" class="external">Using the dependency submission API</a>.</p>
+<p>You can submit multiple sets of dependencies to be included in your dependency graph. The REST API uses the <code>job.correlator</code> property and the <code>detector.name</code> category of the snapshot to ensure the latest submissions for each workflow get shown. The <code>correlator</code> property itself is the primary field you will use to keep independent submissions distinct. An example <code>correlator</code> could be a simple combination of two variables available in actions runs: <code>&lt;GITHUB_WORKFLOW&gt; &lt;GITHUB_JOB&gt;</code>.</p>
+<p>A repository can use multiple methods for dependency submission, which can cause the same package manifest to be scanned multiple times, potentially with different outputs from each scan. Dependency graph uses deduplication logic to parse the outputs, prioritizing the most accurate information for each manifest file.</p>
+<p>Dependency graph displays only one instance of each manifest file using the following precedence rules.</p>
+<ol>
+<li><strong>User submissions</strong> take the highest priority, because they are usually created during artifact builds they have the most complete information.
+<ul>
+<li>If there are multiple manual snapshots from different detectors, they are sorted alphabetically by correlator and the first one used.</li>
+<li>If there are two correlators with the same detector, the resolved dependencies are merged. For more information about correlators and detectors, see <a href="">REST API endpoints for dependency submission</a>.</li>
+</ul>
+</li>
+<li><strong>Dependabot graph jobs</strong> have the second-highest priority. For ecosystems where Dependabot graph jobs are available (currently Go and Python), they take precedence over automatic dependency submission.</li>
+<li><strong>Automatic submissions</strong> have the next priority since they are also created during artifact builds, but are not submitted by users.</li>
+<li><strong>Static analysis results</strong> are used when no other data is available.</li>
+</ol>
+<div class="markdown-alert markdown-alert-note">
+<p class="markdown-alert-title">Note</p>
+<p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
+</div>
+<h2 id="create-a-snapshot-of-dependencies-for-a-repository" title="Create a snapshot of dependencies for a repository">Create a snapshot of dependencies for a repository<a href="#create-a-snapshot-of-dependencies-for-a-repository" aria-label="Link to heading 'Create a snapshot of dependencies for a repository'" data-heading-content="Create a snapshot of dependencies for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/dependency-graph/snapshots
+</span></code></pre>
+<p>Create a new snapshot of a repository's dependencies.<br>
+The authenticated user must have access to the repository.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters" title="Create a snapshot of dependencies for a repository / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters">Path and query parameters<a href="#path-and-query-parameters" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h4 id="body-parameters">Body parameters<a href="#body-parameters" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>version</code></strong> (integer) (required)<br>
+The version of the repository snapshot submission.</p>
+</li>
+<li>
+<p><strong><code>job</code></strong> (object) (required)</p>
+<ul>
+<li><strong><code>id</code></strong> (string) (required)<br>
+The external ID of the job.</li>
+<li><strong><code>correlator</code></strong> (string) (required)<br>
+Correlator provides a key that is used to group snapshots submitted over time. Only the "latest" submitted snapshot for a given combination of job.correlator and detector.name will be considered when calculating a repository's current dependencies. Correlator should be as unique as it takes to distinguish all detection runs for a given "wave" of CI workflow you run. If you're using GitHub Actions, a good default value for this could be the environment variables GITHUB<span data-escaped-char="">_</span>WORKFLOW and GITHUB<span data-escaped-char="">_</span>JOB concatenated together. If you're using a build matrix, then you'll also need to add additional key(s) to distinguish between each submission inside a matrix variation.</li>
+<li><strong><code>html_url</code></strong> (string)<br>
+The url for the job.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>sha</code></strong> (string) (required)<br>
+The commit SHA associated with this dependency snapshot. Maximum length: 64 characters.</p>
+</li>
+<li>
+<p><strong><code>ref</code></strong> (string) (required)<br>
+The repository branch that triggered this snapshot.</p>
+</li>
+<li>
+<p><strong><code>detector</code></strong> (object) (required)<br>
+A description of the detector used.</p>
+<ul>
+<li><strong><code>name</code></strong> (string) (required)<br>
+The name of the detector used.</li>
+<li><strong><code>version</code></strong> (string) (required)<br>
+The version of the detector used.</li>
+<li><strong><code>url</code></strong> (string) (required)<br>
+The url of the detector used.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>metadata</code></strong> (object)<br>
+User-defined metadata to store domain-specific information limited to 8 keys with scalar values.</p>
+</li>
+<li>
+<p><strong><code>manifests</code></strong> (object)<br>
+A collection of package manifests, which are a collection of related dependencies declared in a file or representing a logical group of dependencies.</p>
+<ul>
+<li><strong><code>key</code></strong> (object)<br>
+A user-defined key to represent an item in manifests.
+<ul>
+<li><strong><code>name</code></strong> (string) (required)<br>
+The name of the manifest.</li>
+<li><strong><code>file</code></strong> (object)
+<ul>
+<li><strong><code>source_location</code></strong> (string)<br>
+The path of the manifest file relative to the root of the Git repository.</li>
+</ul>
+</li>
+<li><strong><code>metadata</code></strong> (object)<br>
+User-defined metadata to store domain-specific information limited to 8 keys with scalar values.</li>
+<li><strong><code>resolved</code></strong> (object)<br>
+A collection of resolved package dependencies.
+<ul>
+<li><strong><code>key</code></strong> (object)<br>
+A user-defined key to represent an item in resolved.
+<ul>
+<li><strong><code>package_url</code></strong> (string)<br>
+Package-url (PURL) of dependency. See <a href="https://github.com/package-url/purl-spec" class="external">https://github.com/package-url/purl-spec</a> for more details.</li>
+<li><strong><code>metadata</code></strong> (object)<br>
+User-defined metadata to store domain-specific information limited to 8 keys with scalar values.</li>
+<li><strong><code>relationship</code></strong> (string)<br>
+A notation of whether a dependency is requested directly by this manifest or is a dependency of another dependency.<br>
+Can be one of: <code>direct</code>, <code>indirect</code></li>
+<li><strong><code>scope</code></strong> (string)<br>
+A notation of whether the dependency is required for the primary build artifact (runtime) or is only used for development. Future versions of this specification may allow for more granular scopes.<br>
+Can be one of: <code>runtime</code>, <code>development</code></li>
+<li><strong><code>dependencies</code></strong> (array of strings)<br>
+Array of package-url (PURLs) of direct child dependencies.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>scanned</code></strong> (string) (required)<br>
+The time at which the snapshot was scanned.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes" title="Create a snapshot of dependencies for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>201</strong> - Created</li>
+</ul>
+<h3 id="code-examples" title="Create a snapshot of dependencies for a repository / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/dependency-graph/snapshots \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "version": 0,
+</span><span style="color:#c0c5ce;">  "sha": "ce587453ced02b1526dfb4cb910479d431683101",
+</span><span style="color:#c0c5ce;">  "ref": "refs/heads/main",
+</span><span style="color:#c0c5ce;">  "job": {
+</span><span style="color:#c0c5ce;">    "correlator": "yourworkflowname_youractionname",
+</span><span style="color:#c0c5ce;">    "id": "yourrunid"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "detector": {
+</span><span style="color:#c0c5ce;">    "name": "octo-detector",
+</span><span style="color:#c0c5ce;">    "version": "0.0.1",
+</span><span style="color:#c0c5ce;">    "url": "https://github.com/octo-org/octo-repo"
+</span><span style="color:#c0c5ce;">  },
+</span><span style="color:#c0c5ce;">  "scanned": "2022-06-14T20:25:00Z",
+</span><span style="color:#c0c5ce;">  "manifests": {
+</span><span style="color:#c0c5ce;">    "package-lock.json": {
+</span><span style="color:#c0c5ce;">      "name": "package-lock.json",
+</span><span style="color:#c0c5ce;">      "file": {
+</span><span style="color:#c0c5ce;">        "source_location": "src/package-lock.json"
+</span><span style="color:#c0c5ce;">      },
+</span><span style="color:#c0c5ce;">      "resolved": {
+</span><span style="color:#c0c5ce;">        "@actions/core": {
+</span><span style="color:#c0c5ce;">          "package_url": "pkg:/npm/%40actions/core@1.1.9",
+</span><span style="color:#c0c5ce;">          "dependencies": [
+</span><span style="color:#c0c5ce;">            "@actions/http-client"
+</span><span style="color:#c0c5ce;">          ]
+</span><span style="color:#c0c5ce;">        },
+</span><span style="color:#c0c5ce;">        "@actions/http-client": {
+</span><span style="color:#c0c5ce;">          "package_url": "pkg:/npm/%40actions/http-client@1.0.7",
+</span><span style="color:#c0c5ce;">          "dependencies": [
+</span><span style="color:#c0c5ce;">            "tunnel"
+</span><span style="color:#c0c5ce;">          ]
+</span><span style="color:#c0c5ce;">        },
+</span><span style="color:#c0c5ce;">        "tunnel": {
+</span><span style="color:#c0c5ce;">          "package_url": "pkg:/npm/tunnel@0.0.6"
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">      }
+</span><span style="color:#c0c5ce;">    }
+</span><span style="color:#c0c5ce;">  }
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 201):</strong></p>
+<ul>
+<li><code>id</code>: required, integer</li>
+<li><code>created_at</code>: required, string</li>
+<li><code>result</code>: required, string</li>
+<li><code>message</code>: required, string</li>
+</ul>
+<footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>
