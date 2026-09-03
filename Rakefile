@@ -267,6 +267,10 @@ private
   end
 
   def dashing_config
+    sections = html_path.glob('**/*.html').flat_map do |path|
+      Nokogiri::HTML5.parse(path.read).search('h2').map{ |h2| h2['title'] }
+    end
+
     JSON.pretty_generate(
       name:,
       package:,
@@ -280,6 +284,7 @@ private
           [%Q{code[data-entry-type="#{entry_type}"]}, entry_type]
         end,
       },
+      ignore: sections.tally.select{ |_, n| n > 2 }.keys.sort,
     )
   end
 
