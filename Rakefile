@@ -267,7 +267,8 @@ private
       externalURL: "https://docs.github.com/en/#{prefix}",
       selectors: {
         'h1' => 'Guide',
-        'h2, h3' => {attr: 'title', type: 'Section'},
+        'h2[data-entry-type="Section"]' => {attr: 'title', type: 'Section'},
+        'h2[data-entry-type="Resource"]' => {attr: 'title', type: 'Resource'},
         'code.keyword' => 'Keyword',
       },
     )
@@ -405,14 +406,13 @@ private
       fragment.children.first.before(nav)
     end
 
-    index = []
-    fragment.search('h2, h3').each do |h|
-      index[h.name[1].to_i - 2..] = h.text
-
-      h['title'] = if index[0] && index[1] && index[1].include?(index[0])
-        index[1]
+    fragment.search('h2').each do |h2|
+      if (pre = h2.next_element).name == 'pre' && pre.text =~ %r{\A[A-Z]+ /\S*\n?\z}
+        h2['title'] = "#{pre.text.strip} (#{h2.text.strip})"
+        h2['data-entry-type'] = 'Resource'
       else
-        index.compact.join(' / ')
+        h2['title'] = h2.text.strip
+        h2['data-entry-type'] = 'Section'
       end
     end
 
