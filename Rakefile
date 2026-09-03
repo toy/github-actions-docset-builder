@@ -268,7 +268,7 @@ private
 
   def dashing_config
     sections = html_path.glob('**/*.html').flat_map do |path|
-      Nokogiri::HTML5.parse(path.read).search('h2').map{ |h2| h2['title'] }
+      Nokogiri::HTML5.parse(path.read).search('h2').filter_map{ |h2| h2['title'] }
     end
 
     JSON.pretty_generate(
@@ -421,11 +421,14 @@ private
     end
 
     fragment.search('h2').each do |h2|
+      title = h2.text.strip
+      next if title =~ /\ASchema changes for |\AChanges scheduled for /
+
       if (pre = h2.next_element).name == 'pre' && pre.text =~ %r{\A[A-Z]+ /\S*\n?\z}
-        h2['title'] = "#{pre.text.strip} (#{h2.text.strip})"
+        h2['title'] = "#{pre.text.strip} (#{title})"
         h2['data-entry-type'] = 'Resource'
       else
-        h2['title'] = h2.text.strip
+        h2['title'] = title
         h2['data-entry-type'] = 'Section'
       end
     end
