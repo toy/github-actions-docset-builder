@@ -98,6 +98,13 @@ class GithubDocBuilder
     dark: 'https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown-dark-dimmed.css',
   }
 
+  TABLE_ENTRY_TYPES_BY_HEADERS = {
+    ['Command', 'Description'] => 'Command',
+    ['Variable', 'Description'] => 'Variable',
+    ['Operator', 'Description'] => 'Operator',
+    ['Property name', 'Type', 'Description'] => 'Property',
+  }
+
   def self.all
     yield new 'actions'
     yield new 'code-security', name: 'GitHub Security and code quality'
@@ -269,7 +276,9 @@ private
         'h1' => 'Guide',
         'h2[data-entry-type="Section"]' => {attr: 'title', type: 'Section'},
         'h2[data-entry-type="Resource"]' => {attr: 'title', type: 'Resource'},
-        'code.keyword' => 'Keyword',
+        **TABLE_ENTRY_TYPES_BY_HEADERS.to_h do |_, entry_type|
+          [%Q{code[data-entry-type="#{entry_type}"]}, entry_type]
+        end,
       },
     )
   end
@@ -416,22 +425,13 @@ private
       end
     end
 
-    # try to find meaningfull keywords in tables
-    # find only columns which contain only single <code> and all texts should be different
-    # there should be only one such column
-    fragment.search('tbody').each do |tbody|
-      rows = tbody.search('tr').map do |tr|
-        tr.search('td').map do |td|
-          codes = td.search('code')
+    fragment.search('table').each do |table|
+      headers = table.at('thead').search('th').map(&:text)
+      next unless (entry_type = TABLE_ENTRY_TYPES_BY_HEADERS[headers])
 
-          codes.first if codes.length == 1 && codes.text == td.text
-        end
+      table.search('tbody tr').each do |tr|
+        tr.at('td').search('code').each{ it['data-entry-type'] = entry_type }
       end
-
-      columns = rows.transpose.reject{ |c| c.length < 2 || c.include?(nil) || c.uniq(&:text).length < c.length }
-      next unless columns.length == 1
-
-      columns.first.each{ |code| code['class'] = 'keyword' }
     end
 
     Nokogiri::HTML5::Builder.new do |doc|
