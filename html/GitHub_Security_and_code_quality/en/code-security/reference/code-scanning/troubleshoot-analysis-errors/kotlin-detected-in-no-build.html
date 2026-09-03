@@ -16,17 +16,17 @@
 <h2 id="fixing-the-problem" title="Fixing the problem">Fixing the problem<a href="#fixing-the-problem" aria-label="Link to heading 'Fixing the problem'" data-heading-content="Fixing the problem" class="anchor"></a></h2>
 <p>You may not want to analyze the Kotlin files, in which case you can ignore the warning message.</p>
 <p>If you want to update the analysis to also include Kotlin files, then CodeQL will need to build the Java and Kotlin code.</p>
-<h3 id="code-scanning-default-setup" title="Fixing the problem / Code scanning default setup">Code scanning default setup<a href="#code-scanning-default-setup" aria-label="Link to heading 'Code scanning default setup'" data-heading-content="Code scanning default setup" class="anchor"></a></h3>
+<h3 id="code-scanning-default-setup">Code scanning default setup<a href="#code-scanning-default-setup" aria-label="Link to heading 'Code scanning default setup'" data-heading-content="Code scanning default setup" class="anchor"></a></h3>
 <ol>
 <li>Wait until the Kotlin code is merged into the default branch for the repository.</li>
 <li>Disable and then re-enable default setup on the "Settings" page for your repository.</li>
 </ol>
 <p>This will trigger a new analysis using automatic build detection. See <a href="../../../how-tos/find-and-fix-code-vulnerabilities/configure-code-scanning/configure-code-scanning.html">Configuring default setup for code scanning</a> and <a href="../codeql/build-options-for-compiled-languages.html#building-java-and-kotlin">Building Java and Kotlin</a>.</p>
 <p>If the automatic build detection fails, you will need to use advanced setup with the correct build commands for the project to analyze both languages.</p>
-<h3 id="code-scanning-advanced-setup" title="Fixing the problem / Code scanning advanced setup">Code scanning advanced setup<a href="#code-scanning-advanced-setup" aria-label="Link to heading 'Code scanning advanced setup'" data-heading-content="Code scanning advanced setup" class="anchor"></a></h3>
+<h3 id="code-scanning-advanced-setup">Code scanning advanced setup<a href="#code-scanning-advanced-setup" aria-label="Link to heading 'Code scanning advanced setup'" data-heading-content="Code scanning advanced setup" class="anchor"></a></h3>
 <p>If you already use advanced setup, you can edit the CodeQL workflow and change the build mode for <code>java-kotlin</code> from <code>none</code> to either <code>autobuild</code> to automatically build your project, or <code>manual</code> to specify your own build steps. <a href="../codeql/build-options-for-compiled-languages.html#building-java-and-kotlin">Building Java and Kotlin</a>.</p>
 <p>If you need to convert from default setup to advanced setup, you need enable advanced setup on the on the "Settings" page for your repository and create a CodeQL workflow. Then you can define a <code>manual</code> build mode for <code>java-kotlin</code> and define the build commands for the project.</p>
-<h3 id="running-the-codeql-cli-directly" title="Fixing the problem / Running the CodeQL CLI directly">Running the CodeQL CLI directly<a href="#running-the-codeql-cli-directly" aria-label="Link to heading 'Running the CodeQL CLI directly'" data-heading-content="Running the CodeQL CLI directly" class="anchor"></a></h3>
+<h3 id="running-the-codeql-cli-directly">Running the CodeQL CLI directly<a href="#running-the-codeql-cli-directly" aria-label="Link to heading 'Running the CodeQL CLI directly'" data-heading-content="Running the CodeQL CLI directly" class="anchor"></a></h3>
 <p>Update your calls to run the CodeQL CLI for the repository and pull requests to replace <code>--build-mode none</code> by <code>--build-mode autobuild</code> to try the automatic build detection. If automatic build detection is unsuccessful, remove the <code>--build-mode</code> option and include one or more <code>--command</code> options detailing the build script or steps required to build the project.</p>
 <h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>

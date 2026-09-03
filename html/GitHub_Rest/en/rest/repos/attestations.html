@@ -4,13 +4,13 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="create-an-attestation" title="Create an attestation">Create an attestation<a href="#create-an-attestation" aria-label="Link to heading 'Create an attestation'" data-heading-content="Create an attestation" class="anchor"></a></h2>
+<h2 id="create-an-attestation" title="POST /repos/{owner}/{repo}/attestations (Create an attestation)">Create an attestation<a href="#create-an-attestation" aria-label="Link to heading 'Create an attestation'" data-heading-content="Create an attestation" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/attestations
 </span></code></pre>
 <p>Store an artifact attestation and associate it with a repository.<br>
 The authenticated user must have write permission to the repository and, if using a fine-grained access token, the attestations:write permission is required.<br>
 Artifact attestations are meant to be created using the attest action. For more information, see our guide on using artifact attestations to establish a build's provenance.</p>
-<h3 id="parameters" title="Create an attestation / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -39,7 +39,7 @@ Refer to the Sigstore Bundle Specification for more information.
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="Create an attestation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -51,7 +51,7 @@ Refer to the Sigstore Bundle Specification for more information.
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Create an attestation / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -122,13 +122,13 @@ Refer to the Sigstore Bundle Specification for more information.
 <ul>
 <li><code>id</code>: integer</li>
 </ul>
-<h2 id="list-attestations" title="List attestations">List attestations<a href="#list-attestations" aria-label="Link to heading 'List attestations'" data-heading-content="List attestations" class="anchor"></a></h2>
+<h2 id="list-attestations" title="GET /repos/{owner}/{repo}/attestations/{subject_digest} (List attestations)">List attestations<a href="#list-attestations" aria-label="Link to heading 'List attestations'" data-heading-content="List attestations" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/attestations/{subject_digest}
 </span></code></pre>
 <p>List a collection of artifact attestations with a given subject digest that are associated with a repository.<br>
 The authenticated user making the request must have read access to the repository. In addition, when using a fine-grained access token the attestations:read permission is required.<br>
 Please note: in order to offer meaningful security benefits, an attestation's signature and timestamps must be cryptographically verified, and the identity of the attestation signer must be validated. Attestations can be verified using the GitHub CLI attestation verify command. For more information, see our guide on how to use artifact attestations to establish a build's provenance.</p>
-<h3 id="parameters-1" title="List attestations / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -168,11 +168,11 @@ This option accepts provenance, sbom, release, or freeform text<br>
 for custom predicate types.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="List attestations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-1" title="List attestations / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

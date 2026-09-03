@@ -8,16 +8,16 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="get-the-authenticated-app" title="Get the authenticated app">Get the authenticated app<a href="#get-the-authenticated-app" aria-label="Link to heading 'Get the authenticated app'" data-heading-content="Get the authenticated app" class="anchor"></a></h2>
+<h2 id="get-the-authenticated-app" title="GET /app (Get the authenticated app)">Get the authenticated app<a href="#get-the-authenticated-app" aria-label="Link to heading 'Get the authenticated app'" data-heading-content="Get the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app
 </span></code></pre>
 <p>Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this GitHub App, see the installations<span data-escaped-char="">_</span>count in the response. For more details about your app's installations, see the "List installations for the authenticated app" endpoint.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="http-response-status-codes" title="Get the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples" title="Get the authenticated app / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -92,11 +92,11 @@ You must use a JWT to access this endpoint.</p>
 <li><code>events</code>: required, array of string</li>
 <li><code>installations_count</code>: integer</li>
 </ul>
-<h2 id="create-a-github-app-from-a-manifest" title="Create a GitHub App from a manifest">Create a GitHub App from a manifest<a href="#create-a-github-app-from-a-manifest" aria-label="Link to heading 'Create a GitHub App from a manifest'" data-heading-content="Create a GitHub App from a manifest" class="anchor"></a></h2>
+<h2 id="create-a-github-app-from-a-manifest" title="POST /app-manifests/{code}/conversions (Create a GitHub App from a manifest)">Create a GitHub App from a manifest<a href="#create-a-github-app-from-a-manifest" aria-label="Link to heading 'Create a GitHub App from a manifest'" data-heading-content="Create a GitHub App from a manifest" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /app-manifests/{code}/conversions
 </span></code></pre>
 <p>Use this endpoint to complete the handshake necessary when implementing the GitHub App Manifest flow. When you create a GitHub App with the manifest flow, you receive a temporary code used to retrieve the GitHub App's id, pem (private key), and webhook<span data-escaped-char="">_</span>secret.</p>
-<h3 id="parameters" title="Create a GitHub App from a manifest / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -106,7 +106,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <ul>
 <li><strong><code>code</code></strong> (string) (required)</li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Create a GitHub App from a manifest / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -118,7 +118,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Create a GitHub App from a manifest / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -209,11 +209,11 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
 </li>
 </ul>
-<h2 id="list-installation-requests-for-the-authenticated-app" title="List installation requests for the authenticated app">List installation requests for the authenticated app<a href="#list-installation-requests-for-the-authenticated-app" aria-label="Link to heading 'List installation requests for the authenticated app'" data-heading-content="List installation requests for the authenticated app" class="anchor"></a></h2>
+<h2 id="list-installation-requests-for-the-authenticated-app" title="GET /app/installation-requests (List installation requests for the authenticated app)">List installation requests for the authenticated app<a href="#list-installation-requests-for-the-authenticated-app" aria-label="Link to heading 'List installation requests for the authenticated app'" data-heading-content="List installation requests for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installation-requests
 </span></code></pre>
 <p>Lists all the pending installation requests for the authenticated GitHub App.</p>
-<h3 id="parameters-1" title="List installation requests for the authenticated app / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -232,7 +232,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="List installation requests for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - List of integration installation requests</p>
@@ -244,7 +244,7 @@ Default: <code>1</code></p>
 <p><strong>401</strong> - Requires authentication</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="List installation requests for the authenticated app / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -303,12 +303,12 @@ Default: <code>1</code></p>
 <li><code>requester</code>: required, <code>Simple User</code> (see above)</li>
 <li><code>created_at</code>: required, string, format: date-time</li>
 </ul>
-<h2 id="list-installations-for-the-authenticated-app" title="List installations for the authenticated app">List installations for the authenticated app<a href="#list-installations-for-the-authenticated-app" aria-label="Link to heading 'List installations for the authenticated app'" data-heading-content="List installations for the authenticated app" class="anchor"></a></h2>
+<h2 id="list-installations-for-the-authenticated-app" title="GET /app/installations (List installations for the authenticated app)">List installations for the authenticated app<a href="#list-installations-for-the-authenticated-app" aria-label="Link to heading 'List installations for the authenticated app'" data-heading-content="List installations for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installations
 </span></code></pre>
 <p>The permissions the installation has are included under the permissions key.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-2" title="List installations for the authenticated app / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -334,11 +334,11 @@ Only show results that were last updated after the given time. This is a timesta
 <p><strong><code>outdated</code></strong> (string)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="List installations for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - The permissions the installation has are included under the permissions key.</li>
 </ul>
-<h3 id="code-examples-3" title="List installations for the authenticated app / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -476,12 +476,12 @@ Only show results that were last updated after the given time. This is a timesta
 <li><code>suspended_at</code>: required, string or null, format: date-time</li>
 <li><code>contact_email</code>: string or null</li>
 </ul>
-<h2 id="get-an-installation-for-the-authenticated-app" title="Get an installation for the authenticated app">Get an installation for the authenticated app<a href="#get-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an installation for the authenticated app'" data-heading-content="Get an installation for the authenticated app" class="anchor"></a></h2>
+<h2 id="get-an-installation-for-the-authenticated-app" title="GET /app/installations/{installation_id} (Get an installation for the authenticated app)">Get an installation for the authenticated app<a href="#get-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an installation for the authenticated app'" data-heading-content="Get an installation for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /app/installations/{installation_id}
 </span></code></pre>
 <p>Enables an authenticated GitHub App to find an installation's information using the installation id.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-3" title="Get an installation for the authenticated app / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -492,7 +492,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>installation_id</code></strong> (integer) (required)<br>
 The unique identifier of the installation.</li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Get an installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -501,7 +501,7 @@ The unique identifier of the installation.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Get an installation for the authenticated app / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -638,12 +638,12 @@ The unique identifier of the installation.</li>
 <li><code>suspended_at</code>: required, string or null, format: date-time</li>
 <li><code>contact_email</code>: string or null</li>
 </ul>
-<h2 id="delete-an-installation-for-the-authenticated-app" title="Delete an installation for the authenticated app">Delete an installation for the authenticated app<a href="#delete-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Delete an installation for the authenticated app'" data-heading-content="Delete an installation for the authenticated app" class="anchor"></a></h2>
+<h2 id="delete-an-installation-for-the-authenticated-app" title="DELETE /app/installations/{installation_id} (Delete an installation for the authenticated app)">Delete an installation for the authenticated app<a href="#delete-an-installation-for-the-authenticated-app" aria-label="Link to heading 'Delete an installation for the authenticated app'" data-heading-content="Delete an installation for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /app/installations/{installation_id}
 </span></code></pre>
 <p>Uninstalls a GitHub App on a user, organization, or enterprise account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "Suspend an app installation" endpoint.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-4" title="Delete an installation for the authenticated app / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -654,7 +654,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>installation_id</code></strong> (integer) (required)<br>
 The unique identifier of the installation.</li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Delete an installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>202</strong> - Accepted</p>
@@ -663,7 +663,7 @@ The unique identifier of the installation.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-5" title="Delete an installation for the authenticated app / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -671,7 +671,7 @@ The unique identifier of the installation.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1
 </span></code></pre>
 <p><strong>Response schema (Status: 202):</strong></p>
-<h2 id="create-an-installation-access-token-for-an-app" title="Create an installation access token for an app">Create an installation access token for an app<a href="#create-an-installation-access-token-for-an-app" aria-label="Link to heading 'Create an installation access token for an app'" data-heading-content="Create an installation access token for an app" class="anchor"></a></h2>
+<h2 id="create-an-installation-access-token-for-an-app" title="POST /app/installations/{installation_id}/access_tokens (Create an installation access token for an app)">Create an installation access token for an app<a href="#create-an-installation-access-token-for-an-app" aria-label="Link to heading 'Create an installation access token for an app'" data-heading-content="Create an installation access token for an app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /app/installations/{installation_id}/access_tokens
 </span></code></pre>
 <p>Creates an installation access token that enables a GitHub App to make authenticated API requests for the app's installation on an organization or individual account. Installation tokens expire one hour from the time you create them. Using an expired token produces a status code of 401 - Unauthorized, and requires creating a new installation token. By default the installation token has access to all repositories that the installation can access.<br>
@@ -680,7 +680,7 @@ Note</p>
 <p>Optionally, you can use the repositories or repository<span data-escaped-char="">_</span>ids body parameters to specify individual repositories that the installation access token can access. If you don't use repositories or repository<span data-escaped-char="">_</span>ids to grant access to specific repositories, the installation access token will have access to all repositories that the installation was granted access to. The installation access token cannot be granted access to repositories that the installation was not granted access to. Up to 500 repositories can be listed in this manner.<br>
 Optionally, use the permissions body parameter to specify the permissions that the installation access token should have. If permissions is not specified, the installation access token will have all of the permissions that were granted to the app. The installation access token cannot be granted permissions that the app was not granted.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-5" title="Create an installation access token for an app / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -873,7 +873,7 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="Create an installation access token for an app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -891,7 +891,7 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-6" title="Create an installation access token for an app / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1126,12 +1126,12 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 <li><code>has_multiple_single_files</code>: boolean</li>
 <li><code>single_file_paths</code>: array of string</li>
 </ul>
-<h2 id="suspend-an-app-installation" title="Suspend an app installation">Suspend an app installation<a href="#suspend-an-app-installation" aria-label="Link to heading 'Suspend an app installation'" data-heading-content="Suspend an app installation" class="anchor"></a></h2>
+<h2 id="suspend-an-app-installation" title="PUT /app/installations/{installation_id}/suspended (Suspend an app installation)">Suspend an app installation<a href="#suspend-an-app-installation" aria-label="Link to heading 'Suspend an app installation'" data-heading-content="Suspend an app installation" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /app/installations/{installation_id}/suspended
 </span></code></pre>
 <p>Suspends a GitHub App on a user, organization, or enterprise account, which blocks the app from accessing the account's resources. When a GitHub App is suspended, the app's access to the GitHub API or webhook events is blocked for that account.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-6" title="Suspend an app installation / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1142,7 +1142,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>installation_id</code></strong> (integer) (required)<br>
 The unique identifier of the installation.</li>
 </ul>
-<h3 id="http-response-status-codes-7" title="Suspend an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -1151,7 +1151,7 @@ The unique identifier of the installation.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-7" title="Suspend an app installation / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1159,12 +1159,12 @@ The unique identifier of the installation.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1/suspended
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="unsuspend-an-app-installation" title="Unsuspend an app installation">Unsuspend an app installation<a href="#unsuspend-an-app-installation" aria-label="Link to heading 'Unsuspend an app installation'" data-heading-content="Unsuspend an app installation" class="anchor"></a></h2>
+<h2 id="unsuspend-an-app-installation" title="DELETE /app/installations/{installation_id}/suspended (Unsuspend an app installation)">Unsuspend an app installation<a href="#unsuspend-an-app-installation" aria-label="Link to heading 'Unsuspend an app installation'" data-heading-content="Unsuspend an app installation" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /app/installations/{installation_id}/suspended
 </span></code></pre>
 <p>Removes a GitHub App installation suspension.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-7" title="Unsuspend an app installation / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1175,7 +1175,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>installation_id</code></strong> (integer) (required)<br>
 The unique identifier of the installation.</li>
 </ul>
-<h3 id="http-response-status-codes-8" title="Unsuspend an app installation / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-8">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -1184,7 +1184,7 @@ The unique identifier of the installation.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-8" title="Unsuspend an app installation / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-8">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1192,14 +1192,14 @@ The unique identifier of the installation.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/app/installations/1/suspended
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="create-a-scoped-access-token" title="Create a scoped access token">Create a scoped access token<a href="#create-a-scoped-access-token" aria-label="Link to heading 'Create a scoped access token'" data-heading-content="Create a scoped access token" class="anchor"></a></h2>
+<h2 id="create-a-scoped-access-token" title="POST /applications/{client_id}/token/scoped (Create a scoped access token)">Create a scoped access token<a href="#create-a-scoped-access-token" aria-label="Link to heading 'Create a scoped access token'" data-heading-content="Create a scoped access token" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /applications/{client_id}/token/scoped
 </span></code></pre>
 <p>Use a non-scoped user access token to create a repository-scoped and/or permission-scoped user access token. You can specify<br>
 which repositories the token can access and which permissions are granted to the<br>
 token.<br>
 Invalid tokens will return 404 NOT FOUND.</p>
-<h3 id="parameters-8" title="Create a scoped access token / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-8">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1404,7 +1404,7 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-9" title="Create a scoped access token / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-9">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1422,7 +1422,7 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-9" title="Create a scoped access token / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-9">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1565,12 +1565,12 @@ Can be one of: <code>read</code>, <code>write</code>, <code>admin</code></li>
 </li>
 <li><code>expires_at</code>: required, string or null, format: date-time</li>
 </ul>
-<h2 id="get-an-app" title="Get an app">Get an app<a href="#get-an-app" aria-label="Link to heading 'Get an app'" data-heading-content="Get an app" class="anchor"></a></h2>
+<h2 id="get-an-app" title="GET /apps/{app_slug} (Get an app)">Get an app<a href="#get-an-app" aria-label="Link to heading 'Get an app'" data-heading-content="Get an app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /apps/{app_slug}
 </span></code></pre>
 <p>Note</p>
 <p>The :app<span data-escaped-char="">_</span>slug is just the URL-friendly name of your GitHub App. You can find this on the settings page for your GitHub App (e.g., <a href="https://github.com/settings/apps/:app_slug" class="external">https://github.com/settings/apps/:app_slug</a>).</p>
-<h3 id="parameters-9" title="Get an app / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-9">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1580,7 +1580,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <ul>
 <li><strong><code>app_slug</code></strong> (string) (required)</li>
 </ul>
-<h3 id="http-response-status-codes-10" title="Get an app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-10">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1592,7 +1592,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-10" title="Get an app / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-10">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1601,12 +1601,12 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#get-the-authenticated-app">Get the authenticated app</a>.</p>
-<h2 id="get-an-organization-installation-for-the-authenticated-app" title="Get an organization installation for the authenticated app">Get an organization installation for the authenticated app<a href="#get-an-organization-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an organization installation for the authenticated app'" data-heading-content="Get an organization installation for the authenticated app" class="anchor"></a></h2>
+<h2 id="get-an-organization-installation-for-the-authenticated-app" title="GET /orgs/{org}/installation (Get an organization installation for the authenticated app)">Get an organization installation for the authenticated app<a href="#get-an-organization-installation-for-the-authenticated-app" aria-label="Link to heading 'Get an organization installation for the authenticated app'" data-heading-content="Get an organization installation for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/installation
 </span></code></pre>
 <p>Enables an authenticated GitHub App to find the organization's installation information.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-10" title="Get an organization installation for the authenticated app / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-10">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1617,11 +1617,11 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>org</code></strong> (string) (required)<br>
 The organization name. The name is not case sensitive.</li>
 </ul>
-<h3 id="http-response-status-codes-11" title="Get an organization installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-11">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-11" title="Get an organization installation for the authenticated app / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-11">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1630,12 +1630,12 @@ The organization name. The name is not case sensitive.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#get-an-installation-for-the-authenticated-app">Get an installation for the authenticated app</a>.</p>
-<h2 id="get-a-repository-installation-for-the-authenticated-app" title="Get a repository installation for the authenticated app">Get a repository installation for the authenticated app<a href="#get-a-repository-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a repository installation for the authenticated app'" data-heading-content="Get a repository installation for the authenticated app" class="anchor"></a></h2>
+<h2 id="get-a-repository-installation-for-the-authenticated-app" title="GET /repos/{owner}/{repo}/installation (Get a repository installation for the authenticated app)">Get a repository installation for the authenticated app<a href="#get-a-repository-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a repository installation for the authenticated app'" data-heading-content="Get a repository installation for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/installation
 </span></code></pre>
 <p>Enables an authenticated GitHub App to find the repository's installation information. The installation's account type will be either an organization or a user account, depending which account the repository belongs to.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-11" title="Get a repository installation for the authenticated app / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-11">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1652,7 +1652,7 @@ The account owner of the repository. The name is not case sensitive.</p>
 The name of the repository without the .git extension. The name is not case sensitive.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-12" title="Get a repository installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-12">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1664,7 +1664,7 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-12" title="Get a repository installation for the authenticated app / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-12">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1673,12 +1673,12 @@ The name of the repository without the .git extension. The name is not case sens
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#get-an-installation-for-the-authenticated-app">Get an installation for the authenticated app</a>.</p>
-<h2 id="get-a-user-installation-for-the-authenticated-app" title="Get a user installation for the authenticated app">Get a user installation for the authenticated app<a href="#get-a-user-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a user installation for the authenticated app'" data-heading-content="Get a user installation for the authenticated app" class="anchor"></a></h2>
+<h2 id="get-a-user-installation-for-the-authenticated-app" title="GET /users/{username}/installation (Get a user installation for the authenticated app)">Get a user installation for the authenticated app<a href="#get-a-user-installation-for-the-authenticated-app" aria-label="Link to heading 'Get a user installation for the authenticated app'" data-heading-content="Get a user installation for the authenticated app" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/installation
 </span></code></pre>
 <p>Enables an authenticated GitHub App to find the user’s installation information.<br>
 You must use a JWT to access this endpoint.</p>
-<h3 id="parameters-12" title="Get a user installation for the authenticated app / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-12">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1689,11 +1689,11 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>username</code></strong> (string) (required)<br>
 The handle for the GitHub user account.</li>
 </ul>
-<h3 id="http-response-status-codes-13" title="Get a user installation for the authenticated app / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-13">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-13" title="Get a user installation for the authenticated app / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-13">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

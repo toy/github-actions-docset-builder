@@ -18,7 +18,7 @@
 </ul>
 <p>Each of these customization commands must be defined in its own JSON file. The file name must match the command name, with the extension <code>.json</code>. For example, the <code>prepare_job</code> command is defined in <code>prepare_job.json</code>. These JSON files will then be run together on the self-hosted runner, as part of the main <code>index.js</code> script. This process is described in more detail in <a href="#generating-the-customization-script">Generating the customization script</a>.</p>
 <p>These commands also include configuration arguments, explained below in more detail.</p>
-<h3 id="prepare_job" title="Container customization commands / prepare_job"><code>prepare_job</code><a href="#prepare_job" aria-label="Link to heading 'prepare_job'" data-heading-content="prepare_job" class="anchor"></a></h3>
+<h3 id="prepare_job"><code>prepare_job</code><a href="#prepare_job" aria-label="Link to heading 'prepare_job'" data-heading-content="prepare_job" class="anchor"></a></h3>
 <p>The <code>prepare_job</code> command is called when a job is started. GitHub Actions passes in any job or service containers the job has. This command will be called if you have any service or job containers in the job.</p>
 <p>GitHub Actions assumes that you will do the following tasks in the <code>prepare_job</code> command:</p>
 <ul>
@@ -201,7 +201,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="cleanup_job" title="Container customization commands / cleanup_job"><code>cleanup_job</code><a href="#cleanup_job" aria-label="Link to heading 'cleanup_job'" data-heading-content="cleanup_job" class="anchor"></a></h3>
+<h3 id="cleanup_job"><code>cleanup_job</code><a href="#cleanup_job" aria-label="Link to heading 'cleanup_job'" data-heading-content="cleanup_job" class="anchor"></a></h3>
 <p>The <code>cleanup_job</code> command is called at the end of a job. GitHub Actions assumes that you will do the following tasks in the <code>cleanup_job</code> command:</p>
 <ul>
 <li>Stop any running service or job containers (or the equivalent pod).</li>
@@ -228,7 +228,7 @@
 </span></code></pre>
 <h4 id="example-output-for-cleanup_job">Example output for <code>cleanup_job</code><a href="#example-output-for-cleanup_job" aria-label="Link to heading 'Example output for cleanup_job'" data-heading-content="Example output for cleanup_job" class="anchor"></a></h4>
 <p>No output is expected for <code>cleanup_job</code>.</p>
-<h3 id="run_container_step" title="Container customization commands / run_container_step"><code>run_container_step</code><a href="#run_container_step" aria-label="Link to heading 'run_container_step'" data-heading-content="run_container_step" class="anchor"></a></h3>
+<h3 id="run_container_step"><code>run_container_step</code><a href="#run_container_step" aria-label="Link to heading 'run_container_step'" data-heading-content="run_container_step" class="anchor"></a></h3>
 <p>The <code>run_container_step</code> command is called once for each container action in your job. GitHub Actions assumes that you will do the following tasks in the <code>run_container_step</code> command:</p>
 <ul>
 <li>Pull or build the required container (or fail if you cannot).</li>
@@ -415,7 +415,7 @@
 </span></code></pre>
 <h4 id="example-output-for-run_container_step">Example output for <code>run_container_step</code><a href="#example-output-for-run_container_step" aria-label="Link to heading 'Example output for run_container_step'" data-heading-content="Example output for run_container_step" class="anchor"></a></h4>
 <p>No output is expected for <code>run_container_step</code>.</p>
-<h3 id="run_script_step" title="Container customization commands / run_script_step"><code>run_script_step</code><a href="#run_script_step" aria-label="Link to heading 'run_script_step'" data-heading-content="run_script_step" class="anchor"></a></h3>
+<h3 id="run_script_step"><code>run_script_step</code><a href="#run_script_step" aria-label="Link to heading 'run_script_step'" data-heading-content="run_script_step" class="anchor"></a></h3>
 <p>GitHub Actions assumes that you will do the following tasks:</p>
 <ul>
 <li>Invoke the provided script inside the job container and return the exit code.</li>
@@ -493,8 +493,8 @@
 </span></code></pre>
 <p>If you want to ensure that your job always runs inside a container, and subsequently always applies your container customizations, you can set the <code>ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER</code> variable on the self hosted runner to <code>true</code>. This will fail jobs that do not specify a job container.</p>
 <h2 id="troubleshooting" title="Troubleshooting">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
-<h3 id="no-timeout-setting" title="Troubleshooting / No timeout setting">No timeout setting<a href="#no-timeout-setting" aria-label="Link to heading 'No timeout setting'" data-heading-content="No timeout setting" class="anchor"></a></h3>
+<h3 id="no-timeout-setting">No timeout setting<a href="#no-timeout-setting" aria-label="Link to heading 'No timeout setting'" data-heading-content="No timeout setting" class="anchor"></a></h3>
 <p>There is currently no timeout setting available for the script executed by <code>ACTIONS_RUNNER_CONTAINER_HOOKS</code>. As a result, you could consider adding timeout handling to your script.</p>
-<h3 id="reviewing-the-workflow-run-log" title="Troubleshooting / Reviewing the workflow run log">Reviewing the workflow run log<a href="#reviewing-the-workflow-run-log" aria-label="Link to heading 'Reviewing the workflow run log'" data-heading-content="Reviewing the workflow run log" class="anchor"></a></h3>
+<h3 id="reviewing-the-workflow-run-log">Reviewing the workflow run log<a href="#reviewing-the-workflow-run-log" aria-label="Link to heading 'Reviewing the workflow run log'" data-heading-content="Reviewing the workflow run log" class="anchor"></a></h3>
 <p>To confirm whether your scripts are executing, you can review the logs for that job. For more information on checking the logs, see <a href="../../monitor-workflows/use-workflow-run-logs.html#viewing-logs-to-diagnose-failures">Using workflow run logs</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

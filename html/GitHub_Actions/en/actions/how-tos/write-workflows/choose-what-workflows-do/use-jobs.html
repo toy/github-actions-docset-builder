@@ -4,7 +4,7 @@
 <p>To implement jobs in your workflows, you need to understand what jobs are. See <a href="../../../get-started/understand-github-actions.html#jobs">Understanding GitHub Actions</a>.</p>
 <h2 id="setting-an-id-for-a-job" title="Setting an ID for a job">Setting an ID for a job<a href="#setting-an-id-for-a-job" aria-label="Link to heading 'Setting an ID for a job'" data-heading-content="Setting an ID for a job" class="anchor"></a></h2>
 <p>Use <code>jobs.&lt;job_id&gt;</code> to give your job a unique identifier. The key <code>job_id</code> is a string and its value is a map of the job's configuration data. You must replace <code>&lt;job_id&gt;</code> with a string that is unique to the <code>jobs</code> object. The <code>&lt;job_id&gt;</code> must start with a letter or <code>_</code> and contain only alphanumeric characters, <code>-</code>, or <code>_</code>.</p>
-<h3 id="example-creating-jobs" title="Setting an ID for a job / Example: Creating jobs">Example: Creating jobs<a href="#example-creating-jobs" aria-label="Link to heading 'Example: Creating jobs'" data-heading-content="Example: Creating jobs" class="anchor"></a></h3>
+<h3 id="example-creating-jobs">Example: Creating jobs<a href="#example-creating-jobs" aria-label="Link to heading 'Example: Creating jobs'" data-heading-content="Example: Creating jobs" class="anchor"></a></h3>
 <p>In this example, two jobs have been created, and their <code>job_id</code> values are <code>my_first_job</code> and <code>my_second_job</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
@@ -16,7 +16,7 @@
 <p>Use <code>jobs.&lt;job_id&gt;.name</code> to set a name for the job, which is displayed in the GitHub UI.</p>
 <h2 id="defining-prerequisite-jobs" title="Defining prerequisite jobs">Defining prerequisite jobs<a href="#defining-prerequisite-jobs" aria-label="Link to heading 'Defining prerequisite jobs'" data-heading-content="Defining prerequisite jobs" class="anchor"></a></h2>
 <p>Use <code>jobs.&lt;job_id&gt;.needs</code> to identify any jobs that must complete successfully before this job will run. It can be a string or array of strings. If a job fails or is skipped, all jobs that need it are skipped unless the jobs use a conditional expression that causes the job to continue. If a run contains a series of jobs that need each other, a failure or skip applies to all jobs in the dependency chain from the point of failure or skip onwards. If you would like a job to run even if a job it is dependent on did not succeed, use the <code>always()</code> conditional expression in <code>jobs.&lt;job_id&gt;.if</code>.</p>
-<h3 id="example-requiring-successful-dependent-jobs" title="Defining prerequisite jobs / Example: Requiring successful dependent jobs">Example: Requiring successful dependent jobs<a href="#example-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Requiring successful dependent jobs'" data-heading-content="Example: Requiring successful dependent jobs" class="anchor"></a></h3>
+<h3 id="example-requiring-successful-dependent-jobs">Example: Requiring successful dependent jobs<a href="#example-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Requiring successful dependent jobs'" data-heading-content="Example: Requiring successful dependent jobs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job2</span><span style="color:#c0c5ce;">:
@@ -31,7 +31,7 @@
 <li><code>job2</code></li>
 <li><code>job3</code></li>
 </ol>
-<h3 id="example-not-requiring-successful-dependent-jobs" title="Defining prerequisite jobs / Example: Not requiring successful dependent jobs">Example: Not requiring successful dependent jobs<a href="#example-not-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Not requiring successful dependent jobs'" data-heading-content="Example: Not requiring successful dependent jobs" class="anchor"></a></h3>
+<h3 id="example-not-requiring-successful-dependent-jobs">Example: Not requiring successful dependent jobs<a href="#example-not-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Not requiring successful dependent jobs'" data-heading-content="Example: Not requiring successful dependent jobs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job2</span><span style="color:#c0c5ce;">:

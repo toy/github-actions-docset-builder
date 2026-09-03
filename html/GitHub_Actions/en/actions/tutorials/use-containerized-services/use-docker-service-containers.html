@@ -12,11 +12,11 @@
 </ul>
 </div>
 <p>You can configure jobs in a workflow to run directly on a runner machine or in a Docker container. Communication between a job and its service containers is different depending on whether a job runs directly on the runner machine or in a container.</p>
-<h3 id="running-jobs-in-a-container" title="Communicating with Docker service containers / Running jobs in a container">Running jobs in a container<a href="#running-jobs-in-a-container" aria-label="Link to heading 'Running jobs in a container'" data-heading-content="Running jobs in a container" class="anchor"></a></h3>
+<h3 id="running-jobs-in-a-container">Running jobs in a container<a href="#running-jobs-in-a-container" aria-label="Link to heading 'Running jobs in a container'" data-heading-content="Running jobs in a container" class="anchor"></a></h3>
 <p>When you run jobs in a container, GitHub connects service containers to the job using Docker's user-defined bridge networks. For more information, see <a href="https://docs.docker.com/engine/network/drivers/bridge/" class="external">Bridge network driver</a> in the Docker documentation.</p>
 <p>Running the job and services in a container simplifies network access. You can access a service container using the label you configure in the workflow. The hostname of the service container is automatically mapped to the label name. For example, if you create a service container with the label <code>redis</code>, the hostname of the service container is <code>redis</code>.</p>
 <p>You don't need to configure any ports for service containers. By default, all containers that are part of the same Docker network expose all ports to each other, and no ports are exposed outside of the Docker network.</p>
-<h3 id="running-jobs-on-the-runner-machine" title="Communicating with Docker service containers / Running jobs on the runner machine">Running jobs on the runner machine<a href="#running-jobs-on-the-runner-machine" aria-label="Link to heading 'Running jobs on the runner machine'" data-heading-content="Running jobs on the runner machine" class="anchor"></a></h3>
+<h3 id="running-jobs-on-the-runner-machine">Running jobs on the runner machine<a href="#running-jobs-on-the-runner-machine" aria-label="Link to heading 'Running jobs on the runner machine'" data-heading-content="Running jobs on the runner machine" class="anchor"></a></h3>
 <p>When running jobs directly on the runner machine, you can access service containers using <code>localhost:&lt;port&gt;</code> or <code>127.0.0.1:&lt;port&gt;</code>. GitHub configures the container network to enable communication from the service container to the Docker host.</p>
 <p>When a job runs directly on a runner machine, the service running in the Docker container does not expose its ports to the job on the runner by default. You need to map ports on the service container to the Docker host. For more information, see <a href="#mapping-docker-host-and-service-container-ports">Communicating with Docker service containers</a>.</p>
 <h2 id="creating-service-containers" title="Creating service containers">Creating service containers<a href="#creating-service-containers" aria-label="Link to heading 'Creating service containers'" data-heading-content="Creating service containers" class="anchor"></a></h2>
@@ -52,22 +52,22 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">8080:80</code></td>
+<td><code>8080:80</code></td>
 <td>Maps TCP port 80 in the container to port 8080 on the Docker host.</td>
 </tr>
 <tr>
-<td><code class="keyword">8080:80/udp</code></td>
+<td><code>8080:80/udp</code></td>
 <td>Maps UDP port 80 in the container to port 8080 on the Docker host.</td>
 </tr>
 <tr>
-<td><code class="keyword">8080/udp</code></td>
+<td><code>8080/udp</code></td>
 <td>Maps a randomly chosen port on the Docker host to UDP port 8080 in the container.</td>
 </tr>
 </tbody>
 </table>
 <p>When you map ports using the <code>ports</code> keyword, GitHub uses the <code>--publish</code> command to publish the container’s ports to the Docker host. For more information, see <a href="https://docs.docker.com/config/containers/container-networking/" class="external">Docker container networking</a> in the Docker documentation.</p>
 <p>When you specify the container port but not the Docker host port, the container port is randomly assigned to a free port. GitHub sets the assigned container port in the service container context. For example, for a <code>redis</code> service container, if you configured the Docker host port 5432, you can access the corresponding container port using the <code>job.services.redis.ports[5432]</code> context. For more information, see <a href="../../reference/workflows-and-actions/contexts.html#job-context">Contexts reference</a>.</p>
-<h3 id="example-mapping-redis-ports" title="Mapping Docker host and service container ports / Example mapping Redis ports">Example mapping Redis ports<a href="#example-mapping-redis-ports" aria-label="Link to heading 'Example mapping Redis ports'" data-heading-content="Example mapping Redis ports" class="anchor"></a></h3>
+<h3 id="example-mapping-redis-ports">Example mapping Redis ports<a href="#example-mapping-redis-ports" aria-label="Link to heading 'Example mapping Redis ports'" data-heading-content="Example mapping Redis ports" class="anchor"></a></h3>
 <p>This example maps the service container <code>redis</code> port 6379 to the Docker host port 6379.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Redis Service Example
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push

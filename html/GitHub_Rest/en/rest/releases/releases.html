@@ -8,12 +8,12 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-releases" title="List releases">List releases<a href="#list-releases" aria-label="Link to heading 'List releases'" data-heading-content="List releases" class="anchor"></a></h2>
+<h2 id="list-releases" title="GET /repos/{owner}/{repo}/releases (List releases)">List releases<a href="#list-releases" aria-label="Link to heading 'List releases'" data-heading-content="List releases" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/releases
 </span></code></pre>
 <p>This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the Repository Tags API.<br>
 Information about published releases are available to everyone. Only users with push access will receive listings for draft releases.</p>
-<h3 id="parameters" title="List releases / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -40,7 +40,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List releases / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -49,7 +49,7 @@ Default: <code>1</code></p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples" title="List releases / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -145,7 +145,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="create-a-release" title="Create a release">Create a release<a href="#create-a-release" aria-label="Link to heading 'Create a release'" data-heading-content="Create a release" class="anchor"></a></h2>
+<h2 id="create-a-release" title="POST /repos/{owner}/{repo}/releases (Create a release)">Create a release<a href="#create-a-release" aria-label="Link to heading 'Create a release'" data-heading-content="Create a release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/releases
 </span></code></pre>
 <p>Users with push access to the repository can create a release.<br>
@@ -153,7 +153,7 @@ Note</p>
 <p>If the commit identified by target_commitish (or, when target_commitish is omitted, the latest commit on the default branch) adds or modifies any file under .github/workflows/ relative to the repository's default branch, the authenticating token must be authorized to modify workflows. Otherwise, this endpoint returns 404 Not Found; some authentication paths surface 403 Resource not accessible by integration instead.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the workflow scope when the resolved target commit modifies workflow files. Fine-grained access tokens and GitHub App installation tokens also need the "Workflows" repository permission (write). The GITHUB_TOKEN available to GitHub Actions cannot be authorized for this; for more information, see "Automatic token authentication".<br>
 This endpoint triggers notifications. Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see "Rate limits for the API" and "Best practices for using the REST API."</p>
-<h3 id="parameters-1" title="Create a release / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -214,7 +214,7 @@ Default: <code>true</code><br>
 Can be one of: <code>true</code>, <code>false</code>, <code>legacy</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Create a release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -226,7 +226,7 @@ Can be one of: <code>true</code>, <code>false</code>, <code>legacy</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Create a release / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -330,11 +330,11 @@ Can be one of: <code>true</code>, <code>false</code>, <code>legacy</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="generate-release-notes-content-for-a-release" title="Generate release notes content for a release">Generate release notes content for a release<a href="#generate-release-notes-content-for-a-release" aria-label="Link to heading 'Generate release notes content for a release'" data-heading-content="Generate release notes content for a release" class="anchor"></a></h2>
+<h2 id="generate-release-notes-content-for-a-release" title="POST /repos/{owner}/{repo}/releases/generate-notes (Generate release notes content for a release)">Generate release notes content for a release<a href="#generate-release-notes-content-for-a-release" aria-label="Link to heading 'Generate release notes content for a release'" data-heading-content="Generate release notes content for a release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/releases/generate-notes
 </span></code></pre>
 <p>Generate a name and body describing a release. The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.</p>
-<h3 id="parameters-2" title="Generate release notes content for a release / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -370,7 +370,7 @@ The name of the previous tag to use as the starting point for the release notes.
 Specifies a path to a file in the repository containing configuration settings used for generating the release notes. If unspecified, the configuration file located in the repository at '.github/release.yml' or '.github/release.yaml' will be used. If that is not present, the default configuration will be used.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Generate release notes content for a release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - Name and body of generated release notes</p>
@@ -379,7 +379,7 @@ Specifies a path to a file in the repository containing configuration settings u
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Generate release notes content for a release / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -397,12 +397,12 @@ Specifies a path to a file in the repository containing configuration settings u
 <li><code>name</code>: required, string</li>
 <li><code>body</code>: required, string</li>
 </ul>
-<h2 id="get-the-latest-release" title="Get the latest release">Get the latest release<a href="#get-the-latest-release" aria-label="Link to heading 'Get the latest release'" data-heading-content="Get the latest release" class="anchor"></a></h2>
+<h2 id="get-the-latest-release" title="GET /repos/{owner}/{repo}/releases/latest (Get the latest release)">Get the latest release<a href="#get-the-latest-release" aria-label="Link to heading 'Get the latest release'" data-heading-content="Get the latest release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/releases/latest
 </span></code></pre>
 <p>View the latest published full release for the repository.<br>
 The latest release is the most recent non-prerelease, non-draft release, sorted by the created_at attribute. The created_at attribute is the date of the commit used for the release, and not the date when the release was drafted or published.</p>
-<h3 id="parameters-3" title="Get the latest release / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -419,7 +419,7 @@ The account owner of the repository. The name is not case sensitive.</p>
 The name of the repository without the .git extension. The name is not case sensitive.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Get the latest release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -428,7 +428,7 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Get the latest release / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -437,11 +437,11 @@ The name of the repository without the .git extension. The name is not case sens
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-release">Create a release</a>.</p>
-<h2 id="get-a-release-by-tag-name" title="Get a release by tag name">Get a release by tag name<a href="#get-a-release-by-tag-name" aria-label="Link to heading 'Get a release by tag name'" data-heading-content="Get a release by tag name" class="anchor"></a></h2>
+<h2 id="get-a-release-by-tag-name" title="GET /repos/{owner}/{repo}/releases/tags/{tag} (Get a release by tag name)">Get a release by tag name<a href="#get-a-release-by-tag-name" aria-label="Link to heading 'Get a release by tag name'" data-heading-content="Get a release by tag name" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/releases/tags/{tag}
 </span></code></pre>
 <p>Get a published release with the specified tag.</p>
-<h3 id="parameters-4" title="Get a release by tag name / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -462,7 +462,7 @@ The name of the repository without the .git extension. The name is not case sens
 tag parameter</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Get a release by tag name / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -471,7 +471,7 @@ tag parameter</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Get a release by tag name / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -480,13 +480,13 @@ tag parameter</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-release">Create a release</a>.</p>
-<h2 id="get-a-release" title="Get a release">Get a release<a href="#get-a-release" aria-label="Link to heading 'Get a release'" data-heading-content="Get a release" class="anchor"></a></h2>
+<h2 id="get-a-release" title="GET /repos/{owner}/{repo}/releases/{release_id} (Get a release)">Get a release<a href="#get-a-release" aria-label="Link to heading 'Get a release'" data-heading-content="Get a release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/releases/{release_id}
 </span></code></pre>
 <p>Gets a public release with the specified release ID.<br>
 Note</p>
 <p>This returns an upload_url key corresponding to the endpoint for uploading release assets. This key is a hypermedia resource. For more information, see "Getting started with the REST API."</p>
-<h3 id="parameters-5" title="Get a release / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -507,7 +507,7 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the release.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Get a release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - Note: This returns an upload_url key corresponding to the endpoint for uploading release assets. This key is a hypermedia resource. For more information, see "Getting started with the REST API."</p>
@@ -516,7 +516,7 @@ The unique identifier of the release.</p>
 <p><strong>401</strong> - Unauthorized</p>
 </li>
 </ul>
-<h3 id="code-examples-5" title="Get a release / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -525,14 +525,14 @@ The unique identifier of the release.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-release">Create a release</a>.</p>
-<h2 id="update-a-release" title="Update a release">Update a release<a href="#update-a-release" aria-label="Link to heading 'Update a release'" data-heading-content="Update a release" class="anchor"></a></h2>
+<h2 id="update-a-release" title="PATCH /repos/{owner}/{repo}/releases/{release_id} (Update a release)">Update a release<a href="#update-a-release" aria-label="Link to heading 'Update a release'" data-heading-content="Update a release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/releases/{release_id}
 </span></code></pre>
 <p>Users with push access to the repository can edit a release.<br>
 Note</p>
 <p>If the resolved target commit (the new value of target_commitish if you are changing it, otherwise the existing target) adds or modifies any file under .github/workflows/ relative to the repository's default branch, the authenticating token must be authorized to modify workflows. Otherwise, this endpoint returns 404 Not Found; some authentication paths surface 403 Resource not accessible by integration instead.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the workflow scope when the resolved target commit modifies workflow files. Fine-grained access tokens and GitHub App installation tokens also need the "Workflows" repository permission (write). The GITHUB_TOKEN available to GitHub Actions cannot be authorized for this; for more information, see "Automatic token authentication".</p>
-<h3 id="parameters-6" title="Update a release / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -590,7 +590,7 @@ Can be one of: <code>true</code>, <code>false</code>, <code>legacy</code></p>
 If specified, a discussion of the specified category is created and linked to the release. The value must be a category that already exists in the repository. If there is already a discussion linked to the release, this parameter is ignored. For more information, see "Managing categories for discussions in your repository."</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="Update a release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -599,7 +599,7 @@ If specified, a discussion of the specified category is created and linked to th
 <p><strong>404</strong> - Not Found if the discussion category name is invalid</p>
 </li>
 </ul>
-<h3 id="code-examples-6" title="Update a release / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -616,11 +616,11 @@ If specified, a discussion of the specified category is created and linked to th
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-release">Create a release</a>.</p>
-<h2 id="delete-a-release" title="Delete a release">Delete a release<a href="#delete-a-release" aria-label="Link to heading 'Delete a release'" data-heading-content="Delete a release" class="anchor"></a></h2>
+<h2 id="delete-a-release" title="DELETE /repos/{owner}/{repo}/releases/{release_id} (Delete a release)">Delete a release<a href="#delete-a-release" aria-label="Link to heading 'Delete a release'" data-heading-content="Delete a release" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/releases/{release_id}
 </span></code></pre>
 <p>Users with push access to the repository can delete a release.</p>
-<h3 id="parameters-7" title="Delete a release / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -641,7 +641,7 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the release.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-7" title="Delete a release / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -650,7 +650,7 @@ The unique identifier of the release.</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-7" title="Delete a release / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

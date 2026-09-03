@@ -4,14 +4,14 @@
 <h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>Code scanning and dependency analysis work in the same way in public repositories and in private and internal repositories with Code Security enabled. In addition, Code Security enables you to create security campaigns where security specialists and developers can collaborate to effectively reduce technical debt.</p>
 <p>This article focuses on how you can combine these features with enterprise-level controls to standardize and enforce your development process.</p>
-<h3 id="refine-your-security-configurations" title="Introduction / Refine your security configurations">Refine your security configurations<a href="#refine-your-security-configurations" aria-label="Link to heading 'Refine your security configurations'" data-heading-content="Refine your security configurations" class="anchor"></a></h3>
+<h3 id="refine-your-security-configurations">Refine your security configurations<a href="#refine-your-security-configurations" aria-label="Link to heading 'Refine your security configurations'" data-heading-content="Refine your security configurations" class="anchor"></a></h3>
 <p>In contrast to Secret Protection, where a single security configuration is typically applied to all repositories, you probably want to fine-tune the configuration of code scanning for different types of repositories. For example, you might need to create additional configurations so that:</p>
 <ul>
 <li>Code scanning uses runners with a specific label to apply to repositories that require a specialized environment or that use private registries.</li>
 <li>Code scanning is "Not set" to apply to repositories that need to use advanced setup or that require a third-party tool.</li>
 </ul>
 <p>For your trial, it's simplest to create a primary enterprise-level security configuration and apply it to your test repositories. Then you can create any additional security configurations you need and apply them to a subset of repositories selected using code language, custom property, visibility, and other filter options. For more information, see <a href="enable-security-features-trial.html">Enabling security features in your trial enterprise</a> and <a href="../../how-tos/secure-at-scale/configure-organization-security/establish-complete-coverage/apply-custom-configuration.html">Applying a custom security configuration</a>.</p>
-<h3 id="provide-access-to-view-results-of-code-scanning" title="Introduction / Provide access to view results of code scanning">Provide access to view results of code scanning<a href="#provide-access-to-view-results-of-code-scanning" aria-label="Link to heading 'Provide access to view results of code scanning'" data-heading-content="Provide access to view results of code scanning" class="anchor"></a></h3>
+<h3 id="provide-access-to-view-results-of-code-scanning">Provide access to view results of code scanning<a href="#provide-access-to-view-results-of-code-scanning" aria-label="Link to heading 'Provide access to view results of code scanning'" data-heading-content="Provide access to view results of code scanning" class="anchor"></a></h3>
 <p>By default, only the repository administrator and the organization owner can view all code scanning alerts in their area. You should assign the predefined security manager role to all organization teams and users who you want to access the alerts found during the trial. You may also want to give the enterprise account owner this role for each organization in the trial. For more information, see <a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization" class="external">Managing security managers in your organization</a> and <a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/using-organization-roles#assigning-an-organization-role" class="external">Using organization roles</a>.</p>
 <h2 id="evaluate-and-refine-results-from-the-default-setup" title="Evaluate and refine results from the default setup">Evaluate and refine results from the default setup<a href="#evaluate-and-refine-results-from-the-default-setup" aria-label="Link to heading 'Evaluate and refine results from the default setup'" data-heading-content="Evaluate and refine results from the default setup" class="anchor"></a></h2>
 <p>The default setup for code scanning runs a set of high confidence queries. These are chosen to ensure that, when you roll out code scanning across your whole codebase, developers see a limited set of high quality results, with few false positive results.</p>
@@ -34,7 +34,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>GitHub Copilot Autofix is included in the license for GitHub Code Security. Copilot code review requires a paid Copilot plan.</p>
 </div>
-<h3 id="code-scanning-analysis" title="Enforce automated analysis of pull requests / Code scanning analysis">Code scanning analysis<a href="#code-scanning-analysis" aria-label="Link to heading 'Code scanning analysis'" data-heading-content="Code scanning analysis" class="anchor"></a></h3>
+<h3 id="code-scanning-analysis">Code scanning analysis<a href="#code-scanning-analysis" aria-label="Link to heading 'Code scanning analysis'" data-heading-content="Code scanning analysis" class="anchor"></a></h3>
 <p>When code scanning is enabled, you can then block merges into important branches unless the pull request meets your requirements by creating a code ruleset for the enterprise or organization. Typically, you would require that results from code scanning are present and that any important alerts are resolved.</p>
 <ul>
 <li><strong>Type of ruleset:</strong> Branch.</li>
@@ -42,7 +42,7 @@
 <li><strong>Required tools and alert thresholds:</strong> Define the level of alerts that must be resolved before a pull request can be merged for each code scanning tool you use.</li>
 </ul>
 <p>As with all rulesets, you can control exactly which organizations (enterprise-level), repositories, and branches it acts on and also define roles or teams who can bypass the rule. For more information, see <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets" class="external">About rulesets</a>.</p>
-<h3 id="dependency-review" title="Enforce automated analysis of pull requests / Dependency review">Dependency review<a href="#dependency-review" aria-label="Link to heading 'Dependency review'" data-heading-content="Dependency review" class="anchor"></a></h3>
+<h3 id="dependency-review">Dependency review<a href="#dependency-review" aria-label="Link to heading 'Dependency review'" data-heading-content="Dependency review" class="anchor"></a></h3>
 <p>When Code Security and dependency graph are enabled for a repository, manifest files have a rich diff view which shows a summary of the dependencies that it adds or updates. This is a useful summary for human reviewers of the pull request but does not provide any control of which dependencies are added to the codebase.</p>
 <p>Most enterprises put automatic checks in place to block the use of dependencies with known vulnerabilities or unsupported license terms.</p>
 <ol>
@@ -52,7 +52,7 @@
 <li>In each organization, create or update branch rulesets to add the new workflow to the required status checks, see <a href="../../how-tos/secure-at-scale/configure-organization-security/configure-specific-tools/enforce-dependency-review.html">Enforcing dependency review across an organization</a>.</li>
 </ol>
 <p>This allows you to update the configuration in a single location, but use the workflow in many repositories. You may want to use this central repository to maintain other workflows. For more information, see <a href="https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows" class="external">Reuse workflows</a>.</p>
-<h3 id="copilot-code-review" title="Enforce automated analysis of pull requests / Copilot code review">Copilot code review<a href="#copilot-code-review" aria-label="Link to heading 'Copilot code review'" data-heading-content="Copilot code review" class="anchor"></a></h3>
+<h3 id="copilot-code-review">Copilot code review<a href="#copilot-code-review" aria-label="Link to heading 'Copilot code review'" data-heading-content="Copilot code review" class="anchor"></a></h3>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <ul>

@@ -2,7 +2,7 @@
 <p>Dependabot automatically maintains your dependencies, keeping your code secure and current. This reference helps you diagnose and resolve issues so automated updates can continue.</p>
 <p>When Dependabot encounters errors while updating your dependencies, you can use this reference to diagnose and fix common problems.</p>
 <h2 id="how-to-view-errors" title="How to view errors">How to view errors<a href="#how-to-view-errors" aria-label="Link to heading 'How to view errors'" data-heading-content="How to view errors" class="anchor"></a></h2>
-<h3 id="security-update-errors" title="How to view errors / Security update errors">Security update errors<a href="#security-update-errors" aria-label="Link to heading 'Security update errors'" data-heading-content="Security update errors" class="anchor"></a></h3>
+<h3 id="security-update-errors">Security update errors<a href="#security-update-errors" aria-label="Link to heading 'Security update errors'" data-heading-content="Security update errors" class="anchor"></a></h3>
 <p>When Dependabot is blocked from creating a pull request to fix a Dependabot alert, it posts the error message on the alert. The Dependabot alerts view shows a list of any alerts that have not been resolved yet. To access the alerts view, click <strong>Dependabot alerts</strong> on the <strong><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-shield" aria-label="shield" role="img"><path d="M7.467.133a1.748 1.748 0 0 1 1.066 0l5.25 1.68A1.75 1.75 0 0 1 15 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.697 1.697 0 0 1-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 0 1 1.217-1.667Zm.61 1.429a.25.25 0 0 0-.153 0l-5.25 1.68a.25.25 0 0 0-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.196.196 0 0 0 .154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.251.251 0 0 0-.174-.237l-5.25-1.68ZM8.75 4.75v3a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 1.5 0ZM9 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg> Security and quality</strong> tab for the repository. Where a pull request that will fix the vulnerable dependency has been generated, the alert includes a link to that pull request.</p>
 <p><img src="../../../../..//assets/images/help/dependabot/dependabot-alert-pr-link.png" alt="Screenshot of the Dependabot alerts view. To the right of one alert, a link to a pull request, titled &quot;#353,&quot; is outlined in orange."></p>
 <p>An alert may have no pull request link for several reasons:</p>
@@ -12,20 +12,20 @@
 <li>An error blocked Dependabot from creating a pull request.</li>
 </ol>
 <p>To view error details, click the alert.</p>
-<h3 id="version-update-errors" title="How to view errors / Version update errors">Version update errors<a href="#version-update-errors" aria-label="Link to heading 'Version update errors'" data-heading-content="Version update errors" class="anchor"></a></h3>
+<h3 id="version-update-errors">Version update errors<a href="#version-update-errors" aria-label="Link to heading 'Version update errors'" data-heading-content="Version update errors" class="anchor"></a></h3>
 <p>When Dependabot is blocked from creating a pull request to update a dependency in an ecosystem, you can view the job logs list to find out more about the error.</p>
 <p>The job logs list is accessible from the dependency graph of a repository. From the dependency graph, click the <strong>Dependabot</strong> tab, then to the right of the affected manifest file, click <strong>Recent update jobs</strong>.</p>
 <p>To view the full log files for a particular job, to the right of the log entry you are interested in, click <strong>view logs</strong>.</p>
 <p><img src="../../../../..//assets/images/help/dependabot/dependabot-job-log-error-message.png" alt="Screenshot of the Dependabot job log entries for a manifest file. A button, called &quot;View logs,&quot; is highlighted in a dark orange outline."></p>
 <p>For more information, see <a href="../../../how-tos/view-and-interpret-data/view-dependabot-logs.html">Viewing Dependabot job logs</a>.</p>
 <h2 id="dependency-resolution-errors" title="Dependency resolution errors">Dependency resolution errors<a href="#dependency-resolution-errors" aria-label="Link to heading 'Dependency resolution errors'" data-heading-content="Dependency resolution errors" class="anchor"></a></h2>
-<h3 id="cannot-update-dependency-to-a-non-vulnerable-version" title="Dependency resolution errors / Cannot update DEPENDENCY to a non-vulnerable version">Cannot update DEPENDENCY to a non-vulnerable version<a href="#cannot-update-dependency-to-a-non-vulnerable-version" aria-label="Link to heading 'Cannot update DEPENDENCY to a non-vulnerable version'" data-heading-content="Cannot update DEPENDENCY to a non-vulnerable version" class="anchor"></a></h3>
+<h3 id="cannot-update-dependency-to-a-non-vulnerable-version">Cannot update DEPENDENCY to a non-vulnerable version<a href="#cannot-update-dependency-to-a-non-vulnerable-version" aria-label="Link to heading 'Cannot update DEPENDENCY to a non-vulnerable version'" data-heading-content="Cannot update DEPENDENCY to a non-vulnerable version" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Security updates only</p>
 <p><strong>Error message:</strong> <code>Dependabot cannot update DEPENDENCY to a non-vulnerable version</code></p>
 <p>Dependabot cannot create a pull request to update the vulnerable dependency to a secure version without breaking other dependencies in the dependency graph for this repository.</p>
 <p>Every application that has dependencies has a dependency graph, that is, a directed acyclic graph of every package version that the application directly or indirectly depends on. Every time a dependency is updated, this graph must resolve otherwise the application won't build. When an ecosystem has a deep and complex dependency graph, for example, npm and RubyGems, it is often impossible to upgrade a single dependency without upgrading the whole ecosystem.</p>
 <p><strong>Resolution:</strong> Stay up to date with the most recently released versions, for example, by enabling version updates. This increases the likelihood that a vulnerability in one dependency can be resolved by a simple upgrade that doesn't break the dependency graph. See <a href="../../../how-tos/secure-your-supply-chain/secure-your-dependencies/configure-version-updates.html">Configuring Dependabot version updates</a>.</p>
-<h3 id="updates-dependencies-without-an-alert" title="Dependency resolution errors / Updates dependencies without an alert">Updates dependencies without an alert<a href="#updates-dependencies-without-an-alert" aria-label="Link to heading 'Updates dependencies without an alert'" data-heading-content="Updates dependencies without an alert" class="anchor"></a></h3>
+<h3 id="updates-dependencies-without-an-alert">Updates dependencies without an alert<a href="#updates-dependencies-without-an-alert" aria-label="Link to heading 'Updates dependencies without an alert'" data-heading-content="Updates dependencies without an alert" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Security updates only</p>
 <p><strong>Error message:</strong> <code>Dependabot tries to update dependencies without an alert</code></p>
 <p>Dependabot updates explicitly defined transitive dependencies that are vulnerable for all ecosystems. For npm, Dependabot will raise a pull request that also updates the parent dependency if it's the only way to fix the transitive dependency.</p>
@@ -38,7 +38,7 @@
 </span></code></pre>
 <p>If a security vulnerability is released for <code>B</code> versions <code>&lt;2.0.0</code> and a patch is available at <code>2.0.0</code> then Dependabot will attempt to update <code>B</code> but will find that it's not possible due to the restriction in place by <code>A</code> which only allows lower vulnerable versions. To fix the vulnerability, Dependabot will look for updates to dependency <code>A</code> which allow the fixed version of <code>B</code> to be used.</p>
 <p>Dependabot automatically generates a pull request that upgrades both the locked parent and child transitive dependencies.</p>
-<h3 id="cant-close-pull-request-for-an-update-thats-already-been-applied" title="Dependency resolution errors / Can't close pull request for an update that's already been applied">Can't close pull request for an update that's already been applied<a href="#cant-close-pull-request-for-an-update-thats-already-been-applied" aria-label="Link to heading 'Can't close pull request for an update that's already been applied'" data-heading-content="Can't close pull request for an update that's already been applied" class="anchor"></a></h3>
+<h3 id="cant-close-pull-request-for-an-update-thats-already-been-applied">Can't close pull request for an update that's already been applied<a href="#cant-close-pull-request-for-an-update-thats-already-been-applied" aria-label="Link to heading 'Can't close pull request for an update that's already been applied'" data-heading-content="Can't close pull request for an update that's already been applied" class="anchor"></a></h3>
 <p><strong>Error message:</strong> <code>Dependabot fails to close an open pull request for an update that has already been applied on the default branch</code></p>
 <p>Dependabot will close pull requests for dependency updates, once it detects these updates have been committed to the default branch. However, in rare circumstances, the pull request may remain open.</p>
 <p><strong>Resolution:</strong> If you notice that you have committed an update to a dependency manually, and that the pull request for that same update is still open, you can use one of the following commands in a comment on the pull request:</p>
@@ -48,12 +48,12 @@
 </ul>
 <p>Either comment will trigger Dependabot to check if the dependency is no longer upgradable or vulnerable. If Dependabot detects that the pull request is no longer required, it will close the pull request in this particular case.</p>
 <p>For more information about Dependabot comment commands, see <a href="../../../how-tos/secure-your-supply-chain/manage-your-dependency-security/manage-dependabot-prs.html#managing-dependabot-pull-requests-with-comment-commands">Managing pull requests for dependency updates</a>.</p>
-<h3 id="cant-update-to-the-required-version-as-there-is-already-an-open-pull-request-for-the-latest-version" title="Dependency resolution errors / Can't update to the required version as there is already an open pull request for the latest version">Can't update to the required version as there is already an open pull request for the latest version<a href="#cant-update-to-the-required-version-as-there-is-already-an-open-pull-request-for-the-latest-version" aria-label="Link to heading 'Can't update to the required version as there is already an open pull request for the latest version'" data-heading-content="Can't update to the required version as there is already an open pull request for the latest version" class="anchor"></a></h3>
+<h3 id="cant-update-to-the-required-version-as-there-is-already-an-open-pull-request-for-the-latest-version">Can't update to the required version as there is already an open pull request for the latest version<a href="#cant-update-to-the-required-version-as-there-is-already-an-open-pull-request-for-the-latest-version" aria-label="Link to heading 'Can't update to the required version as there is already an open pull request for the latest version'" data-heading-content="Can't update to the required version as there is already an open pull request for the latest version" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Security updates only</p>
 <p><strong>Error message:</strong> <code>Dependabot cannot update to the required version as there is already an open pull request for the latest version</code></p>
 <p>Dependabot will not create a pull request to update the vulnerable dependency to a secure version because there is already an open pull request to update this dependency. You will see this error when a vulnerability is detected in a single dependency and there's already an open pull request to update the dependency to the latest version.</p>
 <p><strong>Resolution:</strong> You can review the open pull request and merge it as soon as you are confident that the change is safe, or close that pull request and trigger a new security update pull request. See <a href="#triggering-a-dependabot-pull-request-manually">Triggering a Dependabot pull request manually</a>.</p>
-<h3 id="no-security-update-needed" title="Dependency resolution errors / No security update needed">No security update needed<a href="#no-security-update-needed" aria-label="Link to heading 'No security update needed'" data-heading-content="No security update needed" class="anchor"></a></h3>
+<h3 id="no-security-update-needed">No security update needed<a href="#no-security-update-needed" aria-label="Link to heading 'No security update needed'" data-heading-content="No security update needed" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Security updates only</p>
 <p><strong>Error message:</strong> <code>No security update is needed as DEPENDENCY is no longer vulnerable</code></p>
 <p>Dependabot cannot close a pull request to update a dependency that is not, or is no longer, vulnerable. You may see this error when dependency graph data is stale, or when the dependency graph and Dependabot do not agree if a particular version of a dependency is vulnerable.</p>
@@ -61,7 +61,7 @@
 <p>If you suspect your dependency graph data is out of date, you may need to manually update the dependency graph for your repository or investigate your dependency information further. See <a href="dependency-graph-errors.html">Troubleshooting the dependency graph</a>.</p>
 <p>If you are able to confirm the dependency version is no longer vulnerable, you can close the Dependabot pull request.</p>
 <h2 id="pull-request-errors" title="Pull request errors">Pull request errors<a href="#pull-request-errors" aria-label="Link to heading 'Pull request errors'" data-heading-content="Pull request errors" class="anchor"></a></h2>
-<h3 id="pull-request-limit-reached" title="Pull request errors / Pull request limit reached">Pull request limit reached<a href="#pull-request-limit-reached" aria-label="Link to heading 'Pull request limit reached'" data-heading-content="Pull request limit reached" class="anchor"></a></h3>
+<h3 id="pull-request-limit-reached">Pull request limit reached<a href="#pull-request-limit-reached" aria-label="Link to heading 'Pull request limit reached'" data-heading-content="Pull request limit reached" class="anchor"></a></h3>
 <p><strong>Error message:</strong> <code>Dependabot cannot open any more pull requests</code></p>
 <p>There's a limit on the number of open pull requests Dependabot will generate. When this limit is reached, no new pull requests are opened and this error is reported.</p>
 <p><strong>Limits:</strong></p>
@@ -72,7 +72,7 @@
 <p>There are separate limits for security and version update pull requests, so that open version update pull requests cannot block the creation of a security update pull request. For more information, see <a href="../dependabot-options-reference.html#open-pull-requests-limit-">Dependabot options reference</a>.</p>
 <p><strong>Resolution:</strong> Merge or close some of the existing pull requests and trigger a new pull request manually. see <a href="#triggering-a-dependabot-pull-request-manually">Triggering a Dependabot pull request manually</a>.</p>
 <h2 id="timeout-and-performance-errors" title="Timeout and performance errors">Timeout and performance errors<a href="#timeout-and-performance-errors" aria-label="Link to heading 'Timeout and performance errors'" data-heading-content="Timeout and performance errors" class="anchor"></a></h2>
-<h3 id="update-timed-out" title="Timeout and performance errors / Update timed out">Update timed out<a href="#update-timed-out" aria-label="Link to heading 'Update timed out'" data-heading-content="Update timed out" class="anchor"></a></h3>
+<h3 id="update-timed-out">Update timed out<a href="#update-timed-out" aria-label="Link to heading 'Update timed out'" data-heading-content="Update timed out" class="anchor"></a></h3>
 <p><strong>Error message:</strong> <code>Dependabot timed out during its update</code></p>
 <p>Dependabot took longer than the maximum time allowed to assess the update required and prepare a pull request. This error is usually seen only for large repositories with many manifest files, for example, npm or yarn monorepo projects with hundreds of <em>package.json</em> files. Updates to the Composer ecosystem also take longer to assess and may time out.</p>
 <p>Dependabot update jobs that run on GitHub-hosted runners time out after 55 minutes. You cannot increase this time limit.</p>
@@ -80,7 +80,7 @@
 <p><strong>Resolution for version updates:</strong> Specify the most important dependencies to update using the <code>allow</code> parameter or, alternatively, use the <code>ignore</code> parameter to exclude some dependencies from updates. Updating your configuration might allow Dependabot to review the version update and generate the pull request in the time available.</p>
 <p><strong>Resolution for security updates:</strong> Reduce the chances of timeouts by keeping the dependencies updated, for example, by enabling version updates. For more information, see <a href="../../../how-tos/secure-your-supply-chain/secure-your-dependencies/configure-version-updates.html">Configuring Dependabot version updates</a>.</p>
 <h2 id="grouping-errors" title="Grouping errors">Grouping errors<a href="#grouping-errors" aria-label="Link to heading 'Grouping errors'" data-heading-content="Grouping errors" class="anchor"></a></h2>
-<h3 id="failed-to-group-dependencies-version-updates" title="Grouping errors / Failed to group dependencies (version updates)">Failed to group dependencies (version updates)<a href="#failed-to-group-dependencies-version-updates" aria-label="Link to heading 'Failed to group dependencies (version updates)'" data-heading-content="Failed to group dependencies (version updates)" class="anchor"></a></h3>
+<h3 id="failed-to-group-dependencies-version-updates">Failed to group dependencies (version updates)<a href="#failed-to-group-dependencies-version-updates" aria-label="Link to heading 'Failed to group dependencies (version updates)'" data-heading-content="Failed to group dependencies (version updates)" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Version updates only</p>
 <p><strong>Error message:</strong> <code>Dependabot fails to group a set of dependencies into a single pull request for Dependabot version updates</code></p>
 <p>The <a href="../dependabot-options-reference.html#groups--"><code>groups</code></a> configuration settings in the <code>dependabot.yml</code> file can apply to version updates and security updates. Use the <code>applies-to</code> key to specify where (version updates or security updates) a set of grouping rules is applied.</p>
@@ -104,7 +104,7 @@
 </ol>
 <p><strong>Resolution:</strong> Ensure that configuration settings don't cancel each other, and update them appropriately in your configuration file. To debug the problem, look at the logs. For information about accessing the logs for a manifest, see <a href="#how-to-view-errors">How to view errors</a>.</p>
 <p>For more information on how to configure groups for Dependabot version updates, see <a href="../dependabot-options-reference.html#groups--">Dependabot options reference</a>.</p>
-<h3 id="failed-to-group-dependencies-security-updates" title="Grouping errors / Failed to group dependencies (security updates)">Failed to group dependencies (security updates)<a href="#failed-to-group-dependencies-security-updates" aria-label="Link to heading 'Failed to group dependencies (security updates)'" data-heading-content="Failed to group dependencies (security updates)" class="anchor"></a></h3>
+<h3 id="failed-to-group-dependencies-security-updates">Failed to group dependencies (security updates)<a href="#failed-to-group-dependencies-security-updates" aria-label="Link to heading 'Failed to group dependencies (security updates)'" data-heading-content="Failed to group dependencies (security updates)" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Security updates only</p>
 <p><strong>Error message:</strong> <code>Dependabot fails to group a set of dependencies into a single pull request for Dependabot security updates</code></p>
 <p>The <a href="../dependabot-options-reference.html#groups--"><code>groups</code></a> configuration settings in the <code>dependabot.yml</code> file can apply to version updates and security updates. Use the <code>applies-to</code> key to specify where (version updates or security updates) a set of grouping rules is applied. Check you have grouping configured to apply to security updates. If the <code>applies-to</code> key is absent from a set of grouping rules in your configuration, any group rules will by default only apply to version updates.</p>
@@ -117,7 +117,7 @@
 <li>Dependabot <strong>will not</strong> group security updates with version updates.</li>
 </ul>
 <p>For more information, see <a href="../../../concepts/supply-chain-security/dependabot-security-updates.html#about-grouped-security-updates">Dependabot security updates</a> and <a href="../../../how-tos/secure-your-supply-chain/manage-your-dependency-security/customizing-dependabot-security-prs.html">Customizing pull requests for Dependabot security updates</a>.</p>
-<h3 id="failed-to-update-dependency-in-grouped-pull-request" title="Grouping errors / Failed to update dependency in grouped pull request">Failed to update dependency in grouped pull request<a href="#failed-to-update-dependency-in-grouped-pull-request" aria-label="Link to heading 'Failed to update dependency in grouped pull request'" data-heading-content="Failed to update dependency in grouped pull request" class="anchor"></a></h3>
+<h3 id="failed-to-update-dependency-in-grouped-pull-request">Failed to update dependency in grouped pull request<a href="#failed-to-update-dependency-in-grouped-pull-request" aria-label="Link to heading 'Failed to update dependency in grouped pull request'" data-heading-content="Failed to update dependency in grouped pull request" class="anchor"></a></h3>
 <p><strong>Error message:</strong> <code>Dependabot fails to update one of the dependencies in a grouped pull request</code></p>
 <p>There are different troubleshooting techniques you can use for failed version updates and failed security updates.</p>
 <h4 id="version-updates">Version updates<a href="#version-updates" aria-label="Link to heading 'Version updates'" data-heading-content="Version updates" class="anchor"></a></h4>
@@ -142,7 +142,7 @@
 <li>Configure an <code>ignore</code> rule for the dependency in the <code>dependabot.yml</code> file. For more information, see <a href="../dependabot-options-reference.html#ignore--">Dependabot options reference</a>.</li>
 <li>Use the <code>@dependabot ignore</code> comment command for the dependency in the pull request for the grouped updates. For more information, see <a href="../../../how-tos/secure-your-supply-chain/manage-your-dependency-security/manage-dependabot-prs.html#managing-dependabot-pull-requests-with-comment-commands">Managing pull requests for dependency updates</a>.</li>
 </ul>
-<h3 id="continuous-integration-fails-on-grouped-pull-request" title="Grouping errors / Continuous integration fails on grouped pull request">Continuous integration fails on grouped pull request<a href="#continuous-integration-fails-on-grouped-pull-request" aria-label="Link to heading 'Continuous integration fails on grouped pull request'" data-heading-content="Continuous integration fails on grouped pull request" class="anchor"></a></h3>
+<h3 id="continuous-integration-fails-on-grouped-pull-request">Continuous integration fails on grouped pull request<a href="#continuous-integration-fails-on-grouped-pull-request" aria-label="Link to heading 'Continuous integration fails on grouped pull request'" data-heading-content="Continuous integration fails on grouped pull request" class="anchor"></a></h3>
 <p><strong>Applies to:</strong> Version updates only</p>
 <p><strong>Error message:</strong> <code>Continuous integration (CI) fails on my grouped pull request</code></p>
 <p><strong>Resolution:</strong></p>
@@ -154,11 +154,11 @@
 </ul>
 <p>If you continue to see CI failures, remove the group configuration so that Dependabot reverts to raising individual pull requests for each dependency. Then, check and confirm that the update works correctly for each individual pull request.</p>
 <h2 id="authentication-and-registry-errors" title="Authentication and registry errors">Authentication and registry errors<a href="#authentication-and-registry-errors" aria-label="Link to heading 'Authentication and registry errors'" data-heading-content="Authentication and registry errors" class="anchor"></a></h2>
-<h3 id="cannot-resolve-or-access-dependencies" title="Authentication and registry errors / Cannot resolve or access dependencies">Cannot resolve or access dependencies<a href="#cannot-resolve-or-access-dependencies" aria-label="Link to heading 'Cannot resolve or access dependencies'" data-heading-content="Cannot resolve or access dependencies" class="anchor"></a></h3>
+<h3 id="cannot-resolve-or-access-dependencies">Cannot resolve or access dependencies<a href="#cannot-resolve-or-access-dependencies" aria-label="Link to heading 'Cannot resolve or access dependencies'" data-heading-content="Cannot resolve or access dependencies" class="anchor"></a></h3>
 <p><strong>Error message:</strong> <code>Dependabot can't resolve your LANGUAGE dependency files</code></p>
 <p><strong>API error type:</strong> <code>git_dependencies_not_reachable</code></p>
 <p>If Dependabot attempts to check whether dependency references need to be updated in a repository, but can't access one or more of the referenced files, the operation will fail.</p>
-<h3 id="private-package-registry-errors" title="Authentication and registry errors / Private package registry errors">Private package registry errors<a href="#private-package-registry-errors" aria-label="Link to heading 'Private package registry errors'" data-heading-content="Private package registry errors" class="anchor"></a></h3>
+<h3 id="private-package-registry-errors">Private package registry errors<a href="#private-package-registry-errors" aria-label="Link to heading 'Private package registry errors'" data-heading-content="Private package registry errors" class="anchor"></a></h3>
 <p>Dependabot may generate one of the following errors when it can't access a private package registry:</p>
 <table>
 <thead>
@@ -170,19 +170,19 @@
 <tbody>
 <tr>
 <td>"Dependabot can't reach a dependency in a private package registry"</td>
-<td><code class="keyword">private_source_not_reachable</code></td>
+<td><code>private_source_not_reachable</code></td>
 </tr>
 <tr>
 <td>"Dependabot can't authenticate to a private package registry"</td>
-<td><code class="keyword">private_source_authentication_failure</code></td>
+<td><code>private_source_authentication_failure</code></td>
 </tr>
 <tr>
 <td>"Dependabot timed out while waiting for a private package registry"</td>
-<td><code class="keyword">private_source_timed_out</code></td>
+<td><code>private_source_timed_out</code></td>
 </tr>
 <tr>
 <td>"Dependabot couldn't validate the certificate for a private package registry"</td>
-<td><code class="keyword">private_source_certificate_failure</code></td>
+<td><code>private_source_certificate_failure</code></td>
 </tr>
 </tbody>
 </table>

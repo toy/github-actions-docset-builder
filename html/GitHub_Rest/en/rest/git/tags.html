@@ -6,7 +6,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="create-a-tag-object" title="Create a tag object">Create a tag object<a href="#create-a-tag-object" aria-label="Link to heading 'Create a tag object'" data-heading-content="Create a tag object" class="anchor"></a></h2>
+<h2 id="create-a-tag-object" title="POST /repos/{owner}/{repo}/git/tags (Create a tag object)">Create a tag object<a href="#create-a-tag-object" aria-label="Link to heading 'Create a tag object'" data-heading-content="Create a tag object" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/git/tags
 </span></code></pre>
 <p>Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then create the refs/tags/<span data-escaped-char="">[</span>tag] reference. If you want to create a lightweight tag, you only have to create the tag reference - this call would be unnecessary.<br>
@@ -15,7 +15,7 @@ The response will include a verification object that describes the result of ver
 <p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in table below<span data-escaped-char="">.</span>signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified<span data-escaped-char="">_</span>atstringThe date the signature was verified by GitHub.<br>
 These are the possible values for reason in the verification object:</p>
 <p>ValueDescriptionexpired<span data-escaped-char="">_</span>keyThe key that made the signature is expired.not<span data-escaped-char="">_</span>signing<span data-escaped-char="">_</span>keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify<span data-escaped-char="">_</span>errorThere was an error communicating with the signature verification service.gpgverify<span data-escaped-char="">_</span>unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown<span data-escaped-char="">_</span>signature<span data-escaped-char="">_</span>typeA non-PGP signature was found in the commit.no<span data-escaped-char="">_</span>userNo user was associated with the committer email address in the commit.unverified<span data-escaped-char="">_</span>emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad<span data-escaped-char="">_</span>emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown<span data-escaped-char="">_</span>keyThe key that made the signature has not been registered with any user's account.malformed<span data-escaped-char="">_</span>signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
-<h3 id="parameters" title="Create a tag object / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -64,7 +64,7 @@ When this object was tagged. This is a timestamp in ISO 8601 format: YYYY-MM-DDT
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="Create a tag object / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -76,7 +76,7 @@ When this object was tagged. This is a timestamp in ISO 8601 format: YYYY-MM-DDT
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Create a tag object / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -125,7 +125,7 @@ When this object was tagged. This is a timestamp in ISO 8601 format: YYYY-MM-DDT
 </ul>
 </li>
 </ul>
-<h2 id="get-a-tag" title="Get a tag">Get a tag<a href="#get-a-tag" aria-label="Link to heading 'Get a tag'" data-heading-content="Get a tag" class="anchor"></a></h2>
+<h2 id="get-a-tag" title="GET /repos/{owner}/{repo}/git/tags/{tag_sha} (Get a tag)">Get a tag<a href="#get-a-tag" aria-label="Link to heading 'Get a tag'" data-heading-content="Get a tag" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/git/tags/{tag_sha}
 </span></code></pre>
 <p>Signature verification object<br>
@@ -133,7 +133,7 @@ The response will include a verification object that describes the result of ver
 <p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in table below<span data-escaped-char="">.</span>signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified<span data-escaped-char="">_</span>atstringThe date the signature was verified by GitHub.<br>
 These are the possible values for reason in the verification object:</p>
 <p>ValueDescriptionexpired<span data-escaped-char="">_</span>keyThe key that made the signature is expired.not<span data-escaped-char="">_</span>signing<span data-escaped-char="">_</span>keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify<span data-escaped-char="">_</span>errorThere was an error communicating with the signature verification service.gpgverify<span data-escaped-char="">_</span>unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown<span data-escaped-char="">_</span>signature<span data-escaped-char="">_</span>typeA non-PGP signature was found in the commit.no<span data-escaped-char="">_</span>userNo user was associated with the committer email address in the commit.unverified<span data-escaped-char="">_</span>emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad<span data-escaped-char="">_</span>emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown<span data-escaped-char="">_</span>keyThe key that made the signature has not been registered with any user's account.malformed<span data-escaped-char="">_</span>signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
-<h3 id="parameters-1" title="Get a tag / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -153,7 +153,7 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong><code>tag_sha</code></strong> (string) (required)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Get a tag / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -165,7 +165,7 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong>409</strong> - Conflict</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Get a tag / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

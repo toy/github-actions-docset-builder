@@ -4,13 +4,13 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-attestations-by-bulk-subject-digests" title="List attestations by bulk subject digests">List attestations by bulk subject digests<a href="#list-attestations-by-bulk-subject-digests" aria-label="Link to heading 'List attestations by bulk subject digests'" data-heading-content="List attestations by bulk subject digests" class="anchor"></a></h2>
+<h2 id="list-attestations-by-bulk-subject-digests" title="POST /users/{username}/attestations/bulk-list (List attestations by bulk subject digests)">List attestations by bulk subject digests<a href="#list-attestations-by-bulk-subject-digests" aria-label="Link to heading 'List attestations by bulk subject digests'" data-heading-content="List attestations by bulk subject digests" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /users/{username}/attestations/bulk-list
 </span></code></pre>
 <p>List a collection of artifact attestations associated with any entry in a list of subject digests owned by a user.<br>
 The collection of attestations returned by this endpoint is filtered according to the authenticated user's permissions; if the authenticated user cannot read a repository, the attestations associated with that repository will not be included in the response. In addition, when using a fine-grained access token the attestations:read permission is required.<br>
 Please note: in order to offer meaningful security benefits, an attestation's signature and timestamps must be cryptographically verified, and the identity of the attestation signer must be validated. Attestations can be verified using the GitHub CLI attestation verify command. For more information, see our guide on how to use artifact attestations to establish a build's provenance.</p>
-<h3 id="parameters" title="List attestations by bulk subject digests / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -49,11 +49,11 @@ This option accepts provenance, sbom, release, or freeform text<br>
 for custom predicate types.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List attestations by bulk subject digests / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples" title="List attestations by bulk subject digests / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -78,11 +78,11 @@ for custom predicate types.</p>
 </ul>
 </li>
 </ul>
-<h2 id="delete-attestations-in-bulk" title="Delete attestations in bulk">Delete attestations in bulk<a href="#delete-attestations-in-bulk" aria-label="Link to heading 'Delete attestations in bulk'" data-heading-content="Delete attestations in bulk" class="anchor"></a></h2>
+<h2 id="delete-attestations-in-bulk" title="POST /users/{username}/attestations/delete-request (Delete attestations in bulk)">Delete attestations in bulk<a href="#delete-attestations-in-bulk" aria-label="Link to heading 'Delete attestations in bulk'" data-heading-content="Delete attestations in bulk" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /users/{username}/attestations/delete-request
 </span></code></pre>
 <p>Delete artifact attestations in bulk by either subject digests or unique ID.</p>
-<h3 id="parameters-1" title="Delete attestations in bulk / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -98,7 +98,7 @@ The handle for the GitHub user account.</li>
 <li><strong><code>subject_digests</code></strong> (array of strings) (required)<br>
 List of subject digests associated with the artifact attestations to delete.</li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Delete attestations in bulk / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -107,11 +107,11 @@ List of subject digests associated with the artifact attestations to delete.</li
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h2 id="delete-attestations-by-subject-digest" title="Delete attestations by subject digest">Delete attestations by subject digest<a href="#delete-attestations-by-subject-digest" aria-label="Link to heading 'Delete attestations by subject digest'" data-heading-content="Delete attestations by subject digest" class="anchor"></a></h2>
+<h2 id="delete-attestations-by-subject-digest" title="DELETE /users/{username}/attestations/digest/{subject_digest} (Delete attestations by subject digest)">Delete attestations by subject digest<a href="#delete-attestations-by-subject-digest" aria-label="Link to heading 'Delete attestations by subject digest'" data-heading-content="Delete attestations by subject digest" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /users/{username}/attestations/digest/{subject_digest}
 </span></code></pre>
 <p>Delete an artifact attestation by subject digest.</p>
-<h3 id="parameters-2" title="Delete attestations by subject digest / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -128,7 +128,7 @@ The handle for the GitHub user account.</p>
 Subject Digest</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Delete attestations by subject digest / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -140,7 +140,7 @@ Subject Digest</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Delete attestations by subject digest / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -155,11 +155,11 @@ Subject Digest</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/attestations/digest/SUBJECT_DIGEST
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="delete-attestations-by-id" title="Delete attestations by ID">Delete attestations by ID<a href="#delete-attestations-by-id" aria-label="Link to heading 'Delete attestations by ID'" data-heading-content="Delete attestations by ID" class="anchor"></a></h2>
+<h2 id="delete-attestations-by-id" title="DELETE /users/{username}/attestations/{attestation_id} (Delete attestations by ID)">Delete attestations by ID<a href="#delete-attestations-by-id" aria-label="Link to heading 'Delete attestations by ID'" data-heading-content="Delete attestations by ID" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /users/{username}/attestations/{attestation_id}
 </span></code></pre>
 <p>Delete an artifact attestation by unique ID that is associated with a repository owned by a user.</p>
-<h3 id="parameters-3" title="Delete attestations by ID / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -176,7 +176,7 @@ The handle for the GitHub user account.</p>
 Attestation ID</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Delete attestations by ID / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -191,7 +191,7 @@ Attestation ID</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Delete attestations by ID / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200-1">Example 1: Status Code 200<a href="#example-1-status-code-200-1" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -206,13 +206,13 @@ Attestation ID</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/users/USERNAME/attestations/ATTESTATION_ID
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-attestations" title="List attestations">List attestations<a href="#list-attestations" aria-label="Link to heading 'List attestations'" data-heading-content="List attestations" class="anchor"></a></h2>
+<h2 id="list-attestations" title="GET /users/{username}/attestations/{subject_digest} (List attestations)">List attestations<a href="#list-attestations" aria-label="Link to heading 'List attestations'" data-heading-content="List attestations" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/attestations/{subject_digest}
 </span></code></pre>
 <p>List a collection of artifact attestations with a given subject digest that are associated with repositories owned by a user.<br>
 The collection of attestations returned by this endpoint is filtered according to the authenticated user's permissions; if the authenticated user cannot read a repository, the attestations associated with that repository will not be included in the response. In addition, when using a fine-grained access token the attestations:read permission is required.<br>
 Please note: in order to offer meaningful security benefits, an attestation's signature and timestamps must be cryptographically verified, and the identity of the attestation signer must be validated. Attestations can be verified using the GitHub CLI attestation verify command. For more information, see our guide on how to use artifact attestations to establish a build's provenance.</p>
-<h3 id="parameters-4" title="List attestations / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -248,7 +248,7 @@ This option accepts provenance, sbom, release, or freeform text<br>
 for custom predicate types.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="List attestations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -263,7 +263,7 @@ for custom predicate types.</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="List attestations / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

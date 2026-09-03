@@ -2,10 +2,10 @@
 <p>Use the REST API to list, create, update and delete the public gists on GitHub.</p>
 <h2 id="about-gists" title="About gists">About gists<a href="#about-gists" aria-label="Link to heading 'About gists'" data-heading-content="About gists" class="anchor"></a></h2>
 <p>You can use the REST API to view and modify gists. For more information about gists, see <a href="https://docs.github.com/en/get-started/writing-on-github/editing-and-sharing-content-with-gists" class="external">Editing and sharing content with gists</a>.</p>
-<h3 id="authentication" title="About gists / Authentication">Authentication<a href="#authentication" aria-label="Link to heading 'Authentication'" data-heading-content="Authentication" class="anchor"></a></h3>
+<h3 id="authentication">Authentication<a href="#authentication" aria-label="Link to heading 'Authentication'" data-heading-content="Authentication" class="anchor"></a></h3>
 <p>You can read public gists  anonymously, but you must be signed into GitHub to create gists. To read or write gists on a user's behalf, you need the gist OAuth scope and a token. For more information, see <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">Scopes for OAuth apps</a>.</p>
 <!-- When an OAuth client does not have the gists scope, the API will return a 404 "Not Found" response regardless of the validity of the credentials. The API will return a 401 "Bad credentials" response if the gists scope was given to the application but the credentials are invalid. -->
-<h3 id="truncation" title="About gists / Truncation">Truncation<a href="#truncation" aria-label="Link to heading 'Truncation'" data-heading-content="Truncation" class="anchor"></a></h3>
+<h3 id="truncation">Truncation<a href="#truncation" aria-label="Link to heading 'Truncation'" data-heading-content="Truncation" class="anchor"></a></h3>
 <p>The API provides up to one megabyte of content for each file in the gist. Each file returned for a gist through the API has a key called <code>truncated</code>. If <code>truncated</code> is <code>true</code>, the file is too large and only a portion of the contents were returned in <code>content</code>.</p>
 <p>If you need the full contents of the file, you can make a <code>GET</code> request to the URL specified by <code>raw_url</code>. Be aware that for files larger than ten megabytes, you'll need to clone the gist via the URL provided by <code>git_pull_url</code>.</p>
 <p>In addition to a specific file's contents being truncated, the entire files list may be truncated if the total number exceeds 300 files. If the top level <code>truncated</code> key is <code>true</code>, only the first 300 files have been returned in the files list. If you need to fetch all of the gist's files, you'll need to clone the gist via the URL provided by <code>git_pull_url</code>.</p>
@@ -13,11 +13,11 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-gists-for-the-authenticated-user" title="List gists for the authenticated user">List gists for the authenticated user<a href="#list-gists-for-the-authenticated-user" aria-label="Link to heading 'List gists for the authenticated user'" data-heading-content="List gists for the authenticated user" class="anchor"></a></h2>
+<h2 id="list-gists-for-the-authenticated-user" title="GET /gists (List gists for the authenticated user)">List gists for the authenticated user<a href="#list-gists-for-the-authenticated-user" aria-label="Link to heading 'List gists for the authenticated user'" data-heading-content="List gists for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists
 </span></code></pre>
 <p>Lists the authenticated user's gists or if called anonymously, this endpoint returns all public gists:</p>
-<h3 id="parameters" title="List gists for the authenticated user / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -40,7 +40,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List gists for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -52,7 +52,7 @@ Default: <code>1</code></p>
 <p><strong>403</strong> - Forbidden</p>
 </li>
 </ul>
-<h3 id="code-examples" title="List gists for the authenticated user / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -106,13 +106,13 @@ Default: <code>1</code></p>
 </li>
 <li><code>truncated</code>: boolean</li>
 </ul>
-<h2 id="create-a-gist" title="Create a gist">Create a gist<a href="#create-a-gist" aria-label="Link to heading 'Create a gist'" data-heading-content="Create a gist" class="anchor"></a></h2>
+<h2 id="create-a-gist" title="POST /gists (Create a gist)">Create a gist<a href="#create-a-gist" aria-label="Link to heading 'Create a gist'" data-heading-content="Create a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /gists
 </span></code></pre>
 <p>Allows you to add a new gist with one or more files.<br>
 Note</p>
 <p>Don't name your files "gistfile" with a numerical suffix. This is the format of the automatic naming scheme that Gist uses internally.</p>
-<h3 id="parameters-1" title="Create a gist / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -142,7 +142,7 @@ Content of the file</li>
 Flag indicating whether the gist is public</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Create a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -160,7 +160,7 @@ Flag indicating whether the gist is public</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Create a gist / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="creating-a-gist">Creating a gist<a href="#creating-a-gist" aria-label="Link to heading 'Creating a gist'" data-heading-content="Creating a gist" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -258,12 +258,12 @@ Flag indicating whether the gist is public</p>
 <li><code>owner</code>: <code>Simple User</code> (see above)</li>
 <li><code>truncated</code>: boolean</li>
 </ul>
-<h2 id="list-public-gists" title="List public gists">List public gists<a href="#list-public-gists" aria-label="Link to heading 'List public gists'" data-heading-content="List public gists" class="anchor"></a></h2>
+<h2 id="list-public-gists" title="GET /gists/public (List public gists)">List public gists<a href="#list-public-gists" aria-label="Link to heading 'List public gists'" data-heading-content="List public gists" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/public
 </span></code></pre>
 <p>List public gists sorted by most recently updated to least recently updated.<br>
 Note: With pagination, you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page.</p>
-<h3 id="parameters-2" title="List public gists / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -286,7 +286,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="List public gists / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -301,7 +301,7 @@ Default: <code>1</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="List public gists / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -310,11 +310,11 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-gists-for-the-authenticated-user">List gists for the authenticated user</a>.</p>
-<h2 id="list-starred-gists" title="List starred gists">List starred gists<a href="#list-starred-gists" aria-label="Link to heading 'List starred gists'" data-heading-content="List starred gists" class="anchor"></a></h2>
+<h2 id="list-starred-gists" title="GET /gists/starred (List starred gists)">List starred gists<a href="#list-starred-gists" aria-label="Link to heading 'List starred gists'" data-heading-content="List starred gists" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/starred
 </span></code></pre>
 <p>List the authenticated user's starred gists:</p>
-<h3 id="parameters-3" title="List starred gists / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -337,7 +337,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="List starred gists / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -352,7 +352,7 @@ Default: <code>1</code></p>
 <p><strong>403</strong> - Forbidden</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="List starred gists / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -361,13 +361,13 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-gists-for-the-authenticated-user">List gists for the authenticated user</a>.</p>
-<h2 id="get-a-gist" title="Get a gist">Get a gist<a href="#get-a-gist" aria-label="Link to heading 'Get a gist'" data-heading-content="Get a gist" class="anchor"></a></h2>
+<h2 id="get-a-gist" title="GET /gists/{gist_id} (Get a gist)">Get a gist<a href="#get-a-gist" aria-label="Link to heading 'Get a gist'" data-heading-content="Get a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/{gist_id}
 </span></code></pre>
 <p>Gets a specified gist.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.raw+json: Returns the raw markdown. This is the default if you do not pass any specific media type.</p>
-<h3 id="parameters-4" title="Get a gist / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -378,7 +378,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Get a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -393,7 +393,7 @@ The unique identifier of the gist.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Get a gist / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -402,7 +402,7 @@ The unique identifier of the gist.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-gist">Create a gist</a>.</p>
-<h2 id="update-a-gist" title="Update a gist">Update a gist<a href="#update-a-gist" aria-label="Link to heading 'Update a gist'" data-heading-content="Update a gist" class="anchor"></a></h2>
+<h2 id="update-a-gist" title="PATCH /gists/{gist_id} (Update a gist)">Update a gist<a href="#update-a-gist" aria-label="Link to heading 'Update a gist'" data-heading-content="Update a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /gists/{gist_id}
 </span></code></pre>
 <p>Allows you to update a gist's description and to update, delete, or rename gist files. Files<br>
@@ -411,7 +411,7 @@ are unchanged.<br>
 At least one of description or files is required.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.raw+json: Returns the raw markdown. This is the default if you do not pass any specific media type.</p>
-<h3 id="parameters-5" title="Update a gist / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -447,7 +447,7 @@ The new filename for the file.</li>
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Update a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -459,7 +459,7 @@ The new filename for the file.</li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-5" title="Update a gist / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="updating-a-gist">Updating a gist<a href="#updating-a-gist" aria-label="Link to heading 'Updating a gist'" data-heading-content="Updating a gist" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -504,10 +504,10 @@ The new filename for the file.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-gist">Create a gist</a>.</p>
-<h2 id="delete-a-gist" title="Delete a gist">Delete a gist<a href="#delete-a-gist" aria-label="Link to heading 'Delete a gist'" data-heading-content="Delete a gist" class="anchor"></a></h2>
+<h2 id="delete-a-gist" title="DELETE /gists/{gist_id} (Delete a gist)">Delete a gist<a href="#delete-a-gist" aria-label="Link to heading 'Delete a gist'" data-heading-content="Delete a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /gists/{gist_id}
 </span></code></pre>
-<h3 id="parameters-6" title="Delete a gist / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -518,7 +518,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-6" title="Delete a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -533,7 +533,7 @@ The unique identifier of the gist.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-6" title="Delete a gist / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -541,10 +541,10 @@ The unique identifier of the gist.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/gists/GIST_ID
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-gist-commits" title="List gist commits">List gist commits<a href="#list-gist-commits" aria-label="Link to heading 'List gist commits'" data-heading-content="List gist commits" class="anchor"></a></h2>
+<h2 id="list-gist-commits" title="GET /gists/{gist_id}/commits (List gist commits)">List gist commits<a href="#list-gist-commits" aria-label="Link to heading 'List gist commits'" data-heading-content="List gist commits" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/{gist_id}/commits
 </span></code></pre>
-<h3 id="parameters-7" title="List gist commits / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -567,7 +567,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-7" title="List gist commits / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -582,7 +582,7 @@ Default: <code>1</code></p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-7" title="List gist commits / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -634,10 +634,10 @@ Default: <code>1</code></p>
 </li>
 <li><code>committed_at</code>: required, string, format: date-time</li>
 </ul>
-<h2 id="list-gist-forks" title="List gist forks">List gist forks<a href="#list-gist-forks" aria-label="Link to heading 'List gist forks'" data-heading-content="List gist forks" class="anchor"></a></h2>
+<h2 id="list-gist-forks" title="GET /gists/{gist_id}/forks (List gist forks)">List gist forks<a href="#list-gist-forks" aria-label="Link to heading 'List gist forks'" data-heading-content="List gist forks" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/{gist_id}/forks
 </span></code></pre>
-<h3 id="parameters-8" title="List gist forks / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-8">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -660,7 +660,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-8" title="List gist forks / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-8">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -675,7 +675,7 @@ Default: <code>1</code></p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-8" title="List gist forks / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-8">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -765,10 +765,10 @@ Default: <code>1</code></p>
 <li><code>owner</code>: <code>Simple User</code> (see above)</li>
 <li><code>truncated</code>: boolean</li>
 </ul>
-<h2 id="fork-a-gist" title="Fork a gist">Fork a gist<a href="#fork-a-gist" aria-label="Link to heading 'Fork a gist'" data-heading-content="Fork a gist" class="anchor"></a></h2>
+<h2 id="fork-a-gist" title="POST /gists/{gist_id}/forks (Fork a gist)">Fork a gist<a href="#fork-a-gist" aria-label="Link to heading 'Fork a gist'" data-heading-content="Fork a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /gists/{gist_id}/forks
 </span></code></pre>
-<h3 id="parameters-9" title="Fork a gist / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-9">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -779,7 +779,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-9" title="Fork a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-9">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -797,7 +797,7 @@ The unique identifier of the gist.</li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-9" title="Fork a gist / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-9">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -850,10 +850,10 @@ The unique identifier of the gist.</li>
 </li>
 <li><code>truncated</code>: boolean</li>
 </ul>
-<h2 id="check-if-a-gist-is-starred" title="Check if a gist is starred">Check if a gist is starred<a href="#check-if-a-gist-is-starred" aria-label="Link to heading 'Check if a gist is starred'" data-heading-content="Check if a gist is starred" class="anchor"></a></h2>
+<h2 id="check-if-a-gist-is-starred" title="GET /gists/{gist_id}/star (Check if a gist is starred)">Check if a gist is starred<a href="#check-if-a-gist-is-starred" aria-label="Link to heading 'Check if a gist is starred'" data-heading-content="Check if a gist is starred" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/{gist_id}/star
 </span></code></pre>
-<h3 id="parameters-10" title="Check if a gist is starred / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-10">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -864,7 +864,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-10" title="Check if a gist is starred / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-10">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - Response if gist is starred</p>
@@ -879,7 +879,7 @@ The unique identifier of the gist.</li>
 <p><strong>404</strong> - Not Found if gist is not starred</p>
 </li>
 </ul>
-<h3 id="code-examples-10" title="Check if a gist is starred / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-10">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -887,11 +887,11 @@ The unique identifier of the gist.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/gists/GIST_ID/star
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="star-a-gist" title="Star a gist">Star a gist<a href="#star-a-gist" aria-label="Link to heading 'Star a gist'" data-heading-content="Star a gist" class="anchor"></a></h2>
+<h2 id="star-a-gist" title="PUT /gists/{gist_id}/star (Star a gist)">Star a gist<a href="#star-a-gist" aria-label="Link to heading 'Star a gist'" data-heading-content="Star a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /gists/{gist_id}/star
 </span></code></pre>
 <p>Note that you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."</p>
-<h3 id="parameters-11" title="Star a gist / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-11">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -902,7 +902,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-11" title="Star a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-11">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -917,7 +917,7 @@ The unique identifier of the gist.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-11" title="Star a gist / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-11">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -925,10 +925,10 @@ The unique identifier of the gist.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/gists/GIST_ID/star
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="unstar-a-gist" title="Unstar a gist">Unstar a gist<a href="#unstar-a-gist" aria-label="Link to heading 'Unstar a gist'" data-heading-content="Unstar a gist" class="anchor"></a></h2>
+<h2 id="unstar-a-gist" title="DELETE /gists/{gist_id}/star (Unstar a gist)">Unstar a gist<a href="#unstar-a-gist" aria-label="Link to heading 'Unstar a gist'" data-heading-content="Unstar a gist" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /gists/{gist_id}/star
 </span></code></pre>
-<h3 id="parameters-12" title="Unstar a gist / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-12">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -939,7 +939,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>gist_id</code></strong> (string) (required)<br>
 The unique identifier of the gist.</li>
 </ul>
-<h3 id="http-response-status-codes-12" title="Unstar a gist / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-12">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -954,7 +954,7 @@ The unique identifier of the gist.</li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-12" title="Unstar a gist / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-12">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -962,13 +962,13 @@ The unique identifier of the gist.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/gists/GIST_ID/star
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="get-a-gist-revision" title="Get a gist revision">Get a gist revision<a href="#get-a-gist-revision" aria-label="Link to heading 'Get a gist revision'" data-heading-content="Get a gist revision" class="anchor"></a></h2>
+<h2 id="get-a-gist-revision" title="GET /gists/{gist_id}/{sha} (Get a gist revision)">Get a gist revision<a href="#get-a-gist-revision" aria-label="Link to heading 'Get a gist revision'" data-heading-content="Get a gist revision" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /gists/{gist_id}/{sha}
 </span></code></pre>
 <p>Gets a specified gist revision.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.raw+json: Returns the raw markdown. This is the default if you do not pass any specific media type.</p>
-<h3 id="parameters-13" title="Get a gist revision / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-13">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -984,7 +984,7 @@ The unique identifier of the gist.</p>
 <p><strong><code>sha</code></strong> (string) (required)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-13" title="Get a gist revision / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-13">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -999,7 +999,7 @@ The unique identifier of the gist.</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-13" title="Get a gist revision / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-13">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1008,11 +1008,11 @@ The unique identifier of the gist.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-gist">Create a gist</a>.</p>
-<h2 id="list-gists-for-a-user" title="List gists for a user">List gists for a user<a href="#list-gists-for-a-user" aria-label="Link to heading 'List gists for a user'" data-heading-content="List gists for a user" class="anchor"></a></h2>
+<h2 id="list-gists-for-a-user" title="GET /users/{username}/gists (List gists for a user)">List gists for a user<a href="#list-gists-for-a-user" aria-label="Link to heading 'List gists for a user'" data-heading-content="List gists for a user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/gists
 </span></code></pre>
 <p>Lists public gists for the specified user:</p>
-<h3 id="parameters-14" title="List gists for a user / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-14">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1039,7 +1039,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-14" title="List gists for a user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-14">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1048,7 +1048,7 @@ Default: <code>1</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-14" title="List gists for a user / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-14">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

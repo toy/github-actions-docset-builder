@@ -71,7 +71,7 @@
 <p>GitHub Actions workflows can use OIDC tokens instead of secrets to authenticate with cloud providers. Many popular cloud providers offer official login actions that simplify the process of using OIDC in your workflows. For more information about updating your workflows with specific cloud providers, see <a href="../../how-tos/secure-your-work/security-harden-deployments/index.html">Security hardening your deployments</a>.</p>
 <h2 id="using-repository-custom-properties-as-oidc-claims" title="Using repository custom properties as OIDC claims">Using repository custom properties as OIDC claims<a href="#using-repository-custom-properties-as-oidc-claims" aria-label="Link to heading 'Using repository custom properties as OIDC claims'" data-heading-content="Using repository custom properties as OIDC claims" class="anchor"></a></h2>
 <p>Organization and enterprise admins can include repository custom properties as claims in OIDC tokens. This enables attribute-based access control (ABAC) policies in your cloud provider, artifact registry, or secrets manager that are driven by repository metadata rather than hard-coded allow lists.</p>
-<h3 id="how-custom-property-claims-work" title="Using repository custom properties as OIDC claims / How custom property claims work">How custom property claims work<a href="#how-custom-property-claims-work" aria-label="Link to heading 'How custom property claims work'" data-heading-content="How custom property claims work" class="anchor"></a></h3>
+<h3 id="how-custom-property-claims-work">How custom property claims work<a href="#how-custom-property-claims-work" aria-label="Link to heading 'How custom property claims work'" data-heading-content="How custom property claims work" class="anchor"></a></h3>
 <p>The end-to-end flow for using custom properties as OIDC claims is as follows:</p>
 <ol>
 <li><strong>Define custom properties.</strong> An organization or enterprise admin creates custom properties (for example, <code>business_unit</code>, <code>data_classification</code>, or <code>environment_tier</code>) and assigns values to repositories. For more information, see <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a> and <a href="../../reference/security/oidc.html#including-repository-custom-properties-in-oidc-tokens">OpenID Connect reference</a>.</li>
@@ -80,12 +80,12 @@
 <li><strong>Update cloud trust policies.</strong> You update your cloud provider's trust conditions to evaluate the new <code>repo_property_*</code> claims, enabling fine-grained, attribute-based access decisions.</li>
 </ol>
 <p>Because this builds on GitHub's existing OIDC short-lived credential model, no long-lived secrets are required, and every token is scoped, auditable, and automatically rotated per workflow run.</p>
-<h3 id="prerequisites" title="Using repository custom properties as OIDC claims / Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h3>
+<h3 id="prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h3>
 <ul>
 <li>Custom properties must already be defined at the organization or enterprise level. For more information, see <a href="https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization" class="external">Managing custom properties for repositories in your organization</a>.</li>
 <li>You must be an organization admin or enterprise admin.</li>
 </ul>
-<h3 id="adding-a-custom-property-to-oidc-token-claims" title="Using repository custom properties as OIDC claims / Adding a custom property to OIDC token claims">Adding a custom property to OIDC token claims<a href="#adding-a-custom-property-to-oidc-token-claims" aria-label="Link to heading 'Adding a custom property to OIDC token claims'" data-heading-content="Adding a custom property to OIDC token claims" class="anchor"></a></h3>
+<h3 id="adding-a-custom-property-to-oidc-token-claims">Adding a custom property to OIDC token claims<a href="#adding-a-custom-property-to-oidc-token-claims" aria-label="Link to heading 'Adding a custom property to OIDC token claims'" data-heading-content="Adding a custom property to OIDC token claims" class="anchor"></a></h3>
 <p>To include a custom property in OIDC tokens, use the REST API or the settings UI for your organization or enterprise.</p>
 <ul>
 <li>
@@ -95,7 +95,7 @@
 <p><strong>Using the REST API:</strong> Send a <code>POST</code> request to the <code>/orgs/{org}/actions/oidc/customization/properties/repo</code> endpoint to add a custom property to the OIDC token claims for your organization. For request parameters and full details, see the REST API documentation for managing OIDC custom properties: <a href="https://docs.github.com/en/rest/actions/oidc" class="external">REST API endpoints for GitHub Actions OIDC</a>.</p>
 </li>
 </ul>
-<h3 id="example-oidc-token-with-custom-properties" title="Using repository custom properties as OIDC claims / Example OIDC token with custom properties">Example OIDC token with custom properties<a href="#example-oidc-token-with-custom-properties" aria-label="Link to heading 'Example OIDC token with custom properties'" data-heading-content="Example OIDC token with custom properties" class="anchor"></a></h3>
+<h3 id="example-oidc-token-with-custom-properties">Example OIDC token with custom properties<a href="#example-oidc-token-with-custom-properties" aria-label="Link to heading 'Example OIDC token with custom properties'" data-heading-content="Example OIDC token with custom properties" class="anchor"></a></h3>
 <p>The following example shows an OIDC token that includes two custom properties: a single-select property <code>business_unit</code> and a string property <code>workspace_id</code>. Each custom property appears in the token with the <code>repo_property_</code> prefix.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">sub</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">repo:my-org/my-repo:ref:refs/heads/main</span><span style="color:#c0c5ce;">",

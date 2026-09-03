@@ -19,7 +19,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Avoid using your scripts to output sensitive information to the console, as anyone with read access to the repository might be able to see the output in the UI logs.</p>
 </div>
-<h3 id="handling-exit-codes" title="Writing the scripts / Handling exit codes">Handling exit codes<a href="#handling-exit-codes" aria-label="Link to heading 'Handling exit codes'" data-heading-content="Handling exit codes" class="anchor"></a></h3>
+<h3 id="handling-exit-codes">Handling exit codes<a href="#handling-exit-codes" aria-label="Link to heading 'Handling exit codes'" data-heading-content="Handling exit codes" class="anchor"></a></h3>
 <p>For pre-job scripts, exit code <code>0</code> indicates that the script completed successfully, and the job will then proceed to run. If there is any other exit code, the job will not run and will be marked as failed. To see the results of your pre-job scripts, check the logs for <code>Set up runner</code> entries. For more information on checking the logs, see <a href="../../monitor-workflows/use-workflow-run-logs.html#viewing-logs-to-diagnose-failures">Using workflow run logs</a>.</p>
 <p>The <a href="../../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idcontinue-on-error"><code>continue-on-error</code></a> setting is not supported for use by these scripts.</p>
 <h2 id="triggering-the-scripts" title="Triggering the scripts">Triggering the scripts<a href="#triggering-the-scripts" aria-label="Link to heading 'Triggering the scripts'" data-heading-content="Triggering the scripts" class="anchor"></a></h2>
@@ -42,13 +42,13 @@ For example, the following <code>.env</code> entry will have the runner automati
 <p>The script defined in <code>ACTIONS_RUNNER_HOOK_JOB_COMPLETED</code> is executed at the end of the job, before the job completes. This makes it unsuitable for use cases that may interrupt a runner, such as deleting the runner machine as part of an autoscaling implementation.</p>
 </div>
 <h2 id="troubleshooting" title="Troubleshooting">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
-<h3 id="permission-denied" title="Troubleshooting / Permission denied">Permission denied<a href="#permission-denied" aria-label="Link to heading 'Permission denied'" data-heading-content="Permission denied" class="anchor"></a></h3>
+<h3 id="permission-denied">Permission denied<a href="#permission-denied" aria-label="Link to heading 'Permission denied'" data-heading-content="Permission denied" class="anchor"></a></h3>
 <p>If you get a "permission denied" error when you attempt to run a script, make sure that the script is executable. For example, in a terminal on Linux or macOS you can use the following command to make a file executable.</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">chmod</span><span style="color:#c0c5ce;"> +x PATH/TO/FILE
 </span></code></pre>
 <p>For information about using workflows to run scripts, see <a href="../../write-workflows/choose-what-workflows-do/add-scripts.html">Adding scripts to your workflow</a>.</p>
-<h3 id="no-timeout-setting" title="Troubleshooting / No timeout setting">No timeout setting<a href="#no-timeout-setting" aria-label="Link to heading 'No timeout setting'" data-heading-content="No timeout setting" class="anchor"></a></h3>
+<h3 id="no-timeout-setting">No timeout setting<a href="#no-timeout-setting" aria-label="Link to heading 'No timeout setting'" data-heading-content="No timeout setting" class="anchor"></a></h3>
 <p>There is currently no timeout setting available for scripts executed by <code>ACTIONS_RUNNER_HOOK_JOB_STARTED</code> or <code>ACTIONS_RUNNER_HOOK_JOB_COMPLETED</code>. As a result, you could consider adding timeout handling to your script.</p>
-<h3 id="reviewing-the-workflow-run-log" title="Troubleshooting / Reviewing the workflow run log">Reviewing the workflow run log<a href="#reviewing-the-workflow-run-log" aria-label="Link to heading 'Reviewing the workflow run log'" data-heading-content="Reviewing the workflow run log" class="anchor"></a></h3>
+<h3 id="reviewing-the-workflow-run-log">Reviewing the workflow run log<a href="#reviewing-the-workflow-run-log" aria-label="Link to heading 'Reviewing the workflow run log'" data-heading-content="Reviewing the workflow run log" class="anchor"></a></h3>
 <p>To confirm whether your scripts are executing, you can review the logs for that job. The scripts will be listed within separate steps for either <code>Set up runner</code> or <code>Complete runner</code>, depending on which environment variable is triggering the script. For more information on checking the logs, see <a href="../../monitor-workflows/use-workflow-run-logs.html#viewing-logs-to-diagnose-failures">Using workflow run logs</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

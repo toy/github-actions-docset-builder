@@ -67,7 +67,7 @@
 <p>It can take some time for your image to be fully generated and ready to use after the workflow completes. Provisioning time varies based on runner size and configuration, and may take several hours for larger runners.</p>
 <p>The image is generated only when the job completes successfully. This prevents new image versions from being created when a workflow fails or ends in an incomplete state.</p>
 <p>Once the image is generated, it is available for use in your workflows. For more information about managing custom images, see <a href="#managing-custom-images">Managing custom images</a>.</p>
-<h3 id="string-syntax" title="Generating a custom image / String syntax">String syntax<a href="#string-syntax" aria-label="Link to heading 'String syntax'" data-heading-content="String syntax" class="anchor"></a></h3>
+<h3 id="string-syntax">String syntax<a href="#string-syntax" aria-label="Link to heading 'String syntax'" data-heading-content="String syntax" class="anchor"></a></h3>
 <p>You can use the string syntax with <code>snapshot</code> to define the image name. This method creates a new image or adds a new version to an existing image with the same name. You cannot specify a version number using this syntax.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">: 
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">build</span><span style="color:#c0c5ce;">:
@@ -76,7 +76,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Add any steps to download and setup any dependencies here
 </span></code></pre>
-<h3 id="mapping-syntax" title="Generating a custom image / Mapping syntax">Mapping syntax<a href="#mapping-syntax" aria-label="Link to heading 'Mapping syntax'" data-heading-content="Mapping syntax" class="anchor"></a></h3>
+<h3 id="mapping-syntax">Mapping syntax<a href="#mapping-syntax" aria-label="Link to heading 'Mapping syntax'" data-heading-content="Mapping syntax" class="anchor"></a></h3>
 <p>You can use the mapping syntax with <code>snapshot</code> to define both the <code>image-name</code> and the optional <code>version</code>. When you specify a major version, the minor versioning automatically increments if that major version already exists. Patch versions are not supported.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">: 
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">build</span><span style="color:#c0c5ce;">:
@@ -87,7 +87,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Add any steps to download and setup any dependencies here
 </span></code></pre>
-<h3 id="conditionals" title="Generating a custom image / Conditionals">Conditionals<a href="#conditionals" aria-label="Link to heading 'Conditionals'" data-heading-content="Conditionals" class="anchor"></a></h3>
+<h3 id="conditionals">Conditionals<a href="#conditionals" aria-label="Link to heading 'Conditionals'" data-heading-content="Conditionals" class="anchor"></a></h3>
 <p>The <code>snapshot</code> keyword supports conditional execution using the <code>if</code> keyword around the snapshot mapping. You can use conditions to control when an image snapshot is created. For example, the following job skips image creation for tag builds.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">: 
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">build</span><span style="color:#c0c5ce;">:
@@ -102,18 +102,18 @@
 <p>For more information about the <code>if</code> keyword, see <a href="../../write-workflows/choose-when-workflows-run/control-jobs-with-conditions.html">Using conditions to control job execution</a>.</p>
 <h2 id="versioning" title="Versioning">Versioning<a href="#versioning" aria-label="Link to heading 'Versioning'" data-heading-content="Versioning" class="anchor"></a></h2>
 <p>When you generate custom images, GitHub automatically assigns version numbers to help you manage updates and track image history.</p>
-<h3 id="default-behavior" title="Versioning / Default behavior">Default behavior<a href="#default-behavior" aria-label="Link to heading 'Default behavior'" data-heading-content="Default behavior" class="anchor"></a></h3>
+<h3 id="default-behavior">Default behavior<a href="#default-behavior" aria-label="Link to heading 'Default behavior'" data-heading-content="Default behavior" class="anchor"></a></h3>
 <p>If an image with the specified name does not exist in your organization or enterprise, GitHub creates it with an initial version number of 1.0.0.<br>
 If an image with the same name already exists, GitHub creates a new version by incrementing the minor version number (for example, 1.1.0, 1.2.0, etc.).</p>
 <p>If you do not specify a version in your YAML file, image generation uses this default behavior.</p>
-<h3 id="specifying-a-version-in-your-workflow" title="Versioning / Specifying a version in your workflow">Specifying a version in your workflow<a href="#specifying-a-version-in-your-workflow" aria-label="Link to heading 'Specifying a version in your workflow'" data-heading-content="Specifying a version in your workflow" class="anchor"></a></h3>
+<h3 id="specifying-a-version-in-your-workflow">Specifying a version in your workflow<a href="#specifying-a-version-in-your-workflow" aria-label="Link to heading 'Specifying a version in your workflow'" data-heading-content="Specifying a version in your workflow" class="anchor"></a></h3>
 <p>If you include a version in the YAML mapping, GitHub checks the major version number first.</p>
 <ul>
 <li>If the specified major version already exists, the new image uses the next minor version (for example, 1.0 becomes 1.1).</li>
 <li>If the major version does not exist, GitHub creates a new major version (for example, 2.0).</li>
 </ul>
 <p>Patch versions are not supported.</p>
-<h3 id="latest-tag" title="Versioning / Latest tag">Latest tag<a href="#latest-tag" aria-label="Link to heading 'Latest tag'" data-heading-content="Latest tag" class="anchor"></a></h3>
+<h3 id="latest-tag">Latest tag<a href="#latest-tag" aria-label="Link to heading 'Latest tag'" data-heading-content="Latest tag" class="anchor"></a></h3>
 <p>The most recent workflow run for an image is always tagged as latest.<br>
 If you specify an older major version in the YAML (for example, version: 1.<span data-escaped-char="">*</span> when a 2.0 version exists), GitHub generates a new minor version under the older major version and marks it as latest.</p>
 <div class="markdown-alert markdown-alert-note">

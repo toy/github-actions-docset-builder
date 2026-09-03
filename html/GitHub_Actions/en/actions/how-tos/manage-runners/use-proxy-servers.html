@@ -12,17 +12,17 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">https_proxy</code></td>
+<td><code>https_proxy</code></td>
 <td>Proxy URL for HTTPS traffic. You can include basic authentication if required.</td>
 <td><code>http://proxy.local</code><br><code>http://192.168.1.1:8080</code><br><code>http://username:password@proxy.local</code></td>
 </tr>
 <tr>
-<td><code class="keyword">http_proxy</code></td>
+<td><code>http_proxy</code></td>
 <td>Proxy URL for HTTP traffic. You can include basic authentication if required.</td>
 <td><code>http://proxy.local</code><br><code>http://192.168.1.1:8080</code><br><code>http://username:password@proxy.local</code></td>
 </tr>
 <tr>
-<td><code class="keyword">no_proxy</code></td>
+<td><code>no_proxy</code></td>
 <td>A comma-separated list of hosts or IP addresses that should bypass the proxy. Some clients only honor IP addresses when connections are made directly to the IP rather than a hostname.</td>
 <td><code>example.com</code><br><code>example.com,myserver.local:443,example.org</code></td>
 </tr>
@@ -36,7 +36,7 @@
 <p>Self-hosted runners do not support using IP addresses and CIDR ranges in the <code>no_proxy</code> environment variable. If your GitHub Enterprise Server instance uses an IP address and you configure <code>no_proxy</code> to bypass the proxy for that address, the runner will still fail to connect.<br>
 If your GitHub Enterprise Server instance is accessed using an IP address and the connection must bypass the proxy, the runner will fail to connect, even if that IP address is listed in <code>no_proxy</code>.</p>
 </div>
-<h3 id="example-configurations" title="Configuring a proxy for Linux and Windows runners / Example configurations">Example configurations<a href="#example-configurations" aria-label="Link to heading 'Example configurations'" data-heading-content="Example configurations" class="anchor"></a></h3>
+<h3 id="example-configurations">Example configurations<a href="#example-configurations" aria-label="Link to heading 'Example configurations'" data-heading-content="Example configurations" class="anchor"></a></h3>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>To avoid issues, it's good practice to treat environment variables as case sensitive, irrespective of the behavior of the operating system and shell you are using.</p>
@@ -54,7 +54,7 @@ The netsh approach applies to applications and services that rely on the WinHTTP
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">netsh winhttp set advproxy setting-scope=machine settings={\"Proxy\":\"proxy.local:8080\",\"ProxyBypass\":\"168.63.129.16;169.254.169.254\",\"AutoconfigUrl\":\"\",\"AutoDetect\":false} 
 </span></code></pre>
 <p>When configuring this during custom image generation, use <code>setting-scope=machine</code> to ensure the proxy settings persist after reboots and during VM imaging.</p>
-<h3 id="making-proxy-settings-persistent" title="Configuring a proxy for Linux and Windows runners / Making proxy settings persistent">Making proxy settings persistent<a href="#making-proxy-settings-persistent" aria-label="Link to heading 'Making proxy settings persistent'" data-heading-content="Making proxy settings persistent" class="anchor"></a></h3>
+<h3 id="making-proxy-settings-persistent">Making proxy settings persistent<a href="#making-proxy-settings-persistent" aria-label="Link to heading 'Making proxy settings persistent'" data-heading-content="Making proxy settings persistent" class="anchor"></a></h3>
 <p>When setting these environment variables during custom image generation, ensure the configuration persists across reboots or image rebuilds.</p>
 <h4 id="linux-and-macos-1">Linux and macOS<a href="#linux-and-macos-1" aria-label="Link to heading 'Linux and macOS'" data-heading-content="Linux and macOS" class="anchor"></a></h4>
 <p>Write the variables to <code>/etc/environment</code>.</p>
@@ -78,7 +78,7 @@ The netsh approach applies to applications and services that rely on the WinHTTP
 <p>Using a <code>.env</code> file to set the proxy configuration cannot be done on a GitHub-hosted runner.</p>
 </div>
 <p>On self-hosted runners, you can configure proxy settings by adding the variables to a <code>.env</code> file in the self-hosted runner application directory (the directory where you downloaded and unpacked the runner software). This approach is useful when the runner is configured to run as a service under a system account. When the runner starts, it reads the variables set in <code>.env</code> for the proxy configuration.</p>
-<h3 id="example-env-proxy-configuration" title="Using a .env file to set the proxy configuration / Example .env proxy configuration">Example <code>.env</code> proxy configuration<a href="#example-env-proxy-configuration" aria-label="Link to heading 'Example .env proxy configuration'" data-heading-content="Example .env proxy configuration" class="anchor"></a></h3>
+<h3 id="example-env-proxy-configuration">Example <code>.env</code> proxy configuration<a href="#example-env-proxy-configuration" aria-label="Link to heading 'Example .env proxy configuration'" data-heading-content="Example .env proxy configuration" class="anchor"></a></h3>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">https_proxy=http://proxy.local:8080
 </span><span style="color:#c0c5ce;">no_proxy=example.com,myserver.local:443
 </span></code></pre>

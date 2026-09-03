@@ -2,14 +2,14 @@
 <p>Learn how to authenticate to the GraphQL API, then learn how to create and run queries and mutations.</p>
 <h2 id="authenticating-with-graphql" title="Authenticating with GraphQL">Authenticating with GraphQL<a href="#authenticating-with-graphql" aria-label="Link to heading 'Authenticating with GraphQL'" data-heading-content="Authenticating with GraphQL" class="anchor"></a></h2>
 <p>You can authenticate to the GraphQL API using a personal access token, GitHub App, or OAuth app.</p>
-<h3 id="authenticating-with-a-personal-access-token" title="Authenticating with GraphQL / Authenticating with a personal access token">Authenticating with a personal access token<a href="#authenticating-with-a-personal-access-token" aria-label="Link to heading 'Authenticating with a personal access token'" data-heading-content="Authenticating with a personal access token" class="anchor"></a></h3>
+<h3 id="authenticating-with-a-personal-access-token">Authenticating with a personal access token<a href="#authenticating-with-a-personal-access-token" aria-label="Link to heading 'Authenticating with a personal access token'" data-heading-content="Authenticating with a personal access token" class="anchor"></a></h3>
 <p>To authenticate with a personal access token, follow the steps in <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a>. The data that you are requesting will dictate which scopes or permissions you will need.</p>
 <p>For example, select the "issues:read" permission to read all of the issues in the repositories your token has access to.</p>
 <p>All fine-grained personal access tokens include read access to public repositories. To access public repositories with a personal access token (classic), select the "public<span data-escaped-char="">_</span>repo" scope.</p>
 <p>If your token does not have the required scopes or permissions to access a resource, the API will return an error message that states the scopes or permissions your token needs.</p>
-<h3 id="authenticating-with-a-github-app" title="Authenticating with GraphQL / Authenticating with a GitHub App">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
+<h3 id="authenticating-with-a-github-app">Authenticating with a GitHub App<a href="#authenticating-with-a-github-app" aria-label="Link to heading 'Authenticating with a GitHub App'" data-heading-content="Authenticating with a GitHub App" class="anchor"></a></h3>
 <p>If you want to use the API on behalf of an organization or another user, GitHub recommends that you use a GitHub App. In order to attribute activity to your app, you can make your app authenticate as an app installation. In order to attribute app activity to a user, you can make your app authenticate on behalf of a user. In both cases, you will generate a token that you can use to authenticate to the GraphQL API. For more information, see <a href="https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app" class="external">Registering a GitHub App</a> and <a href="https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app" class="external">About authentication with a GitHub App</a>.</p>
-<h3 id="authenticating-with-a-oauth-app" title="Authenticating with GraphQL / Authenticating with a OAuth app">Authenticating with a OAuth app<a href="#authenticating-with-a-oauth-app" aria-label="Link to heading 'Authenticating with a OAuth app'" data-heading-content="Authenticating with a OAuth app" class="anchor"></a></h3>
+<h3 id="authenticating-with-a-oauth-app">Authenticating with a OAuth app<a href="#authenticating-with-a-oauth-app" aria-label="Link to heading 'Authenticating with a OAuth app'" data-heading-content="Authenticating with a OAuth app" class="anchor"></a></h3>
 <p>To authenticate with an OAuth token from an OAuth app, you must first authorize your OAuth app using either a web application flow or device flow. Then, you can use the access token that you received to access the API. For more information, see <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app" class="external">Creating an OAuth app</a> and <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps" class="external">Authorizing OAuth apps</a>.</p>
 <h2 id="the-graphql-endpoint" title="The GraphQL endpoint">The GraphQL endpoint<a href="#the-graphql-endpoint" aria-label="Link to heading 'The GraphQL endpoint'" data-heading-content="The GraphQL endpoint" class="anchor"></a></h2>
 <p>The REST API has numerous endpoints. With the GraphQL API, the endpoint remains constant, no matter what operation you perform. For GitHub.com, that endpoint is:</p>
@@ -28,18 +28,18 @@
 <p class="markdown-alert-title">Note</p>
 <p>The string value of <code>"query"</code> must escape newline characters or the schema will not parse it correctly. For the <code>POST</code> body, use outer double quotes and escaped inner double quotes.</p>
 </div>
-<h3 id="about-query-and-mutation-operations" title="Communicating with GraphQL / About query and mutation operations">About query and mutation operations<a href="#about-query-and-mutation-operations" aria-label="Link to heading 'About query and mutation operations'" data-heading-content="About query and mutation operations" class="anchor"></a></h3>
+<h3 id="about-query-and-mutation-operations">About query and mutation operations<a href="#about-query-and-mutation-operations" aria-label="Link to heading 'About query and mutation operations'" data-heading-content="About query and mutation operations" class="anchor"></a></h3>
 <p>The two types of allowed operations in GitHub's GraphQL API are <em>queries</em> and <em>mutations</em>. Comparing GraphQL to REST, queries operate like <code>GET</code> requests, while mutations operate like <code>POST</code>/<code>PATCH</code>/<code>DELETE</code>. The mutation name determines which modification is executed.</p>
 <p>For information about rate limiting, see <a href="../overview/rate-limits-and-query-limits-for-the-graphql-api.html">Rate limits and query limits for the GraphQL API</a>.</p>
 <p>Queries and mutations share similar forms, with some important differences.</p>
-<h3 id="about-queries" title="Communicating with GraphQL / About queries">About queries<a href="#about-queries" aria-label="Link to heading 'About queries'" data-heading-content="About queries" class="anchor"></a></h3>
+<h3 id="about-queries">About queries<a href="#about-queries" aria-label="Link to heading 'About queries'" data-heading-content="About queries" class="anchor"></a></h3>
 <p>GraphQL queries return only the data you specify. To form a query, you must specify <a href="introduction-to-graphql.html#field">fields within fields</a> (also known as <em>nested subfields</em>) until you return only scalars.</p>
 <p>Queries are structured like this:</p>
 <pre>query {
   JSON-OBJECT-TO-RETURN
 }</pre>
 <p>For a real-world example, see <a href="#example-query">Example query</a>.</p>
-<h3 id="about-mutations" title="Communicating with GraphQL / About mutations">About mutations<a href="#about-mutations" aria-label="Link to heading 'About mutations'" data-heading-content="About mutations" class="anchor"></a></h3>
+<h3 id="about-mutations">About mutations<a href="#about-mutations" aria-label="Link to heading 'About mutations'" data-heading-content="About mutations" class="anchor"></a></h3>
 <p>To form a mutation, you must specify three things:</p>
 <ol>
 <li><em>Mutation name</em>. The type of modification you want to perform.</li>
@@ -250,35 +250,35 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left"><code class="keyword">+1</code></td>
+<td style="text-align:left"><code>+1</code></td>
 <td style="text-align:left">👍</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">-1</code></td>
+<td style="text-align:left"><code>-1</code></td>
 <td style="text-align:left">👎</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">laugh</code></td>
+<td style="text-align:left"><code>laugh</code></td>
 <td style="text-align:left">😄</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">confused</code></td>
+<td style="text-align:left"><code>confused</code></td>
 <td style="text-align:left">😕</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">heart</code></td>
+<td style="text-align:left"><code>heart</code></td>
 <td style="text-align:left">❤️</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">hooray</code></td>
+<td style="text-align:left"><code>hooray</code></td>
 <td style="text-align:left">🎉</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">rocket</code></td>
+<td style="text-align:left"><code>rocket</code></td>
 <td style="text-align:left">🚀</td>
 </tr>
 <tr>
-<td style="text-align:left"><code class="keyword">eyes</code></td>
+<td style="text-align:left"><code>eyes</code></td>
 <td style="text-align:left">👀</td>
 </tr>
 </tbody>

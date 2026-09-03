@@ -3,7 +3,7 @@
 <h2 id="about-github-marketplace" title="About GitHub Marketplace">About GitHub Marketplace<a href="#about-github-marketplace" aria-label="Link to heading 'About GitHub Marketplace'" data-heading-content="About GitHub Marketplace" class="anchor"></a></h2>
 <p>For more information about GitHub Marketplace, see <a href="https://docs.github.com/en/apps/github-marketplace" class="external">GitHub Marketplace</a>.</p>
 <p>These endpoints allow you to see which customers are using a pricing plan, see a customer's purchases, and see if an account has an active subscription.</p>
-<h3 id="testing-with-stubbed-endpoints" title="About GitHub Marketplace / Testing with stubbed endpoints">Testing with stubbed endpoints<a href="#testing-with-stubbed-endpoints" aria-label="Link to heading 'Testing with stubbed endpoints'" data-heading-content="Testing with stubbed endpoints" class="anchor"></a></h3>
+<h3 id="testing-with-stubbed-endpoints">Testing with stubbed endpoints<a href="#testing-with-stubbed-endpoints" aria-label="Link to heading 'Testing with stubbed endpoints'" data-heading-content="Testing with stubbed endpoints" class="anchor"></a></h3>
 <p>You can <a href="https://docs.github.com/en/apps/github-marketplace/using-the-github-marketplace-api-in-your-app/testing-your-app" class="external">test your GitHub App</a> with <strong>stubbed data</strong>. Stubbed data is hard-coded, fake data that will not change based on actual subscriptions.</p>
 <p>To test with stubbed data, use a stubbed endpoint in place of its production counterpart. This allows you to test whether the API logic succeeds before listing GitHub Apps on GitHub Marketplace.</p>
 <p>Make sure to replace stubbed endpoints with production endpoints before deploying your GitHub App.</p>
@@ -11,12 +11,12 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="get-a-subscription-plan-for-an-account" title="Get a subscription plan for an account">Get a subscription plan for an account<a href="#get-a-subscription-plan-for-an-account" aria-label="Link to heading 'Get a subscription plan for an account'" data-heading-content="Get a subscription plan for an account" class="anchor"></a></h2>
+<h2 id="get-a-subscription-plan-for-an-account" title="GET /marketplace_listing/accounts/{account_id} (Get a subscription plan for an account)">Get a subscription plan for an account<a href="#get-a-subscription-plan-for-an-account" aria-label="Link to heading 'Get a subscription plan for an account'" data-heading-content="Get a subscription plan for an account" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/accounts/{account_id}
 </span></code></pre>
 <p>Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will also see the upcoming pending change.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters" title="Get a subscription plan for an account / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -27,7 +27,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>account_id</code></strong> (integer) (required)<br>
 account<span data-escaped-char="">_</span>id parameter</li>
 </ul>
-<h3 id="http-response-status-codes" title="Get a subscription plan for an account / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -39,7 +39,7 @@ account<span data-escaped-char="">_</span>id parameter</li>
 <p><strong>404</strong> - Not Found when the account has not purchased the listing</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Get a subscription plan for an account / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -92,12 +92,12 @@ account<span data-escaped-char="">_</span>id parameter</li>
 </ul>
 </li>
 </ul>
-<h2 id="list-plans" title="List plans">List plans<a href="#list-plans" aria-label="Link to heading 'List plans'" data-heading-content="List plans" class="anchor"></a></h2>
+<h2 id="list-plans" title="GET /marketplace_listing/plans (List plans)">List plans<a href="#list-plans" aria-label="Link to heading 'List plans'" data-heading-content="List plans" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/plans
 </span></code></pre>
 <p>Lists all plans that are part of your GitHub Marketplace listing.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters-1" title="List plans / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -116,7 +116,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="List plans / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -128,7 +128,7 @@ Default: <code>1</code></p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="List plans / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -152,12 +152,12 @@ Default: <code>1</code></p>
 <li><code>state</code>: required, string</li>
 <li><code>bullets</code>: required, array of string</li>
 </ul>
-<h2 id="list-accounts-for-a-plan" title="List accounts for a plan">List accounts for a plan<a href="#list-accounts-for-a-plan" aria-label="Link to heading 'List accounts for a plan'" data-heading-content="List accounts for a plan" class="anchor"></a></h2>
+<h2 id="list-accounts-for-a-plan" title="GET /marketplace_listing/plans/{plan_id}/accounts (List accounts for a plan)">List accounts for a plan<a href="#list-accounts-for-a-plan" aria-label="Link to heading 'List accounts for a plan'" data-heading-content="List accounts for a plan" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/plans/{plan_id}/accounts
 </span></code></pre>
 <p>Returns user and organization accounts associated with the specified plan, including free plans. For per-seat pricing, you see the list of accounts that have purchased the plan, including the number of seats purchased. When someone submits a plan change that won't be processed until the end of their billing cycle, you will also see the upcoming pending change.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters-2" title="List accounts for a plan / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -191,7 +191,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="List accounts for a plan / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -206,7 +206,7 @@ Default: <code>1</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="List accounts for a plan / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -260,12 +260,12 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="get-a-subscription-plan-for-an-account-stubbed" title="Get a subscription plan for an account (stubbed)">Get a subscription plan for an account (stubbed)<a href="#get-a-subscription-plan-for-an-account-stubbed" aria-label="Link to heading 'Get a subscription plan for an account (stubbed)'" data-heading-content="Get a subscription plan for an account (stubbed)" class="anchor"></a></h2>
+<h2 id="get-a-subscription-plan-for-an-account-stubbed" title="GET /marketplace_listing/stubbed/accounts/{account_id} (Get a subscription plan for an account (stubbed))">Get a subscription plan for an account (stubbed)<a href="#get-a-subscription-plan-for-an-account-stubbed" aria-label="Link to heading 'Get a subscription plan for an account (stubbed)'" data-heading-content="Get a subscription plan for an account (stubbed)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/stubbed/accounts/{account_id}
 </span></code></pre>
 <p>Shows whether the user or organization account actively subscribes to a plan listed by the authenticated GitHub App. When someone submits a plan change that won't be processed until the end of their billing cycle, you will also see the upcoming pending change.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters-3" title="Get a subscription plan for an account (stubbed) / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -276,7 +276,7 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>account_id</code></strong> (integer) (required)<br>
 account<span data-escaped-char="">_</span>id parameter</li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Get a subscription plan for an account (stubbed) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -288,7 +288,7 @@ account<span data-escaped-char="">_</span>id parameter</li>
 <p><strong>404</strong> - Not Found when the account has not purchased the listing</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Get a subscription plan for an account (stubbed) / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -297,12 +297,12 @@ account<span data-escaped-char="">_</span>id parameter</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#get-a-subscription-plan-for-an-account">Get a subscription plan for an account</a>.</p>
-<h2 id="list-plans-stubbed" title="List plans (stubbed)">List plans (stubbed)<a href="#list-plans-stubbed" aria-label="Link to heading 'List plans (stubbed)'" data-heading-content="List plans (stubbed)" class="anchor"></a></h2>
+<h2 id="list-plans-stubbed" title="GET /marketplace_listing/stubbed/plans (List plans (stubbed))">List plans (stubbed)<a href="#list-plans-stubbed" aria-label="Link to heading 'List plans (stubbed)'" data-heading-content="List plans (stubbed)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/stubbed/plans
 </span></code></pre>
 <p>Lists all plans that are part of your GitHub Marketplace listing.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters-4" title="List plans (stubbed) / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -321,7 +321,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="List plans (stubbed) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -330,7 +330,7 @@ Default: <code>1</code></p>
 <p><strong>401</strong> - Requires authentication</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="List plans (stubbed) / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -339,12 +339,12 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-plans">List plans</a>.</p>
-<h2 id="list-accounts-for-a-plan-stubbed" title="List accounts for a plan (stubbed)">List accounts for a plan (stubbed)<a href="#list-accounts-for-a-plan-stubbed" aria-label="Link to heading 'List accounts for a plan (stubbed)'" data-heading-content="List accounts for a plan (stubbed)" class="anchor"></a></h2>
+<h2 id="list-accounts-for-a-plan-stubbed" title="GET /marketplace_listing/stubbed/plans/{plan_id}/accounts (List accounts for a plan (stubbed))">List accounts for a plan (stubbed)<a href="#list-accounts-for-a-plan-stubbed" aria-label="Link to heading 'List accounts for a plan (stubbed)'" data-heading-content="List accounts for a plan (stubbed)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /marketplace_listing/stubbed/plans/{plan_id}/accounts
 </span></code></pre>
 <p>Returns repository and organization accounts associated with the specified plan, including free plans. For per-seat pricing, you see the list of accounts that have purchased the plan, including the number of seats purchased. When someone submits a plan change that won't be processed until the end of their billing cycle, you will also see the upcoming pending change.<br>
 GitHub Apps must use a JWT to access this endpoint. OAuth apps must use basic authentication with their client ID and client secret to access this endpoint.</p>
-<h3 id="parameters-5" title="List accounts for a plan (stubbed) / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -378,7 +378,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="List accounts for a plan (stubbed) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -387,7 +387,7 @@ Default: <code>1</code></p>
 <p><strong>401</strong> - Requires authentication</p>
 </li>
 </ul>
-<h3 id="code-examples-5" title="List accounts for a plan (stubbed) / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -396,11 +396,11 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-accounts-for-a-plan">List accounts for a plan</a>.</p>
-<h2 id="list-subscriptions-for-the-authenticated-user" title="List subscriptions for the authenticated user">List subscriptions for the authenticated user<a href="#list-subscriptions-for-the-authenticated-user" aria-label="Link to heading 'List subscriptions for the authenticated user'" data-heading-content="List subscriptions for the authenticated user" class="anchor"></a></h2>
+<h2 id="list-subscriptions-for-the-authenticated-user" title="GET /user/marketplace_purchases (List subscriptions for the authenticated user)">List subscriptions for the authenticated user<a href="#list-subscriptions-for-the-authenticated-user" aria-label="Link to heading 'List subscriptions for the authenticated user'" data-heading-content="List subscriptions for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/marketplace_purchases
 </span></code></pre>
 <p>Lists the active subscriptions for the authenticated user.</p>
-<h3 id="parameters-6" title="List subscriptions for the authenticated user / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -419,7 +419,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="List subscriptions for the authenticated user / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -434,7 +434,7 @@ Default: <code>1</code></p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-6" title="List subscriptions for the authenticated user / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -479,11 +479,11 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="list-subscriptions-for-the-authenticated-user-stubbed" title="List subscriptions for the authenticated user (stubbed)">List subscriptions for the authenticated user (stubbed)<a href="#list-subscriptions-for-the-authenticated-user-stubbed" aria-label="Link to heading 'List subscriptions for the authenticated user (stubbed)'" data-heading-content="List subscriptions for the authenticated user (stubbed)" class="anchor"></a></h2>
+<h2 id="list-subscriptions-for-the-authenticated-user-stubbed" title="GET /user/marketplace_purchases/stubbed (List subscriptions for the authenticated user (stubbed))">List subscriptions for the authenticated user (stubbed)<a href="#list-subscriptions-for-the-authenticated-user-stubbed" aria-label="Link to heading 'List subscriptions for the authenticated user (stubbed)'" data-heading-content="List subscriptions for the authenticated user (stubbed)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/marketplace_purchases/stubbed
 </span></code></pre>
 <p>Lists the active subscriptions for the authenticated user.</p>
-<h3 id="parameters-7" title="List subscriptions for the authenticated user (stubbed) / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -502,7 +502,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-7" title="List subscriptions for the authenticated user (stubbed) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -514,7 +514,7 @@ Default: <code>1</code></p>
 <p><strong>401</strong> - Requires authentication</p>
 </li>
 </ul>
-<h3 id="code-examples-7" title="List subscriptions for the authenticated user (stubbed) / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

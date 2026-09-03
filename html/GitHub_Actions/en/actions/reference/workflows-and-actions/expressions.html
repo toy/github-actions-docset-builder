@@ -11,25 +11,25 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">boolean</code></td>
+<td><code>boolean</code></td>
 <td><code>true</code> or <code>false</code></td>
 </tr>
 <tr>
-<td><code class="keyword">null</code></td>
+<td><code>null</code></td>
 <td><code>null</code></td>
 </tr>
 <tr>
-<td><code class="keyword">number</code></td>
+<td><code>number</code></td>
 <td>Any number format supported by JSON.</td>
 </tr>
 <tr>
-<td><code class="keyword">string</code></td>
+<td><code>string</code></td>
 <td>You don't need to enclose strings in <code>${{</code> and <code>}}</code>. However, if you do, you must use single quotes (<code>'</code>) around the string. To use a literal single quote, escape the literal single quote using an additional single quote (<code>''</code>). Wrapping with double quotes (<code>"</code>) will throw an error.</td>
 </tr>
 </tbody>
 </table>
 <p>Note that in conditionals, falsy values (<code>false</code>, <code>0</code>, <code>-0</code>, <code>""</code>, <code>''</code>, <code>null</code>) are coerced to <code>false</code> and truthy (<code>true</code> and other non-falsy values) are coerced to <code>true</code>.</p>
-<h3 id="example-of-literals" title="Literals / Example of literals">Example of literals<a href="#example-of-literals" aria-label="Link to heading 'Example of literals'" data-heading-content="Example of literals" class="anchor"></a></h3>
+<h3 id="example-of-literals">Example of literals<a href="#example-of-literals" aria-label="Link to heading 'Example of literals'" data-heading-content="Example of literals" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">myNull</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ null }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">myBoolean</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ false }}
@@ -184,7 +184,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="contains" title="Functions / contains">contains<a href="#contains" aria-label="Link to heading 'contains'" data-heading-content="contains" class="anchor"></a></h3>
+<h3 id="contains">contains<a href="#contains" aria-label="Link to heading 'contains'" data-heading-content="contains" class="anchor"></a></h3>
 <p><code>contains( search, item )</code></p>
 <p>Returns <code>true</code> if <code>search</code> contains <code>item</code>. If <code>search</code> is an array, this function returns <code>true</code> if the <code>item</code> is an element in the array. If <code>search</code> is a string, this function returns <code>true</code> if the <code>item</code> is a substring of <code>search</code>. This function is not case sensitive. Casts values to a string.</p>
 <h4 id="example-using-a-string">Example using a string<a href="#example-using-a-string" aria-label="Link to heading 'Example using a string'" data-heading-content="Example using a string" class="anchor"></a></h4>
@@ -195,17 +195,17 @@
 <h4 id="example-matching-an-array-of-strings">Example matching an array of strings<a href="#example-matching-an-array-of-strings" aria-label="Link to heading 'Example matching an array of strings'" data-heading-content="Example matching an array of strings" class="anchor"></a></h4>
 <p>Instead of writing <code>github.event_name == "push" || github.event_name == "pull_request"</code>, you can use <code>contains()</code> with <code>fromJSON()</code> to check if an array of strings contains an <code>item</code>.</p>
 <p>For example, <code>contains(fromJSON('["push", "pull_request"]'), github.event_name)</code> returns <code>true</code> if <code>github.event_name</code> is "push" or "pull<span data-escaped-char="">_</span>request".</p>
-<h3 id="startswith" title="Functions / startsWith">startsWith<a href="#startswith" aria-label="Link to heading 'startsWith'" data-heading-content="startsWith" class="anchor"></a></h3>
+<h3 id="startswith">startsWith<a href="#startswith" aria-label="Link to heading 'startsWith'" data-heading-content="startsWith" class="anchor"></a></h3>
 <p><code>startsWith( searchString, searchValue )</code></p>
 <p>Returns <code>true</code> when <code>searchString</code> starts with <code>searchValue</code>. This function is not case sensitive. Casts values to a string.</p>
 <h4 id="example-of-startswith">Example of <code>startsWith</code><a href="#example-of-startswith" aria-label="Link to heading 'Example of startsWith'" data-heading-content="Example of startsWith" class="anchor"></a></h4>
 <p><code>startsWith('Hello world', 'He')</code> returns <code>true</code>.</p>
-<h3 id="endswith" title="Functions / endsWith">endsWith<a href="#endswith" aria-label="Link to heading 'endsWith'" data-heading-content="endsWith" class="anchor"></a></h3>
+<h3 id="endswith">endsWith<a href="#endswith" aria-label="Link to heading 'endsWith'" data-heading-content="endsWith" class="anchor"></a></h3>
 <p><code>endsWith( searchString, searchValue )</code></p>
 <p>Returns <code>true</code> if <code>searchString</code> ends with <code>searchValue</code>. This function is not case sensitive. Casts values to a string.</p>
 <h4 id="example-of-endswith">Example of <code>endsWith</code><a href="#example-of-endswith" aria-label="Link to heading 'Example of endsWith'" data-heading-content="Example of endsWith" class="anchor"></a></h4>
 <p><code>endsWith('Hello world', 'ld')</code> returns <code>true</code>.</p>
-<h3 id="format" title="Functions / format">format<a href="#format" aria-label="Link to heading 'format'" data-heading-content="format" class="anchor"></a></h3>
+<h3 id="format">format<a href="#format" aria-label="Link to heading 'format'" data-heading-content="format" class="anchor"></a></h3>
 <p><code>format( string, replaceValue0, replaceValue1, ..., replaceValueN)</code></p>
 <p>Replaces values in the <code>string</code>, with the variable <code>replaceValueN</code>. Variables in the <code>string</code> are specified using the <code>{N}</code> syntax, where <code>N</code> is an integer. You must specify at least one <code>replaceValue</code> and <code>string</code>. There is no maximum for the number of variables (<code>replaceValueN</code>) you can use. Escape curly braces using double braces.</p>
 <h4 id="example-of-format">Example of <code>format</code><a href="#example-of-format" aria-label="Link to heading 'Example of format'" data-heading-content="Example of format" class="anchor"></a></h4>
@@ -216,17 +216,17 @@
 <pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">format</span><span style="color:#c0c5ce;">('</span><span style="color:#a3be8c;">{{Hello {0} {1} {2}!}}</span><span style="color:#c0c5ce;">', '</span><span style="color:#a3be8c;">Mona</span><span style="color:#c0c5ce;">', '</span><span style="color:#a3be8c;">the</span><span style="color:#c0c5ce;">', '</span><span style="color:#a3be8c;">Octocat</span><span style="color:#c0c5ce;">')
 </span></code></pre>
 <p>Returns '{Hello Mona the Octocat!}'.</p>
-<h3 id="join" title="Functions / join">join<a href="#join" aria-label="Link to heading 'join'" data-heading-content="join" class="anchor"></a></h3>
+<h3 id="join">join<a href="#join" aria-label="Link to heading 'join'" data-heading-content="join" class="anchor"></a></h3>
 <p><code>join( array, optionalSeparator )</code></p>
 <p>The value for <code>array</code> can be an array or a string. All values in <code>array</code> are concatenated into a string. If you provide <code>optionalSeparator</code>, it is inserted between the concatenated values. Otherwise, the default separator <code>,</code> is used. Casts values to a string.</p>
 <h4 id="example-of-join">Example of <code>join</code><a href="#example-of-join" aria-label="Link to heading 'Example of join'" data-heading-content="Example of join" class="anchor"></a></h4>
 <p><code>join(github.event.issue.labels.*.name, ', ')</code> may return 'bug, help wanted'</p>
-<h3 id="tojson" title="Functions / toJSON">toJSON<a href="#tojson" aria-label="Link to heading 'toJSON'" data-heading-content="toJSON" class="anchor"></a></h3>
+<h3 id="tojson">toJSON<a href="#tojson" aria-label="Link to heading 'toJSON'" data-heading-content="toJSON" class="anchor"></a></h3>
 <p><code>toJSON(value)</code></p>
 <p>Returns a pretty-print JSON representation of <code>value</code>. You can use this function to debug the information provided in contexts.</p>
 <h4 id="example-of-tojson">Example of <code>toJSON</code><a href="#example-of-tojson" aria-label="Link to heading 'Example of toJSON'" data-heading-content="Example of toJSON" class="anchor"></a></h4>
 <p><code>toJSON(job)</code> might return <code>{ "status": "success" }</code></p>
-<h3 id="fromjson" title="Functions / fromJSON">fromJSON<a href="#fromjson" aria-label="Link to heading 'fromJSON'" data-heading-content="fromJSON" class="anchor"></a></h3>
+<h3 id="fromjson">fromJSON<a href="#fromjson" aria-label="Link to heading 'fromJSON'" data-heading-content="fromJSON" class="anchor"></a></h3>
 <p><code>fromJSON(value)</code></p>
 <p>Returns a JSON object or JSON data type for <code>value</code>. You can use this function to provide a JSON object as an evaluated expression or to convert any data type that can be represented in JSON or JavaScript, such as strings, booleans, null values, arrays, and objects.</p>
 <h4 id="example-returning-a-json-object">Example returning a JSON object<a href="#example-returning-a-json-object" aria-label="Link to heading 'Example returning a JSON object'" data-heading-content="Example returning a JSON object" class="anchor"></a></h4>
@@ -265,7 +265,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo ...
 </span></code></pre>
 <p>The workflow uses the <code>fromJSON()</code> function to convert the environment variable <code>continue</code> from a string to a boolean, allowing it to determine whether to continue-on-error or not. Similarly, it converts the <code>time</code> environment variable from a string to an integer, setting the timeout for the job in minutes.</p>
-<h3 id="hashfiles" title="Functions / hashFiles">hashFiles<a href="#hashfiles" aria-label="Link to heading 'hashFiles'" data-heading-content="hashFiles" class="anchor"></a></h3>
+<h3 id="hashfiles">hashFiles<a href="#hashfiles" aria-label="Link to heading 'hashFiles'" data-heading-content="hashFiles" class="anchor"></a></h3>
 <p><code>hashFiles(path)</code></p>
 <p>Returns a single hash for the set of files that matches the <code>path</code> pattern. You can provide a single <code>path</code> pattern or multiple <code>path</code> patterns separated by commas. The <code>path</code> is relative to the <code>GITHUB_WORKSPACE</code> directory and can only include files inside of the <code>GITHUB_WORKSPACE</code>. This function calculates an individual SHA-256 hash for each matched file, and then uses those hashes to calculate a final SHA-256 hash for the set of files. If the <code>path</code> pattern does not match any files, this returns an empty string. For more information about SHA-256, see <a href="https://en.wikipedia.org/wiki/SHA-2" class="external">SHA-2</a>.</p>
 <p>You can use pattern matching characters to match file names. Pattern matching for <code>hashFiles</code> follows glob pattern matching and is case-insensitive on Windows. For more information about supported pattern matching characters, see the <a href="https://www.npmjs.com/package/@actions/glob#patterns" class="external">Patterns</a> section in the <code>@actions/glob</code> documentation.</p>
@@ -281,7 +281,7 @@
 <p><code>hashFiles('**/package-lock.json', '**/Gemfile.lock')</code></p>
 <p>Creates a hash for all <code>.rb</code> files in the <code>lib</code> directory at root level, including any subdirectories of <code>lib</code>, but excluding <code>.rb</code> files in the <code>foo</code> subdirectory.</p>
 <p><code>hashFiles('/lib/**/*.rb', '!/lib/foo/*.rb')</code></p>
-<h3 id="case" title="Functions / case">case<a href="#case" aria-label="Link to heading 'case'" data-heading-content="case" class="anchor"></a></h3>
+<h3 id="case">case<a href="#case" aria-label="Link to heading 'case'" data-heading-content="case" class="anchor"></a></h3>
 <p><code>case( pred1, val1, pred2, val2, ..., default )</code></p>
 <p>Evaluates predicates in order and returns the value corresponding to the first predicate that evaluates to <code>true</code>. If no predicate matches, it returns the last argument as the default value.</p>
 <h4 id="example-with-a-single-predicate">Example with a single predicate<a href="#example-with-a-single-predicate" aria-label="Link to heading 'Example with a single predicate'" data-heading-content="Example with a single predicate" class="anchor"></a></h4>
@@ -303,7 +303,7 @@
 <h2 id="status-check-functions" title="Status check functions">Status check functions<a href="#status-check-functions" aria-label="Link to heading 'Status check functions'" data-heading-content="Status check functions" class="anchor"></a></h2>
 <p>You can use the following status check functions as expressions in <code>if</code> conditionals. A default status check of <code>success()</code> is applied unless you include one of these functions. For more information about <code>if</code> conditionals, see <a href="workflow-syntax.html#jobsjob_idif">Workflow syntax for GitHub Actions</a> and <a href="metadata-syntax.html#runsstepsif">Metadata syntax reference</a>.</p>
 <p>Outside <code>if</code> conditionals, you can use <code>job.status</code> to access the job status. For more information, see <a href="contexts.html#job-context">Contexts reference</a>.</p>
-<h3 id="success" title="Status check functions / success">success<a href="#success" aria-label="Link to heading 'success'" data-heading-content="success" class="anchor"></a></h3>
+<h3 id="success">success<a href="#success" aria-label="Link to heading 'success'" data-heading-content="success" class="anchor"></a></h3>
 <p>Returns <code>true</code> when all previous steps have succeeded.</p>
 <h4 id="example-of-success">Example of <code>success</code><a href="#example-of-success" aria-label="Link to heading 'Example of success'" data-heading-content="Example of success" class="anchor"></a></h4>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
@@ -311,7 +311,7 @@
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">The job has succeeded
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ success() }}
 </span></code></pre>
-<h3 id="always" title="Status check functions / always">always<a href="#always" aria-label="Link to heading 'always'" data-heading-content="always" class="anchor"></a></h3>
+<h3 id="always">always<a href="#always" aria-label="Link to heading 'always'" data-heading-content="always" class="anchor"></a></h3>
 <p>Causes the step to always execute, and returns <code>true</code>, even when canceled. The <code>always</code> expression is best used at the step level or on tasks that you expect to run even when a job is canceled. For example, you can use <code>always</code> to send logs even when a job is canceled.</p>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>
@@ -320,12 +320,12 @@
 <h4 id="example-of-always">Example of <code>always</code><a href="#example-of-always" aria-label="Link to heading 'Example of always'" data-heading-content="Example of always" class="anchor"></a></h4>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ always() }}
 </span></code></pre>
-<h3 id="cancelled" title="Status check functions / cancelled">cancelled<a href="#cancelled" aria-label="Link to heading 'cancelled'" data-heading-content="cancelled" class="anchor"></a></h3>
+<h3 id="cancelled">cancelled<a href="#cancelled" aria-label="Link to heading 'cancelled'" data-heading-content="cancelled" class="anchor"></a></h3>
 <p>Returns <code>true</code> if the workflow was canceled.</p>
 <h4 id="example-of-cancelled">Example of <code>cancelled</code><a href="#example-of-cancelled" aria-label="Link to heading 'Example of cancelled'" data-heading-content="Example of cancelled" class="anchor"></a></h4>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ cancelled() }}
 </span></code></pre>
-<h3 id="failure" title="Status check functions / failure">failure<a href="#failure" aria-label="Link to heading 'failure'" data-heading-content="failure" class="anchor"></a></h3>
+<h3 id="failure">failure<a href="#failure" aria-label="Link to heading 'failure'" data-heading-content="failure" class="anchor"></a></h3>
 <p>Returns <code>true</code> when any previous step of a job fails. If you have a chain of dependent jobs, <code>failure()</code> returns <code>true</code> if any ancestor job fails.</p>
 <h4 id="example-of-failure">Example of <code>failure</code><a href="#example-of-failure" aria-label="Link to heading 'Example of failure'" data-heading-content="Example of failure" class="anchor"></a></h4>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:

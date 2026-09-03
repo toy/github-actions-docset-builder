@@ -6,13 +6,13 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-self-hosted-runners-for-an-organization" title="List self-hosted runners for an organization">List self-hosted runners for an organization<a href="#list-self-hosted-runners-for-an-organization" aria-label="Link to heading 'List self-hosted runners for an organization'" data-heading-content="List self-hosted runners for an organization" class="anchor"></a></h2>
+<h2 id="list-self-hosted-runners-for-an-organization" title="GET /orgs/{org}/actions/runners (List self-hosted runners for an organization)">List self-hosted runners for an organization<a href="#list-self-hosted-runners-for-an-organization" aria-label="Link to heading 'List self-hosted runners for an organization'" data-heading-content="List self-hosted runners for an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners
 </span></code></pre>
 <p>Lists all self-hosted runners configured in an organization.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters" title="List self-hosted runners for an organization / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -39,11 +39,11 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List self-hosted runners for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples" title="List self-hosted runners for an organization / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -73,13 +73,14 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="list-runner-applications-for-an-organization" title="List runner applications for an organization">List runner applications for an organization<a href="#list-runner-applications-for-an-organization" aria-label="Link to heading 'List runner applications for an organization'" data-heading-content="List runner applications for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/downloads
+<h2 id="get-runner-version-end-of-life-schedule-for-an-organization" title="GET /orgs/{org}/actions/runners/deprecations/{version} (Get runner version end-of-life schedule for an organization)">Get runner version end-of-life schedule for an organization<a href="#get-runner-version-end-of-life-schedule-for-an-organization" aria-label="Link to heading 'Get runner version end-of-life schedule for an organization'" data-heading-content="Get runner version end-of-life schedule for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/deprecations/{version}
 </span></code></pre>
-<p>Lists binaries for the runner application that you can download and run.<br>
+<p>Gets the end-of-life schedule for a specific runner version in an organization. Returns the runner version<br>
+and the dates when registration and runtime support will end.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
-OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.  If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-1" title="List runner applications for an organization / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -87,15 +88,55 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
 <h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
-<li><strong><code>org</code></strong> (string) (required)<br>
-The organization name. The name is not case sensitive.</li>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>version</code></strong> (string) (required)<br>
+The runner version to look up.</p>
+</li>
 </ul>
-<h3 id="http-response-status-codes-1" title="List runner applications for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-1" title="List runner applications for an organization / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/deprecations/VERSION
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<ul>
+<li><code>runner_version</code>: required, string</li>
+<li><code>registration_deprecates_at</code>: string or null, format: date-time</li>
+<li><code>runtime_deprecates_at</code>: string or null, format: date-time</li>
+</ul>
+<h2 id="list-runner-applications-for-an-organization" title="GET /orgs/{org}/actions/runners/downloads (List runner applications for an organization)">List runner applications for an organization<a href="#list-runner-applications-for-an-organization" aria-label="Link to heading 'List runner applications for an organization'" data-heading-content="List runner applications for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/downloads
+</span></code></pre>
+<p>Lists binaries for the runner application that you can download and run.<br>
+Authenticated users must have admin access to the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.  If the repository is private, the repo scope is also required.</p>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</li>
+</ul>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \
@@ -111,19 +152,19 @@ The organization name. The name is not case sensitive.</li>
 <li><code>temp_download_token</code>: string</li>
 <li><code>sha256_checksum</code>: string</li>
 </ul>
-<h2 id="create-configuration-for-a-just-in-time-runner-for-an-organization" title="Create configuration for a just-in-time runner for an organization">Create configuration for a just-in-time runner for an organization<a href="#create-configuration-for-a-just-in-time-runner-for-an-organization" aria-label="Link to heading 'Create configuration for a just-in-time runner for an organization'" data-heading-content="Create configuration for a just-in-time runner for an organization" class="anchor"></a></h2>
+<h2 id="create-configuration-for-a-just-in-time-runner-for-an-organization" title="POST /orgs/{org}/actions/runners/generate-jitconfig (Create configuration for a just-in-time runner for an organization)">Create configuration for a just-in-time runner for an organization<a href="#create-configuration-for-a-just-in-time-runner-for-an-organization" aria-label="Link to heading 'Create configuration for a just-in-time runner for an organization'" data-heading-content="Create configuration for a just-in-time runner for an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/runners/generate-jitconfig
 </span></code></pre>
 <p>Generates a configuration that can be passed to the runner application at startup.<br>
 The authenticated user must have admin access to the organization.<br>
 OAuth tokens and personal access tokens (classic) need theadmin:org scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-2" title="Create configuration for a just-in-time runner for an organization / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li><strong><code>org</code></strong> (string) (required)<br>
 The organization name. The name is not case sensitive.</li>
@@ -148,7 +189,7 @@ The working directory to be used for job execution, relative to the runner insta
 Default: <code>_work</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Create configuration for a just-in-time runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -163,8 +204,8 @@ Default: <code>_work</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Create configuration for a just-in-time runner for an organization / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X POST \
@@ -204,7 +245,7 @@ Default: <code>_work</code></p>
 </li>
 <li><code>encoded_jit_config</code>: required, string</li>
 </ul>
-<h2 id="create-a-registration-token-for-an-organization" title="Create a registration token for an organization">Create a registration token for an organization<a href="#create-a-registration-token-for-an-organization" aria-label="Link to heading 'Create a registration token for an organization'" data-heading-content="Create a registration token for an organization" class="anchor"></a></h2>
+<h2 id="create-a-registration-token-for-an-organization" title="POST /orgs/{org}/actions/runners/registration-token (Create a registration token for an organization)">Create a registration token for an organization<a href="#create-a-registration-token-for-an-organization" aria-label="Link to heading 'Create a registration token for an organization'" data-heading-content="Create a registration token for an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/runners/registration-token
 </span></code></pre>
 <p>Returns a token that you can pass to the config script. The token expires after one hour.<br>
@@ -212,23 +253,23 @@ For example, you can replace TOKEN in the following example with the registratio
 ./config.sh --url <a href="https://github.com/octo-org" class="external">https://github.com/octo-org</a> --token TOKEN</p>
 <p>Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need theadmin:org scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-3" title="Create a registration token for an organization / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li><strong><code>org</code></strong> (string) (required)<br>
 The organization name. The name is not case sensitive.</li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Create a registration token for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples-3" title="Create a registration token for an organization / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X POST \
@@ -393,7 +434,7 @@ The organization name. The name is not case sensitive.</li>
 <li><code>single_file</code>: string or null</li>
 <li><code>repository_selection</code>: string, enum: <code>all</code>, <code>selected</code></li>
 </ul>
-<h2 id="create-a-remove-token-for-an-organization" title="Create a remove token for an organization">Create a remove token for an organization<a href="#create-a-remove-token-for-an-organization" aria-label="Link to heading 'Create a remove token for an organization'" data-heading-content="Create a remove token for an organization" class="anchor"></a></h2>
+<h2 id="create-a-remove-token-for-an-organization" title="POST /orgs/{org}/actions/runners/remove-token (Create a remove token for an organization)">Create a remove token for an organization<a href="#create-a-remove-token-for-an-organization" aria-label="Link to heading 'Create a remove token for an organization'" data-heading-content="Create a remove token for an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/runners/remove-token
 </span></code></pre>
 <p>Returns a token that you can pass to the config script to remove a self-hosted runner from an organization. The token expires after one hour.<br>
@@ -401,23 +442,23 @@ For example, you can replace TOKEN in the following example with the registratio
 ./config.sh remove --token TOKEN</p>
 <p>Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need theadmin:org scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-4" title="Create a remove token for an organization / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-4">Path and query parameters<a href="#path-and-query-parameters-4" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li><strong><code>org</code></strong> (string) (required)<br>
 The organization name. The name is not case sensitive.</li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Create a remove token for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples-4" title="Create a remove token for an organization / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X POST \
@@ -425,19 +466,19 @@ The organization name. The name is not case sensitive.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
 <p>Same response schema as <a href="#create-a-registration-token-for-an-organization">Create a registration token for an organization</a>.</p>
-<h2 id="get-a-self-hosted-runner-for-an-organization" title="Get a self-hosted runner for an organization">Get a self-hosted runner for an organization<a href="#get-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Get a self-hosted runner for an organization'" data-heading-content="Get a self-hosted runner for an organization" class="anchor"></a></h2>
+<h2 id="get-a-self-hosted-runner-for-an-organization" title="GET /orgs/{org}/actions/runners/{runner_id} (Get a self-hosted runner for an organization)">Get a self-hosted runner for an organization<a href="#get-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Get a self-hosted runner for an organization'" data-heading-content="Get a self-hosted runner for an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/{runner_id}
 </span></code></pre>
 <p>Gets a specific self-hosted runner configured in an organization.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-5" title="Get a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>org</code></strong> (string) (required)<br>
@@ -448,12 +489,12 @@ The organization name. The name is not case sensitive.</p>
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Get a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-5" title="Get a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \
@@ -477,53 +518,13 @@ Unique identifier of the self-hosted runner.</p>
 <li><code>ephemeral</code>: boolean</li>
 <li><code>version</code>: string or null</li>
 </ul>
-<h2 id="delete-a-self-hosted-runner-from-an-organization" title="Delete a self-hosted runner from an organization">Delete a self-hosted runner from an organization<a href="#delete-a-self-hosted-runner-from-an-organization" aria-label="Link to heading 'Delete a self-hosted runner from an organization'" data-heading-content="Delete a self-hosted runner from an organization" class="anchor"></a></h2>
+<h2 id="delete-a-self-hosted-runner-from-an-organization" title="DELETE /orgs/{org}/actions/runners/{runner_id} (Delete a self-hosted runner from an organization)">Delete a self-hosted runner from an organization<a href="#delete-a-self-hosted-runner-from-an-organization" aria-label="Link to heading 'Delete a self-hosted runner from an organization'" data-heading-content="Delete a self-hosted runner from an organization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/runners/{runner_id}
 </span></code></pre>
 <p>Forces the removal of a self-hosted runner from an organization. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need theadmin:org scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-6" title="Delete a self-hosted runner from an organization / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
-<ul>
-<li><strong><code>accept</code></strong> (string)<br>
-Setting to <code>application/vnd.github+json</code> is recommended.</li>
-</ul>
-<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
-<ul>
-<li>
-<p><strong><code>org</code></strong> (string) (required)<br>
-The organization name. The name is not case sensitive.</p>
-</li>
-<li>
-<p><strong><code>runner_id</code></strong> (integer) (required)<br>
-Unique identifier of the self-hosted runner.</p>
-</li>
-</ul>
-<h3 id="http-response-status-codes-6" title="Delete a self-hosted runner from an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
-<ul>
-<li>
-<p><strong>204</strong> - No Content</p>
-</li>
-<li>
-<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
-</li>
-</ul>
-<h3 id="code-examples-6" title="Delete a self-hosted runner from an organization / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X DELETE \
-</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID
-</span></code></pre>
-<p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-labels-for-a-self-hosted-runner-for-an-organization" title="List labels for a self-hosted runner for an organization">List labels for a self-hosted runner for an organization<a href="#list-labels-for-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'List labels for a self-hosted runner for an organization'" data-heading-content="List labels for a self-hosted runner for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/{runner_id}/labels
-</span></code></pre>
-<p>Lists all labels for a self-hosted runner configured in an organization.<br>
-Authenticated users must have admin access to the organization to use this endpoint.<br>
-OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-7" title="List labels for a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -540,40 +541,30 @@ The organization name. The name is not case sensitive.</p>
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-7" title="List labels for a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
-<p><strong>200</strong> - OK</p>
+<p><strong>204</strong> - No Content</p>
 </li>
 <li>
-<p><strong>404</strong> - Resource not found</p>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-7" title="List labels for a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-7">Example<a href="#example-7" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID
 </span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<ul>
-<li><code>total_count</code>: required, integer</li>
-<li><code>labels</code>: required, array of <code>Self hosted runner label</code>:
-<ul>
-<li><code>id</code>: integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>type</code>: string, enum: <code>read-only</code>, <code>custom</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="add-custom-labels-to-a-self-hosted-runner-for-an-organization" title="Add custom labels to a self-hosted runner for an organization">Add custom labels to a self-hosted runner for an organization<a href="#add-custom-labels-to-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Add custom labels to a self-hosted runner for an organization'" data-heading-content="Add custom labels to a self-hosted runner for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/runners/{runner_id}/labels
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-labels-for-a-self-hosted-runner-for-an-organization" title="GET /orgs/{org}/actions/runners/{runner_id}/labels (List labels for a self-hosted runner for an organization)">List labels for a self-hosted runner for an organization<a href="#list-labels-for-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'List labels for a self-hosted runner for an organization'" data-heading-content="List labels for a self-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Adds custom labels to a self-hosted runner configured in an organization.<br>
+<p>Lists all labels for a self-hosted runner configured in an organization.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
-OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
-<h3 id="parameters-8" title="Add custom labels to a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
+<h3 id="parameters-8">Parameters<a href="#parameters-8" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-8">Headers<a href="#headers-8" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -590,12 +581,7 @@ The organization name. The name is not case sensitive.</p>
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
-<ul>
-<li><strong><code>labels</code></strong> (array of strings) (required)<br>
-The names of the custom labels to add to the runner.</li>
-</ul>
-<h3 id="http-response-status-codes-8" title="Add custom labels to a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-8">HTTP response status codes<a href="#http-response-status-codes-8" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -603,33 +589,32 @@ The names of the custom labels to add to the runner.</li>
 <li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
-<li>
-<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
-</li>
 </ul>
-<h3 id="code-examples-8" title="Add custom labels to a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-8">Code examples<a href="#code-examples-8" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-8">Example<a href="#example-8" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X POST \
-</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels \
-</span><span style="color:#c0c5ce;">  -d '{
-</span><span style="color:#c0c5ce;">  "labels": [
-</span><span style="color:#c0c5ce;">    "gpu",
-</span><span style="color:#c0c5ce;">    "accelerated"
-</span><span style="color:#c0c5ce;">  ]
-</span><span style="color:#c0c5ce;">}'
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
-<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="set-custom-labels-for-a-self-hosted-runner-for-an-organization" title="Set custom labels for a self-hosted runner for an organization">Set custom labels for a self-hosted runner for an organization<a href="#set-custom-labels-for-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Set custom labels for a self-hosted runner for an organization'" data-heading-content="Set custom labels for a self-hosted runner for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/runners/{runner_id}/labels
+<ul>
+<li><code>total_count</code>: required, integer</li>
+<li><code>labels</code>: required, array of <code>Self hosted runner label</code>:
+<ul>
+<li><code>id</code>: integer</li>
+<li><code>name</code>: required, string</li>
+<li><code>type</code>: string, enum: <code>read-only</code>, <code>custom</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="add-custom-labels-to-a-self-hosted-runner-for-an-organization" title="POST /orgs/{org}/actions/runners/{runner_id}/labels (Add custom labels to a self-hosted runner for an organization)">Add custom labels to a self-hosted runner for an organization<a href="#add-custom-labels-to-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Add custom labels to a self-hosted runner for an organization'" data-heading-content="Add custom labels to a self-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove all previous custom labels and set the new custom labels for a specific<br>
-self-hosted runner configured in an organization.<br>
+<p>Adds custom labels to a self-hosted runner configured in an organization.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
-OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-9" title="Set custom labels for a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+OAuth tokens and personal access tokens (classic) need the admin:org scope to use this endpoint.</p>
+<h3 id="parameters-9">Parameters<a href="#parameters-9" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-9">Headers<a href="#headers-9" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -646,12 +631,12 @@ The organization name. The name is not case sensitive.</p>
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<h4 id="body-parameters-1">Body parameters<a href="#body-parameters-1" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
 <ul>
 <li><strong><code>labels</code></strong> (array of strings) (required)<br>
-The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels.</li>
+The names of the custom labels to add to the runner.</li>
 </ul>
-<h3 id="http-response-status-codes-9" title="Set custom labels for a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-9">HTTP response status codes<a href="#http-response-status-codes-9" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -663,11 +648,11 @@ The names of the custom labels to set for the runner. You can pass an empty arra
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-9" title="Set custom labels for a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-9">Code examples<a href="#code-examples-9" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-9">Example<a href="#example-9" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  -X POST \
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels \
 </span><span style="color:#c0c5ce;">  -d '{
 </span><span style="color:#c0c5ce;">  "labels": [
@@ -678,14 +663,14 @@ The names of the custom labels to set for the runner. You can pass an empty arra
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="remove-all-custom-labels-from-a-self-hosted-runner-for-an-organization" title="Remove all custom labels from a self-hosted runner for an organization">Remove all custom labels from a self-hosted runner for an organization<a href="#remove-all-custom-labels-from-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Remove all custom labels from a self-hosted runner for an organization'" data-heading-content="Remove all custom labels from a self-hosted runner for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/runners/{runner_id}/labels
+<h2 id="set-custom-labels-for-a-self-hosted-runner-for-an-organization" title="PUT /orgs/{org}/actions/runners/{runner_id}/labels (Set custom labels for a self-hosted runner for an organization)">Set custom labels for a self-hosted runner for an organization<a href="#set-custom-labels-for-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Set custom labels for a self-hosted runner for an organization'" data-heading-content="Set custom labels for a self-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove all custom labels from a self-hosted runner configured in an<br>
-organization. Returns the remaining read-only labels from the runner.<br>
+<p>Remove all previous custom labels and set the new custom labels for a specific<br>
+self-hosted runner configured in an organization.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-10" title="Remove all custom labels from a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-10">Parameters<a href="#parameters-10" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-10">Headers<a href="#headers-10" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -702,7 +687,12 @@ The organization name. The name is not case sensitive.</p>
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-10" title="Remove all custom labels from a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h4 id="body-parameters-2">Body parameters<a href="#body-parameters-2" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>labels</code></strong> (array of strings) (required)<br>
+The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels.</li>
+</ul>
+<h3 id="http-response-status-codes-10">HTTP response status codes<a href="#http-response-status-codes-10" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -710,26 +700,33 @@ Unique identifier of the self-hosted runner.</p>
 <li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
 </ul>
-<h3 id="code-examples-10" title="Remove all custom labels from a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-10">Code examples<a href="#code-examples-10" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-10">Example<a href="#example-10" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X DELETE \
-</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "labels": [
+</span><span style="color:#c0c5ce;">    "gpu",
+</span><span style="color:#c0c5ce;">    "accelerated"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="remove-a-custom-label-from-a-self-hosted-runner-for-an-organization" title="Remove a custom label from a self-hosted runner for an organization">Remove a custom label from a self-hosted runner for an organization<a href="#remove-a-custom-label-from-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Remove a custom label from a self-hosted runner for an organization'" data-heading-content="Remove a custom label from a self-hosted runner for an organization" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name}
+<h2 id="remove-all-custom-labels-from-a-self-hosted-runner-for-an-organization" title="DELETE /orgs/{org}/actions/runners/{runner_id}/labels (Remove all custom labels from a self-hosted runner for an organization)">Remove all custom labels from a self-hosted runner for an organization<a href="#remove-all-custom-labels-from-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Remove all custom labels from a self-hosted runner for an organization'" data-heading-content="Remove all custom labels from a self-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove a custom label from a self-hosted runner configured<br>
-in an organization. Returns the remaining labels from the runner.<br>
-This endpoint returns a 404 Not Found status if the custom label is not<br>
-present on the runner.<br>
+<p>Remove all custom labels from a self-hosted runner configured in an<br>
+organization. Returns the remaining read-only labels from the runner.<br>
 Authenticated users must have admin access to the organization to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
-<h3 id="parameters-11" title="Remove a custom label from a self-hosted runner for an organization / Parameters">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-11">Parameters<a href="#parameters-11" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-11">Headers<a href="#headers-11" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -745,12 +742,56 @@ The organization name. The name is not case sensitive.</p>
 <p><strong><code>runner_id</code></strong> (integer) (required)<br>
 Unique identifier of the self-hosted runner.</p>
 </li>
+</ul>
+<h3 id="http-response-status-codes-11">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-11">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/actions/runners/RUNNER_ID/labels
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
+<h2 id="remove-a-custom-label-from-a-self-hosted-runner-for-an-organization" title="DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name} (Remove a custom label from a self-hosted runner for an organization)">Remove a custom label from a self-hosted runner for an organization<a href="#remove-a-custom-label-from-a-self-hosted-runner-for-an-organization" aria-label="Link to heading 'Remove a custom label from a self-hosted runner for an organization'" data-heading-content="Remove a custom label from a self-hosted runner for an organization" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name}
+</span></code></pre>
+<p>Remove a custom label from a self-hosted runner configured<br>
+in an organization. Returns the remaining labels from the runner.<br>
+This endpoint returns a 404 Not Found status if the custom label is not<br>
+present on the runner.<br>
+Authenticated users must have admin access to the organization to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the admin:org scope to use this endpoint. If the repository is private, the repo scope is also required.</p>
+<h3 id="parameters-12">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>org</code></strong> (string) (required)<br>
+The organization name. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the self-hosted runner.</p>
+</li>
 <li>
 <p><strong><code>name</code></strong> (string) (required)<br>
 The name of a self-hosted runner's custom label.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-11" title="Remove a custom label from a self-hosted runner for an organization / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-11" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-12">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -762,8 +803,8 @@ The name of a self-hosted runner's custom label.</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-11" title="Remove a custom label from a self-hosted runner for an organization / Code examples">Code examples<a href="#code-examples-11" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-11">Example<a href="#example-11" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-12">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X DELETE \
@@ -771,19 +812,19 @@ The name of a self-hosted runner's custom label.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="list-self-hosted-runners-for-a-repository" title="List self-hosted runners for a repository">List self-hosted runners for a repository<a href="#list-self-hosted-runners-for-a-repository" aria-label="Link to heading 'List self-hosted runners for a repository'" data-heading-content="List self-hosted runners for a repository" class="anchor"></a></h2>
+<h2 id="list-self-hosted-runners-for-a-repository" title="GET /repos/{owner}/{repo}/actions/runners (List self-hosted runners for a repository)">List self-hosted runners for a repository<a href="#list-self-hosted-runners-for-a-repository" aria-label="Link to heading 'List self-hosted runners for a repository'" data-heading-content="List self-hosted runners for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners
 </span></code></pre>
 <p>Lists all self-hosted runners configured in a repository.<br>
 Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-12" title="List self-hosted runners for a repository / Parameters">Parameters<a href="#parameters-12" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-12">Headers<a href="#headers-12" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-13">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-12">Path and query parameters<a href="#path-and-query-parameters-12" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>name</code></strong> (string)<br>
@@ -808,12 +849,12 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-12" title="List self-hosted runners for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-12" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-13">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-12" title="List self-hosted runners for a repository / Code examples">Code examples<a href="#code-examples-12" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-12">Example<a href="#example-12" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-13">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \
@@ -821,19 +862,60 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-self-hosted-runners-for-an-organization">List self-hosted runners for an organization</a>.</p>
-<h2 id="list-runner-applications-for-a-repository" title="List runner applications for a repository">List runner applications for a repository<a href="#list-runner-applications-for-a-repository" aria-label="Link to heading 'List runner applications for a repository'" data-heading-content="List runner applications for a repository" class="anchor"></a></h2>
+<h2 id="get-runner-version-end-of-life-schedule-for-a-repository" title="GET /repos/{owner}/{repo}/actions/runners/deprecations/{version} (Get runner version end-of-life schedule for a repository)">Get runner version end-of-life schedule for a repository<a href="#get-runner-version-end-of-life-schedule-for-a-repository" aria-label="Link to heading 'Get runner version end-of-life schedule for a repository'" data-heading-content="Get runner version end-of-life schedule for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/deprecations/{version}
+</span></code></pre>
+<p>Gets the end-of-life schedule for a specific runner version in a repository. Returns the runner version<br>
+and the dates when registration and runtime support will end.<br>
+Authenticated users must have admin access to the repository to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-14">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>version</code></strong> (string) (required)<br>
+The runner version to look up.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-14">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>200</strong> - OK</li>
+</ul>
+<h3 id="code-examples-14">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/deprecations/VERSION
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#get-runner-version-end-of-life-schedule-for-an-organization">Get runner version end-of-life schedule for an organization</a>.</p>
+<h2 id="list-runner-applications-for-a-repository" title="GET /repos/{owner}/{repo}/actions/runners/downloads (List runner applications for a repository)">List runner applications for a repository<a href="#list-runner-applications-for-a-repository" aria-label="Link to heading 'List runner applications for a repository'" data-heading-content="List runner applications for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/downloads
 </span></code></pre>
 <p>Lists binaries for the runner application that you can download and run.<br>
 Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-13" title="List runner applications for a repository / Parameters">Parameters<a href="#parameters-13" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-13">Headers<a href="#headers-13" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-15">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-13">Path and query parameters<a href="#path-and-query-parameters-13" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>owner</code></strong> (string) (required)<br>
@@ -844,12 +926,12 @@ The account owner of the repository. The name is not case sensitive.</p>
 The name of the repository without the .git extension. The name is not case sensitive.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-13" title="List runner applications for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-13" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-15">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-13" title="List runner applications for a repository / Code examples">Code examples<a href="#code-examples-13" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-13">Example<a href="#example-13" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-15">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \
@@ -857,19 +939,19 @@ The name of the repository without the .git extension. The name is not case sens
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-runner-applications-for-an-organization">List runner applications for an organization</a>.</p>
-<h2 id="create-configuration-for-a-just-in-time-runner-for-a-repository" title="Create configuration for a just-in-time runner for a repository">Create configuration for a just-in-time runner for a repository<a href="#create-configuration-for-a-just-in-time-runner-for-a-repository" aria-label="Link to heading 'Create configuration for a just-in-time runner for a repository'" data-heading-content="Create configuration for a just-in-time runner for a repository" class="anchor"></a></h2>
+<h2 id="create-configuration-for-a-just-in-time-runner-for-a-repository" title="POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig (Create configuration for a just-in-time runner for a repository)">Create configuration for a just-in-time runner for a repository<a href="#create-configuration-for-a-just-in-time-runner-for-a-repository" aria-label="Link to heading 'Create configuration for a just-in-time runner for a repository'" data-heading-content="Create configuration for a just-in-time runner for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/generate-jitconfig
 </span></code></pre>
 <p>Generates a configuration that can be passed to the runner application at startup.<br>
 The authenticated user must have admin access to the repository.<br>
 OAuth tokens and personal access tokens (classic) need therepo scope to use this endpoint.</p>
-<h3 id="parameters-14" title="Create configuration for a just-in-time runner for a repository / Parameters">Parameters<a href="#parameters-14" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-14">Headers<a href="#headers-14" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-16">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-14">Path and query parameters<a href="#path-and-query-parameters-14" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>owner</code></strong> (string) (required)<br>
@@ -900,7 +982,7 @@ The working directory to be used for job execution, relative to the runner insta
 Default: <code>_work</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-14" title="Create configuration for a just-in-time runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-14" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-16">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -915,8 +997,8 @@ Default: <code>_work</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-14" title="Create configuration for a just-in-time runner for a repository / Code examples">Code examples<a href="#code-examples-14" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-14">Example<a href="#example-14" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-16">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-16">Example<a href="#example-16" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X POST \
@@ -935,7 +1017,7 @@ Default: <code>_work</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
 <p>Same response schema as <a href="#create-configuration-for-a-just-in-time-runner-for-an-organization">Create configuration for a just-in-time runner for an organization</a>.</p>
-<h2 id="create-a-registration-token-for-a-repository" title="Create a registration token for a repository">Create a registration token for a repository<a href="#create-a-registration-token-for-a-repository" aria-label="Link to heading 'Create a registration token for a repository'" data-heading-content="Create a registration token for a repository" class="anchor"></a></h2>
+<h2 id="create-a-registration-token-for-a-repository" title="POST /repos/{owner}/{repo}/actions/runners/registration-token (Create a registration token for a repository)">Create a registration token for a repository<a href="#create-a-registration-token-for-a-repository" aria-label="Link to heading 'Create a registration token for a repository'" data-heading-content="Create a registration token for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/registration-token
 </span></code></pre>
 <p>Returns a token that you can pass to the config script. The token expires after one hour.<br>
@@ -943,81 +1025,7 @@ For example, you can replace TOKEN in the following example with the registratio
 ./config.sh --url <a href="https://github.com/octo-org" class="external">https://github.com/octo-org</a> --token TOKEN</p>
 <p>Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-15" title="Create a registration token for a repository / Parameters">Parameters<a href="#parameters-15" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-15">Headers<a href="#headers-15" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
-<ul>
-<li><strong><code>accept</code></strong> (string)<br>
-Setting to <code>application/vnd.github+json</code> is recommended.</li>
-</ul>
-<h4 id="path-and-query-parameters-15">Path and query parameters<a href="#path-and-query-parameters-15" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
-<ul>
-<li>
-<p><strong><code>owner</code></strong> (string) (required)<br>
-The account owner of the repository. The name is not case sensitive.</p>
-</li>
-<li>
-<p><strong><code>repo</code></strong> (string) (required)<br>
-The name of the repository without the .git extension. The name is not case sensitive.</p>
-</li>
-</ul>
-<h3 id="http-response-status-codes-15" title="Create a registration token for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-15" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
-<ul>
-<li><strong>201</strong> - Created</li>
-</ul>
-<h3 id="code-examples-15" title="Create a registration token for a repository / Code examples">Code examples<a href="#code-examples-15" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-15">Example<a href="#example-15" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X POST \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/registration-token
-</span></code></pre>
-<p><strong>Response schema (Status: 201):</strong></p>
-<p>Same response schema as <a href="#create-a-registration-token-for-an-organization">Create a registration token for an organization</a>.</p>
-<h2 id="create-a-remove-token-for-a-repository" title="Create a remove token for a repository">Create a remove token for a repository<a href="#create-a-remove-token-for-a-repository" aria-label="Link to heading 'Create a remove token for a repository'" data-heading-content="Create a remove token for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/remove-token
-</span></code></pre>
-<p>Returns a token that you can pass to the config script to remove a self-hosted runner from an repository. The token expires after one hour.<br>
-For example, you can replace TOKEN in the following example with the registration token provided by this endpoint to remove your self-hosted runner from an organization:<br>
-./config.sh remove --token TOKEN</p>
-<p>Authenticated users must have admin access to the repository to use this endpoint.<br>
-OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-16" title="Create a remove token for a repository / Parameters">Parameters<a href="#parameters-16" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-16">Headers<a href="#headers-16" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
-<ul>
-<li><strong><code>accept</code></strong> (string)<br>
-Setting to <code>application/vnd.github+json</code> is recommended.</li>
-</ul>
-<h4 id="path-and-query-parameters-16">Path and query parameters<a href="#path-and-query-parameters-16" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
-<ul>
-<li>
-<p><strong><code>owner</code></strong> (string) (required)<br>
-The account owner of the repository. The name is not case sensitive.</p>
-</li>
-<li>
-<p><strong><code>repo</code></strong> (string) (required)<br>
-The name of the repository without the .git extension. The name is not case sensitive.</p>
-</li>
-</ul>
-<h3 id="http-response-status-codes-16" title="Create a remove token for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-16" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
-<ul>
-<li><strong>201</strong> - Created</li>
-</ul>
-<h3 id="code-examples-16" title="Create a remove token for a repository / Code examples">Code examples<a href="#code-examples-16" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-16">Example<a href="#example-16" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X POST \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/remove-token
-</span></code></pre>
-<p><strong>Response schema (Status: 201):</strong></p>
-<p>Same response schema as <a href="#create-a-registration-token-for-an-organization">Create a registration token for an organization</a>.</p>
-<h2 id="get-a-self-hosted-runner-for-a-repository" title="Get a self-hosted runner for a repository">Get a self-hosted runner for a repository<a href="#get-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Get a self-hosted runner for a repository'" data-heading-content="Get a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/{runner_id}
-</span></code></pre>
-<p>Gets a specific self-hosted runner configured in a repository.<br>
-Authenticated users must have admin access to the repository to use this endpoint.<br>
-OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-17" title="Get a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-17">Parameters<a href="#parameters-17" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-17">Headers<a href="#headers-17" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1033,31 +1041,29 @@ The account owner of the repository. The name is not case sensitive.</p>
 <p><strong><code>repo</code></strong> (string) (required)<br>
 The name of the repository without the .git extension. The name is not case sensitive.</p>
 </li>
-<li>
-<p><strong><code>runner_id</code></strong> (integer) (required)<br>
-Unique identifier of the self-hosted runner.</p>
-</li>
 </ul>
-<h3 id="http-response-status-codes-17" title="Get a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-17">HTTP response status codes<a href="#http-response-status-codes-17" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li><strong>200</strong> - OK</li>
+<li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples-17" title="Get a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-17">Code examples<a href="#code-examples-17" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-17">Example<a href="#example-17" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/registration-token
 </span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Same response schema as <a href="#get-a-self-hosted-runner-for-an-organization">Get a self-hosted runner for an organization</a>.</p>
-<h2 id="delete-a-self-hosted-runner-from-a-repository" title="Delete a self-hosted runner from a repository">Delete a self-hosted runner from a repository<a href="#delete-a-self-hosted-runner-from-a-repository" aria-label="Link to heading 'Delete a self-hosted runner from a repository'" data-heading-content="Delete a self-hosted runner from a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-registration-token-for-an-organization">Create a registration token for an organization</a>.</p>
+<h2 id="create-a-remove-token-for-a-repository" title="POST /repos/{owner}/{repo}/actions/runners/remove-token (Create a remove token for a repository)">Create a remove token for a repository<a href="#create-a-remove-token-for-a-repository" aria-label="Link to heading 'Create a remove token for a repository'" data-heading-content="Create a remove token for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/remove-token
 </span></code></pre>
-<p>Forces the removal of a self-hosted runner from a repository. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.<br>
-Authenticated users must have admin access to the repository to use this endpoint.<br>
+<p>Returns a token that you can pass to the config script to remove a self-hosted runner from an repository. The token expires after one hour.<br>
+For example, you can replace TOKEN in the following example with the registration token provided by this endpoint to remove your self-hosted runner from an organization:<br>
+./config.sh remove --token TOKEN</p>
+<p>Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-18" title="Delete a self-hosted runner from a repository / Parameters">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-18">Parameters<a href="#parameters-18" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-18">Headers<a href="#headers-18" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1073,35 +1079,27 @@ The account owner of the repository. The name is not case sensitive.</p>
 <p><strong><code>repo</code></strong> (string) (required)<br>
 The name of the repository without the .git extension. The name is not case sensitive.</p>
 </li>
-<li>
-<p><strong><code>runner_id</code></strong> (integer) (required)<br>
-Unique identifier of the self-hosted runner.</p>
-</li>
 </ul>
-<h3 id="http-response-status-codes-18" title="Delete a self-hosted runner from a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-18">HTTP response status codes<a href="#http-response-status-codes-18" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>204</strong> - No Content</p>
-</li>
-<li>
-<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
-</li>
+<li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples-18" title="Delete a self-hosted runner from a repository / Code examples">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-18">Code examples<a href="#code-examples-18" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-18">Example<a href="#example-18" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X DELETE \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/remove-token
 </span></code></pre>
-<p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-labels-for-a-self-hosted-runner-for-a-repository" title="List labels for a self-hosted runner for a repository">List labels for a self-hosted runner for a repository<a href="#list-labels-for-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'List labels for a self-hosted runner for a repository'" data-heading-content="List labels for a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+<p><strong>Response schema (Status: 201):</strong></p>
+<p>Same response schema as <a href="#create-a-registration-token-for-an-organization">Create a registration token for an organization</a>.</p>
+<h2 id="get-a-self-hosted-runner-for-a-repository" title="GET /repos/{owner}/{repo}/actions/runners/{runner_id} (Get a self-hosted runner for a repository)">Get a self-hosted runner for a repository<a href="#get-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Get a self-hosted runner for a repository'" data-heading-content="Get a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/{runner_id}
 </span></code></pre>
-<p>Lists all labels for a self-hosted runner configured in a repository.<br>
+<p>Gets a specific self-hosted runner configured in a repository.<br>
 Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-19" title="List labels for a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-19" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-19">Parameters<a href="#parameters-19" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-19">Headers<a href="#headers-19" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1122,31 +1120,26 @@ The name of the repository without the .git extension. The name is not case sens
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-19" title="List labels for a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-19" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-19">HTTP response status codes<a href="#http-response-status-codes-19" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>404</strong> - Resource not found</p>
-</li>
+<li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-19" title="List labels for a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-19" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-19">Code examples<a href="#code-examples-19" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-19">Example<a href="#example-19" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
-<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="add-custom-labels-to-a-self-hosted-runner-for-a-repository" title="Add custom labels to a self-hosted runner for a repository">Add custom labels to a self-hosted runner for a repository<a href="#add-custom-labels-to-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Add custom labels to a self-hosted runner for a repository'" data-heading-content="Add custom labels to a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+<p>Same response schema as <a href="#get-a-self-hosted-runner-for-an-organization">Get a self-hosted runner for an organization</a>.</p>
+<h2 id="delete-a-self-hosted-runner-from-a-repository" title="DELETE /repos/{owner}/{repo}/actions/runners/{runner_id} (Delete a self-hosted runner from a repository)">Delete a self-hosted runner from a repository<a href="#delete-a-self-hosted-runner-from-a-repository" aria-label="Link to heading 'Delete a self-hosted runner from a repository'" data-heading-content="Delete a self-hosted runner from a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}
 </span></code></pre>
-<p>Adds custom labels to a self-hosted runner configured in a repository.<br>
-Authenticated users must have admin access to the organization to use this endpoint.<br>
+<p>Forces the removal of a self-hosted runner from a repository. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.<br>
+Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-20" title="Add custom labels to a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-20" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-20">Parameters<a href="#parameters-20" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-20">Headers<a href="#headers-20" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1167,46 +1160,30 @@ The name of the repository without the .git extension. The name is not case sens
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
-<ul>
-<li><strong><code>labels</code></strong> (array of strings) (required)<br>
-The names of the custom labels to add to the runner.</li>
-</ul>
-<h3 id="http-response-status-codes-20" title="Add custom labels to a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-20" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-20">HTTP response status codes<a href="#http-response-status-codes-20" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>404</strong> - Resource not found</p>
+<p><strong>204</strong> - No Content</p>
 </li>
 <li>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-20" title="Add custom labels to a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-20" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-20">Code examples<a href="#code-examples-20" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-20">Example<a href="#example-20" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X POST \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels \
-</span><span style="color:#c0c5ce;">  -d '{
-</span><span style="color:#c0c5ce;">  "labels": [
-</span><span style="color:#c0c5ce;">    "gpu",
-</span><span style="color:#c0c5ce;">    "accelerated"
-</span><span style="color:#c0c5ce;">  ]
-</span><span style="color:#c0c5ce;">}'
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID
 </span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="set-custom-labels-for-a-self-hosted-runner-for-a-repository" title="Set custom labels for a self-hosted runner for a repository">Set custom labels for a self-hosted runner for a repository<a href="#set-custom-labels-for-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Set custom labels for a self-hosted runner for a repository'" data-heading-content="Set custom labels for a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="list-labels-for-a-self-hosted-runner-for-a-repository" title="GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels (List labels for a self-hosted runner for a repository)">List labels for a self-hosted runner for a repository<a href="#list-labels-for-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'List labels for a self-hosted runner for a repository'" data-heading-content="List labels for a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove all previous custom labels and set the new custom labels for a specific<br>
-self-hosted runner configured in a repository.<br>
+<p>Lists all labels for a self-hosted runner configured in a repository.<br>
 Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-21" title="Set custom labels for a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-21" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-21">Parameters<a href="#parameters-21" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-21">Headers<a href="#headers-21" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1227,12 +1204,7 @@ The name of the repository without the .git extension. The name is not case sens
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
-<ul>
-<li><strong><code>labels</code></strong> (array of strings) (required)<br>
-The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels.</li>
-</ul>
-<h3 id="http-response-status-codes-21" title="Set custom labels for a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-21" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-21">HTTP response status codes<a href="#http-response-status-codes-21" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1240,33 +1212,23 @@ The names of the custom labels to set for the runner. You can pass an empty arra
 <li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
-<li>
-<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
-</li>
 </ul>
-<h3 id="code-examples-21" title="Set custom labels for a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-21" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-21">Code examples<a href="#code-examples-21" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-21">Example<a href="#example-21" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X PUT \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels \
-</span><span style="color:#c0c5ce;">  -d '{
-</span><span style="color:#c0c5ce;">  "labels": [
-</span><span style="color:#c0c5ce;">    "gpu",
-</span><span style="color:#c0c5ce;">    "accelerated"
-</span><span style="color:#c0c5ce;">  ]
-</span><span style="color:#c0c5ce;">}'
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="remove-all-custom-labels-from-a-self-hosted-runner-for-a-repository" title="Remove all custom labels from a self-hosted runner for a repository">Remove all custom labels from a self-hosted runner for a repository<a href="#remove-all-custom-labels-from-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Remove all custom labels from a self-hosted runner for a repository'" data-heading-content="Remove all custom labels from a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+<h2 id="add-custom-labels-to-a-self-hosted-runner-for-a-repository" title="POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels (Add custom labels to a self-hosted runner for a repository)">Add custom labels to a self-hosted runner for a repository<a href="#add-custom-labels-to-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Add custom labels to a self-hosted runner for a repository'" data-heading-content="Add custom labels to a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove all custom labels from a self-hosted runner configured in a<br>
-repository. Returns the remaining read-only labels from the runner.<br>
-Authenticated users must have admin access to the repository to use this endpoint.<br>
-OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-22" title="Remove all custom labels from a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-22" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<p>Adds custom labels to a self-hosted runner configured in a repository.<br>
+Authenticated users must have admin access to the organization to use this endpoint.<br>
+OAuth tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-22">Parameters<a href="#parameters-22" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-22">Headers<a href="#headers-22" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1287,7 +1249,12 @@ The name of the repository without the .git extension. The name is not case sens
 Unique identifier of the self-hosted runner.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-22" title="Remove all custom labels from a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-22" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h4 id="body-parameters-4">Body parameters<a href="#body-parameters-4" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>labels</code></strong> (array of strings) (required)<br>
+The names of the custom labels to add to the runner.</li>
+</ul>
+<h3 id="http-response-status-codes-22">HTTP response status codes<a href="#http-response-status-codes-22" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1295,26 +1262,33 @@ Unique identifier of the self-hosted runner.</p>
 <li>
 <p><strong>404</strong> - Resource not found</p>
 </li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
 </ul>
-<h3 id="code-examples-22" title="Remove all custom labels from a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-22" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-22">Code examples<a href="#code-examples-22" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-22">Example<a href="#example-22" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X DELETE \
-</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels
+</span><span style="color:#c0c5ce;">  -X POST \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "labels": [
+</span><span style="color:#c0c5ce;">    "gpu",
+</span><span style="color:#c0c5ce;">    "accelerated"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
-<h2 id="remove-a-custom-label-from-a-self-hosted-runner-for-a-repository" title="Remove a custom label from a self-hosted runner for a repository">Remove a custom label from a self-hosted runner for a repository<a href="#remove-a-custom-label-from-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Remove a custom label from a self-hosted runner for a repository'" data-heading-content="Remove a custom label from a self-hosted runner for a repository" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}
+<h2 id="set-custom-labels-for-a-self-hosted-runner-for-a-repository" title="PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels (Set custom labels for a self-hosted runner for a repository)">Set custom labels for a self-hosted runner for a repository<a href="#set-custom-labels-for-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Set custom labels for a self-hosted runner for a repository'" data-heading-content="Set custom labels for a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
 </span></code></pre>
-<p>Remove a custom label from a self-hosted runner configured<br>
-in a repository. Returns the remaining labels from the runner.<br>
-This endpoint returns a 404 Not Found status if the custom label is not<br>
-present on the runner.<br>
+<p>Remove all previous custom labels and set the new custom labels for a specific<br>
+self-hosted runner configured in a repository.<br>
 Authenticated users must have admin access to the repository to use this endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
-<h3 id="parameters-23" title="Remove a custom label from a self-hosted runner for a repository / Parameters">Parameters<a href="#parameters-23" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-23">Parameters<a href="#parameters-23" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-23">Headers<a href="#headers-23" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1334,12 +1308,13 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong><code>runner_id</code></strong> (integer) (required)<br>
 Unique identifier of the self-hosted runner.</p>
 </li>
-<li>
-<p><strong><code>name</code></strong> (string) (required)<br>
-The name of a self-hosted runner's custom label.</p>
-</li>
 </ul>
-<h3 id="http-response-status-codes-23" title="Remove a custom label from a self-hosted runner for a repository / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-23" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h4 id="body-parameters-5">Body parameters<a href="#body-parameters-5" aria-label="Link to heading 'Body parameters'" data-heading-content="Body parameters" class="anchor"></a></h4>
+<ul>
+<li><strong><code>labels</code></strong> (array of strings) (required)<br>
+The names of the custom labels to set for the runner. You can pass an empty array to remove all custom labels.</li>
+</ul>
+<h3 id="http-response-status-codes-23">HTTP response status codes<a href="#http-response-status-codes-23" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1351,8 +1326,115 @@ The name of a self-hosted runner's custom label.</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-23" title="Remove a custom label from a self-hosted runner for a repository / Code examples">Code examples<a href="#code-examples-23" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-23">Code examples<a href="#code-examples-23" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-23">Example<a href="#example-23" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels \
+</span><span style="color:#c0c5ce;">  -d '{
+</span><span style="color:#c0c5ce;">  "labels": [
+</span><span style="color:#c0c5ce;">    "gpu",
+</span><span style="color:#c0c5ce;">    "accelerated"
+</span><span style="color:#c0c5ce;">  ]
+</span><span style="color:#c0c5ce;">}'
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
+<h2 id="remove-all-custom-labels-from-a-self-hosted-runner-for-a-repository" title="DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels (Remove all custom labels from a self-hosted runner for a repository)">Remove all custom labels from a self-hosted runner for a repository<a href="#remove-all-custom-labels-from-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Remove all custom labels from a self-hosted runner for a repository'" data-heading-content="Remove all custom labels from a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+</span></code></pre>
+<p>Remove all custom labels from a self-hosted runner configured in a<br>
+repository. Returns the remaining read-only labels from the runner.<br>
+Authenticated users must have admin access to the repository to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-24">Parameters<a href="#parameters-24" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-24">Headers<a href="#headers-24" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-24">Path and query parameters<a href="#path-and-query-parameters-24" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the self-hosted runner.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-24">HTTP response status codes<a href="#http-response-status-codes-24" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-24">Code examples<a href="#code-examples-24" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-24">Example<a href="#example-24" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X DELETE \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/actions/runners/RUNNER_ID/labels
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Same response schema as <a href="#list-labels-for-a-self-hosted-runner-for-an-organization">List labels for a self-hosted runner for an organization</a>.</p>
+<h2 id="remove-a-custom-label-from-a-self-hosted-runner-for-a-repository" title="DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name} (Remove a custom label from a self-hosted runner for a repository)">Remove a custom label from a self-hosted runner for a repository<a href="#remove-a-custom-label-from-a-self-hosted-runner-for-a-repository" aria-label="Link to heading 'Remove a custom label from a self-hosted runner for a repository'" data-heading-content="Remove a custom label from a self-hosted runner for a repository" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}
+</span></code></pre>
+<p>Remove a custom label from a self-hosted runner configured<br>
+in a repository. Returns the remaining labels from the runner.<br>
+This endpoint returns a 404 Not Found status if the custom label is not<br>
+present on the runner.<br>
+Authenticated users must have admin access to the repository to use this endpoint.<br>
+OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint.</p>
+<h3 id="parameters-25">Parameters<a href="#parameters-25" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-25">Headers<a href="#headers-25" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-25">Path and query parameters<a href="#path-and-query-parameters-25" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>runner_id</code></strong> (integer) (required)<br>
+Unique identifier of the self-hosted runner.</p>
+</li>
+<li>
+<p><strong><code>name</code></strong> (string) (required)<br>
+The name of a self-hosted runner's custom label.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-25">HTTP response status codes<a href="#http-response-status-codes-25" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - OK</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-25">Code examples<a href="#code-examples-25" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-25">Example<a href="#example-25" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X DELETE \

@@ -4,7 +4,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-commits" title="List commits">List commits<a href="#list-commits" aria-label="Link to heading 'List commits'" data-heading-content="List commits" class="anchor"></a></h2>
+<h2 id="list-commits" title="GET /repos/{owner}/{repo}/commits (List commits)">List commits<a href="#list-commits" aria-label="Link to heading 'List commits'" data-heading-content="List commits" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits
 </span></code></pre>
 <p>Signature verification object<br>
@@ -12,7 +12,7 @@ The response will include a verification object that describes the result of ver
 <p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in table below.signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified_atstringThe date the signature was verified by GitHub.<br>
 These are the possible values for reason in the verification object:</p>
 <p>ValueDescriptionexpired_keyThe key that made the signature is expired.not_signing_keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify_errorThere was an error communicating with the signature verification service.gpgverify_unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown_signature_typeA non-PGP signature was found in the commit.no_userNo user was associated with the committer email address in the commit.unverified_emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad_emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown_keyThe key that made the signature has not been registered with any user's account.malformed_signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
-<h3 id="parameters" title="List commits / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -63,7 +63,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List commits / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -81,7 +81,7 @@ Default: <code>1</code></p>
 <p><strong>500</strong> - Internal Error</p>
 </li>
 </ul>
-<h3 id="code-examples" title="List commits / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -203,12 +203,12 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="list-branches-for-head-commit" title="List branches for HEAD commit">List branches for HEAD commit<a href="#list-branches-for-head-commit" aria-label="Link to heading 'List branches for HEAD commit'" data-heading-content="List branches for HEAD commit" class="anchor"></a></h2>
+<h2 id="list-branches-for-head-commit" title="GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head (List branches for HEAD commit)">List branches for HEAD commit<a href="#list-branches-for-head-commit" aria-label="Link to heading 'List branches for HEAD commit'" data-heading-content="List branches for HEAD commit" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head
 </span></code></pre>
 <p>Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see GitHub's products in the GitHub Help documentation.<br>
 Returns all branches where the given commit SHA is the HEAD, or latest commit for the branch.</p>
-<h3 id="parameters-1" title="List branches for HEAD commit / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -229,7 +229,7 @@ The name of the repository without the .git extension. The name is not case sens
 The SHA of the commit.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="List branches for HEAD commit / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -241,7 +241,7 @@ The SHA of the commit.</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="List branches for HEAD commit / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -260,12 +260,12 @@ The SHA of the commit.</p>
 </li>
 <li><code>protected</code>: required, boolean</li>
 </ul>
-<h2 id="list-pull-requests-associated-with-a-commit" title="List pull requests associated with a commit">List pull requests associated with a commit<a href="#list-pull-requests-associated-with-a-commit" aria-label="Link to heading 'List pull requests associated with a commit'" data-heading-content="List pull requests associated with a commit" class="anchor"></a></h2>
+<h2 id="list-pull-requests-associated-with-a-commit" title="GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls (List pull requests associated with a commit)">List pull requests associated with a commit<a href="#list-pull-requests-associated-with-a-commit" aria-label="Link to heading 'List pull requests associated with a commit'" data-heading-content="List pull requests associated with a commit" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls
 </span></code></pre>
 <p>Lists the merged pull request that introduced the commit to the repository. If the commit is not present in the default branch, it will return merged and open pull requests associated with the commit.<br>
 To list the open or merged pull requests associated with a branch, you can set the commit_sha parameter to the branch name.</p>
-<h3 id="parameters-2" title="List pull requests associated with a commit / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -296,7 +296,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="List pull requests associated with a commit / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -305,7 +305,7 @@ Default: <code>1</code></p>
 <p><strong>409</strong> - Conflict</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="List pull requests associated with a commit / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -659,7 +659,7 @@ Default: <code>1</code></p>
 </li>
 <li><code>draft</code>: boolean</li>
 </ul>
-<h2 id="get-a-commit" title="Get a commit">Get a commit<a href="#get-a-commit" aria-label="Link to heading 'Get a commit'" data-heading-content="Get a commit" class="anchor"></a></h2>
+<h2 id="get-a-commit" title="GET /repos/{owner}/{repo}/commits/{ref} (Get a commit)">Get a commit<a href="#get-a-commit" aria-label="Link to heading 'Get a commit'" data-heading-content="Get a commit" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits/{ref}
 </span></code></pre>
 <p>Returns the contents of a single commit reference. You must have read access for the repository to use this endpoint.<br>
@@ -674,7 +674,7 @@ The response will include a verification object that describes the result of ver
 <p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in table below.signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified_atstringThe date the signature was verified by GitHub.<br>
 These are the possible values for reason in the verification object:</p>
 <p>ValueDescriptionexpired_keyThe key that made the signature is expired.not_signing_keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify_errorThere was an error communicating with the signature verification service.gpgverify_unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown_signature_typeA non-PGP signature was found in the commit.no_userNo user was associated with the committer email address in the commit.unverified_emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad_emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown_keyThe key that made the signature has not been registered with any user's account.malformed_signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
-<h3 id="parameters-3" title="Get a commit / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -705,7 +705,7 @@ Default: <code>30</code></p>
 The commit reference. Can be a commit SHA, branch name (heads/BRANCH_NAME), or tag name (tags/TAG_NAME). For more information, see "Git References" in the Git documentation.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Get a commit / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -726,7 +726,7 @@ The commit reference. Can be a commit SHA, branch name (heads/BRANCH_NAME), or t
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Get a commit / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -871,7 +871,7 @@ The commit reference. Can be a commit SHA, branch name (heads/BRANCH_NAME), or t
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>string</p>
-<h2 id="compare-two-commits" title="Compare two commits">Compare two commits<a href="#compare-two-commits" aria-label="Link to heading 'Compare two commits'" data-heading-content="Compare two commits" class="anchor"></a></h2>
+<h2 id="compare-two-commits" title="GET /repos/{owner}/{repo}/compare/{basehead} (Compare two commits)">Compare two commits<a href="#compare-two-commits" aria-label="Link to heading 'Compare two commits'" data-heading-content="Compare two commits" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/compare/{basehead}
 </span></code></pre>
 <p>Compares two commits against one another. You can compare refs (branches or tags) and commit SHAs in the same repository, or you can compare refs and commit SHAs that exist in different repositories within the same repository network, including fork branches. For more information about how to view a repository's network, see "Understanding connections between repositories."<br>
@@ -891,7 +891,7 @@ The response will include a verification object that describes the result of ver
 <p>NameTypeDescriptionverifiedbooleanIndicates whether GitHub considers the signature in this commit to be verified.reasonstringThe reason for verified value. Possible values and their meanings are enumerated in table below.signaturestringThe signature that was extracted from the commit.payloadstringThe value that was signed.verified_atstringThe date the signature was verified by GitHub.<br>
 These are the possible values for reason in the verification object:</p>
 <p>ValueDescriptionexpired_keyThe key that made the signature is expired.not_signing_keyThe "signing" flag is not among the usage flags in the GPG key that made the signature.gpgverify_errorThere was an error communicating with the signature verification service.gpgverify_unavailableThe signature verification service is currently unavailable.unsignedThe object does not include a signature.unknown_signature_typeA non-PGP signature was found in the commit.no_userNo user was associated with the committer email address in the commit.unverified_emailThe committer email address in the commit was associated with a user, but the email address is not verified on their account.bad_emailThe committer email address in the commit is not included in the identities of the PGP key that made the signature.unknown_keyThe key that made the signature has not been registered with any user's account.malformed_signatureThere was an error parsing the signature.invalidThe signature could not be cryptographically verified using the key whose key-id was found in the signature.validNone of the above errors applied, so the signature is considered to be verified.</p>
-<h3 id="parameters-4" title="Compare two commits / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -922,7 +922,7 @@ Default: <code>30</code></p>
 The base branch and head branch to compare. This parameter expects the format BASE...HEAD. Both must be branch names in repo. To compare with a branch that exists in a different repository in the same network as repo, the basehead parameter expects the format USERNAME:BASE...USERNAME:HEAD.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Compare two commits / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -937,7 +937,7 @@ The base branch and head branch to compare. This parameter expects the format BA
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Compare two commits / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200-1">Example 1: Status Code 200<a href="#example-1-status-code-200-1" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

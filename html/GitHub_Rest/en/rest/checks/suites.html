@@ -12,14 +12,14 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="create-a-check-suite" title="Create a check suite">Create a check suite<a href="#create-a-check-suite" aria-label="Link to heading 'Create a check suite'" data-heading-content="Create a check suite" class="anchor"></a></h2>
+<h2 id="create-a-check-suite" title="POST /repos/{owner}/{repo}/check-suites (Create a check suite)">Create a check suite<a href="#create-a-check-suite" aria-label="Link to heading 'Create a check suite'" data-heading-content="Create a check suite" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/check-suites
 </span></code></pre>
 <p>Creates a check suite manually. By default, check suites are automatically created when you create a check run. You only need to use this endpoint for manually creating check suites when you've disabled automatic creation using "Update repository preferences for check suites".<br>
 Note</p>
 <p>The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array and a null value for head<span data-escaped-char="">_</span>branch.</p>
 <p>OAuth apps and personal access tokens (classic) cannot use this endpoint.</p>
-<h3 id="parameters" title="Create a check suite / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -41,7 +41,7 @@ The name of the repository without the .git extension. The name is not case sens
 <li><strong><code>head_sha</code></strong> (string) (required)<br>
 The sha of the head commit.</li>
 </ul>
-<h3 id="http-response-status-codes" title="Create a check suite / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - Response when the suite already exists</p>
@@ -50,7 +50,7 @@ The sha of the head commit.</li>
 <p><strong>201</strong> - Response when the suite was created</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Create a check suite / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -711,12 +711,12 @@ The sha of the head commit.</li>
 <li><code>rerequestable</code>: boolean</li>
 <li><code>runs_rerequestable</code>: boolean</li>
 </ul>
-<h2 id="update-repository-preferences-for-check-suites" title="Update repository preferences for check suites">Update repository preferences for check suites<a href="#update-repository-preferences-for-check-suites" aria-label="Link to heading 'Update repository preferences for check suites'" data-heading-content="Update repository preferences for check suites" class="anchor"></a></h2>
+<h2 id="update-repository-preferences-for-check-suites" title="PATCH /repos/{owner}/{repo}/check-suites/preferences (Update repository preferences for check suites)">Update repository preferences for check suites<a href="#update-repository-preferences-for-check-suites" aria-label="Link to heading 'Update repository preferences for check suites'" data-heading-content="Update repository preferences for check suites" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/check-suites/preferences
 </span></code></pre>
 <p>Changes the default automatic flow when creating check suites. By default, a check suite is automatically created each time code is pushed to a repository. When you disable the automatic creation of check suites, you can manually Create a check suite.<br>
 You must have admin permissions in the repository to set preferences for check suites.</p>
-<h3 id="parameters-1" title="Update repository preferences for check suites / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -746,11 +746,11 @@ Default: <code>true</code></li>
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Update repository preferences for check suites / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-1" title="Update repository preferences for check suites / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -979,14 +979,14 @@ Default: <code>true</code></li>
 </ul>
 </li>
 </ul>
-<h2 id="get-a-check-suite" title="Get a check suite">Get a check suite<a href="#get-a-check-suite" aria-label="Link to heading 'Get a check suite'" data-heading-content="Get a check suite" class="anchor"></a></h2>
+<h2 id="get-a-check-suite" title="GET /repos/{owner}/{repo}/check-suites/{check_suite_id} (Get a check suite)">Get a check suite<a href="#get-a-check-suite" aria-label="Link to heading 'Get a check suite'" data-heading-content="Get a check suite" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/check-suites/{check_suite_id}
 </span></code></pre>
 <p>Gets a single check suite using its id.<br>
 Note</p>
 <p>The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array and a null value for head<span data-escaped-char="">_</span>branch.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-2" title="Get a check suite / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1007,11 +1007,11 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the check suite.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Get a check suite / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-2" title="Get a check suite / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1020,11 +1020,11 @@ The unique identifier of the check suite.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-check-suite">Create a check suite</a>.</p>
-<h2 id="rerequest-a-check-suite" title="Rerequest a check suite">Rerequest a check suite<a href="#rerequest-a-check-suite" aria-label="Link to heading 'Rerequest a check suite'" data-heading-content="Rerequest a check suite" class="anchor"></a></h2>
+<h2 id="rerequest-a-check-suite" title="POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest (Rerequest a check suite)">Rerequest a check suite<a href="#rerequest-a-check-suite" aria-label="Link to heading 'Rerequest a check suite'" data-heading-content="Rerequest a check suite" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
 </span></code></pre>
 <p>Triggers GitHub to rerequest an existing check suite, without pushing new code to a repository. This endpoint will trigger the check<span data-escaped-char="">_</span>suite webhook event with the action rerequested. When a check suite is rerequested, its status is reset to queued and the conclusion is cleared.</p>
-<h3 id="parameters-3" title="Rerequest a check suite / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1045,11 +1045,11 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the check suite.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Rerequest a check suite / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples-3" title="Rerequest a check suite / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1057,14 +1057,14 @@ The unique identifier of the check suite.</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/check-suites/CHECK_SUITE_ID/rerequest
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
-<h2 id="list-check-suites-for-a-git-reference" title="List check suites for a Git reference">List check suites for a Git reference<a href="#list-check-suites-for-a-git-reference" aria-label="Link to heading 'List check suites for a Git reference'" data-heading-content="List check suites for a Git reference" class="anchor"></a></h2>
+<h2 id="list-check-suites-for-a-git-reference" title="GET /repos/{owner}/{repo}/commits/{ref}/check-suites (List check suites for a Git reference)">List check suites for a Git reference<a href="#list-check-suites-for-a-git-reference" aria-label="Link to heading 'List check suites for a Git reference'" data-heading-content="List check suites for a Git reference" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits/{ref}/check-suites
 </span></code></pre>
 <p>Lists check suites for a commit ref. The ref can be a SHA, branch name, or a tag name.<br>
 Note</p>
 <p>The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array and a null value for head<span data-escaped-char="">_</span>branch.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-4" title="List check suites for a Git reference / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1103,11 +1103,11 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="List check suites for a Git reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-4" title="List check suites for a Git reference / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

@@ -12,22 +12,22 @@
 <h2 id="run-name" title="run-name"><code>run-name</code><a href="#run-name" aria-label="Link to heading 'run-name'" data-heading-content="run-name" class="anchor"></a></h2>
 <p>The name for workflow runs generated from the workflow. GitHub displays the workflow run name in the list of workflow runs on your repository's "Actions" tab. If <code>run-name</code> is omitted or is only whitespace, then the run name is set to event-specific information for the workflow run. For example, for a workflow triggered by a <code>push</code> or <code>pull_request</code> event, it is set as the commit message or the title of the pull request.</p>
 <p>This value can include expressions and can reference the <a href="contexts.html#github-context"><code>github</code></a> and <a href="contexts.html#inputs-context"><code>inputs</code></a> contexts.</p>
-<h3 id="example-of-run-name" title="Example of run-name">Example of <code>run-name</code><a href="#example-of-run-name" aria-label="Link to heading 'Example of run-name'" data-heading-content="Example of run-name" class="anchor"></a></h3>
+<h3 id="example-of-run-name">Example of <code>run-name</code><a href="#example-of-run-name" aria-label="Link to heading 'Example of run-name'" data-heading-content="Example of run-name" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">run-name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Deploy to ${{ inputs.deploy_target }} by @${{ github.actor }}
 </span></code></pre>
 <h2 id="on" title="on"><code>on</code><a href="#on" aria-label="Link to heading 'on'" data-heading-content="on" class="anchor"></a></h2>
 <p>To automatically trigger a workflow, use <code>on</code> to define which events can cause the workflow to run. For a list of available events, see <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
 <p>You can define single or multiple events that can trigger a workflow, or set a time schedule. You can also restrict the execution of a workflow to only occur for specific files, tags, or branch changes. These options are described in the following sections.</p>
-<h3 id="using-a-single-event" title="on / Using a single event">Using a single event<a href="#using-a-single-event" aria-label="Link to heading 'Using a single event'" data-heading-content="Using a single event" class="anchor"></a></h3>
+<h3 id="using-a-single-event">Using a single event<a href="#using-a-single-event" aria-label="Link to heading 'Using a single event'" data-heading-content="Using a single event" class="anchor"></a></h3>
 <p>For example, a workflow with the following <code>on</code> value will run when a push is made to any branch in the workflow's repository:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
 </span></code></pre>
-<h3 id="using-multiple-events" title="on / Using multiple events">Using multiple events<a href="#using-multiple-events" aria-label="Link to heading 'Using multiple events'" data-heading-content="Using multiple events" class="anchor"></a></h3>
+<h3 id="using-multiple-events">Using multiple events<a href="#using-multiple-events" aria-label="Link to heading 'Using multiple events'" data-heading-content="Using multiple events" class="anchor"></a></h3>
 <p>You can specify a single event or multiple events. For example, a workflow with the following <code>on</code> value will run when a push is made to any branch in the repository or when someone forks the repository:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">push</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">fork</span><span style="color:#c0c5ce;">]
 </span></code></pre>
 <p>If you specify multiple events, only one of those events needs to occur to trigger your workflow. If multiple triggering events for your workflow occur at the same time, multiple workflow runs will be triggered.</p>
-<h3 id="using-activity-types" title="on / Using activity types">Using activity types<a href="#using-activity-types" aria-label="Link to heading 'Using activity types'" data-heading-content="Using activity types" class="anchor"></a></h3>
+<h3 id="using-activity-types">Using activity types<a href="#using-activity-types" aria-label="Link to heading 'Using activity types'" data-heading-content="Using activity types" class="anchor"></a></h3>
 <p>Some events have activity types that give you more control over when your workflow should run. Use <code>on.&lt;event_name&gt;.types</code> to define the type of event activity that will trigger a workflow run.</p>
 <p>For example, the <code>issue_comment</code> event has the <code>created</code>, <code>edited</code>, and <code>deleted</code> activity types. If your workflow triggers on the <code>label</code> event, it will run whenever a label is created, edited, or deleted. If you specify the <code>created</code> activity type for the <code>label</code> event, your workflow will run when a label is created but not when a label is edited or deleted.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -43,7 +43,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">labeled
 </span></code></pre>
 <p>For more information about each event and their activity types, see <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
-<h3 id="using-filters" title="on / Using filters">Using filters<a href="#using-filters" aria-label="Link to heading 'Using filters'" data-heading-content="Using filters" class="anchor"></a></h3>
+<h3 id="using-filters">Using filters<a href="#using-filters" aria-label="Link to heading 'Using filters'" data-heading-content="Using filters" class="anchor"></a></h3>
 <p>Some events have filters that give you more control over when your workflow should run.</p>
 <p>For example, the <code>push</code> event has a <code>branches</code> filter that causes your workflow to run only when a push to a branch that matches the <code>branches</code> filter occurs, instead of when any push occurs.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -52,7 +52,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">main
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">releases/**</span><span style="color:#c0c5ce;">'
 </span></code></pre>
-<h3 id="using-activity-types-and-filters-with-multiple-events" title="on / Using activity types and filters with multiple events">Using activity types and filters with multiple events<a href="#using-activity-types-and-filters-with-multiple-events" aria-label="Link to heading 'Using activity types and filters with multiple events'" data-heading-content="Using activity types and filters with multiple events" class="anchor"></a></h3>
+<h3 id="using-activity-types-and-filters-with-multiple-events">Using activity types and filters with multiple events<a href="#using-activity-types-and-filters-with-multiple-events" aria-label="Link to heading 'Using activity types and filters with multiple events'" data-heading-content="Using activity types and filters with multiple events" class="anchor"></a></h3>
 <p>If you specify activity types or filters for an event and your workflow triggers on multiple events, you must configure each event separately. You must append a colon (<code>:</code>) to all events, including events without configuration.</p>
 <p>For example, a workflow with the following <code>on</code> value will run when:</p>
 <ul>
@@ -81,7 +81,7 @@
 <p>Use the <code>branches</code> filter when you want to include branch name patterns or when you want to both include and exclude branch names patterns. Use the <code>branches-ignore</code> filter when you only want to exclude branch name patterns. You cannot use both the <code>branches</code> and <code>branches-ignore</code> filters for the same event in a workflow.</p>
 <p>If you define both <code>branches</code>/<code>branches-ignore</code> and <a href="#onpushpull_requestpull_request_targetpathspaths-ignore"><code>paths</code>/<code>paths-ignore</code></a>, the workflow will only run when both filters are satisfied.</p>
 <p>The <code>branches</code> and <code>branches-ignore</code> keywords accept glob patterns that use characters like <code>*</code>, <code>**</code>, <code>+</code>, <code>?</code>, <code>!</code> and others to match more than one branch name. If a name contains any of these characters and you want a literal match, you need to escape each of these special characters with <code>\</code>. For more information about glob patterns, see the <a href="#filter-pattern-cheat-sheet">Workflow syntax for GitHub Actions</a>.</p>
-<h3 id="example-including-branches" title="on.<pull_request|pull_request_target>.<branches|branches-ignore> / Example: Including branches">Example: Including branches<a href="#example-including-branches" aria-label="Link to heading 'Example: Including branches'" data-heading-content="Example: Including branches" class="anchor"></a></h3>
+<h3 id="example-including-branches">Example: Including branches<a href="#example-including-branches" aria-label="Link to heading 'Example: Including branches'" data-heading-content="Example: Including branches" class="anchor"></a></h3>
 <p>The patterns defined in <code>branches</code> are evaluated against the Git ref's name. For example, the following workflow would run whenever there is a <code>pull_request</code> event for a pull request targeting:</p>
 <ul>
 <li>A branch named <code>main</code> (<code>refs/heads/main</code>)</li>
@@ -97,7 +97,7 @@
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">releases/**</span><span style="color:#c0c5ce;">'
 </span></code></pre>
 <p>If a workflow is skipped due to branch filtering, <a href="#onpushpull_requestpull_request_targetpathspaths-ignore">path filtering</a>, or a <a href="../../how-tos/manage-workflow-runs/skip-workflow-runs.html">commit message</a>, then checks associated with that workflow will remain in a "Pending" state. A pull request that requires those checks to be successful will be blocked from merging.</p>
-<h3 id="example-excluding-branches" title="on.<pull_request|pull_request_target>.<branches|branches-ignore> / Example: Excluding branches">Example: Excluding branches<a href="#example-excluding-branches" aria-label="Link to heading 'Example: Excluding branches'" data-heading-content="Example: Excluding branches" class="anchor"></a></h3>
+<h3 id="example-excluding-branches">Example: Excluding branches<a href="#example-excluding-branches" aria-label="Link to heading 'Example: Excluding branches'" data-heading-content="Example: Excluding branches" class="anchor"></a></h3>
 <p>When a pattern matches the <code>branches-ignore</code> pattern, the workflow will not run. The patterns defined in <code>branches-ignore</code> are evaluated against the Git ref's name. For example, the following workflow would run whenever there is a <code>pull_request</code> event unless the pull request is targeting:</p>
 <ul>
 <li>A branch named <code>mona/octocat</code> (<code>refs/heads/mona/octocat</code>)</li>
@@ -110,7 +110,7 @@
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">mona/octocat</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">releases/**-alpha</span><span style="color:#c0c5ce;">'
 </span></code></pre>
-<h3 id="example-including-and-excluding-branches" title="on.<pull_request|pull_request_target>.<branches|branches-ignore> / Example: Including and excluding branches">Example: Including and excluding branches<a href="#example-including-and-excluding-branches" aria-label="Link to heading 'Example: Including and excluding branches'" data-heading-content="Example: Including and excluding branches" class="anchor"></a></h3>
+<h3 id="example-including-and-excluding-branches">Example: Including and excluding branches<a href="#example-including-and-excluding-branches" aria-label="Link to heading 'Example: Including and excluding branches'" data-heading-content="Example: Including and excluding branches" class="anchor"></a></h3>
 <p>You cannot use <code>branches</code> and <code>branches-ignore</code> to filter the same event in a single workflow. If you want to both include and exclude branch patterns for a single event, use the <code>branches</code> filter along with the <code>!</code> character to indicate which branches should be excluded.</p>
 <p>If you define a branch with the <code>!</code> character, you must also define at least one branch without the <code>!</code> character. If you only want to exclude branches, use <code>branches-ignore</code> instead.</p>
 <p>The order that you define patterns matters.</p>
@@ -131,7 +131,7 @@
 <p>Use the <code>tags</code> filter when you want to include tag name patterns or when you want to both include and exclude tag names patterns. Use the <code>tags-ignore</code> filter when you only want to exclude tag name patterns. You cannot use both the <code>tags</code> and <code>tags-ignore</code> filters for the same event in a workflow.</p>
 <p>If you define only <code>tags</code>/<code>tags-ignore</code> or only <code>branches</code>/<code>branches-ignore</code>, the workflow won't run for events affecting the undefined Git ref. If you define neither <code>tags</code>/<code>tags-ignore</code> or <code>branches</code>/<code>branches-ignore</code>, the workflow will run for events affecting either branches or tags. If you define both <code>branches</code>/<code>branches-ignore</code> and <a href="#onpushpull_requestpull_request_targetpathspaths-ignore"><code>paths</code>/<code>paths-ignore</code></a>, the workflow will only run when both filters are satisfied.</p>
 <p>The <code>branches</code>, <code>branches-ignore</code>, <code>tags</code>, and <code>tags-ignore</code> keywords accept glob patterns that use characters like <code>*</code>, <code>**</code>, <code>+</code>, <code>?</code>, <code>!</code> and others to match more than one branch or tag name. If a name contains any of these characters and you want a literal match, you need to <em>escape</em> each of these special characters with <code>\</code>. For more information about glob patterns, see the <a href="#filter-pattern-cheat-sheet">Workflow syntax for GitHub Actions</a>.</p>
-<h3 id="example-including-branches-and-tags" title="on.push.<branches|tags|branches-ignore|tags-ignore> / Example: Including branches and tags">Example: Including branches and tags<a href="#example-including-branches-and-tags" aria-label="Link to heading 'Example: Including branches and tags'" data-heading-content="Example: Including branches and tags" class="anchor"></a></h3>
+<h3 id="example-including-branches-and-tags">Example: Including branches and tags<a href="#example-including-branches-and-tags" aria-label="Link to heading 'Example: Including branches and tags'" data-heading-content="Example: Including branches and tags" class="anchor"></a></h3>
 <p>The patterns defined in <code>branches</code> and <code>tags</code> are evaluated against the Git ref's name. For example, the following workflow would run whenever there is a <code>push</code> event to:</p>
 <ul>
 <li>A branch named <code>main</code> (<code>refs/heads/main</code>)</li>
@@ -152,7 +152,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">v2
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">v1.*
 </span></code></pre>
-<h3 id="example-excluding-branches-and-tags" title="on.push.<branches|tags|branches-ignore|tags-ignore> / Example: Excluding branches and tags">Example: Excluding branches and tags<a href="#example-excluding-branches-and-tags" aria-label="Link to heading 'Example: Excluding branches and tags'" data-heading-content="Example: Excluding branches and tags" class="anchor"></a></h3>
+<h3 id="example-excluding-branches-and-tags">Example: Excluding branches and tags<a href="#example-excluding-branches-and-tags" aria-label="Link to heading 'Example: Excluding branches and tags'" data-heading-content="Example: Excluding branches and tags" class="anchor"></a></h3>
 <p>When a pattern matches the <code>branches-ignore</code> or <code>tags-ignore</code> pattern, the workflow will not run. The patterns defined in <code>branches</code> and <code>tags</code> are evaluated against the Git ref's name. For example, the following workflow would run whenever there is a <code>push</code> event, unless the <code>push</code> event is to:</p>
 <ul>
 <li>A branch named <code>mona/octocat</code> (<code>refs/heads/mona/octocat</code>)</li>
@@ -171,7 +171,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">v2
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">v1.*
 </span></code></pre>
-<h3 id="example-including-and-excluding-branches-and-tags" title="on.push.<branches|tags|branches-ignore|tags-ignore> / Example: Including and excluding branches and tags">Example: Including and excluding branches and tags<a href="#example-including-and-excluding-branches-and-tags" aria-label="Link to heading 'Example: Including and excluding branches and tags'" data-heading-content="Example: Including and excluding branches and tags" class="anchor"></a></h3>
+<h3 id="example-including-and-excluding-branches-and-tags">Example: Including and excluding branches and tags<a href="#example-including-and-excluding-branches-and-tags" aria-label="Link to heading 'Example: Including and excluding branches and tags'" data-heading-content="Example: Including and excluding branches and tags" class="anchor"></a></h3>
 <p>You can't use <code>branches</code> and <code>branches-ignore</code> to filter the same event in a single workflow. Similarly, you can't use <code>tags</code> and <code>tags-ignore</code> to filter the same event in a single workflow. If you want to both include and exclude branch or tag patterns for a single event, use the <code>branches</code> or <code>tags</code> filter along with the <code>!</code> character to indicate which branches or tags should be excluded.</p>
 <p>If you define a branch with the <code>!</code> character, you must also define at least one branch without the <code>!</code> character. If you only want to exclude branches, use <code>branches-ignore</code> instead. Similarly, if you define a tag with the <code>!</code> character, you must also define at least one tag without the <code>!</code> character. If you only want to exclude tags, use <code>tags-ignore</code> instead.</p>
 <p>The order that you define patterns matters.</p>
@@ -199,7 +199,7 @@
 </div>
 <p>If you define both <code>branches</code>/<code>branches-ignore</code> and <code>paths</code>/<code>paths-ignore</code>, the workflow will only run when both filters are satisfied.</p>
 <p>The <code>paths</code> and <code>paths-ignore</code> keywords accept glob patterns that use the <code>*</code> and <code>**</code> wildcard characters to match more than one path name. For more information, see the <a href="#filter-pattern-cheat-sheet">Workflow syntax for GitHub Actions</a>.</p>
-<h3 id="example-including-paths" title="on.<push|pull_request|pull_request_target>.<paths|paths-ignore> / Example: Including paths">Example: Including paths<a href="#example-including-paths" aria-label="Link to heading 'Example: Including paths'" data-heading-content="Example: Including paths" class="anchor"></a></h3>
+<h3 id="example-including-paths">Example: Including paths<a href="#example-including-paths" aria-label="Link to heading 'Example: Including paths'" data-heading-content="Example: Including paths" class="anchor"></a></h3>
 <p>If at least one path matches a pattern in the <code>paths</code> filter, the workflow runs. For example, the following workflow would run anytime you push a JavaScript file (<code>.js</code>).</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">push</span><span style="color:#c0c5ce;">:
@@ -207,7 +207,7 @@
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">**.js</span><span style="color:#c0c5ce;">'
 </span></code></pre>
 <p>If a workflow is skipped due to path filtering, <a href="#onpull_requestpull_request_targetbranchesbranches-ignore">branch filtering</a>, or a <a href="../../how-tos/manage-workflow-runs/skip-workflow-runs.html">commit message</a>, then checks associated with that workflow will remain in a "Pending" state. A pull request that requires those checks to be successful will be blocked from merging.</p>
-<h3 id="example-excluding-paths" title="on.<push|pull_request|pull_request_target>.<paths|paths-ignore> / Example: Excluding paths">Example: Excluding paths<a href="#example-excluding-paths" aria-label="Link to heading 'Example: Excluding paths'" data-heading-content="Example: Excluding paths" class="anchor"></a></h3>
+<h3 id="example-excluding-paths">Example: Excluding paths<a href="#example-excluding-paths" aria-label="Link to heading 'Example: Excluding paths'" data-heading-content="Example: Excluding paths" class="anchor"></a></h3>
 <p>When all the path names match patterns in <code>paths-ignore</code>, the workflow will not run. If any path names do not match patterns in <code>paths-ignore</code>, even if some path names match the patterns, the workflow will run.</p>
 <p>A workflow with the following path filter will only run on <code>push</code> events that include at least one file outside the <code>docs</code> directory at the root of the repository.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -215,7 +215,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">paths-ignore</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">docs/**</span><span style="color:#c0c5ce;">'
 </span></code></pre>
-<h3 id="example-including-and-excluding-paths" title="on.<push|pull_request|pull_request_target>.<paths|paths-ignore> / Example: Including and excluding paths">Example: Including and excluding paths<a href="#example-including-and-excluding-paths" aria-label="Link to heading 'Example: Including and excluding paths'" data-heading-content="Example: Including and excluding paths" class="anchor"></a></h3>
+<h3 id="example-including-and-excluding-paths">Example: Including and excluding paths<a href="#example-including-and-excluding-paths" aria-label="Link to heading 'Example: Including and excluding paths'" data-heading-content="Example: Including and excluding paths" class="anchor"></a></h3>
 <p>You cannot use <code>paths</code> and <code>paths-ignore</code> to filter the same event in a single workflow. If you want to both include and exclude path patterns for a single event, use the <code>paths</code> filter prefixed with the <code>!</code> character to indicate which paths should be excluded.</p>
 <p>If you define a path with the <code>!</code> character, you must also define at least one path without the <code>!</code> character. If you only want to exclude paths, use <code>paths-ignore</code> instead.</p>
 <p>The order that you define <code>paths</code> patterns matters:</p>
@@ -230,7 +230,7 @@
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">sub-project/**</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">!sub-project/docs/**</span><span style="color:#c0c5ce;">'
 </span></code></pre>
-<h3 id="git-diff-comparisons" title="on.<push|pull_request|pull_request_target>.<paths|paths-ignore> / Git diff comparisons">Git diff comparisons<a href="#git-diff-comparisons" aria-label="Link to heading 'Git diff comparisons'" data-heading-content="Git diff comparisons" class="anchor"></a></h3>
+<h3 id="git-diff-comparisons">Git diff comparisons<a href="#git-diff-comparisons" aria-label="Link to heading 'Git diff comparisons'" data-heading-content="Git diff comparisons" class="anchor"></a></h3>
 <p>The filter determines if a workflow should run by evaluating the changed files and running them against the <code>paths-ignore</code> or <code>paths</code> list. If there are no files changed, the workflow will not run.</p>
 <p>GitHub generates the list of changed files using two-dot diffs for pushes and three-dot diffs for pull requests:</p>
 <ul>
@@ -325,7 +325,7 @@
 <p>If a <code>default</code> parameter is not set, the default value of the input is <code>false</code> for a boolean, <code>0</code> for a number, and <code>""</code> for a string.</p>
 <p>Within the called workflow, you can use the <code>inputs</code> context to refer to an input. For more information, see <a href="contexts.html#inputs-context">Contexts reference</a>.</p>
 <p>If a caller workflow passes an input that is not specified in the called workflow, this results in an error.</p>
-<h3 id="example-of-onworkflow_callinputs" title="Example of on.workflow_call.inputs">Example of <code>on.workflow_call.inputs</code><a href="#example-of-onworkflow_callinputs" aria-label="Link to heading 'Example of on.workflow_call.inputs'" data-heading-content="Example of on.workflow_call.inputs" class="anchor"></a></h3>
+<h3 id="example-of-onworkflow_callinputs">Example of <code>on.workflow_call.inputs</code><a href="#example-of-onworkflow_callinputs" aria-label="Link to heading 'Example of on.workflow_call.inputs'" data-heading-content="Example of on.workflow_call.inputs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_call</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">inputs</span><span style="color:#c0c5ce;">:
@@ -349,7 +349,7 @@
 <h2 id="onworkflow_calloutputs" title="on.workflow_call.outputs"><code>on.workflow_call.outputs</code><a href="#onworkflow_calloutputs" aria-label="Link to heading 'on.workflow_call.outputs'" data-heading-content="on.workflow_call.outputs" class="anchor"></a></h2>
 <p>A map of outputs for a called workflow. Called workflow outputs are available to all downstream jobs in the caller workflow. Each output has an identifier, an optional <code>description,</code> and a <code>value.</code> The <code>value</code> must be set to the value of an output from a job within the called workflow.</p>
 <p>In the example below, two outputs are defined for this reusable workflow: <code>workflow_output1</code> and <code>workflow_output2</code>. These are mapped to outputs called <code>job_output1</code> and <code>job_output2</code>, both from a job called <code>my_job</code>.</p>
-<h3 id="example-of-onworkflow_calloutputs" title="Example of on.workflow_call.outputs">Example of <code>on.workflow_call.outputs</code><a href="#example-of-onworkflow_calloutputs" aria-label="Link to heading 'Example of on.workflow_call.outputs'" data-heading-content="Example of on.workflow_call.outputs" class="anchor"></a></h3>
+<h3 id="example-of-onworkflow_calloutputs">Example of <code>on.workflow_call.outputs</code><a href="#example-of-onworkflow_calloutputs" aria-label="Link to heading 'Example of on.workflow_call.outputs'" data-heading-content="Example of on.workflow_call.outputs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_call</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># Map the workflow outputs to job outputs
@@ -370,7 +370,7 @@
 <p>If you are passing the secret to a nested reusable workflow, then you must use <a href="#jobsjob_idsecrets"><code>jobs.&lt;job_id&gt;.secrets</code></a> again to pass the secret. For more information, see <a href="../../how-tos/reuse-automations/reuse-workflows.html#passing-secrets-to-nested-workflows">Reuse workflows</a>.</p>
 </div>
 <p>If a caller workflow passes a secret that is not specified in the called workflow, this results in an error.</p>
-<h3 id="example-of-onworkflow_callsecrets" title="Example of on.workflow_call.secrets">Example of <code>on.workflow_call.secrets</code><a href="#example-of-onworkflow_callsecrets" aria-label="Link to heading 'Example of on.workflow_call.secrets'" data-heading-content="Example of on.workflow_call.secrets" class="anchor"></a></h3>
+<h3 id="example-of-onworkflow_callsecrets">Example of <code>on.workflow_call.secrets</code><a href="#example-of-onworkflow_callsecrets" aria-label="Link to heading 'Example of on.workflow_call.secrets'" data-heading-content="Example of on.workflow_call.secrets" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_call</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">secrets</span><span style="color:#c0c5ce;">:
@@ -446,7 +446,7 @@
 <li>The maximum payload for <code>inputs</code> is 65,535 characters.</li>
 </ul>
 </div>
-<h3 id="example-of-onworkflow_dispatchinputs" title="Example of on.workflow_dispatch.inputs">Example of <code>on.workflow_dispatch.inputs</code><a href="#example-of-onworkflow_dispatchinputs" aria-label="Link to heading 'Example of on.workflow_dispatch.inputs'" data-heading-content="Example of on.workflow_dispatch.inputs" class="anchor"></a></h3>
+<h3 id="example-of-onworkflow_dispatchinputs">Example of <code>on.workflow_dispatch.inputs</code><a href="#example-of-onworkflow_dispatchinputs" aria-label="Link to heading 'Example of on.workflow_dispatch.inputs'" data-heading-content="Example of on.workflow_dispatch.inputs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">inputs</span><span style="color:#c0c5ce;">:
@@ -605,7 +605,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="defining-access-for-the-github_token-scopes" title="permissions / Defining access for the GITHUB_TOKEN scopes">Defining access for the <code>GITHUB_TOKEN</code> scopes<a href="#defining-access-for-the-github_token-scopes" aria-label="Link to heading 'Defining access for the GITHUB_TOKEN scopes'" data-heading-content="Defining access for the GITHUB_TOKEN scopes" class="anchor"></a></h3>
+<h3 id="defining-access-for-the-github_token-scopes">Defining access for the <code>GITHUB_TOKEN</code> scopes<a href="#defining-access-for-the-github_token-scopes" aria-label="Link to heading 'Defining access for the GITHUB_TOKEN scopes'" data-heading-content="Defining access for the GITHUB_TOKEN scopes" class="anchor"></a></h3>
 <p>You can define the access that the <code>GITHUB_TOKEN</code> will permit by specifying <code>read</code>, <code>write</code>, or <code>none</code> as the value of the available permissions within the <code>permissions</code> key.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">actions</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
@@ -637,9 +637,9 @@
 </span></code></pre>
 <h4 id="changing-the-permissions-in-a-forked-repository">Changing the permissions in a forked repository<a href="#changing-the-permissions-in-a-forked-repository" aria-label="Link to heading 'Changing the permissions in a forked repository'" data-heading-content="Changing the permissions in a forked repository" class="anchor"></a></h4>
 <p>You can use the <code>permissions</code> key to add and remove read permissions for forked repositories, but typically you can't grant write access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories" class="external">Managing GitHub Actions settings for a repository</a>.</p>
-<h3 id="how-permissions-are-calculated-for-a-workflow-job" title="How permissions are calculated for a workflow job">How permissions are calculated for a workflow job<a href="#how-permissions-are-calculated-for-a-workflow-job" aria-label="Link to heading 'How permissions are calculated for a workflow job'" data-heading-content="How permissions are calculated for a workflow job" class="anchor"></a></h3>
+<h3 id="how-permissions-are-calculated-for-a-workflow-job">How permissions are calculated for a workflow job<a href="#how-permissions-are-calculated-for-a-workflow-job" aria-label="Link to heading 'How permissions are calculated for a workflow job'" data-heading-content="How permissions are calculated for a workflow job" class="anchor"></a></h3>
 <p>The permissions for the <code>GITHUB_TOKEN</code> are initially set to the default setting for the enterprise, organization, or repository. If the default is set to the restricted permissions at any of these levels then this will apply to the relevant repositories. For example, if you choose the restricted default at the organization level then all repositories in that organization will use the restricted permissions as the default. The permissions are then adjusted based on any configuration within the workflow file, first at the workflow level and then at the job level. Finally, if the workflow was triggered by a pull request event other than <code>pull_request_target</code> from a forked repository, and the <strong>Send write tokens to workflows from pull requests</strong> setting is not selected, the permissions are adjusted to change any write permissions to read only.</p>
-<h3 id="setting-the-github_token-permissions-for-all-jobs-in-a-workflow" title="Setting the GITHUB_TOKEN permissions for all jobs in a workflow">Setting the <code>GITHUB_TOKEN</code> permissions for all jobs in a workflow<a href="#setting-the-github_token-permissions-for-all-jobs-in-a-workflow" aria-label="Link to heading 'Setting the GITHUB_TOKEN permissions for all jobs in a workflow'" data-heading-content="Setting the GITHUB_TOKEN permissions for all jobs in a workflow" class="anchor"></a></h3>
+<h3 id="setting-the-github_token-permissions-for-all-jobs-in-a-workflow">Setting the <code>GITHUB_TOKEN</code> permissions for all jobs in a workflow<a href="#setting-the-github_token-permissions-for-all-jobs-in-a-workflow" aria-label="Link to heading 'Setting the GITHUB_TOKEN permissions for all jobs in a workflow'" data-heading-content="Setting the GITHUB_TOKEN permissions for all jobs in a workflow" class="anchor"></a></h3>
 <p>You can specify <code>permissions</code> at the top level of a workflow, so that the setting applies to all jobs in the workflow.</p>
 <h4 id="example-setting-the-github_token-permissions-for-an-entire-workflow">Example: Setting the <code>GITHUB_TOKEN</code> permissions for an entire workflow<a href="#example-setting-the-github_token-permissions-for-an-entire-workflow" aria-label="Link to heading 'Example: Setting the GITHUB_TOKEN permissions for an entire workflow'" data-heading-content="Example: Setting the GITHUB_TOKEN permissions for an entire workflow" class="anchor"></a></h4>
 <p>This example shows permissions being set for the <code>GITHUB_TOKEN</code> that will apply to all jobs in the workflow. All permissions are granted read access.</p>
@@ -652,15 +652,15 @@
 </span><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#d08770;">...
 </span></code></pre>
-<h3 id="using-the-permissions-key-for-forked-repositories" title="Using the permissions key for forked repositories">Using the <code>permissions</code> key for forked repositories<a href="#using-the-permissions-key-for-forked-repositories" aria-label="Link to heading 'Using the permissions key for forked repositories'" data-heading-content="Using the permissions key for forked repositories" class="anchor"></a></h3>
+<h3 id="using-the-permissions-key-for-forked-repositories">Using the <code>permissions</code> key for forked repositories<a href="#using-the-permissions-key-for-forked-repositories" aria-label="Link to heading 'Using the permissions key for forked repositories'" data-heading-content="Using the permissions key for forked repositories" class="anchor"></a></h3>
 <p>You can use the <code>permissions</code> key to add and remove <code>read</code> permissions for forked repositories, but typically you can't grant <code>write</code> access. The exception to this behavior is where an admin user has selected the <strong>Send write tokens to workflows from pull requests</strong> option in the GitHub Actions settings. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#enabling-workflows-for-forks-of-private-repositories" class="external">Managing GitHub Actions settings for a repository</a>.</p>
-<h3 id="permissions-for-workflow-runs-triggered-by-dependabot" title="permissions / Permissions for workflow runs triggered by Dependabot">Permissions for workflow runs triggered by Dependabot<a href="#permissions-for-workflow-runs-triggered-by-dependabot" aria-label="Link to heading 'Permissions for workflow runs triggered by Dependabot'" data-heading-content="Permissions for workflow runs triggered by Dependabot" class="anchor"></a></h3>
+<h3 id="permissions-for-workflow-runs-triggered-by-dependabot">Permissions for workflow runs triggered by Dependabot<a href="#permissions-for-workflow-runs-triggered-by-dependabot" aria-label="Link to heading 'Permissions for workflow runs triggered by Dependabot'" data-heading-content="Permissions for workflow runs triggered by Dependabot" class="anchor"></a></h3>
 <p>Workflow runs triggered by Dependabot pull requests run as if they are from a forked repository, and therefore use a read-only <code>GITHUB_TOKEN</code>. These workflow runs cannot access any secrets. For information about strategies to keep these workflows secure, see <a href="../security/secure-use.html">Secure use reference</a>.</p>
 <h2 id="env" title="env"><code>env</code><a href="#env" aria-label="Link to heading 'env'" data-heading-content="env" class="anchor"></a></h2>
 <p>A <code>map</code> of variables that are available to the steps of all jobs in the workflow. You can also set variables that are only available to the steps of a single job or to a single step. For more information, see <a href="#jobsjob_idenv"><code>jobs.&lt;job_id&gt;.env</code></a> and <a href="#jobsjob_idstepsenv"><code>jobs.&lt;job_id&gt;.steps[*].env</code></a>.</p>
 <p>Variables in the <code>env</code> map cannot be defined in terms of other variables in the map.</p>
 <p>When more than one environment variable is defined with the same name, GitHub uses the most specific variable. For example, an environment variable defined in a step will override job and workflow environment variables with the same name, while the step executes. An environment variable defined for a job will override a workflow variable with the same name, while the job executes.</p>
-<h3 id="example-of-env" title="Example of env">Example of <code>env</code><a href="#example-of-env" aria-label="Link to heading 'Example of env'" data-heading-content="Example of env" class="anchor"></a></h3>
+<h3 id="example-of-env">Example of <code>env</code><a href="#example-of-env" aria-label="Link to heading 'Example of env'" data-heading-content="Example of env" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">SERVER</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">production
 </span></code></pre>
@@ -670,7 +670,7 @@
 <h2 id="defaultsrun" title="defaults.run"><code>defaults.run</code><a href="#defaultsrun" aria-label="Link to heading 'defaults.run'" data-heading-content="defaults.run" class="anchor"></a></h2>
 <p>You can use <code>defaults.run</code> to provide default <code>shell</code> and <code>working-directory</code> options for all <a href="#jobsjob_idstepsrun"><code>run</code></a> steps in a workflow. You can also set default settings for <code>run</code> that are only available to a job. For more information, see <a href="#jobsjob_iddefaultsrun"><code>jobs.&lt;job_id&gt;.defaults.run</code></a>. You cannot use contexts or expressions in this keyword.</p>
 <p>When more than one default setting is defined with the same name, GitHub uses the most specific default setting. For example, a default setting defined in a job will override a default setting that has the same name defined in a workflow.</p>
-<h3 id="example-set-the-default-shell-and-working-directory" title="defaults.run / Example: Set the default shell and working directory">Example: Set the default shell and working directory<a href="#example-set-the-default-shell-and-working-directory" aria-label="Link to heading 'Example: Set the default shell and working directory'" data-heading-content="Example: Set the default shell and working directory" class="anchor"></a></h3>
+<h3 id="example-set-the-default-shell-and-working-directory">Example: Set the default shell and working directory<a href="#example-set-the-default-shell-and-working-directory" aria-label="Link to heading 'Example: Set the default shell and working directory'" data-heading-content="Example: Set the default shell and working directory" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">defaults</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">bash
@@ -764,7 +764,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <li>Jobs or workflow runs in the same concurrency group are processed in first-in-first-out (FIFO) order according to the time each one started waiting on the concurrency group, not the time each workflow was dispatched. Since the actual start time of a job or run may vary, ordering is not guaranteed.</li>
 </ul>
 </div>
-<h3 id="example-using-concurrency-and-the-default-behavior" title="Example: Using concurrency and the default behavior">Example: Using concurrency and the default behavior<a href="#example-using-concurrency-and-the-default-behavior" aria-label="Link to heading 'Example: Using concurrency and the default behavior'" data-heading-content="Example: Using concurrency and the default behavior" class="anchor"></a></h3>
+<h3 id="example-using-concurrency-and-the-default-behavior">Example: Using concurrency and the default behavior<a href="#example-using-concurrency-and-the-default-behavior" aria-label="Link to heading 'Example: Using concurrency and the default behavior'" data-heading-content="Example: Using concurrency and the default behavior" class="anchor"></a></h3>
 <p>The default behavior of GitHub Actions is to allow multiple jobs or workflow runs to run concurrently. The <code>concurrency</code> keyword allows you to control the concurrency of workflow runs.</p>
 <p>For example, you can use the <code>concurrency</code> keyword immediately after where trigger conditions are defined to limit the concurrency of entire workflow runs for a specific branch:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -789,7 +789,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">example-group
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-concurrency-groups" title="concurrency / Example: Concurrency groups">Example: Concurrency groups<a href="#example-concurrency-groups" aria-label="Link to heading 'Example: Concurrency groups'" data-heading-content="Example: Concurrency groups" class="anchor"></a></h3>
+<h3 id="example-concurrency-groups">Example: Concurrency groups<a href="#example-concurrency-groups" aria-label="Link to heading 'Example: Concurrency groups'" data-heading-content="Example: Concurrency groups" class="anchor"></a></h3>
 <p>Concurrency groups provide a way to manage and limit the execution of workflow runs or jobs that share the same concurrency key.</p>
 <p>The <code>concurrency</code> key is used to group workflows or jobs together into a concurrency group. When you define a <code>concurrency</code> key, GitHub Actions ensures that only one workflow or job with that key runs at any given time. If a new workflow run or job starts with the same <code>concurrency</code> key, GitHub Actions will cancel any workflow or job already running with that key. The <code>concurrency</code> key can be a hard-coded string, or it can be a dynamic expression that includes context variables.</p>
 <p>It is possible to define concurrency conditions in your workflow so that the workflow or job is part of a concurrency group.</p>
@@ -812,7 +812,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ci-${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-queueing-multiple-pending-runs" title="concurrency / Example: Queueing multiple pending runs">Example: Queueing multiple pending runs<a href="#example-queueing-multiple-pending-runs" aria-label="Link to heading 'Example: Queueing multiple pending runs'" data-heading-content="Example: Queueing multiple pending runs" class="anchor"></a></h3>
+<h3 id="example-queueing-multiple-pending-runs">Example: Queueing multiple pending runs<a href="#example-queueing-multiple-pending-runs" aria-label="Link to heading 'Example: Queueing multiple pending runs'" data-heading-content="Example: Queueing multiple pending runs" class="anchor"></a></h3>
 <p>By default, only one job or workflow run can be <code>pending</code> in a concurrency group at a time. To allow multiple runs to queue instead of being canceled, set <code>queue: max</code>. With <code>queue: max</code>, up to 100 jobs or workflow runs can wait in the concurrency group; once the queue is full, any additional runs are canceled.</p>
 <p>For example, the following workflow queues deployments to the <code>production</code> environment, processing them one at a time in order based on when each run started waiting on the concurrency group:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -825,27 +825,27 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">queue</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">max
 </span></code></pre>
 <p>Note that <code>queue: max</code> cannot be combined with <code>cancel-in-progress: true</code>, because the two options describe conflicting behaviors for handling in-progress runs.</p>
-<h3 id="example-using-concurrency-to-cancel-any-in-progress-job-or-run" title="Example: Using concurrency to cancel any in-progress job or run">Example: Using concurrency to cancel any in-progress job or run<a href="#example-using-concurrency-to-cancel-any-in-progress-job-or-run" aria-label="Link to heading 'Example: Using concurrency to cancel any in-progress job or run'" data-heading-content="Example: Using concurrency to cancel any in-progress job or run" class="anchor"></a></h3>
+<h3 id="example-using-concurrency-to-cancel-any-in-progress-job-or-run">Example: Using concurrency to cancel any in-progress job or run<a href="#example-using-concurrency-to-cancel-any-in-progress-job-or-run" aria-label="Link to heading 'Example: Using concurrency to cancel any in-progress job or run'" data-heading-content="Example: Using concurrency to cancel any in-progress job or run" class="anchor"></a></h3>
 <p>To use concurrency to cancel any in-progress job or run in GitHub Actions, you can use the <code>concurrency</code> key with the <code>cancel-in-progress</code> option set to <code>true</code>:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
 <p>Note that in this example, without defining a particular concurrency group, GitHub Actions will cancel <em>any</em> in-progress run of the job or workflow.</p>
-<h3 id="example-using-a-fallback-value" title="concurrency / Example: Using a fallback value">Example: Using a fallback value<a href="#example-using-a-fallback-value" aria-label="Link to heading 'Example: Using a fallback value'" data-heading-content="Example: Using a fallback value" class="anchor"></a></h3>
+<h3 id="example-using-a-fallback-value">Example: Using a fallback value<a href="#example-using-a-fallback-value" aria-label="Link to heading 'Example: Using a fallback value'" data-heading-content="Example: Using a fallback value" class="anchor"></a></h3>
 <p>If you build the group name with a property that is only defined for specific events, you can use a fallback value. For example, <code>github.head_ref</code> is only defined on <code>pull_request</code> events. If your workflow responds to other events in addition to <code>pull_request</code> events, you will need to provide a fallback to avoid a syntax error. The following concurrency group cancels in-progress jobs or runs on <code>pull_request</code> events only; if <code>github.head_ref</code> is undefined, the concurrency group will fallback to the run ID, which is guaranteed to be both unique and defined for the run.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.head_ref || github.run_id }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow" title="concurrency / Example: Only cancel in-progress jobs or runs for the current workflow">Example: Only cancel in-progress jobs or runs for the current workflow<a href="#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow" aria-label="Link to heading 'Example: Only cancel in-progress jobs or runs for the current workflow'" data-heading-content="Example: Only cancel in-progress jobs or runs for the current workflow" class="anchor"></a></h3>
+<h3 id="example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow">Example: Only cancel in-progress jobs or runs for the current workflow<a href="#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow" aria-label="Link to heading 'Example: Only cancel in-progress jobs or runs for the current workflow'" data-heading-content="Example: Only cancel in-progress jobs or runs for the current workflow" class="anchor"></a></h3>
 <p>If you have multiple workflows in the same repository, concurrency group names must be unique across workflows to avoid canceling in-progress jobs or runs from other workflows. Otherwise, any previously in-progress or pending job will be canceled, regardless of the workflow.</p>
 <p>To only cancel in-progress runs of the same workflow, you can use the <code>github.workflow</code> property to build the concurrency group:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.workflow }}-${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-only-cancel-in-progress-jobs-on-specific-branches" title="concurrency / Example: Only cancel in-progress jobs on specific branches">Example: Only cancel in-progress jobs on specific branches<a href="#example-only-cancel-in-progress-jobs-on-specific-branches" aria-label="Link to heading 'Example: Only cancel in-progress jobs on specific branches'" data-heading-content="Example: Only cancel in-progress jobs on specific branches" class="anchor"></a></h3>
+<h3 id="example-only-cancel-in-progress-jobs-on-specific-branches">Example: Only cancel in-progress jobs on specific branches<a href="#example-only-cancel-in-progress-jobs-on-specific-branches" aria-label="Link to heading 'Example: Only cancel in-progress jobs on specific branches'" data-heading-content="Example: Only cancel in-progress jobs on specific branches" class="anchor"></a></h3>
 <p>If you would like to cancel in-progress jobs on certain branches but not on others, you can use conditional expressions with <code>cancel-in-progress</code>. For example, you can do this if you would like to cancel in-progress jobs on development branches but not on release branches.</p>
 <p>To only cancel in-progress runs of the same workflow when not running on a release branch, you can set <code>cancel-in-progress</code> to an expression similar to the following:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
@@ -860,7 +860,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>If you need to find the unique identifier of a job running in a workflow run, you can use the GitHub API. For more information, see <a href="https://docs.github.com/en/rest/actions#workflow-jobs" class="external">REST API endpoints for GitHub Actions</a>.</p>
 <h2 id="jobsjob_id" title="jobs.<job_id>"><code>jobs.&lt;job_id&gt;</code><a href="#jobsjob_id" aria-label="Link to heading 'jobs.<job_id>'" data-heading-content="jobs.<job_id>" class="anchor"></a></h2>
 <p>Use <code>jobs.&lt;job_id&gt;</code> to give your job a unique identifier. The key <code>job_id</code> is a string and its value is a map of the job's configuration data. You must replace <code>&lt;job_id&gt;</code> with a string that is unique to the <code>jobs</code> object. The <code>&lt;job_id&gt;</code> must start with a letter or <code>_</code> and contain only alphanumeric characters, <code>-</code>, or <code>_</code>.</p>
-<h3 id="example-creating-jobs" title="jobs.<job_id> / Example: Creating jobs">Example: Creating jobs<a href="#example-creating-jobs" aria-label="Link to heading 'Example: Creating jobs'" data-heading-content="Example: Creating jobs" class="anchor"></a></h3>
+<h3 id="example-creating-jobs">Example: Creating jobs<a href="#example-creating-jobs" aria-label="Link to heading 'Example: Creating jobs'" data-heading-content="Example: Creating jobs" class="anchor"></a></h3>
 <p>In this example, two jobs have been created, and their <code>job_id</code> values are <code>my_first_job</code> and <code>my_second_job</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
@@ -989,7 +989,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </tr>
 </tbody>
 </table>
-<h3 id="defining-access-for-the-github_token-scopes-1" title="jobs.<job_id>.permissions / Defining access for the GITHUB_TOKEN scopes">Defining access for the <code>GITHUB_TOKEN</code> scopes<a href="#defining-access-for-the-github_token-scopes-1" aria-label="Link to heading 'Defining access for the GITHUB_TOKEN scopes'" data-heading-content="Defining access for the GITHUB_TOKEN scopes" class="anchor"></a></h3>
+<h3 id="defining-access-for-the-github_token-scopes-1">Defining access for the <code>GITHUB_TOKEN</code> scopes<a href="#defining-access-for-the-github_token-scopes-1" aria-label="Link to heading 'Defining access for the GITHUB_TOKEN scopes'" data-heading-content="Defining access for the GITHUB_TOKEN scopes" class="anchor"></a></h3>
 <p>You can define the access that the <code>GITHUB_TOKEN</code> will permit by specifying <code>read</code>, <code>write</code>, or <code>none</code> as the value of the available permissions within the <code>permissions</code> key.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">permissions</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">actions</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">read|write|none
@@ -1036,7 +1036,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idneeds" title="jobs.<job_id>.needs"><code>jobs.&lt;job_id&gt;.needs</code><a href="#jobsjob_idneeds" aria-label="Link to heading 'jobs.<job_id>.needs'" data-heading-content="jobs.<job_id>.needs" class="anchor"></a></h2>
 <p>Use <code>jobs.&lt;job_id&gt;.needs</code> to identify any jobs that must complete successfully before this job will run. It can be a string or array of strings. If a job fails or is skipped, all jobs that need it are skipped unless the jobs use a conditional expression that causes the job to continue. If a run contains a series of jobs that need each other, a failure or skip applies to all jobs in the dependency chain from the point of failure or skip onwards. If you would like a job to run even if a job it is dependent on did not succeed, use the <code>always()</code> conditional expression in <code>jobs.&lt;job_id&gt;.if</code>.</p>
-<h3 id="example-requiring-successful-dependent-jobs" title="jobs.<job_id>.needs / Example: Requiring successful dependent jobs">Example: Requiring successful dependent jobs<a href="#example-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Requiring successful dependent jobs'" data-heading-content="Example: Requiring successful dependent jobs" class="anchor"></a></h3>
+<h3 id="example-requiring-successful-dependent-jobs">Example: Requiring successful dependent jobs<a href="#example-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Requiring successful dependent jobs'" data-heading-content="Example: Requiring successful dependent jobs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job2</span><span style="color:#c0c5ce;">:
@@ -1051,7 +1051,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <li><code>job2</code></li>
 <li><code>job3</code></li>
 </ol>
-<h3 id="example-not-requiring-successful-dependent-jobs" title="jobs.<job_id>.needs / Example: Not requiring successful dependent jobs">Example: Not requiring successful dependent jobs<a href="#example-not-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Not requiring successful dependent jobs'" data-heading-content="Example: Not requiring successful dependent jobs" class="anchor"></a></h3>
+<h3 id="example-not-requiring-successful-dependent-jobs">Example: Not requiring successful dependent jobs<a href="#example-not-requiring-successful-dependent-jobs" aria-label="Link to heading 'Example: Not requiring successful dependent jobs'" data-heading-content="Example: Not requiring successful dependent jobs" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job2</span><span style="color:#c0c5ce;">:
@@ -1072,7 +1072,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ ! startsWith(github.ref, 'refs/tags/') }}
 </span></code></pre>
 <p>For more information, see <a href="expressions.html">Evaluate expressions in workflows and actions</a>.</p>
-<h3 id="example-only-run-job-for-specific-repository" title="jobs.<job_id>.if / Example: Only run job for specific repository">Example: Only run job for specific repository<a href="#example-only-run-job-for-specific-repository" aria-label="Link to heading 'Example: Only run job for specific repository'" data-heading-content="Example: Only run job for specific repository" class="anchor"></a></h3>
+<h3 id="example-only-run-job-for-specific-repository">Example: Only run job for specific repository<a href="#example-only-run-job-for-specific-repository" aria-label="Link to heading 'Example: Only run job for specific repository'" data-heading-content="Example: Only run job for specific repository" class="anchor"></a></h3>
 <p>This example uses <code>if</code> to control when the <code>production-deploy</code> job can run. It will only run if the repository is named <code>octo-repo-prod</code> and is within the <code>octo-org</code> organization. Otherwise, the job will be marked as <em>skipped</em>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">example-workflow
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">push</span><span style="color:#c0c5ce;">]
@@ -1138,11 +1138,11 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>Quotation marks are not required around simple strings like <code>self-hosted</code>, but they are required for expressions like  <code>"${{ inputs.chosen-os }}"</code>.</p>
 </div>
-<h3 id="choosing-github-hosted-runners" title="jobs.<job_id>.runs-on / Choosing GitHub-hosted runners">Choosing GitHub-hosted runners<a href="#choosing-github-hosted-runners" aria-label="Link to heading 'Choosing GitHub-hosted runners'" data-heading-content="Choosing GitHub-hosted runners" class="anchor"></a></h3>
+<h3 id="choosing-github-hosted-runners">Choosing GitHub-hosted runners<a href="#choosing-github-hosted-runners" aria-label="Link to heading 'Choosing GitHub-hosted runners'" data-heading-content="Choosing GitHub-hosted runners" class="anchor"></a></h3>
 <p>If you use a GitHub-hosted runner, each job runs in a fresh instance of a runner image specified by <code>runs-on</code>.</p>
 <p>The value for runs-on, when you are using a GitHub-hosted runner, is a workflow label or the name of a runner group. The labels for the standard GitHub-hosted runners are shown in the following tables.</p>
 <p>For more information, see <a href="../../concepts/runners/github-hosted-runners.html">GitHub-hosted runners</a>.</p>
-<h3 id="standard-github-hosted-runners-for-public-repositories" title="jobs.<job_id>.runs-on / Standard GitHub-hosted runners for public repositories">Standard GitHub-hosted runners for public repositories<a href="#standard-github-hosted-runners-for-public-repositories" aria-label="Link to heading 'Standard GitHub-hosted runners for public repositories'" data-heading-content="Standard GitHub-hosted runners for public repositories" class="anchor"></a></h3>
+<h3 id="standard-github-hosted-runners-for-public-repositories">Standard GitHub-hosted runners for public repositories<a href="#standard-github-hosted-runners-for-public-repositories" aria-label="Link to heading 'Standard GitHub-hosted runners for public repositories'" data-heading-content="Standard GitHub-hosted runners for public repositories" class="anchor"></a></h3>
 <p>For public repositories, jobs using the workflow labels shown in the table below will run with the associated specifications. With the exception of single-CPU runners, each GitHub-hosted runner is a new virtual machine (VM) hosted by GitHub. Single-CPU runners are hosted in a container on a shared VM—see <a href="../runners/github-hosted-runners.html#single-cpu-runners">GitHub-hosted runners reference</a>. Use of the standard GitHub-hosted runners is free and unlimited on public repositories.</p>
 <table style="width:100%">
   <thead>
@@ -1242,7 +1242,7 @@ When more than one default setting is defined with the same name, GitHub uses th
     </tr>
   </tbody>
 </table>
-<h3 id="standard-github-hosted-runners-for--private-repositories" title="jobs.<job_id>.runs-on / Standard GitHub-hosted runners for  private repositories">Standard GitHub-hosted runners for  private repositories<a href="#standard-github-hosted-runners-for--private-repositories" aria-label="Link to heading 'Standard GitHub-hosted runners for  private repositories'" data-heading-content="Standard GitHub-hosted runners for  private repositories" class="anchor"></a></h3>
+<h3 id="standard-github-hosted-runners-for--private-repositories">Standard GitHub-hosted runners for  private repositories<a href="#standard-github-hosted-runners-for--private-repositories" aria-label="Link to heading 'Standard GitHub-hosted runners for  private repositories'" data-heading-content="Standard GitHub-hosted runners for  private repositories" class="anchor"></a></h3>
 <p>For  private repositories, jobs using the workflow labels shown in the table below will run on virtual machines with the associated specifications. These runners use your GitHub account's allotment of free minutes, and are then charged at the per minute rates. See <a href="https://docs.github.com/en/billing/reference/actions-runner-pricing" class="external">Actions runner pricing</a>.</p>
 <table style="width:100%">
   <thead>
@@ -1354,7 +1354,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
 </span></code></pre>
 <p>For more information, see <a href="../../concepts/runners/github-hosted-runners.html">GitHub-hosted runners</a>.</p>
-<h3 id="choosing-self-hosted-runners" title="jobs.<job_id>.runs-on / Choosing self-hosted runners">Choosing self-hosted runners<a href="#choosing-self-hosted-runners" aria-label="Link to heading 'Choosing self-hosted runners'" data-heading-content="Choosing self-hosted runners" class="anchor"></a></h3>
+<h3 id="choosing-self-hosted-runners">Choosing self-hosted runners<a href="#choosing-self-hosted-runners" aria-label="Link to heading 'Choosing self-hosted runners'" data-heading-content="Choosing self-hosted runners" class="anchor"></a></h3>
 <p>To specify a self-hosted runner for your job, configure <code>runs-on</code> in your workflow file with self-hosted runner labels.</p>
 <p>Self-hosted runners may have the <code>self-hosted</code> label. When setting up a self-hosted runner, by default we will include the label <code>self-hosted</code>. You may pass in the <code>--no-default-labels</code> flag to prevent the self-hosted label from being applied. Labels can be used to create targeting options for runners, such as operating system or architecture, we recommend providing an array of labels that begins with <code>self-hosted</code> (this must be listed first) and then includes additional labels as needed. When you specify an array of labels, jobs will be queued on runners that have all the labels that you specify.</p>
 <div class="markdown-alert markdown-alert-note">
@@ -1365,7 +1365,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">self-hosted</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">linux</span><span style="color:#c0c5ce;">]
 </span></code></pre>
 <p>For more information, see <a href="../../concepts/runners/self-hosted-runners.html">Self-hosted runners</a> and <a href="../../how-tos/manage-runners/self-hosted-runners/use-in-a-workflow.html">Using self-hosted runners in a workflow</a>.</p>
-<h3 id="choosing-runners-in-a-group" title="jobs.<job_id>.runs-on / Choosing runners in a group">Choosing runners in a group<a href="#choosing-runners-in-a-group" aria-label="Link to heading 'Choosing runners in a group'" data-heading-content="Choosing runners in a group" class="anchor"></a></h3>
+<h3 id="choosing-runners-in-a-group">Choosing runners in a group<a href="#choosing-runners-in-a-group" aria-label="Link to heading 'Choosing runners in a group'" data-heading-content="Choosing runners in a group" class="anchor"></a></h3>
 <p>You can use <code>runs-on</code> to target runner groups, so that the job will execute on any runner that is a member of that group. For more granular control, you can also combine runner groups with labels.</p>
 <p>Runner groups can only have <a href="../../concepts/runners/larger-runners.html">larger runners</a> or <a href="../../how-tos/manage-runners/self-hosted-runners/index.html">self-hosted runners</a> as members.</p>
 <h4 id="example-using-groups-to-control-where-jobs-are-run">Example: Using groups to control where jobs are run<a href="#example-using-groups-to-control-where-jobs-are-run" aria-label="Link to heading 'Example: Using groups to control where jobs are run'" data-heading-content="Example: Using groups to control where jobs are run" class="anchor"></a></h4>
@@ -1414,26 +1414,26 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>All deployment protection rules must pass before a job referencing the environment is sent to a runner. For more information, see <a href="../../how-tos/deploy/configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a>.</p>
 </div>
-<h3 id="example-using-a-single-environment-name" title="jobs.<job_id>.environment / Example: Using a single environment name">Example: Using a single environment name<a href="#example-using-a-single-environment-name" aria-label="Link to heading 'Example: Using a single environment name'" data-heading-content="Example: Using a single environment name" class="anchor"></a></h3>
+<h3 id="example-using-a-single-environment-name">Example: Using a single environment name<a href="#example-using-a-single-environment-name" aria-label="Link to heading 'Example: Using a single environment name'" data-heading-content="Example: Using a single environment name" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">environment</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">staging_environment
 </span></code></pre>
-<h3 id="example-using-environment-name-and-url" title="jobs.<job_id>.environment / Example: Using environment name and URL">Example: Using environment name and URL<a href="#example-using-environment-name-and-url" aria-label="Link to heading 'Example: Using environment name and URL'" data-heading-content="Example: Using environment name and URL" class="anchor"></a></h3>
+<h3 id="example-using-environment-name-and-url">Example: Using environment name and URL<a href="#example-using-environment-name-and-url" aria-label="Link to heading 'Example: Using environment name and URL'" data-heading-content="Example: Using environment name and URL" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">environment</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">production_environment
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">https://github.com
 </span></code></pre>
 <p>The value of <code>url</code> can be an expression. Allowed expression contexts: <a href="contexts.html#github-context"><code>github</code></a>, <a href="contexts.html#inputs-context"><code>inputs</code></a>, <a href="contexts.html#vars-context"><code>vars</code></a>, <a href="contexts.html#needs-context"><code>needs</code></a>, <a href="contexts.html#strategy-context"><code>strategy</code></a>, <a href="contexts.html#matrix-context"><code>matrix</code></a>, <a href="contexts.html#job-context"><code>job</code></a>, <a href="contexts.html#runner-context"><code>runner</code></a>, <a href="contexts.html#env-context"><code>env</code></a>, and <a href="contexts.html#steps-context"><code>steps</code></a>. For more information about expressions, see <a href="expressions.html">Evaluate expressions in workflows and actions</a>.</p>
-<h3 id="example-using-output-as-url" title="jobs.<job_id>.environment / Example: Using output as URL">Example: Using output as URL<a href="#example-using-output-as-url" aria-label="Link to heading 'Example: Using output as URL'" data-heading-content="Example: Using output as URL" class="anchor"></a></h3>
+<h3 id="example-using-output-as-url">Example: Using output as URL<a href="#example-using-output-as-url" aria-label="Link to heading 'Example: Using output as URL'" data-heading-content="Example: Using output as URL" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">environment</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">production_environment
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">url</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.step_id.outputs.url_output }}
 </span></code></pre>
 <p>The value of <code>name</code> can be an expression. Allowed expression contexts: <a href="contexts.html#github-context"><code>github</code></a>, <a href="contexts.html#inputs-context"><code>inputs</code></a>, <a href="contexts.html#vars-context"><code>vars</code></a>, <a href="contexts.html#needs-context"><code>needs</code></a>, <a href="contexts.html#strategy-context"><code>strategy</code></a>, and <a href="contexts.html#matrix-context"><code>matrix</code></a>. For more information about expressions, see <a href="expressions.html">Evaluate expressions in workflows and actions</a>.</p>
-<h3 id="example-using-an-expression-as-environment-name" title="jobs.<job_id>.environment / Example: Using an expression as environment name">Example: Using an expression as environment name<a href="#example-using-an-expression-as-environment-name" aria-label="Link to heading 'Example: Using an expression as environment name'" data-heading-content="Example: Using an expression as environment name" class="anchor"></a></h3>
+<h3 id="example-using-an-expression-as-environment-name">Example: Using an expression as environment name<a href="#example-using-an-expression-as-environment-name" aria-label="Link to heading 'Example: Using an expression as environment name'" data-heading-content="Example: Using an expression as environment name" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">environment</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.ref_name }}
 </span></code></pre>
-<h3 id="example-using-an-environment-without-creating-a-deployment" title="jobs.<job_id>.environment / Example: Using an environment without creating a deployment">Example: Using an environment without creating a deployment<a href="#example-using-an-environment-without-creating-a-deployment" aria-label="Link to heading 'Example: Using an environment without creating a deployment'" data-heading-content="Example: Using an environment without creating a deployment" class="anchor"></a></h3>
+<h3 id="example-using-an-environment-without-creating-a-deployment">Example: Using an environment without creating a deployment<a href="#example-using-an-environment-without-creating-a-deployment" aria-label="Link to heading 'Example: Using an environment without creating a deployment'" data-heading-content="Example: Using an environment without creating a deployment" class="anchor"></a></h3>
 <p>Set <code>deployment</code> to <code>false</code> to use an environment's secrets and variables without creating a deployment object.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">environment</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">testing
@@ -1459,7 +1459,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 <li>Jobs or workflow runs in the same concurrency group are processed in first-in-first-out (FIFO) order according to the time each one started waiting on the concurrency group, not the time each workflow was dispatched. Since the actual start time of a job or run may vary, ordering is not guaranteed.</li>
 </ul>
 </div>
-<h3 id="example-using-concurrency-and-the-default-behavior-1" title="jobs.<job_id>.concurrency / Example: Using concurrency and the default behavior">Example: Using concurrency and the default behavior<a href="#example-using-concurrency-and-the-default-behavior-1" aria-label="Link to heading 'Example: Using concurrency and the default behavior'" data-heading-content="Example: Using concurrency and the default behavior" class="anchor"></a></h3>
+<h3 id="example-using-concurrency-and-the-default-behavior-1">Example: Using concurrency and the default behavior<a href="#example-using-concurrency-and-the-default-behavior-1" aria-label="Link to heading 'Example: Using concurrency and the default behavior'" data-heading-content="Example: Using concurrency and the default behavior" class="anchor"></a></h3>
 <p>The default behavior of GitHub Actions is to allow multiple jobs or workflow runs to run concurrently. The <code>concurrency</code> keyword allows you to control the concurrency of workflow runs.</p>
 <p>For example, you can use the <code>concurrency</code> keyword immediately after where trigger conditions are defined to limit the concurrency of entire workflow runs for a specific branch:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -1484,7 +1484,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">example-group
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-concurrency-groups-1" title="jobs.<job_id>.concurrency / Example: Concurrency groups">Example: Concurrency groups<a href="#example-concurrency-groups-1" aria-label="Link to heading 'Example: Concurrency groups'" data-heading-content="Example: Concurrency groups" class="anchor"></a></h3>
+<h3 id="example-concurrency-groups-1">Example: Concurrency groups<a href="#example-concurrency-groups-1" aria-label="Link to heading 'Example: Concurrency groups'" data-heading-content="Example: Concurrency groups" class="anchor"></a></h3>
 <p>Concurrency groups provide a way to manage and limit the execution of workflow runs or jobs that share the same concurrency key.</p>
 <p>The <code>concurrency</code> key is used to group workflows or jobs together into a concurrency group. When you define a <code>concurrency</code> key, GitHub Actions ensures that only one workflow or job with that key runs at any given time. If a new workflow run or job starts with the same <code>concurrency</code> key, GitHub Actions will cancel any workflow or job already running with that key. The <code>concurrency</code> key can be a hard-coded string, or it can be a dynamic expression that includes context variables.</p>
 <p>It is possible to define concurrency conditions in your workflow so that the workflow or job is part of a concurrency group.</p>
@@ -1507,7 +1507,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ci-${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-queueing-multiple-pending-runs-1" title="jobs.<job_id>.concurrency / Example: Queueing multiple pending runs">Example: Queueing multiple pending runs<a href="#example-queueing-multiple-pending-runs-1" aria-label="Link to heading 'Example: Queueing multiple pending runs'" data-heading-content="Example: Queueing multiple pending runs" class="anchor"></a></h3>
+<h3 id="example-queueing-multiple-pending-runs-1">Example: Queueing multiple pending runs<a href="#example-queueing-multiple-pending-runs-1" aria-label="Link to heading 'Example: Queueing multiple pending runs'" data-heading-content="Example: Queueing multiple pending runs" class="anchor"></a></h3>
 <p>By default, only one job or workflow run can be <code>pending</code> in a concurrency group at a time. To allow multiple runs to queue instead of being canceled, set <code>queue: max</code>. With <code>queue: max</code>, up to 100 jobs or workflow runs can wait in the concurrency group; once the queue is full, any additional runs are canceled.</p>
 <p>For example, the following workflow queues deployments to the <code>production</code> environment, processing them one at a time in order based on when each run started waiting on the concurrency group:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -1520,27 +1520,27 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">queue</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">max
 </span></code></pre>
 <p>Note that <code>queue: max</code> cannot be combined with <code>cancel-in-progress: true</code>, because the two options describe conflicting behaviors for handling in-progress runs.</p>
-<h3 id="example-using-concurrency-to-cancel-any-in-progress-job-or-run-1" title="jobs.<job_id>.concurrency / Example: Using concurrency to cancel any in-progress job or run">Example: Using concurrency to cancel any in-progress job or run<a href="#example-using-concurrency-to-cancel-any-in-progress-job-or-run-1" aria-label="Link to heading 'Example: Using concurrency to cancel any in-progress job or run'" data-heading-content="Example: Using concurrency to cancel any in-progress job or run" class="anchor"></a></h3>
+<h3 id="example-using-concurrency-to-cancel-any-in-progress-job-or-run-1">Example: Using concurrency to cancel any in-progress job or run<a href="#example-using-concurrency-to-cancel-any-in-progress-job-or-run-1" aria-label="Link to heading 'Example: Using concurrency to cancel any in-progress job or run'" data-heading-content="Example: Using concurrency to cancel any in-progress job or run" class="anchor"></a></h3>
 <p>To use concurrency to cancel any in-progress job or run in GitHub Actions, you can use the <code>concurrency</code> key with the <code>cancel-in-progress</code> option set to <code>true</code>:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
 <p>Note that in this example, without defining a particular concurrency group, GitHub Actions will cancel <em>any</em> in-progress run of the job or workflow.</p>
-<h3 id="example-using-a-fallback-value-1" title="jobs.<job_id>.concurrency / Example: Using a fallback value">Example: Using a fallback value<a href="#example-using-a-fallback-value-1" aria-label="Link to heading 'Example: Using a fallback value'" data-heading-content="Example: Using a fallback value" class="anchor"></a></h3>
+<h3 id="example-using-a-fallback-value-1">Example: Using a fallback value<a href="#example-using-a-fallback-value-1" aria-label="Link to heading 'Example: Using a fallback value'" data-heading-content="Example: Using a fallback value" class="anchor"></a></h3>
 <p>If you build the group name with a property that is only defined for specific events, you can use a fallback value. For example, <code>github.head_ref</code> is only defined on <code>pull_request</code> events. If your workflow responds to other events in addition to <code>pull_request</code> events, you will need to provide a fallback to avoid a syntax error. The following concurrency group cancels in-progress jobs or runs on <code>pull_request</code> events only; if <code>github.head_ref</code> is undefined, the concurrency group will fallback to the run ID, which is guaranteed to be both unique and defined for the run.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.head_ref || github.run_id }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow-1" title="jobs.<job_id>.concurrency / Example: Only cancel in-progress jobs or runs for the current workflow">Example: Only cancel in-progress jobs or runs for the current workflow<a href="#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow-1" aria-label="Link to heading 'Example: Only cancel in-progress jobs or runs for the current workflow'" data-heading-content="Example: Only cancel in-progress jobs or runs for the current workflow" class="anchor"></a></h3>
+<h3 id="example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow-1">Example: Only cancel in-progress jobs or runs for the current workflow<a href="#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow-1" aria-label="Link to heading 'Example: Only cancel in-progress jobs or runs for the current workflow'" data-heading-content="Example: Only cancel in-progress jobs or runs for the current workflow" class="anchor"></a></h3>
 <p>If you have multiple workflows in the same repository, concurrency group names must be unique across workflows to avoid canceling in-progress jobs or runs from other workflows. Otherwise, any previously in-progress or pending job will be canceled, regardless of the workflow.</p>
 <p>To only cancel in-progress runs of the same workflow, you can use the <code>github.workflow</code> property to build the concurrency group:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">group</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.workflow }}-${{ github.ref }}
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">cancel-in-progress</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h3 id="example-only-cancel-in-progress-jobs-on-specific-branches-1" title="jobs.<job_id>.concurrency / Example: Only cancel in-progress jobs on specific branches">Example: Only cancel in-progress jobs on specific branches<a href="#example-only-cancel-in-progress-jobs-on-specific-branches-1" aria-label="Link to heading 'Example: Only cancel in-progress jobs on specific branches'" data-heading-content="Example: Only cancel in-progress jobs on specific branches" class="anchor"></a></h3>
+<h3 id="example-only-cancel-in-progress-jobs-on-specific-branches-1">Example: Only cancel in-progress jobs on specific branches<a href="#example-only-cancel-in-progress-jobs-on-specific-branches-1" aria-label="Link to heading 'Example: Only cancel in-progress jobs on specific branches'" data-heading-content="Example: Only cancel in-progress jobs on specific branches" class="anchor"></a></h3>
 <p>If you would like to cancel in-progress jobs on certain branches but not on others, you can use conditional expressions with <code>cancel-in-progress</code>. For example, you can do this if you would like to cancel in-progress jobs on development branches but not on release branches.</p>
 <p>To only cancel in-progress runs of the same workflow when not running on a release branch, you can set <code>cancel-in-progress</code> to an expression similar to the following:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">concurrency</span><span style="color:#c0c5ce;">:
@@ -1554,7 +1554,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 <p>Job outputs containing expressions are evaluated on the runner at the end of each job. Outputs containing secrets are redacted on the runner and not sent to GitHub Actions.</p>
 <p>If an output is skipped because it may contain a secret, you will see the following warning message: "Skip output <code>{output.Key}</code> since it may contain secret." For more information on how to handle secrets, please refer to the <a href="workflow-commands.html#example-masking-and-passing-a-secret-between-jobs-or-workflows">Example: Masking and passing a secret between jobs or workflows</a>.</p>
 <p>To use job outputs in a dependent job, you can use the <code>needs</code> context. For more information, see <a href="contexts.html#needs-context">Contexts reference</a>.</p>
-<h3 id="example-defining-outputs-for-a-job" title="jobs.<job_id>.outputs / Example: Defining outputs for a job">Example: Defining outputs for a job<a href="#example-defining-outputs-for-a-job" aria-label="Link to heading 'Example: Defining outputs for a job'" data-heading-content="Example: Defining outputs for a job" class="anchor"></a></h3>
+<h3 id="example-defining-outputs-for-a-job">Example: Defining outputs for a job<a href="#example-defining-outputs-for-a-job" aria-label="Link to heading 'Example: Defining outputs for a job'" data-heading-content="Example: Defining outputs for a job" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
@@ -1576,7 +1576,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">OUTPUT2</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{needs.job1.outputs.output2}}
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "$OUTPUT1 $OUTPUT2"
 </span></code></pre>
-<h3 id="using-job-outputs-in-a-matrix-job" title="jobs.<job_id>.outputs / Using Job Outputs in a Matrix Job">Using Job Outputs in a Matrix Job<a href="#using-job-outputs-in-a-matrix-job" aria-label="Link to heading 'Using Job Outputs in a Matrix Job'" data-heading-content="Using Job Outputs in a Matrix Job" class="anchor"></a></h3>
+<h3 id="using-job-outputs-in-a-matrix-job">Using Job Outputs in a Matrix Job<a href="#using-job-outputs-in-a-matrix-job" aria-label="Link to heading 'Using Job Outputs in a Matrix Job'" data-heading-content="Using Job Outputs in a Matrix Job" class="anchor"></a></h3>
 <p>Matrices can be used to generate multiple outputs of different names. When using a matrix, job outputs will be combined from all jobs inside the matrix.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
@@ -1613,7 +1613,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 <h2 id="jobsjob_idenv" title="jobs.<job_id>.env"><code>jobs.&lt;job_id&gt;.env</code><a href="#jobsjob_idenv" aria-label="Link to heading 'jobs.<job_id>.env'" data-heading-content="jobs.<job_id>.env" class="anchor"></a></h2>
 <p>A <code>map</code> of variables that are available to all steps in the job. You can set variables for the entire workflow or an individual step. For more information, see <a href="#env"><code>env</code></a> and <a href="#jobsjob_idstepsenv"><code>jobs.&lt;job_id&gt;.steps[*].env</code></a>.</p>
 <p>When more than one environment variable is defined with the same name, GitHub uses the most specific variable. For example, an environment variable defined in a step will override job and workflow environment variables with the same name, while the step executes. An environment variable defined for a job will override a workflow variable with the same name, while the job executes.</p>
-<h3 id="example-of-jobsjob_idenv" title="Example of jobs.<job_id>.env">Example of <code>jobs.&lt;job_id&gt;.env</code><a href="#example-of-jobsjob_idenv" aria-label="Link to heading 'Example of jobs.<job_id>.env'" data-heading-content="Example of jobs.<job_id>.env" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idenv">Example of <code>jobs.&lt;job_id&gt;.env</code><a href="#example-of-jobsjob_idenv" aria-label="Link to heading 'Example of jobs.<job_id>.env'" data-heading-content="Example of jobs.<job_id>.env" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
@@ -1697,7 +1697,7 @@ For more information, see <a href="../../how-tos/deploy/configure-and-manage-dep
 <p>Ensure the <code>working-directory</code> you assign exists on the runner before you run your shell in it.<br>
 When more than one default setting is defined with the same name, GitHub uses the most specific default setting. For example, a default setting defined in a job will override a default setting that has the same name defined in a workflow.</p>
 </div>
-<h3 id="example-setting-default-run-step-options-for-a-job" title="jobs.<job_id>.defaults.run.working-directory / Example: Setting default run step options for a job">Example: Setting default <code>run</code> step options for a job<a href="#example-setting-default-run-step-options-for-a-job" aria-label="Link to heading 'Example: Setting default run step options for a job'" data-heading-content="Example: Setting default run step options for a job" class="anchor"></a></h3>
+<h3 id="example-setting-default-run-step-options-for-a-job">Example: Setting default <code>run</code> step options for a job<a href="#example-setting-default-run-step-options-for-a-job" aria-label="Link to heading 'Example: Setting default run step options for a job'" data-heading-content="Example: Setting default run step options for a job" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">job1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ubuntu-latest
@@ -1709,7 +1709,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <h2 id="jobsjob_idsteps" title="jobs.<job_id>.steps"><code>jobs.&lt;job_id&gt;.steps</code><a href="#jobsjob_idsteps" aria-label="Link to heading 'jobs.<job_id>.steps'" data-heading-content="jobs.<job_id>.steps" class="anchor"></a></h2>
 <p>A job contains a sequence of tasks called <code>steps</code>. Steps can run commands, run setup tasks, or run an action in your repository, a public repository, or an action published in a Docker registry. Not all steps run actions, but all actions run as a step. Each step runs in its own process in the runner environment and has access to the workspace and filesystem. Because steps run in their own process, changes to environment variables are not preserved between steps. GitHub provides built-in steps to set up and complete a job.</p>
 <p>GitHub only displays the first 1,000 checks, however, you can run an unlimited number of steps as long as you are within the workflow usage limits. For more information, see <a href="../../concepts/billing-and-usage.html">Billing and usage</a> for GitHub-hosted runners and <a href="../limits.html">Actions limits</a> for self-hosted runner usage limits.</p>
-<h3 id="example-of-jobsjob_idsteps" title="Example of jobs.<job_id>.steps">Example of <code>jobs.&lt;job_id&gt;.steps</code><a href="#example-of-jobsjob_idsteps" aria-label="Link to heading 'Example of jobs.<job_id>.steps'" data-heading-content="Example of jobs.<job_id>.steps" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idsteps">Example of <code>jobs.&lt;job_id&gt;.steps</code><a href="#example-of-jobsjob_idsteps" aria-label="Link to heading 'Example of jobs.<job_id>.steps'" data-heading-content="Example of jobs.<job_id>.steps" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Greeting from Mona
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1737,14 +1737,14 @@ When more than one default setting is defined with the same name, GitHub uses th
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ ! startsWith(github.ref, 'refs/tags/') }}
 </span></code></pre>
 <p>For more information, see <a href="expressions.html">Evaluate expressions in workflows and actions</a>.</p>
-<h3 id="example-using-contexts" title="jobs.<job_id>.steps[*].if / Example: Using contexts">Example: Using contexts<a href="#example-using-contexts" aria-label="Link to heading 'Example: Using contexts'" data-heading-content="Example: Using contexts" class="anchor"></a></h3>
+<h3 id="example-using-contexts">Example: Using contexts<a href="#example-using-contexts" aria-label="Link to heading 'Example: Using contexts'" data-heading-content="Example: Using contexts" class="anchor"></a></h3>
 <p>This step only runs when the event type is a <code>pull_request</code> and the event action is <code>unassigned</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ github.event_name == 'pull_request' &amp;&amp; github.event.action == 'unassigned' }}
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo This event is a pull request that had an assignee removed.
 </span></code></pre>
-<h3 id="example-using-status-check-functions" title="jobs.<job_id>.steps[*].if / Example: Using status check functions">Example: Using status check functions<a href="#example-using-status-check-functions" aria-label="Link to heading 'Example: Using status check functions'" data-heading-content="Example: Using status check functions" class="anchor"></a></h3>
+<h3 id="example-using-status-check-functions">Example: Using status check functions<a href="#example-using-status-check-functions" aria-label="Link to heading 'Example: Using status check functions'" data-heading-content="Example: Using status check functions" class="anchor"></a></h3>
 <p>The <code>my backup step</code> only runs when the previous step of a job fails. For more information, see <a href="expressions.html#status-check-functions">Evaluate expressions in workflows and actions</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
@@ -1753,7 +1753,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">if</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ failure() }}
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/heroku@1.0.0
 </span></code></pre>
-<h3 id="example-using-secrets" title="jobs.<job_id>.steps[*].if / Example: Using secrets">Example: Using secrets<a href="#example-using-secrets" aria-label="Link to heading 'Example: Using secrets'" data-heading-content="Example: Using secrets" class="anchor"></a></h3>
+<h3 id="example-using-secrets">Example: Using secrets<a href="#example-using-secrets" aria-label="Link to heading 'Example: Using secrets'" data-heading-content="Example: Using secrets" class="anchor"></a></h3>
 <p>Secrets cannot be directly referenced in <code>if:</code> conditionals. Instead, consider setting secrets as job-level environment variables, then referencing the environment variables to conditionally run steps in the job.</p>
 <p>If a secret has not been set, the return value of an expression referencing the secret (such as <code>${{ secrets.SuperSecret }}</code> in the example) will be an empty string.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run a step if a secret has been set
@@ -1782,7 +1782,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </ul>
 <p>Some actions require inputs that you must set using the <a href="#jobsjob_idstepswith"><code>with</code></a> keyword. Review the action's README file to determine the inputs required.</p>
 <p>Actions are either JavaScript files or Docker containers. If the action you're using is a Docker container you must run the job in a Linux environment. For more details, see <a href="#jobsjob_idruns-on"><code>runs-on</code></a>.</p>
-<h3 id="example-using-versioned-actions" title="jobs.<job_id>.steps[*].uses / Example: Using versioned actions">Example: Using versioned actions<a href="#example-using-versioned-actions" aria-label="Link to heading 'Example: Using versioned actions'" data-heading-content="Example: Using versioned actions" class="anchor"></a></h3>
+<h3 id="example-using-versioned-actions">Example: Using versioned actions<a href="#example-using-versioned-actions" aria-label="Link to heading 'Example: Using versioned actions'" data-heading-content="Example: Using versioned actions" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># Reference a specific commit
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
@@ -1793,7 +1793,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">  </span><span style="color:#65737e;"># Reference a branch
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@main
 </span></code></pre>
-<h3 id="example-using-a-public-action" title="jobs.<job_id>.steps[*].uses / Example: Using a public action">Example: Using a public action<a href="#example-using-a-public-action" aria-label="Link to heading 'Example: Using a public action'" data-heading-content="Example: Using a public action" class="anchor"></a></h3>
+<h3 id="example-using-a-public-action">Example: Using a public action<a href="#example-using-a-public-action" aria-label="Link to heading 'Example: Using a public action'" data-heading-content="Example: Using a public action" class="anchor"></a></h3>
 <p><code>{owner}/{repo}@{ref}</code></p>
 <p>You can specify a branch, ref, or SHA in a public GitHub repository.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1806,7 +1806,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">        </span><span style="color:#65737e;"># Uses a specific version tag of a public repository
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/aws@v2.0.1
 </span></code></pre>
-<h3 id="example-using-a-public-action-in-a-subdirectory" title="jobs.<job_id>.steps[*].uses / Example: Using a public action in a subdirectory">Example: Using a public action in a subdirectory<a href="#example-using-a-public-action-in-a-subdirectory" aria-label="Link to heading 'Example: Using a public action in a subdirectory'" data-heading-content="Example: Using a public action in a subdirectory" class="anchor"></a></h3>
+<h3 id="example-using-a-public-action-in-a-subdirectory">Example: Using a public action in a subdirectory<a href="#example-using-a-public-action-in-a-subdirectory" aria-label="Link to heading 'Example: Using a public action in a subdirectory'" data-heading-content="Example: Using a public action in a subdirectory" class="anchor"></a></h3>
 <p><code>{owner}/{repo}/{path}@{ref}</code></p>
 <p>A subdirectory in a public GitHub repository at a specific branch, ref, or SHA.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1815,7 +1815,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/aws/ec2@main
 </span></code></pre>
-<h3 id="example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended" title="jobs.<job_id>.steps[*].uses / Example: Using an action in the same repository as the workflow at the running commit (recommended)">Example: Using an action in the same repository as the workflow at the running commit (recommended)<a href="#example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow at the running commit (recommended)'" data-heading-content="Example: Using an action in the same repository as the workflow at the running commit (recommended)" class="anchor"></a></h3>
+<h3 id="example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended">Example: Using an action in the same repository as the workflow at the running commit (recommended)<a href="#example-using-an-action-in-the-same-repository-as-the-workflow-at-the-running-commit-recommended" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow at the running commit (recommended)'" data-heading-content="Example: Using an action in the same repository as the workflow at the running commit (recommended)" class="anchor"></a></h3>
 <p><code>$/path/to/action</code></p>
 <p>The <code>$/</code> prefix is the self repository reference. It references an action stored in the same repository as the workflow or action that is currently running, and resolves to that repository at the running commit (the same SHA as the running workflow or action). You do not need to check out the repository first, so it is the recommended way to reference an action within its own repository.</p>
 <p>The <code>$/</code> syntax is not available in GitHub Enterprise Server.</p>
@@ -1832,17 +1832,17 @@ When more than one default setting is defined with the same name, GitHub uses th
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">$/path/to/action</code></td>
+<td><code>$/path/to/action</code></td>
 <td>The same repository as the running workflow or action, at the running commit</td>
 <td>Actions in the same repository</td>
 </tr>
 <tr>
-<td><code class="keyword">{owner}/{repo}@{ref}</code></td>
+<td><code>{owner}/{repo}@{ref}</code></td>
 <td>The specified repository at the specified ref</td>
 <td>Actions in another repository</td>
 </tr>
 <tr>
-<td><code class="keyword">./path/to/action</code></td>
+<td><code>./path/to/action</code></td>
 <td>A path in the runner's checked-out workspace, relative to the default working directory (<code>${{ github.workspace }}</code>)</td>
 <td>Edge cases only</td>
 </tr>
@@ -1857,7 +1857,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># References an action in the same repository at the running commit
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">$/.github/actions/hello-world-action
 </span></code></pre>
-<h3 id="example-using-an-action-in-the-same-repository-as-the-workflow" title="jobs.<job_id>.steps[*].uses / Example: Using an action in the same repository as the workflow">Example: Using an action in the same repository as the workflow<a href="#example-using-an-action-in-the-same-repository-as-the-workflow" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow'" data-heading-content="Example: Using an action in the same repository as the workflow" class="anchor"></a></h3>
+<h3 id="example-using-an-action-in-the-same-repository-as-the-workflow">Example: Using an action in the same repository as the workflow<a href="#example-using-an-action-in-the-same-repository-as-the-workflow" aria-label="Link to heading 'Example: Using an action in the same repository as the workflow'" data-heading-content="Example: Using an action in the same repository as the workflow" class="anchor"></a></h3>
 <p><code>./path/to/dir</code></p>
 <p>The path to the directory that contains the action in your workflow's repository. You must check out your repository before using the action, and the <code>./</code> path resolves against the runner's workspace rather than the repository of the running workflow. For most cases, use the <code>$/</code> syntax shown above instead.</p>
 <p>Example repository file structure:</p>
@@ -1882,7 +1882,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Use local hello-world-action
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">./.github/actions/hello-world-action
 </span></code></pre>
-<h3 id="example-using-a-docker-hub-action" title="jobs.<job_id>.steps[*].uses / Example: Using a Docker Hub action">Example: Using a Docker Hub action<a href="#example-using-a-docker-hub-action" aria-label="Link to heading 'Example: Using a Docker Hub action'" data-heading-content="Example: Using a Docker Hub action" class="anchor"></a></h3>
+<h3 id="example-using-a-docker-hub-action">Example: Using a Docker Hub action<a href="#example-using-a-docker-hub-action" aria-label="Link to heading 'Example: Using a Docker Hub action'" data-heading-content="Example: Using a Docker Hub action" class="anchor"></a></h3>
 <p><code>docker://{image}:{tag}</code></p>
 <p>A Docker image published on <a href="https://hub.docker.com/" class="external">Docker Hub</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1891,7 +1891,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">docker://alpine:3.8
 </span></code></pre>
-<h3 id="example-using-the-github-packages-container-registry" title="jobs.<job_id>.steps[*].uses / Example: Using the GitHub Packages Container registry">Example: Using the GitHub Packages Container registry<a href="#example-using-the-github-packages-container-registry" aria-label="Link to heading 'Example: Using the GitHub Packages Container registry'" data-heading-content="Example: Using the GitHub Packages Container registry" class="anchor"></a></h3>
+<h3 id="example-using-the-github-packages-container-registry">Example: Using the GitHub Packages Container registry<a href="#example-using-the-github-packages-container-registry" aria-label="Link to heading 'Example: Using the GitHub Packages Container registry'" data-heading-content="Example: Using the GitHub Packages Container registry" class="anchor"></a></h3>
 <p><code>docker://{host}/{image}:{tag}</code></p>
 <p>A public Docker image in the GitHub Packages Container registry.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1900,7 +1900,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">docker://ghcr.io/OWNER/IMAGE_NAME
 </span></code></pre>
-<h3 id="example-using-a-docker-public-registry-action" title="jobs.<job_id>.steps[*].uses / Example: Using a Docker public registry action">Example: Using a Docker public registry action<a href="#example-using-a-docker-public-registry-action" aria-label="Link to heading 'Example: Using a Docker public registry action'" data-heading-content="Example: Using a Docker public registry action" class="anchor"></a></h3>
+<h3 id="example-using-a-docker-public-registry-action">Example: Using a Docker public registry action<a href="#example-using-a-docker-public-registry-action" aria-label="Link to heading 'Example: Using a Docker public registry action'" data-heading-content="Example: Using a Docker public registry action" class="anchor"></a></h3>
 <p><code>docker://{host}/{image}:{tag}</code></p>
 <p>A Docker image in a public registry. This example uses the Google Container Registry at <code>gcr.io</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
@@ -1909,7 +1909,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first step
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">docker://gcr.io/cloud-builders/gradle
 </span></code></pre>
-<h3 id="example-using-an-action-inside-a-different-private-repository-than-the-workflow" title="jobs.<job_id>.steps[*].uses / Example: Using an action inside a different private repository than the workflow">Example: Using an action inside a different private repository than the workflow<a href="#example-using-an-action-inside-a-different-private-repository-than-the-workflow" aria-label="Link to heading 'Example: Using an action inside a different private repository than the workflow'" data-heading-content="Example: Using an action inside a different private repository than the workflow" class="anchor"></a></h3>
+<h3 id="example-using-an-action-inside-a-different-private-repository-than-the-workflow">Example: Using an action inside a different private repository than the workflow<a href="#example-using-an-action-inside-a-different-private-repository-than-the-workflow" aria-label="Link to heading 'Example: Using an action inside a different private repository than the workflow'" data-heading-content="Example: Using an action inside a different private repository than the workflow" class="anchor"></a></h3>
 <p>If the action is in an internal repository, or in a private repository configured to allow access from your workflow's repository, you can reference the action directly. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository" class="external">Managing GitHub Actions settings for a repository</a> and <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#allowing-access-to-components-in-a-private-repository" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <p>If the action isn't in a repository configured to allow access, you need to check out the repository and reference the action locally. Generate a personal access token and add the token as a secret. The following example shows this method for referencing an action. For more information, see <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" class="external">Managing your personal access tokens</a> and <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 <p>Replace <code>PERSONAL_ACCESS_TOKEN</code> in the example with the name of your secret.</p>
@@ -2018,31 +2018,31 @@ When more than one default setting is defined with the same name, GitHub uses th
 </tbody>
 </table>
 <p>Alternatively, you can specify a default shell for all <code>run</code> steps in a job, or for all <code>run</code> steps in the entire workflow. For more information, see <a href="#defaultsrunshell"><code>defaults.run.shell</code></a> and <a href="#jobsjob_iddefaultsrunshell"><code>jobs.&lt;job_id&gt;.defaults.run.shell</code></a>.</p>
-<h3 id="example-running-a-command-using-bash" title="jobs.<job_id>.steps[*].shell / Example: Running a command using Bash">Example: Running a command using Bash<a href="#example-running-a-command-using-bash" aria-label="Link to heading 'Example: Running a command using Bash'" data-heading-content="Example: Running a command using Bash" class="anchor"></a></h3>
+<h3 id="example-running-a-command-using-bash">Example: Running a command using Bash<a href="#example-running-a-command-using-bash" aria-label="Link to heading 'Example: Running a command using Bash'" data-heading-content="Example: Running a command using Bash" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Display the path
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">bash
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo $PATH
 </span></code></pre>
-<h3 id="example-running-a-command-using-windows-cmd" title="jobs.<job_id>.steps[*].shell / Example: Running a command using Windows cmd">Example: Running a command using Windows <code>cmd</code><a href="#example-running-a-command-using-windows-cmd" aria-label="Link to heading 'Example: Running a command using Windows cmd'" data-heading-content="Example: Running a command using Windows cmd" class="anchor"></a></h3>
+<h3 id="example-running-a-command-using-windows-cmd">Example: Running a command using Windows <code>cmd</code><a href="#example-running-a-command-using-windows-cmd" aria-label="Link to heading 'Example: Running a command using Windows cmd'" data-heading-content="Example: Running a command using Windows cmd" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Display the path
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">cmd
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo %PATH%
 </span></code></pre>
-<h3 id="example-running-a-command-using-powershell-core" title="jobs.<job_id>.steps[*].shell / Example: Running a command using PowerShell Core">Example: Running a command using PowerShell Core<a href="#example-running-a-command-using-powershell-core" aria-label="Link to heading 'Example: Running a command using PowerShell Core'" data-heading-content="Example: Running a command using PowerShell Core" class="anchor"></a></h3>
+<h3 id="example-running-a-command-using-powershell-core">Example: Running a command using PowerShell Core<a href="#example-running-a-command-using-powershell-core" aria-label="Link to heading 'Example: Running a command using PowerShell Core'" data-heading-content="Example: Running a command using PowerShell Core" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Display the path
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">pwsh
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo ${env:PATH}
 </span></code></pre>
-<h3 id="example-using-powershell-desktop-to-run-a-command" title="jobs.<job_id>.steps[*].shell / Example: Using PowerShell Desktop to run a command">Example: Using PowerShell Desktop to run a command<a href="#example-using-powershell-desktop-to-run-a-command" aria-label="Link to heading 'Example: Using PowerShell Desktop to run a command'" data-heading-content="Example: Using PowerShell Desktop to run a command" class="anchor"></a></h3>
+<h3 id="example-using-powershell-desktop-to-run-a-command">Example: Using PowerShell Desktop to run a command<a href="#example-using-powershell-desktop-to-run-a-command" aria-label="Link to heading 'Example: Using PowerShell Desktop to run a command'" data-heading-content="Example: Using PowerShell Desktop to run a command" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Display the path
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">powershell
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo ${env:PATH}
 </span></code></pre>
-<h3 id="example-running-an-inline-python-script" title="jobs.<job_id>.steps[*].shell / Example: Running an inline Python script">Example: Running an inline Python script<a href="#example-running-an-inline-python-script" aria-label="Link to heading 'Example: Running an inline Python script'" data-heading-content="Example: Running an inline Python script" class="anchor"></a></h3>
+<h3 id="example-running-an-inline-python-script">Example: Running an inline Python script<a href="#example-running-an-inline-python-script" aria-label="Link to heading 'Example: Running an inline Python script'" data-heading-content="Example: Running an inline Python script" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Display the path
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">python
@@ -2050,7 +2050,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#a3be8c;">      import os
 </span><span style="color:#a3be8c;">      print(os.environ['PATH'])
 </span></code></pre>
-<h3 id="custom-shell" title="jobs.<job_id>.steps[*].shell / Custom shell">Custom shell<a href="#custom-shell" aria-label="Link to heading 'Custom shell'" data-heading-content="Custom shell" class="anchor"></a></h3>
+<h3 id="custom-shell">Custom shell<a href="#custom-shell" aria-label="Link to heading 'Custom shell'" data-heading-content="Custom shell" class="anchor"></a></h3>
 <p>You can set the <code>shell</code> value to a template string using <code>command [options] {0} [more_options]</code>. GitHub interprets the first whitespace-delimited word of the string as the command, and inserts the file name for the temporary script at <code>{0}</code>.</p>
 <p>For example:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
@@ -2061,7 +2061,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <p>The command used, <code>perl</code> in this example, must be installed on the runner.</p>
 <p>For information about the software included on GitHub-hosted runners, see <a href="../../concepts/runners/github-hosted-runners.html#preinstalled-software-for-github-owned-images">GitHub-hosted runners</a>.</p>
-<h3 id="exit-codes-and-error-action-preference" title="jobs.<job_id>.steps[*].shell / Exit codes and error action preference">Exit codes and error action preference<a href="#exit-codes-and-error-action-preference" aria-label="Link to heading 'Exit codes and error action preference'" data-heading-content="Exit codes and error action preference" class="anchor"></a></h3>
+<h3 id="exit-codes-and-error-action-preference">Exit codes and error action preference<a href="#exit-codes-and-error-action-preference" aria-label="Link to heading 'Exit codes and error action preference'" data-heading-content="Exit codes and error action preference" class="anchor"></a></h3>
 <p>For built-in shell keywords, we provide the following defaults that are executed by GitHub-hosted runners. You should use these guidelines when running shell scripts.</p>
 <ul>
 <li>
@@ -2091,7 +2091,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <h2 id="jobsjob_idstepswith" title="jobs.<job_id>.steps[*].with"><code>jobs.&lt;job_id&gt;.steps[*].with</code><a href="#jobsjob_idstepswith" aria-label="Link to heading 'jobs.<job_id>.steps[*].with'" data-heading-content="jobs.<job_id>.steps[*].with" class="anchor"></a></h2>
 <p>A <code>map</code> of the input parameters defined by the action. Each input parameter is a key/value pair. Input parameters are set as environment variables. The variable is prefixed with <code>INPUT_</code> and converted to upper case.</p>
 <p>Input parameters defined for a Docker container must use <code>args</code>. For more information, see <a href="#jobsjob_idstepswithargs"><code>jobs.&lt;job_id&gt;.steps[*].with.args</code></a>.</p>
-<h3 id="example-of-jobsjob_idstepswith" title="Example of jobs.<job_id>.steps[*].with">Example of <code>jobs.&lt;job_id&gt;.steps[*].with</code><a href="#example-of-jobsjob_idstepswith" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with'" data-heading-content="Example of jobs.<job_id>.steps[*].with" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idstepswith">Example of <code>jobs.&lt;job_id&gt;.steps[*].with</code><a href="#example-of-jobsjob_idstepswith" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with'" data-heading-content="Example of jobs.<job_id>.steps[*].with" class="anchor"></a></h3>
 <p>Defines the three input parameters (<code>first_name</code>, <code>middle_name</code>, and <code>last_name</code>) defined by the <code>hello_world</code> action. These input variables will be accessible to the <code>hello-world</code> action as <code>INPUT_FIRST_NAME</code>, <code>INPUT_MIDDLE_NAME</code>, and <code>INPUT_LAST_NAME</code> environment variables.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my_first_job</span><span style="color:#c0c5ce;">:
@@ -2105,7 +2105,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idstepswithargs" title="jobs.<job_id>.steps[*].with.args"><code>jobs.&lt;job_id&gt;.steps[*].with.args</code><a href="#jobsjob_idstepswithargs" aria-label="Link to heading 'jobs.<job_id>.steps[*].with.args'" data-heading-content="jobs.<job_id>.steps[*].with.args" class="anchor"></a></h2>
 <p>A <code>string</code> that defines the inputs for a Docker container. GitHub passes the <code>args</code> to the container's <code>ENTRYPOINT</code> when the container starts up. An <code>array of strings</code> is not supported by this parameter. A single argument that includes spaces should be surrounded by double quotes <code>""</code>.</p>
-<h3 id="example-of-jobsjob_idstepswithargs" title="Example of jobs.<job_id>.steps[*].with.args">Example of <code>jobs.&lt;job_id&gt;.steps[*].with.args</code><a href="#example-of-jobsjob_idstepswithargs" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with.args'" data-heading-content="Example of jobs.<job_id>.steps[*].with.args" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idstepswithargs">Example of <code>jobs.&lt;job_id&gt;.steps[*].with.args</code><a href="#example-of-jobsjob_idstepswithargs" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with.args'" data-heading-content="Example of jobs.<job_id>.steps[*].with.args" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Explain why this job ran
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/action-name@main
@@ -2121,7 +2121,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </ol>
 <h2 id="jobsjob_idstepswithentrypoint" title="jobs.<job_id>.steps[*].with.entrypoint"><code>jobs.&lt;job_id&gt;.steps[*].with.entrypoint</code><a href="#jobsjob_idstepswithentrypoint" aria-label="Link to heading 'jobs.<job_id>.steps[*].with.entrypoint'" data-heading-content="jobs.<job_id>.steps[*].with.entrypoint" class="anchor"></a></h2>
 <p>Overrides the Docker <code>ENTRYPOINT</code> in the <code>Dockerfile</code>, or sets it if one wasn't already specified. Unlike the Docker <code>ENTRYPOINT</code> instruction which has a shell and exec form, <code>entrypoint</code> keyword accepts only a single string defining the executable to be run.</p>
-<h3 id="example-of-jobsjob_idstepswithentrypoint" title="Example of jobs.<job_id>.steps[*].with.entrypoint">Example of <code>jobs.&lt;job_id&gt;.steps[*].with.entrypoint</code><a href="#example-of-jobsjob_idstepswithentrypoint" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with.entrypoint'" data-heading-content="Example of jobs.<job_id>.steps[*].with.entrypoint" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idstepswithentrypoint">Example of <code>jobs.&lt;job_id&gt;.steps[*].with.entrypoint</code><a href="#example-of-jobsjob_idstepswithentrypoint" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].with.entrypoint'" data-heading-content="Example of jobs.<job_id>.steps[*].with.entrypoint" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run a custom command
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/action-name@main
@@ -2133,7 +2133,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>Sets variables for steps to use in the runner environment. You can also set variables for the entire workflow or a job. For more information, see <a href="#env"><code>env</code></a> and <a href="#jobsjob_idenv"><code>jobs.&lt;job_id&gt;.env</code></a>.</p>
 <p>When more than one environment variable is defined with the same name, GitHub uses the most specific variable. For example, an environment variable defined in a step will override job and workflow environment variables with the same name, while the step executes. An environment variable defined for a job will override a workflow variable with the same name, while the job executes.</p>
 <p>Public actions may specify expected variables in the README file. If you are setting a secret or sensitive value, such as a password or token, you must set secrets using the <code>secrets</code> context. For more information, see <a href="contexts.html">Contexts reference</a>.</p>
-<h3 id="example-of-jobsjob_idstepsenv" title="Example of jobs.<job_id>.steps[*].env">Example of <code>jobs.&lt;job_id&gt;.steps[*].env</code><a href="#example-of-jobsjob_idstepsenv" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].env'" data-heading-content="Example of jobs.<job_id>.steps[*].env" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idstepsenv">Example of <code>jobs.&lt;job_id&gt;.steps[*].env</code><a href="#example-of-jobsjob_idstepsenv" aria-label="Link to heading 'Example of jobs.<job_id>.steps[*].env'" data-heading-content="Example of jobs.<job_id>.steps[*].env" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">My first action
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">env</span><span style="color:#c0c5ce;">:
@@ -2155,7 +2155,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>You cannot use <code>background</code> on steps inside a composite action. A composite action can itself run as a background step, but it cannot declare background steps internally.</p>
 </div>
-<h3 id="example-running-a-step-in-the-background" title="jobs.<job_id>.steps[*].background / Example: Running a step in the background">Example: Running a step in the background<a href="#example-running-a-step-in-the-background" aria-label="Link to heading 'Example: Running a step in the background'" data-heading-content="Example: Running a step in the background" class="anchor"></a></h3>
+<h3 id="example-running-a-step-in-the-background">Example: Running a step in the background<a href="#example-running-a-step-in-the-background" aria-label="Link to heading 'Example: Running a step in the background'" data-heading-content="Example: Running a step in the background" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Start server
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">server
@@ -2175,7 +2175,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>A <code>wait</code> step always runs and does not support the <a href="#jobsjob_idstepsif"><code>if</code></a> conditional.</p>
 </div>
-<h3 id="example-waiting-for-specific-background-steps" title="jobs.<job_id>.steps[*].wait / Example: Waiting for specific background steps">Example: Waiting for specific background steps<a href="#example-waiting-for-specific-background-steps" aria-label="Link to heading 'Example: Waiting for specific background steps'" data-heading-content="Example: Waiting for specific background steps" class="anchor"></a></h3>
+<h3 id="example-waiting-for-specific-background-steps">Example: Waiting for specific background steps<a href="#example-waiting-for-specific-background-steps" aria-label="Link to heading 'Example: Waiting for specific background steps'" data-heading-content="Example: Waiting for specific background steps" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Build frontend
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">build-frontend
@@ -2203,7 +2203,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>A <code>wait-all</code> step always runs and does not support the <a href="#jobsjob_idstepsif"><code>if</code></a> conditional.</p>
 </div>
-<h3 id="example-waiting-for-all-background-steps" title="jobs.<job_id>.steps[*].wait-all / Example: Waiting for all background steps">Example: Waiting for all background steps<a href="#example-waiting-for-all-background-steps" aria-label="Link to heading 'Example: Waiting for all background steps'" data-heading-content="Example: Waiting for all background steps" class="anchor"></a></h3>
+<h3 id="example-waiting-for-all-background-steps">Example: Waiting for all background steps<a href="#example-waiting-for-all-background-steps" aria-label="Link to heading 'Example: Waiting for all background steps'" data-heading-content="Example: Waiting for all background steps" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Start database
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">db
@@ -2227,7 +2227,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>A <code>cancel</code> step always runs and does not support the <a href="#jobsjob_idstepsif"><code>if</code></a> conditional.</p>
 </div>
-<h3 id="example-canceling-a-background-step" title="jobs.<job_id>.steps[*].cancel / Example: Canceling a background step">Example: Canceling a background step<a href="#example-canceling-a-background-step" aria-label="Link to heading 'Example: Canceling a background step'" data-heading-content="Example: Canceling a background step" class="anchor"></a></h3>
+<h3 id="example-canceling-a-background-step">Example: Canceling a background step<a href="#example-canceling-a-background-step" aria-label="Link to heading 'Example: Canceling a background step'" data-heading-content="Example: Canceling a background step" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Start long-running monitor
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">id</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">monitor
@@ -2248,7 +2248,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>You cannot use <code>parallel</code> inside a composite action.</p>
 </div>
-<h3 id="example-running-steps-in-parallel" title="jobs.<job_id>.steps[*].parallel / Example: Running steps in parallel">Example: Running steps in parallel<a href="#example-running-steps-in-parallel" aria-label="Link to heading 'Example: Running steps in parallel'" data-heading-content="Example: Running steps in parallel" class="anchor"></a></h3>
+<h3 id="example-running-steps-in-parallel">Example: Running steps in parallel<a href="#example-running-steps-in-parallel" aria-label="Link to heading 'Example: Running steps in parallel'" data-heading-content="Example: Running steps in parallel" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">steps</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
 </span><span style="color:#c0c5ce;">
@@ -2280,7 +2280,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>A matrix will generate a maximum of 256 jobs per workflow run. This limit applies to both GitHub-hosted and self-hosted runners.</p>
 <p>The variables that you define become properties in the <code>matrix</code> context, and you can reference the property in other areas of your workflow file. In this example, you can use <code>matrix.version</code> and <code>matrix.os</code> to access the current value of <code>version</code> and <code>os</code> that the job is using. For more information, see <a href="contexts.html">Contexts reference</a>.</p>
 <p>By default, GitHub will maximize the number of jobs run in parallel depending on runner availability. The order of the variables in the matrix determines the order in which the jobs are created. The first variable you define will be the first job that is created in your workflow run.</p>
-<h3 id="using-a-single-dimension-matrix" title="jobs.<job_id>.strategy.matrix / Using a single-dimension matrix">Using a single-dimension matrix<a href="#using-a-single-dimension-matrix" aria-label="Link to heading 'Using a single-dimension matrix'" data-heading-content="Using a single-dimension matrix" class="anchor"></a></h3>
+<h3 id="using-a-single-dimension-matrix">Using a single-dimension matrix<a href="#using-a-single-dimension-matrix" aria-label="Link to heading 'Using a single-dimension matrix'" data-heading-content="Using a single-dimension matrix" class="anchor"></a></h3>
 <p>The following workflow defines the variable <code>version</code> with the values <code>[10, 12, 14]</code>. The workflow will run three jobs, one for each value in the variable. Each job will access the <code>version</code> value through the <code>matrix.version</code> context and pass the value as <code>node-version</code> to the <code>actions/setup-node</code> action.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">example_matrix</span><span style="color:#c0c5ce;">:
@@ -2292,7 +2292,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">node-version</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.version }}
 </span></code></pre>
-<h3 id="using-a-multi-dimensional-matrix" title="jobs.<job_id>.strategy.matrix / Using a multi-dimensional matrix">Using a multi-dimensional matrix<a href="#using-a-multi-dimensional-matrix" aria-label="Link to heading 'Using a multi-dimensional matrix'" data-heading-content="Using a multi-dimensional matrix" class="anchor"></a></h3>
+<h3 id="using-a-multi-dimensional-matrix">Using a multi-dimensional matrix<a href="#using-a-multi-dimensional-matrix" aria-label="Link to heading 'Using a multi-dimensional matrix'" data-heading-content="Using a multi-dimensional matrix" class="anchor"></a></h3>
 <p>Specify multiple variables to create a multi-dimensional matrix. A job will run for each possible combination of the variables.</p>
 <p>For example, the following workflow specifies two variables:</p>
 <ul>
@@ -2336,7 +2336,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idstrategymatrixinclude" title="jobs.<job_id>.strategy.matrix.include"><code>jobs.&lt;job_id&gt;.strategy.matrix.include</code><a href="#jobsjob_idstrategymatrixinclude" aria-label="Link to heading 'jobs.<job_id>.strategy.matrix.include'" data-heading-content="jobs.<job_id>.strategy.matrix.include" class="anchor"></a></h2>
 <p>For each object in the <code>include</code> list, the key:value pairs in the object will be added to each of the matrix combinations if none of the key:value pairs overwrite any of the original matrix values. If the object cannot be added to any of the matrix combinations, a new matrix combination will be created instead. Note that the original matrix values will not be overwritten, but added matrix values can be overwritten.</p>
-<h3 id="example-expanding-configurations" title="jobs.<job_id>.strategy.matrix.include / Example: Expanding configurations">Example: Expanding configurations<a href="#example-expanding-configurations" aria-label="Link to heading 'Example: Expanding configurations'" data-heading-content="Example: Expanding configurations" class="anchor"></a></h3>
+<h3 id="example-expanding-configurations">Example: Expanding configurations<a href="#example-expanding-configurations" aria-label="Link to heading 'Example: Expanding configurations'" data-heading-content="Example: Expanding configurations" class="anchor"></a></h3>
 <p>For example, the following workflow will run four jobs, one for each combination of <code>os</code> and <code>node</code>. When the job for the <code>os</code> value of <code>windows-latest</code> and <code>node</code> value of <code>16</code> runs, an additional variable called <code>npm</code> with the value of <code>6</code> will be included in the job.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">example_matrix</span><span style="color:#c0c5ce;">:
@@ -2357,7 +2357,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm install -g npm@${{ matrix.npm }}
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">npm --version
 </span></code></pre>
-<h3 id="example-adding-configurations" title="jobs.<job_id>.strategy.matrix.include / Example: Adding configurations">Example: Adding configurations<a href="#example-adding-configurations" aria-label="Link to heading 'Example: Adding configurations'" data-heading-content="Example: Adding configurations" class="anchor"></a></h3>
+<h3 id="example-adding-configurations">Example: Adding configurations<a href="#example-adding-configurations" aria-label="Link to heading 'Example: Adding configurations'" data-heading-content="Example: Adding configurations" class="anchor"></a></h3>
 <p>For example, this matrix will run 10 jobs, one for each combination of <code>os</code> and <code>version</code> in the matrix, plus a job for the <code>os</code> value of <code>windows-latest</code> and <code>version</code> value of <code>17</code>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">example_matrix</span><span style="color:#c0c5ce;">:
@@ -2407,7 +2407,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <h2 id="jobsjob_idcontinue-on-error" title="jobs.<job_id>.continue-on-error"><code>jobs.&lt;job_id&gt;.continue-on-error</code><a href="#jobsjob_idcontinue-on-error" aria-label="Link to heading 'jobs.<job_id>.continue-on-error'" data-heading-content="jobs.<job_id>.continue-on-error" class="anchor"></a></h2>
 <p><code>jobs.&lt;job_id&gt;.continue-on-error</code> applies to a single job. If <code>jobs.&lt;job_id&gt;.continue-on-error</code> is <code>true</code>, other jobs in the matrix will continue running even if the job with <code>jobs.&lt;job_id&gt;.continue-on-error: true</code> fails.</p>
 <p>Prevents a workflow run from failing when a job fails. Set to <code>true</code> to allow a workflow run to pass when this job fails.</p>
-<h3 id="example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run" title="jobs.<job_id>.continue-on-error / Example: Preventing a specific failing matrix job from failing a workflow run">Example: Preventing a specific failing matrix job from failing a workflow run<a href="#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run" aria-label="Link to heading 'Example: Preventing a specific failing matrix job from failing a workflow run'" data-heading-content="Example: Preventing a specific failing matrix job from failing a workflow run" class="anchor"></a></h3>
+<h3 id="example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run">Example: Preventing a specific failing matrix job from failing a workflow run<a href="#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run" aria-label="Link to heading 'Example: Preventing a specific failing matrix job from failing a workflow run'" data-heading-content="Example: Preventing a specific failing matrix job from failing a workflow run" class="anchor"></a></h3>
 <p>You can allow specific jobs in a job matrix to fail without failing the workflow run. For example, if you wanted to only allow an experimental job with <code>node</code> set to <code>15</code> to fail without failing the workflow run.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">runs-on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.os }}
 </span><span style="color:#bf616a;">continue-on-error</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ matrix.experimental }}
@@ -2437,7 +2437,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p class="markdown-alert-title">Note</p>
 <p>The default shell for <code>run</code> steps inside a container is <code>sh</code> instead of <code>bash</code>. This can be overridden with <a href="#jobsjob_iddefaultsrun"><code>jobs.&lt;job_id&gt;.defaults.run</code></a> or <a href="#jobsjob_idstepsshell"><code>jobs.&lt;job_id&gt;.steps[*].shell</code></a>.</p>
 </div>
-<h3 id="example-running-a-job-within-a-container" title="jobs.<job_id>.container / Example: Running a job within a container">Example: Running a job within a container<a href="#example-running-a-job-within-a-container" aria-label="Link to heading 'Example: Running a job within a container'" data-heading-content="Example: Running a job within a container" class="anchor"></a></h3>
+<h3 id="example-running-a-job-within-a-container">Example: Running a job within a container<a href="#example-running-a-job-within-a-container" aria-label="Link to heading 'Example: Running a job within a container'" data-heading-content="Example: Running a job within a container" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">CI
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">push</span><span style="color:#c0c5ce;">:
@@ -2472,7 +2472,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </div>
 <h2 id="jobsjob_idcontainercredentials" title="jobs.<job_id>.container.credentials"><code>jobs.&lt;job_id&gt;.container.credentials</code><a href="#jobsjob_idcontainercredentials" aria-label="Link to heading 'jobs.<job_id>.container.credentials'" data-heading-content="jobs.<job_id>.container.credentials" class="anchor"></a></h2>
 <p>If the image's container registry requires authentication to pull the image, you can use <code>jobs.&lt;job_id&gt;.container.credentials</code> to set a <code>map</code> of the <code>username</code> and <code>password</code>. The credentials are the same values that you would provide to the <a href="https://docs.docker.com/engine/reference/commandline/login/" class="external"><code>docker login</code></a> command.</p>
-<h3 id="example-defining-credentials-for-a-container-registry" title="jobs.<job_id>.container.credentials / Example: Defining credentials for a container registry">Example: Defining credentials for a container registry<a href="#example-defining-credentials-for-a-container-registry" aria-label="Link to heading 'Example: Defining credentials for a container registry'" data-heading-content="Example: Defining credentials for a container registry" class="anchor"></a></h3>
+<h3 id="example-defining-credentials-for-a-container-registry">Example: Defining credentials for a container registry<a href="#example-defining-credentials-for-a-container-registry" aria-label="Link to heading 'Example: Defining credentials for a container registry'" data-heading-content="Example: Defining credentials for a container registry" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">container</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">image</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ghcr.io/owner/image
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">credentials</span><span style="color:#c0c5ce;">:
@@ -2488,7 +2488,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>To specify a volume, you specify the source and destination path:</p>
 <p><code>&lt;source&gt;:&lt;destinationPath&gt;</code>.</p>
 <p>The <code>&lt;source&gt;</code> is a volume name or an absolute path on the host machine, and <code>&lt;destinationPath&gt;</code> is an absolute path in the container.</p>
-<h3 id="example-mounting-volumes-in-a-container" title="jobs.<job_id>.container.volumes / Example: Mounting volumes in a container">Example: Mounting volumes in a container<a href="#example-mounting-volumes-in-a-container" aria-label="Link to heading 'Example: Mounting volumes in a container'" data-heading-content="Example: Mounting volumes in a container" class="anchor"></a></h3>
+<h3 id="example-mounting-volumes-in-a-container">Example: Mounting volumes in a container<a href="#example-mounting-volumes-in-a-container" aria-label="Link to heading 'Example: Mounting volumes in a container'" data-heading-content="Example: Mounting volumes in a container" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">volumes</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#a3be8c;">my_docker_volume:/volume_mount
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#a3be8c;">/data/my_data
@@ -2513,7 +2513,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>If you configure your job to run in a container, or your step uses container actions, you don't need to map ports to access the service or action. Docker automatically exposes all ports between containers on the same Docker user-defined bridge network. You can directly reference the service container by its hostname. The hostname is automatically mapped to the label name you configure for the service in the workflow.</p>
 <p>If you configure the job to run directly on the runner machine and your step doesn't use a container action, you must map any required Docker service container ports to the Docker host (the runner machine). You can access the service container using localhost and the mapped port.</p>
 <p>For more information about the differences between networking service containers, see <a href="../../tutorials/use-containerized-services/use-docker-service-containers.html">Communicating with Docker service containers</a>.</p>
-<h3 id="example-using-localhost" title="jobs.<job_id>.services / Example: Using localhost">Example: Using localhost<a href="#example-using-localhost" aria-label="Link to heading 'Example: Using localhost'" data-heading-content="Example: Using localhost" class="anchor"></a></h3>
+<h3 id="example-using-localhost">Example: Using localhost<a href="#example-using-localhost" aria-label="Link to heading 'Example: Using localhost'" data-heading-content="Example: Using localhost" class="anchor"></a></h3>
 <p>This example creates two services: nginx and redis. When you specify the container port but not the host port, the container port is randomly assigned to a free port on the host. GitHub sets the assigned host port in the <code>${{job.services.&lt;service_name&gt;.ports}}</code> context. In this example, you can access the service host ports using the <code>${{ job.services.nginx.ports['80'] }}</code> and <code>${{ job.services.redis.ports['6379'] }}</code> contexts.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">services</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">nginx</span><span style="color:#c0c5ce;">:
@@ -2540,7 +2540,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idservicesservice_idcredentials" title="jobs.<job_id>.services.<service_id>.credentials"><code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.credentials</code><a href="#jobsjob_idservicesservice_idcredentials" aria-label="Link to heading 'jobs.<job_id>.services.<service_id>.credentials'" data-heading-content="jobs.<job_id>.services.<service_id>.credentials" class="anchor"></a></h2>
 <p>If the image's container registry requires authentication to pull the image, you can use <code>jobs.&lt;job_id&gt;.container.credentials</code> to set a <code>map</code> of the <code>username</code> and <code>password</code>. The credentials are the same values that you would provide to the <a href="https://docs.docker.com/engine/reference/commandline/login/" class="external"><code>docker login</code></a> command.</p>
-<h3 id="example-of-jobsjob_idservicesservice_idcredentials" title="Example of jobs.<job_id>.services.<service_id>.credentials">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.credentials</code><a href="#example-of-jobsjob_idservicesservice_idcredentials" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.credentials'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.credentials" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idservicesservice_idcredentials">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.credentials</code><a href="#example-of-jobsjob_idservicesservice_idcredentials" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.credentials'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.credentials" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">services</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">myservice1</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">image</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">ghcr.io/owner/myservice1
@@ -2562,7 +2562,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>To specify a volume, you specify the source and destination path:</p>
 <p><code>&lt;source&gt;:&lt;destinationPath&gt;</code>.</p>
 <p>The <code>&lt;source&gt;</code> is a volume name or an absolute path on the host machine, and <code>&lt;destinationPath&gt;</code> is an absolute path in the container.</p>
-<h3 id="example-of-jobsjob_idservicesservice_idvolumes" title="Example of jobs.<job_id>.services.<service_id>.volumes">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.volumes</code><a href="#example-of-jobsjob_idservicesservice_idvolumes" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.volumes'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.volumes" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idservicesservice_idvolumes">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.volumes</code><a href="#example-of-jobsjob_idservicesservice_idvolumes" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.volumes'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.volumes" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">volumes</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#a3be8c;">my_docker_volume:/volume_mount
 </span><span style="color:#c0c5ce;">  - </span><span style="color:#a3be8c;">/data/my_data
@@ -2576,7 +2576,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </div>
 <h2 id="jobsjob_idservicesservice_idcommand" title="jobs.<job_id>.services.<service_id>.command"><code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.command</code><a href="#jobsjob_idservicesservice_idcommand" aria-label="Link to heading 'jobs.<job_id>.services.<service_id>.command'" data-heading-content="jobs.<job_id>.services.<service_id>.command" class="anchor"></a></h2>
 <p>Overrides the Docker image's default command (<code>CMD</code>). The value is passed as arguments after the image name in the <code>docker create</code> command. If you also specify <code>entrypoint</code>, <code>command</code> provides the arguments to that entrypoint.</p>
-<h3 id="example-of-jobsjob_idservicesservice_idcommand" title="Example of jobs.<job_id>.services.<service_id>.command">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.command</code><a href="#example-of-jobsjob_idservicesservice_idcommand" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.command'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.command" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idservicesservice_idcommand">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.command</code><a href="#example-of-jobsjob_idservicesservice_idcommand" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.command'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.command" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">services</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">mysql</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">image</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">mysql:8
@@ -2588,7 +2588,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idservicesservice_identrypoint" title="jobs.<job_id>.services.<service_id>.entrypoint"><code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.entrypoint</code><a href="#jobsjob_idservicesservice_identrypoint" aria-label="Link to heading 'jobs.<job_id>.services.<service_id>.entrypoint'" data-heading-content="jobs.<job_id>.services.<service_id>.entrypoint" class="anchor"></a></h2>
 <p>Overrides the Docker image's default <code>ENTRYPOINT</code>. The value is a single string defining the executable to run. Use this when you need to replace the image's entrypoint entirely. You can combine <code>entrypoint</code> with <code>command</code> to pass arguments to the custom entrypoint.</p>
-<h3 id="example-of-jobsjob_idservicesservice_identrypoint" title="Example of jobs.<job_id>.services.<service_id>.entrypoint">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.entrypoint</code><a href="#example-of-jobsjob_idservicesservice_identrypoint" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.entrypoint'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.entrypoint" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idservicesservice_identrypoint">Example of <code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.entrypoint</code><a href="#example-of-jobsjob_idservicesservice_identrypoint" aria-label="Link to heading 'Example of jobs.<job_id>.services.<service_id>.entrypoint'" data-heading-content="Example of jobs.<job_id>.services.<service_id>.entrypoint" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">services</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">etcd</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">image</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">quay.io/coreos/etcd:v3.5.17
@@ -2608,7 +2608,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </ul>
 <p>When you reference a reusable workflow with <code>{owner}/{repo}</code> and <code>@{ref}</code>, the <code>{ref}</code> can be a SHA, a release tag, or a branch name. If a release tag and a branch have the same name, the release tag takes precedence over the branch name. Using the commit SHA is the safest option for stability and security. For more information, see <a href="../security/secure-use.html#reusing-third-party-workflows">Secure use reference</a>.</p>
 <p>When you reference a reusable workflow in the same repository using <code>$/</code> or <code>./</code> (without <code>{owner}/{repo}</code> and <code>@{ref}</code>), the called workflow is from the same commit as the caller workflow. A <code>$/</code> reference must not include an <code>@{ref}</code> suffix, and <code>$/</code> is not available in GitHub Enterprise Server. Ref prefixes such as <code>refs/heads</code> and <code>refs/tags</code> are not allowed. You cannot use contexts or expressions in this keyword.</p>
-<h3 id="example-of-jobsjob_iduses" title="Example of jobs.<job_id>.uses">Example of <code>jobs.&lt;job_id&gt;.uses</code><a href="#example-of-jobsjob_iduses" aria-label="Link to heading 'Example of jobs.<job_id>.uses'" data-heading-content="Example of jobs.<job_id>.uses" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_iduses">Example of <code>jobs.&lt;job_id&gt;.uses</code><a href="#example-of-jobsjob_iduses" aria-label="Link to heading 'Example of jobs.<job_id>.uses'" data-heading-content="Example of jobs.<job_id>.uses" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow-1-in-local-repo</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/this-repo/.github/workflows/workflow-1.yml@172239021f7ba04fe7327647b213799853a9eb89
@@ -2625,7 +2625,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <p>When a job is used to call a reusable workflow, you can use <code>with</code> to provide a map of inputs that are passed to the called workflow.</p>
 <p>Any inputs that you pass must match the input specifications defined in the called workflow.</p>
 <p>Unlike <a href="#jobsjob_idstepswith"><code>jobs.&lt;job_id&gt;.steps[*].with</code></a>, the inputs you pass with <code>jobs.&lt;job_id&gt;.with</code> are not available as environment variables in the called workflow. Instead, you can reference the inputs by using the <code>inputs</code> context.</p>
-<h3 id="example-of-jobsjob_idwith" title="Example of jobs.<job_id>.with">Example of <code>jobs.&lt;job_id&gt;.with</code><a href="#example-of-jobsjob_idwith" aria-label="Link to heading 'Example of jobs.<job_id>.with'" data-heading-content="Example of jobs.<job_id>.with" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idwith">Example of <code>jobs.&lt;job_id&gt;.with</code><a href="#example-of-jobsjob_idwith" aria-label="Link to heading 'Example of jobs.<job_id>.with'" data-heading-content="Example of jobs.<job_id>.with" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/example-repo/.github/workflows/called-workflow.yml@main
@@ -2638,7 +2638,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 <h2 id="jobsjob_idsecrets" title="jobs.<job_id>.secrets"><code>jobs.&lt;job_id&gt;.secrets</code><a href="#jobsjob_idsecrets" aria-label="Link to heading 'jobs.<job_id>.secrets'" data-heading-content="jobs.<job_id>.secrets" class="anchor"></a></h2>
 <p>When a job is used to call a reusable workflow, you can use <code>secrets</code> to provide a map of secrets that are passed to the called workflow.</p>
 <p>Any secrets that you pass must match the names defined in the called workflow.</p>
-<h3 id="example-of-jobsjob_idsecrets" title="Example of jobs.<job_id>.secrets">Example of <code>jobs.&lt;job_id&gt;.secrets</code><a href="#example-of-jobsjob_idsecrets" aria-label="Link to heading 'Example of jobs.<job_id>.secrets'" data-heading-content="Example of jobs.<job_id>.secrets" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idsecrets">Example of <code>jobs.&lt;job_id&gt;.secrets</code><a href="#example-of-jobsjob_idsecrets" aria-label="Link to heading 'Example of jobs.<job_id>.secrets'" data-heading-content="Example of jobs.<job_id>.secrets" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">jobs</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">call-workflow</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">octo-org/example-repo/.github/workflows/called-workflow.yml@main
@@ -2647,7 +2647,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span></code></pre>
 <h2 id="jobsjob_idsecretsinherit" title="jobs.<job_id>.secrets.inherit"><code>jobs.&lt;job_id&gt;.secrets.inherit</code><a href="#jobsjob_idsecretsinherit" aria-label="Link to heading 'jobs.<job_id>.secrets.inherit'" data-heading-content="jobs.<job_id>.secrets.inherit" class="anchor"></a></h2>
 <p>Use the <code>inherit</code> keyword to pass all the calling workflow's secrets to the called workflow. This includes all secrets the calling workflow has access to, namely organization, repository, and environment secrets. The <code>inherit</code> keyword can be used to pass secrets across repositories within the same organization, or across organizations within the same enterprise.</p>
-<h3 id="example-of-jobsjob_idsecretsinherit" title="Example of jobs.<job_id>.secrets.inherit">Example of <code>jobs.&lt;job_id&gt;.secrets.inherit</code><a href="#example-of-jobsjob_idsecretsinherit" aria-label="Link to heading 'Example of jobs.<job_id>.secrets.inherit'" data-heading-content="Example of jobs.<job_id>.secrets.inherit" class="anchor"></a></h3>
+<h3 id="example-of-jobsjob_idsecretsinherit">Example of <code>jobs.&lt;job_id&gt;.secrets.inherit</code><a href="#example-of-jobsjob_idsecretsinherit" aria-label="Link to heading 'Example of jobs.<job_id>.secrets.inherit'" data-heading-content="Example of jobs.<job_id>.secrets.inherit" class="anchor"></a></h3>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">
@@ -2696,7 +2696,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </span><span style="color:#bf616a;">branches</span><span style="color:#c0c5ce;">: [ </span><span style="color:#a3be8c;">main</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">release/v</span><span style="color:#c0c5ce;">[</span><span style="color:#a3be8c;">0-9</span><span style="color:#c0c5ce;">]</span><span style="color:#d08770;">.</span><span style="color:#c0c5ce;">[</span><span style="color:#a3be8c;">0-9</span><span style="color:#c0c5ce;">] ]
 </span></code></pre>
 <p>For more information about branch, tag, and path filter syntax, see <a href="#onpushbranchestagsbranches-ignoretags-ignore"><code>on.&lt;push&gt;.&lt;branches|tags&gt;</code></a>, <a href="#onpull_requestpull_request_targetbranchesbranches-ignore"><code>on.&lt;pull_request&gt;.&lt;branches|tags&gt;</code></a>, and <a href="#onpushpull_requestpull_request_targetpathspaths-ignore"><code>on.&lt;push|pull_request&gt;.paths</code></a>.</p>
-<h3 id="patterns-to-match-branches-and-tags" title="Filter pattern cheat sheet / Patterns to match branches and tags">Patterns to match branches and tags<a href="#patterns-to-match-branches-and-tags" aria-label="Link to heading 'Patterns to match branches and tags'" data-heading-content="Patterns to match branches and tags" class="anchor"></a></h3>
+<h3 id="patterns-to-match-branches-and-tags">Patterns to match branches and tags<a href="#patterns-to-match-branches-and-tags" aria-label="Link to heading 'Patterns to match branches and tags'" data-heading-content="Patterns to match branches and tags" class="anchor"></a></h3>
 <table>
 <thead>
 <tr>
@@ -2748,7 +2748,7 @@ When more than one default setting is defined with the same name, GitHub uses th
 </tr>
 </tbody>
 </table>
-<h3 id="patterns-to-match-file-paths" title="Filter pattern cheat sheet / Patterns to match file paths">Patterns to match file paths<a href="#patterns-to-match-file-paths" aria-label="Link to heading 'Patterns to match file paths'" data-heading-content="Patterns to match file paths" class="anchor"></a></h3>
+<h3 id="patterns-to-match-file-paths">Patterns to match file paths<a href="#patterns-to-match-file-paths" aria-label="Link to heading 'Patterns to match file paths'" data-heading-content="Patterns to match file paths" class="anchor"></a></h3>
 <p>Path patterns must match the whole path, and start from the repository's root.</p>
 <table>
 <thead>

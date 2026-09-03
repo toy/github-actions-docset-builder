@@ -12,7 +12,7 @@
 <li><em>For <code>GITHUB_TOKEN</code> in GitHub Actions workflows</em>: 1,000 points per hour per repository. For requests to resources that belong to an enterprise account on GitHub.com, the limit is 15,000 points per hour per repository.</li>
 </ul>
 <p>You can check the point value of a query or calculate the expected point value as described in the following sections. The formula for calculating points and the rate limit are subject to change.</p>
-<h3 id="checking-the-status-of-your-primary-rate-limit" title="Primary rate limit / Checking the status of your primary rate limit">Checking the status of your primary rate limit<a href="#checking-the-status-of-your-primary-rate-limit" aria-label="Link to heading 'Checking the status of your primary rate limit'" data-heading-content="Checking the status of your primary rate limit" class="anchor"></a></h3>
+<h3 id="checking-the-status-of-your-primary-rate-limit">Checking the status of your primary rate limit<a href="#checking-the-status-of-your-primary-rate-limit" aria-label="Link to heading 'Checking the status of your primary rate limit'" data-heading-content="Checking the status of your primary rate limit" class="anchor"></a></h3>
 <p>You can use the headers that are sent with each response to determine the current status of your primary rate limit.</p>
 <table>
 <thead>
@@ -23,23 +23,23 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">x-ratelimit-limit</code></td>
+<td><code>x-ratelimit-limit</code></td>
 <td>The maximum number of points that you can use per hour</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-remaining</code></td>
+<td><code>x-ratelimit-remaining</code></td>
 <td>The number of points remaining in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-used</code></td>
+<td><code>x-ratelimit-used</code></td>
 <td>The number of points you have used in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-reset</code></td>
+<td><code>x-ratelimit-reset</code></td>
 <td>The time at which the current rate limit window resets, in UTC epoch seconds</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-resource</code></td>
+<td><code>x-ratelimit-resource</code></td>
 <td>The rate limit resource that the request counted against. For GraphQL requests, this will always be <code>graphql</code>.</td>
 </tr>
 </tbody>
@@ -66,24 +66,24 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">limit</code></td>
+<td><code>limit</code></td>
 <td>The maximum number of points that you can use per hour</td>
 </tr>
 <tr>
-<td><code class="keyword">remaining</code></td>
+<td><code>remaining</code></td>
 <td>The number of points remaining in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">used</code></td>
+<td><code>used</code></td>
 <td>The number of points you have used in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">resetAt</code></td>
+<td><code>resetAt</code></td>
 <td>The time at which the current rate limit window resets, in UTC epoch seconds</td>
 </tr>
 </tbody>
 </table>
-<h3 id="returning-the-point-value-of-a-query" title="Primary rate limit / Returning the point value of a query">Returning the point value of a query<a href="#returning-the-point-value-of-a-query" aria-label="Link to heading 'Returning the point value of a query'" data-heading-content="Returning the point value of a query" class="anchor"></a></h3>
+<h3 id="returning-the-point-value-of-a-query">Returning the point value of a query<a href="#returning-the-point-value-of-a-query" aria-label="Link to heading 'Returning the point value of a query'" data-heading-content="Returning the point value of a query" class="anchor"></a></h3>
 <p>You can return the point value of a query by querying the <code>cost</code> field on the <code>rateLimit</code> object:</p>
 <pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
 </span><span style="color:#c0c5ce;">  viewer {
@@ -94,7 +94,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="predicting-the-point-value-of-a-query" title="Primary rate limit / Predicting the point value of a query">Predicting the point value of a query<a href="#predicting-the-point-value-of-a-query" aria-label="Link to heading 'Predicting the point value of a query'" data-heading-content="Predicting the point value of a query" class="anchor"></a></h3>
+<h3 id="predicting-the-point-value-of-a-query">Predicting the point value of a query<a href="#predicting-the-point-value-of-a-query" aria-label="Link to heading 'Predicting the point value of a query'" data-heading-content="Predicting the point value of a query" class="anchor"></a></h3>
 <p>You can also roughly calculate the point value of a query before you make the query.</p>
 <ol>
 <li>Add up the number of requests needed to fulfill each unique connection in the call. Assume every request will reach the <code>first</code> or <code>last</code> argument limits.</li>
@@ -155,7 +155,7 @@
 <li><em>Make too many OAuth access token requests in a short period of time.</em> No more than 2,000 OAuth access token requests per hour are allowed for GitHub Apps and OAuth apps.</li>
 </ul>
 <p>These secondary rate limits are subject to change without notice. You may also encounter a secondary rate limit for undisclosed reasons.</p>
-<h3 id="calculating-points-for-the-secondary-rate-limit" title="Secondary rate limits / Calculating points for the secondary rate limit">Calculating points for the secondary rate limit<a href="#calculating-points-for-the-secondary-rate-limit" aria-label="Link to heading 'Calculating points for the secondary rate limit'" data-heading-content="Calculating points for the secondary rate limit" class="anchor"></a></h3>
+<h3 id="calculating-points-for-the-secondary-rate-limit">Calculating points for the secondary rate limit<a href="#calculating-points-for-the-secondary-rate-limit" aria-label="Link to heading 'Calculating points for the secondary rate limit'" data-heading-content="Calculating points for the secondary rate limit" class="anchor"></a></h3>
 <p>Some secondary rate limits are determined by the point values of requests. For GraphQL requests, these point values are separate from the point value calculations for the primary rate limit.</p>
 <table>
 <thead>
@@ -199,7 +199,7 @@
 <li>Values of <code>first</code> and <code>last</code> must be within 1-100.</li>
 <li>Individual calls cannot request more than 500,000 total <a href="../guides/introduction-to-graphql.html#node">nodes</a>.</li>
 </ul>
-<h3 id="calculating-nodes-in-a-call" title="Node limit / Calculating nodes in a call">Calculating nodes in a call<a href="#calculating-nodes-in-a-call" aria-label="Link to heading 'Calculating nodes in a call'" data-heading-content="Calculating nodes in a call" class="anchor"></a></h3>
+<h3 id="calculating-nodes-in-a-call">Calculating nodes in a call<a href="#calculating-nodes-in-a-call" aria-label="Link to heading 'Calculating nodes in a call'" data-heading-content="Calculating nodes in a call" class="anchor"></a></h3>
 <p>These two examples show how to calculate the total nodes in a call.</p>
 <ol>
 <li>

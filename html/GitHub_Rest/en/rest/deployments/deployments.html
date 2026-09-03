@@ -34,18 +34,18 @@ the <code>description</code> is a high-level summary of what happened with the d
 </span></code></pre>
 <p>Keep in mind that GitHub is never actually accessing your servers. It's up to your third-party integration to interact with deployment events. Multiple systems can listen for deployment events, and it's up to each of those systems to decide whether they're responsible for pushing the code out to your servers, building native code, etc.</p>
 <p>Note that the <code>repo_deployment</code> <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">OAuth scope</a> grants targeted access to deployments and deployment statuses <strong>without</strong> granting access to repository code, while the <code>public_repo</code> and <code>repo</code> scopes grant permission to code as well.</p>
-<h3 id="inactive-deployments" title="About deployments / Inactive deployments">Inactive deployments<a href="#inactive-deployments" aria-label="Link to heading 'Inactive deployments'" data-heading-content="Inactive deployments" class="anchor"></a></h3>
+<h3 id="inactive-deployments">Inactive deployments<a href="#inactive-deployments" aria-label="Link to heading 'Inactive deployments'" data-heading-content="Inactive deployments" class="anchor"></a></h3>
 <p>When you set the state of a deployment to <code>success</code>, then all prior non-transient, non-production environment deployments in the same repository with the same environment name will become <code>inactive</code>. To avoid this, you can set <code>auto_inactive</code> to <code>false</code> when creating the deployment status.</p>
 <p>You can communicate that a transient environment no longer exists by setting its <code>state</code> to <code>inactive</code>. Setting the <code>state</code> to <code>inactive</code> shows the deployment as <code>destroyed</code> in GitHub and removes access to it.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-deployments" title="List deployments">List deployments<a href="#list-deployments" aria-label="Link to heading 'List deployments'" data-heading-content="List deployments" class="anchor"></a></h2>
+<h2 id="list-deployments" title="GET /repos/{owner}/{repo}/deployments (List deployments)">List deployments<a href="#list-deployments" aria-label="Link to heading 'List deployments'" data-heading-content="List deployments" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments
 </span></code></pre>
 <p>Simple filtering of deployments is available via query parameters:</p>
-<h3 id="parameters" title="List deployments / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -92,11 +92,11 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="List deployments / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples" title="List deployments / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -208,7 +208,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="create-a-deployment" title="Create a deployment">Create a deployment<a href="#create-a-deployment" aria-label="Link to heading 'Create a deployment'" data-heading-content="Create a deployment" class="anchor"></a></h2>
+<h2 id="create-a-deployment" title="POST /repos/{owner}/{repo}/deployments (Create a deployment)">Create a deployment<a href="#create-a-deployment" aria-label="Link to heading 'Create a deployment'" data-heading-content="Create a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/deployments
 </span></code></pre>
 <p>Deployments offer a few configurable parameters with certain defaults.<br>
@@ -245,7 +245,7 @@ Failed commit status checks:<br>
 This error happens when the required<span data-escaped-char="">_</span>contexts parameter indicates that one or more contexts need to have a success<br>
 status for the commit to be deployed, but one or more of the required contexts do not have a state of success.<br>
 OAuth app tokens and personal access tokens (classic) need the repo or repo<span data-escaped-char="">_</span>deployment scope to use this endpoint.</p>
-<h3 id="parameters-1" title="Create a deployment / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -306,7 +306,7 @@ Default: <code>false</code></p>
 Specifies if the given environment is one that end-users directly interact with. Default: true when environment is production and false otherwise.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Create a deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -321,7 +321,7 @@ Specifies if the given environment is one that end-users directly interact with.
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Create a deployment / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="simple-example">Simple example<a href="#simple-example" aria-label="Link to heading 'Simple example'" data-heading-content="Simple example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -437,10 +437,10 @@ Specifies if the given environment is one that end-users directly interact with.
 </ul>
 </li>
 </ul>
-<h2 id="get-a-deployment" title="Get a deployment">Get a deployment<a href="#get-a-deployment" aria-label="Link to heading 'Get a deployment'" data-heading-content="Get a deployment" class="anchor"></a></h2>
+<h2 id="get-a-deployment" title="GET /repos/{owner}/{repo}/deployments/{deployment_id} (Get a deployment)">Get a deployment<a href="#get-a-deployment" aria-label="Link to heading 'Get a deployment'" data-heading-content="Get a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments/{deployment_id}
 </span></code></pre>
-<h3 id="parameters-2" title="Get a deployment / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -461,7 +461,7 @@ The name of the repository without the .git extension. The name is not case sens
 deployment<span data-escaped-char="">_</span>id parameter</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Get a deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -470,7 +470,7 @@ deployment<span data-escaped-char="">_</span>id parameter</p>
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Get a deployment / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -479,7 +479,7 @@ deployment<span data-escaped-char="">_</span>id parameter</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-deployment">Create a deployment</a>.</p>
-<h2 id="delete-a-deployment" title="Delete a deployment">Delete a deployment<a href="#delete-a-deployment" aria-label="Link to heading 'Delete a deployment'" data-heading-content="Delete a deployment" class="anchor"></a></h2>
+<h2 id="delete-a-deployment" title="DELETE /repos/{owner}/{repo}/deployments/{deployment_id} (Delete a deployment)">Delete a deployment<a href="#delete-a-deployment" aria-label="Link to heading 'Delete a deployment'" data-heading-content="Delete a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/deployments/{deployment_id}
 </span></code></pre>
 <p>If the repository only has one deployment, you can delete the deployment regardless of its status. If the repository has more than one deployment, you can only delete inactive deployments. This ensures that repositories with multiple deployments will always have an active deployment.<br>
@@ -488,7 +488,7 @@ To set a deployment as inactive, you must:</p>
 Mark the active deployment as inactive by adding any non-successful deployment status.</p>
 <p>For more information, see "Create a deployment" and "Create a deployment status."<br>
 OAuth app tokens and personal access tokens (classic) need the repo or repo<span data-escaped-char="">_</span>deployment scope to use this endpoint.</p>
-<h3 id="parameters-3" title="Delete a deployment / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -509,7 +509,7 @@ The name of the repository without the .git extension. The name is not case sens
 deployment<span data-escaped-char="">_</span>id parameter</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Delete a deployment / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>204</strong> - No Content</p>
@@ -521,7 +521,7 @@ deployment<span data-escaped-char="">_</span>id parameter</p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Delete a deployment / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

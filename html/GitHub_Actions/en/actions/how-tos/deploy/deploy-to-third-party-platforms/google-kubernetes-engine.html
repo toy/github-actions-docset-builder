@@ -2,7 +2,7 @@
 <p>Learn how to deploy a project to Google Kubernetes Engine (GKE) as part of a continuous deployment (CD) workflow.</p>
 <h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>Before you proceed with creating the workflow, you will need to complete the following steps for your Kubernetes project. This guide assumes the root of your project already has a <code>Dockerfile</code> and a Kubernetes Deployment configuration file.</p>
-<h3 id="creating-a-gke-cluster" title="Prerequisites / Creating a GKE cluster">Creating a GKE cluster<a href="#creating-a-gke-cluster" aria-label="Link to heading 'Creating a GKE cluster'" data-heading-content="Creating a GKE cluster" class="anchor"></a></h3>
+<h3 id="creating-a-gke-cluster">Creating a GKE cluster<a href="#creating-a-gke-cluster" aria-label="Link to heading 'Creating a GKE cluster'" data-heading-content="Creating a GKE cluster" class="anchor"></a></h3>
 <p>To create the GKE cluster, you will first need to authenticate using the <code>gcloud</code> CLI. For more information on this step, see the following articles:</p>
 <ul>
 <li><a href="https://cloud.google.com/sdk/gcloud/reference/auth/login" class="external"><code>gcloud auth login</code></a></li>
@@ -14,13 +14,13 @@
 </span><span style="color:#c0c5ce;">	--project=$GKE_PROJECT \
 </span><span style="color:#c0c5ce;">	--zone=$GKE_ZONE
 </span></code></pre>
-<h3 id="enabling-the-apis" title="Prerequisites / Enabling the APIs">Enabling the APIs<a href="#enabling-the-apis" aria-label="Link to heading 'Enabling the APIs'" data-heading-content="Enabling the APIs" class="anchor"></a></h3>
+<h3 id="enabling-the-apis">Enabling the APIs<a href="#enabling-the-apis" aria-label="Link to heading 'Enabling the APIs'" data-heading-content="Enabling the APIs" class="anchor"></a></h3>
 <p>Enable the Kubernetes Engine and Container Registry APIs. For example:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">$ gcloud services enable \
 </span><span style="color:#c0c5ce;">	containerregistry.googleapis.com \
 </span><span style="color:#c0c5ce;">	container.googleapis.com
 </span></code></pre>
-<h3 id="configuring-a-service-account-and-storing-its-credentials" title="Prerequisites / Configuring a service account and storing its credentials">Configuring a service account and storing its credentials<a href="#configuring-a-service-account-and-storing-its-credentials" aria-label="Link to heading 'Configuring a service account and storing its credentials'" data-heading-content="Configuring a service account and storing its credentials" class="anchor"></a></h3>
+<h3 id="configuring-a-service-account-and-storing-its-credentials">Configuring a service account and storing its credentials<a href="#configuring-a-service-account-and-storing-its-credentials" aria-label="Link to heading 'Configuring a service account and storing its credentials'" data-heading-content="Configuring a service account and storing its credentials" class="anchor"></a></h3>
 <p>This procedure demonstrates how to create the service account for your GKE integration. It explains how to create the account, add roles to it, retrieve its keys, and store them as a base64-encoded encrypted repository secret named <code>GKE_SA_KEY</code>.</p>
 <ol>
 <li>
@@ -62,11 +62,11 @@
 <p>For more information about how to store a secret, see <a href="../../write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
 </li>
 </ol>
-<h3 id="storing-your-project-name" title="Prerequisites / Storing your project name">Storing your project name<a href="#storing-your-project-name" aria-label="Link to heading 'Storing your project name'" data-heading-content="Storing your project name" class="anchor"></a></h3>
+<h3 id="storing-your-project-name">Storing your project name<a href="#storing-your-project-name" aria-label="Link to heading 'Storing your project name'" data-heading-content="Storing your project name" class="anchor"></a></h3>
 <p>Store the name of your project as a secret named <code>GKE_PROJECT</code>. For more information about how to store a secret, see <a href="../../write-workflows/choose-what-workflows-do/use-secrets.html">Using secrets in GitHub Actions</a>.</p>
-<h3 id="optional-configuring-kustomize" title="Prerequisites / (Optional) Configuring kustomize">(Optional) Configuring kustomize<a href="#optional-configuring-kustomize" aria-label="Link to heading '(Optional) Configuring kustomize'" data-heading-content="(Optional) Configuring kustomize" class="anchor"></a></h3>
+<h3 id="optional-configuring-kustomize">(Optional) Configuring kustomize<a href="#optional-configuring-kustomize" aria-label="Link to heading '(Optional) Configuring kustomize'" data-heading-content="(Optional) Configuring kustomize" class="anchor"></a></h3>
 <p>Kustomize is an optional tool used for managing YAML specs. After creating a <code>kustomization</code> file, the workflow below can be used to dynamically set fields of the image and pipe in the result to <code>kubectl</code>. For more information, see <a href="https://github.com/kubernetes-sigs/kustomize#usage" class="external">kustomize usage</a>.</p>
-<h3 id="optional-configure-a-deployment-environment" title="Prerequisites / (Optional) Configure a deployment environment">(Optional) Configure a deployment environment<a href="#optional-configure-a-deployment-environment" aria-label="Link to heading '(Optional) Configure a deployment environment'" data-heading-content="(Optional) Configure a deployment environment" class="anchor"></a></h3>
+<h3 id="optional-configure-a-deployment-environment">(Optional) Configure a deployment environment<a href="#optional-configure-a-deployment-environment" aria-label="Link to heading '(Optional) Configure a deployment environment'" data-heading-content="(Optional) Configure a deployment environment" class="anchor"></a></h3>
 <p>Environments are used to describe a general deployment target like <code>production</code>, <code>staging</code>, or <code>development</code>. When a GitHub Actions workflow deploys to an environment, the environment is displayed on the main page of the repository. You can use environments to require approval for a job to proceed, restrict which branches can trigger a workflow, gate deployments with custom deployment protection rules, or limit access to secrets. For more information about creating environments, see <a href="../configure-and-manage-deployments/manage-environments.html">Managing environments for deployment</a>.</p>
 <h2 id="creating-the-workflow" title="Creating the workflow">Creating the workflow<a href="#creating-the-workflow" aria-label="Link to heading 'Creating the workflow'" data-heading-content="Creating the workflow" class="anchor"></a></h2>
 <p>Once you've completed the prerequisites, you can proceed with creating the workflow.</p>

@@ -4,7 +4,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="get-repository-content" title="Get repository content">Get repository content<a href="#get-repository-content" aria-label="Link to heading 'Get repository content'" data-heading-content="Get repository content" class="anchor"></a></h2>
+<h2 id="get-repository-content" title="GET /repos/{owner}/{repo}/contents/{path} (Get repository content)">Get repository content<a href="#get-repository-content" aria-label="Link to heading 'Get repository content'" data-heading-content="Get repository content" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/contents/{path}
 </span></code></pre>
 <p>Gets the contents of a file or directory in a repository. Specify the file path or directory with the path parameter. If you omit the path parameter, you will receive the contents of the repository's root directory.<br>
@@ -25,7 +25,7 @@ If the requested file's size is:</p>
 Between 1-100 MB: Only the raw or object custom media types are supported. Both will work as normal, except that when using the object media type, the content field will be an empty<br>
 string and the encoding field will be "none". To get the contents of these larger files, use the raw media type.<br>
 Greater than 100 MB: This endpoint is not supported.</p>
-<h3 id="parameters" title="Get repository content / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -50,7 +50,7 @@ path parameter</p>
 The name of the commit/branch/tag. Default: the repository’s default branch.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="Get repository content / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -68,7 +68,7 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 <p><strong>404</strong> - Resource not found</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Get repository content / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="content-is-a-file-using-the-object-media-type">Content is a file using the object media type<a href="#content-is-a-file-using-the-object-media-type" aria-label="Link to heading 'Content is a file using the object media type'" data-heading-content="Content is a file using the object media type" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -483,14 +483,14 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 </ul>
 </li>
 </ul>
-<h2 id="create-or-update-file-contents" title="Create or update file contents">Create or update file contents<a href="#create-or-update-file-contents" aria-label="Link to heading 'Create or update file contents'" data-heading-content="Create or update file contents" class="anchor"></a></h2>
+<h2 id="create-or-update-file-contents" title="PUT /repos/{owner}/{repo}/contents/{path} (Create or update file contents)">Create or update file contents<a href="#create-or-update-file-contents" aria-label="Link to heading 'Create or update file contents'" data-heading-content="Create or update file contents" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/contents/{path}
 </span></code></pre>
 <p>Creates a new file or replaces an existing file in a repository.<br>
 Note</p>
 <p>If you use this endpoint and the "Delete a file" endpoint in parallel, the concurrent requests will conflict and you will receive errors. You must use these endpoints serially instead.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint. The workflow scope is also required in order to modify files in the .github/workflows directory.</p>
-<h3 id="parameters-1" title="Create or update file contents / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -552,7 +552,7 @@ The email of the author or committer of the commit. You'll receive a 422 status 
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Create or update file contents / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -570,7 +570,7 @@ The email of the author or committer of the commit. You'll receive a 422 status 
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Create or update file contents / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-for-creating-a-file">Example for creating a file<a href="#example-for-creating-a-file" aria-label="Link to heading 'Example for creating a file'" data-heading-content="Example for creating a file" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -736,7 +736,7 @@ The email of the author or committer of the commit. You'll receive a 422 status 
 </ul>
 </li>
 </ul>
-<h2 id="delete-a-file" title="Delete a file">Delete a file<a href="#delete-a-file" aria-label="Link to heading 'Delete a file'" data-heading-content="Delete a file" class="anchor"></a></h2>
+<h2 id="delete-a-file" title="DELETE /repos/{owner}/{repo}/contents/{path} (Delete a file)">Delete a file<a href="#delete-a-file" aria-label="Link to heading 'Delete a file'" data-heading-content="Delete a file" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/contents/{path}
 </span></code></pre>
 <p>Deletes a file in a repository.<br>
@@ -745,7 +745,7 @@ The author section is optional and is filled in with the committer information i
 You must provide values for both name and email, whether you choose to use author or committer. Otherwise, you'll receive a 422 status code.<br>
 Note</p>
 <p>If you use this endpoint and the "Create or update file contents" endpoint in parallel, the concurrent requests will conflict and you will receive errors. You must use these endpoints serially instead.</p>
-<h3 id="parameters-2" title="Delete a file / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -801,7 +801,7 @@ The email of the author (or committer) of the commit</li>
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Delete a file / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -819,7 +819,7 @@ The email of the author (or committer) of the commit</li>
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Delete a file / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -836,14 +836,14 @@ The email of the author (or committer) of the commit</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-or-update-file-contents">Create or update file contents</a>.</p>
-<h2 id="get-a-repository-readme" title="Get a repository README">Get a repository README<a href="#get-a-repository-readme" aria-label="Link to heading 'Get a repository README'" data-heading-content="Get a repository README" class="anchor"></a></h2>
+<h2 id="get-a-repository-readme" title="GET /repos/{owner}/{repo}/readme (Get a repository README)">Get a repository README<a href="#get-a-repository-readme" aria-label="Link to heading 'Get a repository README'" data-heading-content="Get a repository README" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/readme
 </span></code></pre>
 <p>Gets the preferred README for a repository.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.raw+json: Returns the raw file contents. This is the default if you do not specify a media type.<br>
 application/vnd.github.html+json: Returns the README in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.</p>
-<h3 id="parameters-3" title="Get a repository README / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -864,7 +864,7 @@ The name of the repository without the .git extension. The name is not case sens
 The name of the commit/branch/tag. Default: the repository’s default branch.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Get a repository README / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -879,7 +879,7 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Get a repository README / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -909,14 +909,14 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 <li><code>target</code>: string</li>
 <li><code>submodule_git_url</code>: string</li>
 </ul>
-<h2 id="get-a-repository-readme-for-a-directory" title="Get a repository README for a directory">Get a repository README for a directory<a href="#get-a-repository-readme-for-a-directory" aria-label="Link to heading 'Get a repository README for a directory'" data-heading-content="Get a repository README for a directory" class="anchor"></a></h2>
+<h2 id="get-a-repository-readme-for-a-directory" title="GET /repos/{owner}/{repo}/readme/{dir} (Get a repository README for a directory)">Get a repository README for a directory<a href="#get-a-repository-readme-for-a-directory" aria-label="Link to heading 'Get a repository README for a directory'" data-heading-content="Get a repository README for a directory" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/readme/{dir}
 </span></code></pre>
 <p>Gets the README from a repository directory.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.raw+json: Returns the raw file contents. This is the default if you do not specify a media type.<br>
 application/vnd.github.html+json: Returns the README in HTML. Markup languages are rendered to HTML using GitHub's open-source Markup library.</p>
-<h3 id="parameters-4" title="Get a repository README for a directory / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -941,7 +941,7 @@ The alternate path to look for a README file</p>
 The name of the commit/branch/tag. Default: the repository’s default branch.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Get a repository README for a directory / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -953,7 +953,7 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Get a repository README for a directory / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -962,7 +962,7 @@ The name of the commit/branch/tag. Default: the repository’s default branch.</
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#get-a-repository-readme">Get a repository README</a>.</p>
-<h2 id="download-a-repository-archive-tar" title="Download a repository archive (tar)">Download a repository archive (tar)<a href="#download-a-repository-archive-tar" aria-label="Link to heading 'Download a repository archive (tar)'" data-heading-content="Download a repository archive (tar)" class="anchor"></a></h2>
+<h2 id="download-a-repository-archive-tar" title="GET /repos/{owner}/{repo}/tarball/{ref} (Download a repository archive (tar))">Download a repository archive (tar)<a href="#download-a-repository-archive-tar" aria-label="Link to heading 'Download a repository archive (tar)'" data-heading-content="Download a repository archive (tar)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/tarball/{ref}
 </span></code></pre>
 <p>Gets a redirect URL to download a tar archive for a repository. If you omit :ref, the repository’s default branch (usually<br>
@@ -970,7 +970,7 @@ main) will be used. Please make sure your HTTP framework is configured to follow
 the Location header to make a second GET request.<br>
 Note</p>
 <p>For private repositories, these links are temporary and expire after five minutes.</p>
-<h3 id="parameters-5" title="Download a repository archive (tar) / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -990,11 +990,11 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong><code>ref</code></strong> (string) (required)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Download a repository archive (tar) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>302</strong> - Found</li>
 </ul>
-<h3 id="code-examples-5" title="Download a repository archive (tar) / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1002,7 +1002,7 @@ The name of the repository without the .git extension. The name is not case sens
 </span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/tarball/REF
 </span></code></pre>
 <p><strong>Response schema (Status: 302):</strong></p>
-<h2 id="download-a-repository-archive-zip" title="Download a repository archive (zip)">Download a repository archive (zip)<a href="#download-a-repository-archive-zip" aria-label="Link to heading 'Download a repository archive (zip)'" data-heading-content="Download a repository archive (zip)" class="anchor"></a></h2>
+<h2 id="download-a-repository-archive-zip" title="GET /repos/{owner}/{repo}/zipball/{ref} (Download a repository archive (zip))">Download a repository archive (zip)<a href="#download-a-repository-archive-zip" aria-label="Link to heading 'Download a repository archive (zip)'" data-heading-content="Download a repository archive (zip)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/zipball/{ref}
 </span></code></pre>
 <p>Gets a redirect URL to download a zip archive for a repository. If you omit :ref, the repository’s default branch (usually<br>
@@ -1010,7 +1010,7 @@ main) will be used. Please make sure your HTTP framework is configured to follow
 the Location header to make a second GET request.<br>
 Note</p>
 <p>For private repositories, these links are temporary and expire after five minutes. If the repository is empty, you will receive a 404 when you follow the redirect.</p>
-<h3 id="parameters-6" title="Download a repository archive (zip) / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1030,11 +1030,11 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong><code>ref</code></strong> (string) (required)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="Download a repository archive (zip) / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>302</strong> - Found</li>
 </ul>
-<h3 id="code-examples-6" title="Download a repository archive (zip) / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

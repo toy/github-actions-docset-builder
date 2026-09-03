@@ -11,62 +11,62 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">github</code></td>
+<td><code>github</code></td>
 <td><code>object</code></td>
 <td>Information about the workflow run. For more information, see <a href="#github-context"><code>github</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">env</code></td>
+<td><code>env</code></td>
 <td><code>object</code></td>
 <td>Contains variables set in a workflow, job, or step. For more information, see <a href="#env-context"><code>env</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">vars</code></td>
+<td><code>vars</code></td>
 <td><code>object</code></td>
 <td>Contains variables set at the repository, organization, or environment levels. For more information, see <a href="#vars-context"><code>vars</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">job</code></td>
+<td><code>job</code></td>
 <td><code>object</code></td>
 <td>Information about the currently running job. For more information, see <a href="#job-context"><code>job</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs</code></td>
+<td><code>jobs</code></td>
 <td><code>object</code></td>
 <td>For reusable workflows only, contains outputs of jobs from the reusable workflow. For more information, see <a href="#jobs-context"><code>jobs</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">steps</code></td>
+<td><code>steps</code></td>
 <td><code>object</code></td>
 <td>Information about the steps that have been run in the current job. For more information, see <a href="#steps-context"><code>steps</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">runner</code></td>
+<td><code>runner</code></td>
 <td><code>object</code></td>
 <td>Information about the runner that is running the current job. For more information, see <a href="#runner-context"><code>runner</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">secrets</code></td>
+<td><code>secrets</code></td>
 <td><code>object</code></td>
 <td>Contains the names and values of secrets that are available to a workflow run. For more information, see <a href="#secrets-context"><code>secrets</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">strategy</code></td>
+<td><code>strategy</code></td>
 <td><code>object</code></td>
 <td>Information about the matrix execution strategy for the current job. For more information, see <a href="#strategy-context"><code>strategy</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">matrix</code></td>
+<td><code>matrix</code></td>
 <td><code>object</code></td>
 <td>Contains the matrix properties defined in the workflow that apply to the current job. For more information, see <a href="#matrix-context"><code>matrix</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">needs</code></td>
+<td><code>needs</code></td>
 <td><code>object</code></td>
 <td>Contains the outputs of all jobs that are defined as a dependency of the current job. For more information, see <a href="#needs-context"><code>needs</code> context</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">inputs</code></td>
+<td><code>inputs</code></td>
 <td><code>object</code></td>
 <td>Contains the inputs of a reusable or manually triggered workflow. For more information, see <a href="#inputs-context"><code>inputs</code> context</a>.</td>
 </tr>
@@ -79,7 +79,7 @@
 </ul>
 <p>In order to use property dereference syntax, the property name must start with a letter or <code>_</code> and contain only alphanumeric characters, <code>-</code>, or <code>_</code>.</p>
 <p>If you attempt to dereference a nonexistent property, it will evaluate to an empty string.</p>
-<h3 id="determining-when-to-use-contexts" title="Available contexts / Determining when to use contexts">Determining when to use contexts<a href="#determining-when-to-use-contexts" aria-label="Link to heading 'Determining when to use contexts'" data-heading-content="Determining when to use contexts" class="anchor"></a></h3>
+<h3 id="determining-when-to-use-contexts">Determining when to use contexts<a href="#determining-when-to-use-contexts" aria-label="Link to heading 'Determining when to use contexts'" data-heading-content="Determining when to use contexts" class="anchor"></a></h3>
 <p>GitHub Actions includes a collection of variables called <em>contexts</em> and a similar collection of variables called <em>default variables</em>. These variables are intended for use at different points in the workflow:</p>
 <ul>
 <li><strong>Default environment variables:</strong> These environment variables exist only on the runner that is executing your job. For more information, see <a href="variables.html">Variables reference</a>.</li>
@@ -96,7 +96,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Deploying to production server on branch $GITHUB_REF"
 </span></code></pre>
 <p>In this example, the <code>if</code> statement checks the <a href="#github-context"><code>github.ref</code></a> context to determine the current branch name; if the name is <code>refs/heads/main</code>, then the subsequent steps are executed. The <code>if</code> check is processed by GitHub Actions, and the job is only sent to the runner if the result is <code>true</code>. Once the job is sent to the runner, the step is executed and refers to the <a href="variables.html"><code>$GITHUB_REF</code></a> variable from the runner.</p>
-<h3 id="context-availability" title="Available contexts / Context availability">Context availability<a href="#context-availability" aria-label="Link to heading 'Context availability'" data-heading-content="Context availability" class="anchor"></a></h3>
+<h3 id="context-availability">Context availability<a href="#context-availability" aria-label="Link to heading 'Context availability'" data-heading-content="Context availability" class="anchor"></a></h3>
 <p>Different contexts are available throughout a workflow run. For example, the <code>secrets</code> context may only be used at certain places within a job.</p>
 <p>In addition, some functions may only be used in certain places. For example, the <code>hashFiles</code> function is not available everywhere.</p>
 <p>The following table lists the restrictions on where each context and special function can be used within a workflow. The listed contexts are only available for the given workflow key, and may not be used anywhere else. Unless listed below, a function can be used anywhere.</p>
@@ -110,178 +110,178 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">run-name</code></td>
+<td><code>run-name</code></td>
 <td><code>github, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">concurrency</code></td>
+<td><code>concurrency</code></td>
 <td><code>github, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">env</code></td>
+<td><code>env</code></td>
 <td><code>github, secrets, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.concurrency</code></td>
+<td><code>jobs.&lt;job_id&gt;.concurrency</code></td>
 <td><code>github, needs, strategy, matrix, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.container</code></td>
+<td><code>jobs.&lt;job_id&gt;.container</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.container.credentials</code></td>
+<td><code>jobs.&lt;job_id&gt;.container.credentials</code></td>
 <td><code>github, needs, strategy, matrix, env, vars, secrets, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.container.env.&lt;env_id&gt;</code></td>
+<td><code>jobs.&lt;job_id&gt;.container.env.&lt;env_id&gt;</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.container.image</code></td>
+<td><code>jobs.&lt;job_id&gt;.container.image</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.continue-on-error</code></td>
+<td><code>jobs.&lt;job_id&gt;.continue-on-error</code></td>
 <td><code>github, needs, strategy, vars, matrix, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.defaults.run</code></td>
+<td><code>jobs.&lt;job_id&gt;.defaults.run</code></td>
 <td><code>github, needs, strategy, matrix, env, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.env</code></td>
+<td><code>jobs.&lt;job_id&gt;.env</code></td>
 <td><code>github, needs, strategy, matrix, vars, secrets, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.environment</code></td>
+<td><code>jobs.&lt;job_id&gt;.environment</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.environment.url</code></td>
+<td><code>jobs.&lt;job_id&gt;.environment.url</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, steps, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.if</code></td>
+<td><code>jobs.&lt;job_id&gt;.if</code></td>
 <td><code>github, needs, vars, inputs</code></td>
 <td><code>always, cancelled, success, failure</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.name</code></td>
+<td><code>jobs.&lt;job_id&gt;.name</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.outputs.&lt;output_id&gt;</code></td>
+<td><code>jobs.&lt;job_id&gt;.outputs.&lt;output_id&gt;</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.runs-on</code></td>
+<td><code>jobs.&lt;job_id&gt;.runs-on</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.secrets.&lt;secrets_id&gt;</code></td>
+<td><code>jobs.&lt;job_id&gt;.secrets.&lt;secrets_id&gt;</code></td>
 <td><code>github, needs, strategy, matrix, secrets, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.services</code></td>
+<td><code>jobs.&lt;job_id&gt;.services</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.credentials</code></td>
+<td><code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.credentials</code></td>
 <td><code>github, needs, strategy, matrix, env, vars, secrets, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.env.&lt;env_id&gt;</code></td>
+<td><code>jobs.&lt;job_id&gt;.services.&lt;service_id&gt;.env.&lt;env_id&gt;</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.continue-on-error</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.continue-on-error</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.env</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.env</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.if</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.if</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, steps, inputs</code></td>
 <td><code>always, cancelled, success, failure, hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.name</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.name</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.run</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.run</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.timeout-minutes</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.timeout-minutes</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.with</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.with</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.steps.working-directory</code></td>
+<td><code>jobs.&lt;job_id&gt;.steps.working-directory</code></td>
 <td><code>github, needs, strategy, matrix, job, runner, env, vars, secrets, steps, inputs</code></td>
 <td><code>hashFiles</code></td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.strategy</code></td>
+<td><code>jobs.&lt;job_id&gt;.strategy</code></td>
 <td><code>github, needs, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.timeout-minutes</code></td>
+<td><code>jobs.&lt;job_id&gt;.timeout-minutes</code></td>
 <td><code>github, needs, strategy, matrix, vars, inputs</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">jobs.&lt;job_id&gt;.with.&lt;with_id&gt;</code></td>
+<td><code>jobs.&lt;job_id&gt;.with.&lt;with_id&gt;</code></td>
 <td><code>github, needs, strategy, matrix, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">on.workflow_call.inputs.&lt;inputs_id&gt;.default</code></td>
+<td><code>on.workflow_call.inputs.&lt;inputs_id&gt;.default</code></td>
 <td><code>github, inputs, vars</code></td>
 <td>None</td>
 </tr>
 <tr>
-<td><code class="keyword">on.workflow_call.outputs.&lt;output_id&gt;.value</code></td>
+<td><code>on.workflow_call.outputs.&lt;output_id&gt;.value</code></td>
 <td><code>github, jobs, vars, inputs</code></td>
 <td>None</td>
 </tr>
 </tbody>
 </table>
-<h3 id="example-printing-context-information-to-the-log" title="Available contexts / Example: printing context information to the log">Example: printing context information to the log<a href="#example-printing-context-information-to-the-log" aria-label="Link to heading 'Example: printing context information to the log'" data-heading-content="Example: printing context information to the log" class="anchor"></a></h3>
+<h3 id="example-printing-context-information-to-the-log">Example: printing context information to the log<a href="#example-printing-context-information-to-the-log" aria-label="Link to heading 'Example: printing context information to the log'" data-heading-content="Example: printing context information to the log" class="anchor"></a></h3>
 <p>You can print the contents of contexts to the log for debugging. The <a href="expressions.html#tojson"><code>toJSON</code> function</a> is required to pretty-print JSON objects to the log.</p>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>
@@ -337,47 +337,47 @@ When creating workflows and actions, you should always consider whether your cod
 </thead>
 <tbody>
 <tr>
-<td><code>github</code></td>
+<td><code class="keyword">github</code></td>
 <td><code>object</code></td>
 <td>The top-level context available during any job or step in a workflow. This object contains all the properties listed below.</td>
 </tr>
 <tr>
-<td><code>github.action</code></td>
+<td><code class="keyword">github.action</code></td>
 <td><code>string</code></td>
 <td>The name of the action currently running, or the <a href="workflow-syntax.html#jobsjob_idstepsid"><code>id</code></a> of a step. GitHub removes special characters, and uses the name <code>__run</code> when the current step runs a script without an <code>id</code>. If you use the same action more than once in the same job, the name will include a suffix with the sequence number with underscore before it. For example, the first script you run will have the name <code>__run</code>, and the second script will be named <code>__run_2</code>. Similarly, the second invocation of <code>actions/checkout</code> will be <code>actionscheckout2</code>.</td>
 </tr>
 <tr>
-<td><code>github.action_path</code></td>
+<td><code class="keyword">github.action_path</code></td>
 <td><code>string</code></td>
 <td>The path where an action is located. This property is only supported in composite actions. You can use this path to access files located in the same repository as the action, for example by changing directories to the path (using the corresponding environment variable):  <code>cd "$GITHUB_ACTION_PATH"</code> . For more information on environment variables, see <a href="../security/secure-use.html#use-an-intermediate-environment-variable">Secure use reference</a>.</td>
 </tr>
 <tr>
-<td><code>github.action_ref</code></td>
+<td><code class="keyword">github.action_ref</code></td>
 <td><code>string</code></td>
 <td>For a step executing an action, this is the ref of the action being executed. For example, <code>v2</code>.<br><br>Do not use in the <code>run</code> keyword. To make this context work with composite actions, reference it within the <code>env</code> context of the composite action.</td>
 </tr>
 <tr>
-<td><code>github.action_repository</code></td>
+<td><code class="keyword">github.action_repository</code></td>
 <td><code>string</code></td>
 <td>For a step executing an action, this is the owner and repository name of the action. For example, <code>actions/checkout</code>.<br><br>Do not use in the <code>run</code> keyword. To make this context work with composite actions, reference it within the <code>env</code> context of the composite action.</td>
 </tr>
 <tr>
-<td><code>github.action_status</code></td>
+<td><code class="keyword">github.action_status</code></td>
 <td><code>string</code></td>
 <td>For a composite action, the current result of the composite action.</td>
 </tr>
 <tr>
-<td><code>github.actor</code></td>
+<td><code class="keyword">github.actor</code></td>
 <td><code>string</code></td>
 <td>The username of the user that triggered the initial workflow run. If the workflow run is a re-run, this value may differ from <code>github.triggering_actor</code>. Any workflow re-runs will use the privileges of <code>github.actor</code>, even if the actor initiating the re-run (<code>github.triggering_actor</code>) has different privileges.</td>
 </tr>
 <tr>
-<td><code>github.actor_id</code></td>
+<td><code class="keyword">github.actor_id</code></td>
 <td><code>string</code></td>
 <td>The account ID of the person or app that triggered the initial workflow run. For example, <code>1234567</code>. Note that this is different from the actor username.</td>
 </tr>
 <tr>
-<td><code>github.api_url</code></td>
+<td><code class="keyword">github.api_url</code></td>
 <td><code>string</code></td>
 <td>The URL of the GitHub REST API.</td>
 </tr>
@@ -387,12 +387,12 @@ When creating workflows and actions, you should always consider whether your cod
 <td></td>
 </tr>
 <tr>
-<td><code>github.artifacts</code></td>
+<td><code class="keyword">github.artifacts</code></td>
 <td><code>string</code></td>
 <td>Path on the runner to the file that identifies workflow artifacts for the current step. Write one declaration per line to identify files or OCI digest references as workflow artifacts. For more information, see <a href="workflow-commands.html#declaring-workflow-artifacts">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code>github.artifacts_list</code></td>
+<td><code class="keyword">github.artifacts_list</code></td>
 <td><code>string</code></td>
 <td>Path on the runner to a read-only file containing the aggregated workflow artifact metadata for the current job as JSON. For more information, see <a href="workflow-commands.html#reading-workflow-artifacts">Workflow commands for GitHub Actions</a>.</td>
 </tr>
@@ -402,163 +402,163 @@ When creating workflows and actions, you should always consider whether your cod
 <td></td>
 </tr>
 <tr>
-<td><code>github.base_ref</code></td>
+<td><code class="keyword">github.base_ref</code></td>
 <td><code>string</code></td>
 <td>The <code>base_ref</code> or target branch of the pull request in a workflow run. This property is only available when the event that triggers a workflow run is either <code>pull_request</code> or <code>pull_request_target</code>.</td>
 </tr>
 <tr>
-<td><code>github.env</code></td>
+<td><code class="keyword">github.env</code></td>
 <td><code>string</code></td>
 <td>Path on the runner to the file that sets environment variables from workflow commands. This file is unique to the current step and is a different file for each step in a job. For more information, see <a href="workflow-commands.html#setting-an-environment-variable">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code>github.event</code></td>
+<td><code class="keyword">github.event</code></td>
 <td><code>object</code></td>
 <td>The full event webhook payload. You can access individual properties of the event using this context. This object is identical to the webhook payload of the event that triggered the workflow run, and is different for each event. The webhooks for each GitHub Actions event is linked in <a href="events-that-trigger-workflows.html#workflow_call">Events that trigger workflows</a>. For example, for a workflow run triggered by the <a href="events-that-trigger-workflows.html#push"><code>push</code> event</a>, this object contains the contents of the <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#push" class="external">push webhook payload</a>.</td>
 </tr>
 <tr>
-<td><code>github.event_name</code></td>
+<td><code class="keyword">github.event_name</code></td>
 <td><code>string</code></td>
 <td>The name of the event that triggered the workflow run.</td>
 </tr>
 <tr>
-<td><code>github.event_path</code></td>
+<td><code class="keyword">github.event_path</code></td>
 <td><code>string</code></td>
 <td>The path to the file on the runner that contains the full event webhook payload.</td>
 </tr>
 <tr>
-<td><code>github.graphql_url</code></td>
+<td><code class="keyword">github.graphql_url</code></td>
 <td><code>string</code></td>
 <td>The URL of the GitHub GraphQL API.</td>
 </tr>
 <tr>
-<td><code>github.head_ref</code></td>
+<td><code class="keyword">github.head_ref</code></td>
 <td><code>string</code></td>
 <td>The <code>head_ref</code> or source branch of the pull request in a workflow run. This property is only available when the event that triggers a workflow run is either <code>pull_request</code> or <code>pull_request_target</code>.</td>
 </tr>
 <tr>
-<td><code>github.job</code></td>
+<td><code class="keyword">github.job</code></td>
 <td><code>string</code></td>
 <td>The <a href="workflow-syntax.html#jobsjob_id"><code>job_id</code></a> of the current job. <br> Note: This context property is set by the Actions runner, and is only available within the execution <code>steps</code> of a job. Otherwise, the value of this property will be <code>null</code>.</td>
 </tr>
 <tr>
-<td><code>github.path</code></td>
+<td><code class="keyword">github.path</code></td>
 <td><code>string</code></td>
 <td>Path on the runner to the file that sets system <code>PATH</code> variables from workflow commands. This file is unique to the current step and is a different file for each step in a job. For more information, see <a href="workflow-commands.html#adding-a-system-path">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code>github.ref</code></td>
+<td><code class="keyword">github.ref</code></td>
 <td><code>string</code></td>
 <td>The fully-formed ref of the branch or tag that triggered the workflow run. For workflows triggered by <code>push</code>, this is the branch or tag ref that was pushed. For workflows triggered by <code>pull_request</code> that were not merged, this is the pull request merge branch. If the pull request was merged, this is the branch it was merged into. For workflows triggered by <code>release</code>, this is the release tag created. For other triggers, this is the branch or tag ref that triggered the workflow run. This is only set if a branch or tag is available for the event type. The ref given is fully-formed, meaning that for branches the format is <code>refs/heads/&lt;branch_name&gt;</code>. For pull request events except <code>pull_request_target</code> that were not merged, it is <code>refs/pull/&lt;pr_number&gt;/merge</code>. <code>pull_request_target</code> events have the <code>ref</code> from the base branch. For tags it is <code>refs/tags/&lt;tag_name&gt;</code>. For example, <code>refs/heads/feature-branch-1</code>. For more information about pull request merge branches, see <a href="https://docs.github.com/en/pull-requests/reference/pull-requests#pull-request-refs-and-merge-branches" class="external">Pull requests</a>.</td>
 </tr>
 <tr>
-<td><code>github.ref_name</code></td>
+<td><code class="keyword">github.ref_name</code></td>
 <td><code>string</code></td>
 <td>The short ref name of the branch or tag that triggered the workflow run. This value matches the branch or tag name shown on GitHub. For example, <code>feature-branch-1</code>.<br><br>For pull requests that were not merged, the format is <code>&lt;pr_number&gt;/merge</code>.</td>
 </tr>
 <tr>
-<td><code>github.ref_protected</code></td>
+<td><code class="keyword">github.ref_protected</code></td>
 <td><code>boolean</code></td>
 <td><code>true</code> if branch protections or <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository" class="external">rulesets</a> are configured for the ref that triggered the workflow run.</td>
 </tr>
 <tr>
-<td><code>github.ref_type</code></td>
+<td><code class="keyword">github.ref_type</code></td>
 <td><code>string</code></td>
 <td>The type of ref that triggered the workflow run. Valid values are <code>branch</code> or <code>tag</code>.</td>
 </tr>
 <tr>
-<td><code>github.repository</code></td>
+<td><code class="keyword">github.repository</code></td>
 <td><code>string</code></td>
 <td>The owner and repository name. For example, <code>octocat/Hello-World</code>.</td>
 </tr>
 <tr>
-<td><code>github.repository_id</code></td>
+<td><code class="keyword">github.repository_id</code></td>
 <td><code>string</code></td>
 <td>The ID of the repository. For example, <code>123456789</code>. Note that this is different from the repository name.</td>
 </tr>
 <tr>
-<td><code>github.repository_owner</code></td>
+<td><code class="keyword">github.repository_owner</code></td>
 <td><code>string</code></td>
 <td>The repository owner's username. For example, <code>octocat</code>.</td>
 </tr>
 <tr>
-<td><code>github.repository_owner_id</code></td>
+<td><code class="keyword">github.repository_owner_id</code></td>
 <td><code>string</code></td>
 <td>The repository owner's account ID. For example, <code>1234567</code>. Note that this is different from the owner's name.</td>
 </tr>
 <tr>
-<td><code>github.repositoryUrl</code></td>
+<td><code class="keyword">github.repositoryUrl</code></td>
 <td><code>string</code></td>
 <td>The Git URL to the repository. For example, <code>git://github.com/octocat/hello-world.git</code>.</td>
 </tr>
 <tr>
-<td><code>github.retention_days</code></td>
+<td><code class="keyword">github.retention_days</code></td>
 <td><code>string</code></td>
 <td>The number of days that workflow run logs and artifacts are kept.</td>
 </tr>
 <tr>
-<td><code>github.run_id</code></td>
+<td><code class="keyword">github.run_id</code></td>
 <td><code>string</code></td>
 <td>A unique number for each workflow run within a repository. This number does not change if you re-run the workflow run.</td>
 </tr>
 <tr>
-<td><code>github.run_number</code></td>
+<td><code class="keyword">github.run_number</code></td>
 <td><code>string</code></td>
 <td>A unique number for each run of a particular workflow in a repository. This number begins at 1 for the workflow's first run, and increments with each new run. This number does not change if you re-run the workflow run.</td>
 </tr>
 <tr>
-<td><code>github.run_attempt</code></td>
+<td><code class="keyword">github.run_attempt</code></td>
 <td><code>string</code></td>
 <td>A unique number for each attempt of a particular workflow run in a repository. This number begins at 1 for the workflow run's first attempt, and increments with each re-run.</td>
 </tr>
 <tr>
-<td><code>github.secret_source</code></td>
+<td><code class="keyword">github.secret_source</code></td>
 <td><code>string</code></td>
 <td>The source of a secret used in a workflow. Possible values are <code>None</code>, <code>Actions</code>, <code>Codespaces</code>, or <code>Dependabot</code>.</td>
 </tr>
 <tr>
-<td><code>github.server_url</code></td>
+<td><code class="keyword">github.server_url</code></td>
 <td><code>string</code></td>
 <td>The URL of the GitHub server. For example: <code>https://github.com</code>.</td>
 </tr>
 <tr>
-<td><code>github.sha</code></td>
+<td><code class="keyword">github.sha</code></td>
 <td><code>string</code></td>
 <td>The commit SHA that triggered the workflow. The value of this commit SHA depends on the event that triggered the workflow. For more information, see <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>. For example, <code>ffac537e6cbbf934b08745a378932722df287a53</code>.</td>
 </tr>
 <tr>
-<td><code>github.token</code></td>
+<td><code class="keyword">github.token</code></td>
 <td><code>string</code></td>
 <td>A token to authenticate on behalf of the GitHub App installed on your repository. This is functionally equivalent to the <code>GITHUB_TOKEN</code> secret. For more information, see <a href="../../tutorials/authenticate-with-github_token.html">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>.  <br> Note: This context property is set by the Actions runner, and is only available within the execution <code>steps</code> of a job. Otherwise, the value of this property will be <code>null</code>.</td>
 </tr>
 <tr>
-<td><code>github.triggering_actor</code></td>
+<td><code class="keyword">github.triggering_actor</code></td>
 <td><code>string</code></td>
 <td>The username of the user that initiated the workflow run. If the workflow run is a re-run, this value may differ from <code>github.actor</code>. Any workflow re-runs will use the privileges of <code>github.actor</code>, even if the actor initiating the re-run (<code>github.triggering_actor</code>) has different privileges.</td>
 </tr>
 <tr>
-<td><code>github.workflow</code></td>
+<td><code class="keyword">github.workflow</code></td>
 <td><code>string</code></td>
 <td>The name of the workflow. If the workflow file doesn't specify a <code>name</code>, the value of this property is the full path of the workflow file in the repository.</td>
 </tr>
 <tr>
-<td><code>github.workflow_ref</code></td>
+<td><code class="keyword">github.workflow_ref</code></td>
 <td><code>string</code></td>
 <td>The ref path to the workflow. For example, <code>octocat/hello-world/.github/workflows/my-workflow.yml@refs/heads/my_branch</code>.</td>
 </tr>
 <tr>
-<td><code>github.workflow_sha</code></td>
+<td><code class="keyword">github.workflow_sha</code></td>
 <td><code>string</code></td>
 <td>The commit SHA for the workflow file.</td>
 </tr>
 <tr>
-<td><code>github.workspace</code></td>
+<td><code class="keyword">github.workspace</code></td>
 <td><code>string</code></td>
 <td>The default working directory on the runner for steps, and the default location of your repository when using the <a href="https://github.com/actions/checkout" class="external"><code>checkout</code></a> action.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-github-context" title="Example contents of the github context">Example contents of the <code>github</code> context<a href="#example-contents-of-the-github-context" aria-label="Link to heading 'Example contents of the github context'" data-heading-content="Example contents of the github context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-github-context">Example contents of the <code>github</code> context<a href="#example-contents-of-the-github-context" aria-label="Link to heading 'Example contents of the github context'" data-heading-content="Example contents of the github context" class="anchor"></a></h3>
 <p>The following example context is from a workflow run triggered by the <code>push</code> event. The <code>event</code> object in this example has been truncated because it is identical to the contents of the <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#push" class="external"><code>push</code> webhook payload</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -600,7 +600,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">env</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">/home/runner/work/_temp/_runner_file_commands/set_env_b037e7b5-1c88-48e2-bf78-eaaab5e02602</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-github-context" title="Example usage of the github context">Example usage of the <code>github</code> context<a href="#example-usage-of-the-github-context" aria-label="Link to heading 'Example usage of the github context'" data-heading-content="Example usage of the github context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-github-context">Example usage of the <code>github</code> context<a href="#example-usage-of-the-github-context" aria-label="Link to heading 'Example usage of the github context'" data-heading-content="Example usage of the github context" class="anchor"></a></h3>
 <p>This example workflow uses the <code>github.event_name</code> context to run a job only if the workflow run was triggered by the <code>pull_request</code> event.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Run CI
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">push</span><span style="color:#c0c5ce;">, </span><span style="color:#a3be8c;">pull_request</span><span style="color:#c0c5ce;">]
@@ -633,25 +633,25 @@ When creating workflows and actions, you should always consider whether your cod
 </thead>
 <tbody>
 <tr>
-<td><code>env</code></td>
+<td><code class="keyword">env</code></td>
 <td><code>object</code></td>
 <td>This context changes for each step in a job. You can access this context from any step in a job. This object contains the properties listed below.</td>
 </tr>
 <tr>
-<td><code>env.&lt;env_name&gt;</code></td>
+<td><code class="keyword">env.&lt;env_name&gt;</code></td>
 <td><code>string</code></td>
 <td>The value of a specific environment variable.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-env-context" title="Example contents of the env context">Example contents of the <code>env</code> context<a href="#example-contents-of-the-env-context" aria-label="Link to heading 'Example contents of the env context'" data-heading-content="Example contents of the env context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-env-context">Example contents of the <code>env</code> context<a href="#example-contents-of-the-env-context" aria-label="Link to heading 'Example contents of the env context'" data-heading-content="Example contents of the env context" class="anchor"></a></h3>
 <p>The contents of the <code>env</code> context is a mapping of variable names to their values. The context's contents can change depending on where it is used in the workflow run. In this example, the <code>env</code> context contains two variables.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">first_name</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Mona</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">super_duper_var</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">totally_awesome</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-env-context" title="Example usage of the env context">Example usage of the <code>env</code> context<a href="#example-usage-of-the-env-context" aria-label="Link to heading 'Example usage of the env context'" data-heading-content="Example usage of the env context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-env-context">Example usage of the <code>env</code> context<a href="#example-usage-of-the-env-context" aria-label="Link to heading 'Example usage of the env context'" data-heading-content="Example usage of the env context" class="anchor"></a></h3>
 <p>This example workflow shows variables being set in the <code>env</code> context at the workflow, job, and step levels. The <code>${{ env.VARIABLE-NAME }}</code> syntax is then used to retrieve variable values within individual steps in the workflow.</p>
 <p>When more than one environment variable is defined with the same name, GitHub uses the most specific variable. For example, an environment variable defined in a step will override job and workflow environment variables with the same name, while the step executes. An environment variable defined for a job will override a workflow variable with the same name, while the job executes.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Hi Mascot
@@ -677,13 +677,13 @@ When creating workflows and actions, you should always consider whether your cod
 </span></code></pre>
 <h2 id="vars-context" title="vars context"><code>vars</code> context<a href="#vars-context" aria-label="Link to heading 'vars context'" data-heading-content="vars context" class="anchor"></a></h2>
 <p>The <code>vars</code> context contains custom configuration variables set at the organization, repository, and environment levels. For more information about defining configuration variables for use in multiple workflows, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-variables.html#defining-configuration-variables-for-multiple-workflows">Store information in variables</a>.</p>
-<h3 id="example-contents-of-the-vars-context" title="Example contents of the vars context">Example contents of the <code>vars</code> context<a href="#example-contents-of-the-vars-context" aria-label="Link to heading 'Example contents of the vars context'" data-heading-content="Example contents of the vars context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-vars-context">Example contents of the <code>vars</code> context<a href="#example-contents-of-the-vars-context" aria-label="Link to heading 'Example contents of the vars context'" data-heading-content="Example contents of the vars context" class="anchor"></a></h3>
 <p>The contents of the <code>vars</code> context is a mapping of configuration variable names to their values.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">mascot</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Mona</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-vars-context" title="Example usage of the vars context">Example usage of the <code>vars</code> context<a href="#example-usage-of-the-vars-context" aria-label="Link to heading 'Example usage of the vars context'" data-heading-content="Example usage of the vars context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-vars-context">Example usage of the <code>vars</code> context<a href="#example-usage-of-the-vars-context" aria-label="Link to heading 'Example usage of the vars context'" data-heading-content="Example usage of the vars context" class="anchor"></a></h3>
 <p>This example workflow shows how configuration variables set at the repository, environment, or organization levels are automatically available using the <code>vars</code> context.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -734,7 +734,7 @@ When creating workflows and actions, you should always consider whether your cod
 </thead>
 <tbody>
 <tr>
-<td><code>job</code></td>
+<td><code class="keyword">job</code></td>
 <td><code>object</code></td>
 <td>This context changes for each job in a workflow run. You can access this context from any step in a job. This object contains all the properties listed below.</td>
 </tr>
@@ -744,7 +744,7 @@ When creating workflows and actions, you should always consider whether your cod
 <td></td>
 </tr>
 <tr>
-<td><code>job.check_run_id</code></td>
+<td><code class="keyword">job.check_run_id</code></td>
 <td><code>number</code></td>
 <td>The check run ID of the current job.</td>
 </tr>
@@ -754,68 +754,68 @@ When creating workflows and actions, you should always consider whether your cod
 <td></td>
 </tr>
 <tr>
-<td><code>job.container</code></td>
+<td><code class="keyword">job.container</code></td>
 <td><code>object</code></td>
 <td>Information about the job's container. For more information about containers, see <a href="workflow-syntax.html#jobsjob_idcontainer">Workflow syntax for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code>job.container.id</code></td>
+<td><code class="keyword">job.container.id</code></td>
 <td><code>string</code></td>
 <td>The ID of the container.</td>
 </tr>
 <tr>
-<td><code>job.container.network</code></td>
+<td><code class="keyword">job.container.network</code></td>
 <td><code>string</code></td>
 <td>The ID of the container network. The runner creates the network used by all containers in a job.</td>
 </tr>
 <tr>
-<td><code>job.services</code></td>
+<td><code class="keyword">job.services</code></td>
 <td><code>object</code></td>
 <td>The service containers created for a job. For more information about service containers, see <a href="workflow-syntax.html#jobsjob_idservices">Workflow syntax for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code>job.services.&lt;service_id&gt;.id</code></td>
+<td><code class="keyword">job.services.&lt;service_id&gt;.id</code></td>
 <td><code>string</code></td>
 <td>The ID of the service container.</td>
 </tr>
 <tr>
-<td><code>job.services.&lt;service_id&gt;.network</code></td>
+<td><code class="keyword">job.services.&lt;service_id&gt;.network</code></td>
 <td><code>string</code></td>
 <td>The ID of the service container network. The runner creates the network used by all containers in a job.</td>
 </tr>
 <tr>
-<td><code>job.services.&lt;service_id&gt;.ports</code></td>
+<td><code class="keyword">job.services.&lt;service_id&gt;.ports</code></td>
 <td><code>object</code></td>
 <td>The exposed ports of the service container.</td>
 </tr>
 <tr>
-<td><code>job.status</code></td>
+<td><code class="keyword">job.status</code></td>
 <td><code>string</code></td>
 <td>The current status of the job. Possible values are <code>success</code>, <code>failure</code>, or <code>cancelled</code>.</td>
 </tr>
 <tr>
-<td><code>job.workflow_ref</code></td>
+<td><code class="keyword">job.workflow_ref</code></td>
 <td><code>string</code></td>
 <td>The full ref of the workflow file that defines the current job. For example, <code>octo-org/octo-repo/.github/workflows/deploy.yml@refs/heads/main</code>. For jobs defined directly in a workflow file, this is the same as <code>github.workflow_ref</code>. For jobs defined in a <a href="../../how-tos/reuse-automations/reuse-workflows.html">Reuse workflows</a>, this refers to the reusable workflow file. (not available on GitHub Enterprise Server)</td>
 </tr>
 <tr>
-<td><code>job.workflow_sha</code></td>
+<td><code class="keyword">job.workflow_sha</code></td>
 <td><code>string</code></td>
 <td>The commit SHA of the workflow file that defines the current job. (not available on GitHub Enterprise Server)</td>
 </tr>
 <tr>
-<td><code>job.workflow_repository</code></td>
+<td><code class="keyword">job.workflow_repository</code></td>
 <td><code>string</code></td>
 <td>The <code>owner/repo</code> of the repository containing the workflow file that defines the current job. For example, <code>octo-org/octo-repo</code>. (not available on GitHub Enterprise Server)</td>
 </tr>
 <tr>
-<td><code>job.workflow_file_path</code></td>
+<td><code class="keyword">job.workflow_file_path</code></td>
 <td><code>string</code></td>
 <td>The file path of the workflow file that defines the current job, relative to the repository root. For example, <code>.github/workflows/deploy.yml</code>. (not available on GitHub Enterprise Server)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-job-context" title="Example contents of the job context">Example contents of the <code>job</code> context<a href="#example-contents-of-the-job-context" aria-label="Link to heading 'Example contents of the job context'" data-heading-content="Example contents of the job context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-job-context">Example contents of the <code>job</code> context<a href="#example-contents-of-the-job-context" aria-label="Link to heading 'Example contents of the job context'" data-heading-content="Example contents of the job context" class="anchor"></a></h3>
 <p>This example <code>job</code> context uses a PostgreSQL service container with mapped ports. If there are no containers or service containers used in a job, the <code>job</code> context only contains <code>status</code>. The <code>check_run_id</code> and workflow identity properties (<code>workflow_ref</code>, <code>workflow_sha</code>, <code>workflow_repository</code>, <code>workflow_file_path</code>) are not available on GitHub Enterprise Server.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">status</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">success</span><span style="color:#c0c5ce;">",
@@ -838,7 +838,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-job-context" title="Example usage of the job context">Example usage of the <code>job</code> context<a href="#example-usage-of-the-job-context" aria-label="Link to heading 'Example usage of the job context'" data-heading-content="Example usage of the job context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-job-context">Example usage of the <code>job</code> context<a href="#example-usage-of-the-job-context" aria-label="Link to heading 'Example usage of the job context'" data-heading-content="Example usage of the job context" class="anchor"></a></h3>
 <p>This example workflow configures a PostgreSQL service container, and automatically maps port 5432 in the service container to a randomly chosen available port on the host. The <code>job</code> context is used to access the number of the port that was assigned on the host.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">PostgreSQL Service Example
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -859,7 +859,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">pg_isready -h localhost -p ${{ job.services.postgres.ports[5432] }}
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Run tests against Postgres"
 </span></code></pre>
-<h3 id="example-usage-of-job-context-workflow-identity" title="Example usage of job context workflow identity">Example usage of <code>job</code> context workflow identity<a href="#example-usage-of-job-context-workflow-identity" aria-label="Link to heading 'Example usage of job context workflow identity'" data-heading-content="Example usage of job context workflow identity" class="anchor"></a></h3>
+<h3 id="example-usage-of-job-context-workflow-identity">Example usage of <code>job</code> context workflow identity<a href="#example-usage-of-job-context-workflow-identity" aria-label="Link to heading 'Example usage of job context workflow identity'" data-heading-content="Example usage of job context workflow identity" class="anchor"></a></h3>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>The <code>job.workflow_*</code> context properties are not available on GitHub Enterprise Server.</p>
@@ -915,7 +915,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-jobs-context" title="Example contents of the jobs context">Example contents of the <code>jobs</code> context<a href="#example-contents-of-the-jobs-context" aria-label="Link to heading 'Example contents of the jobs context'" data-heading-content="Example contents of the jobs context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-jobs-context">Example contents of the <code>jobs</code> context<a href="#example-contents-of-the-jobs-context" aria-label="Link to heading 'Example contents of the jobs context'" data-heading-content="Example contents of the jobs context" class="anchor"></a></h3>
 <p>This example <code>jobs</code> context contains the result and outputs of a job from a reusable workflow run.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">example_job</span><span style="color:#c0c5ce;">": {
@@ -927,7 +927,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-jobs-context" title="Example usage of the jobs context">Example usage of the <code>jobs</code> context<a href="#example-usage-of-the-jobs-context" aria-label="Link to heading 'Example usage of the jobs context'" data-heading-content="Example usage of the jobs context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-jobs-context">Example usage of the <code>jobs</code> context<a href="#example-usage-of-the-jobs-context" aria-label="Link to heading 'Example usage of the jobs context'" data-heading-content="Example usage of the jobs context" class="anchor"></a></h3>
 <p>This example reusable workflow uses the <code>jobs</code> context to set outputs for the reusable workflow. Note how the outputs flow up from the steps, to the job, then to the <code>workflow_call</code> trigger. For more information, see <a href="../../how-tos/reuse-automations/reuse-workflows.html#using-outputs-from-a-reusable-workflow">Reuse workflows</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Reusable workflow
 </span><span style="color:#c0c5ce;">
@@ -994,7 +994,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-steps-context" title="Example contents of the steps context">Example contents of the <code>steps</code> context<a href="#example-contents-of-the-steps-context" aria-label="Link to heading 'Example contents of the steps context'" data-heading-content="Example contents of the steps context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-steps-context">Example contents of the <code>steps</code> context<a href="#example-contents-of-the-steps-context" aria-label="Link to heading 'Example contents of the steps context'" data-heading-content="Example contents of the steps context" class="anchor"></a></h3>
 <p>This example <code>steps</code> context shows two previous steps that had an <a href="workflow-syntax.html#jobsjob_idstepsid"><code>id</code></a> specified. The first step had the <code>id</code> named <code>checkout</code>, the second <code>generate_number</code>. The <code>generate_number</code> step had an output named <code>random_number</code>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">checkout</span><span style="color:#c0c5ce;">": {
@@ -1011,7 +1011,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-steps-context" title="Example usage of the steps context">Example usage of the <code>steps</code> context<a href="#example-usage-of-the-steps-context" aria-label="Link to heading 'Example usage of the steps context'" data-heading-content="Example usage of the steps context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-steps-context">Example usage of the <code>steps</code> context<a href="#example-usage-of-the-steps-context" aria-label="Link to heading 'Example usage of the steps context'" data-heading-content="Example usage of the steps context" class="anchor"></a></h3>
 <p>This example workflow generates a random number as an output in one step, and a later step uses the <code>steps</code> context to read the value of that output.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Generate random failure
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1079,7 +1079,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-runner-context" title="Example contents of the runner context">Example contents of the <code>runner</code> context<a href="#example-contents-of-the-runner-context" aria-label="Link to heading 'Example contents of the runner context'" data-heading-content="Example contents of the runner context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-runner-context">Example contents of the <code>runner</code> context<a href="#example-contents-of-the-runner-context" aria-label="Link to heading 'Example contents of the runner context'" data-heading-content="Example contents of the runner context" class="anchor"></a></h3>
 <p>The following example context is from a Linux GitHub-hosted runner.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">os</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">Linux</span><span style="color:#c0c5ce;">",
@@ -1089,7 +1089,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">temp</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">/home/runner/work/_temp</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-runner-context" title="Example usage of the runner context">Example usage of the <code>runner</code> context<a href="#example-usage-of-the-runner-context" aria-label="Link to heading 'Example usage of the runner context'" data-heading-content="Example usage of the runner context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-runner-context">Example usage of the <code>runner</code> context<a href="#example-usage-of-the-runner-context" aria-label="Link to heading 'Example usage of the runner context'" data-heading-content="Example usage of the runner context" class="anchor"></a></h3>
 <p>This example workflow uses the <code>runner</code> context to set the path to the temporary directory to write logs, and if the workflow fails, it uploads those logs as artifact.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Build
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1144,7 +1144,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-secrets-context" title="Example contents of the secrets context">Example contents of the <code>secrets</code> context<a href="#example-contents-of-the-secrets-context" aria-label="Link to heading 'Example contents of the secrets context'" data-heading-content="Example contents of the secrets context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-secrets-context">Example contents of the <code>secrets</code> context<a href="#example-contents-of-the-secrets-context" aria-label="Link to heading 'Example contents of the secrets context'" data-heading-content="Example contents of the secrets context" class="anchor"></a></h3>
 <p>The following example contents of the <code>secrets</code> context shows the automatic <code>GITHUB_TOKEN</code>, as well as two other secrets available to the workflow run.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">github_token</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">***</span><span style="color:#c0c5ce;">",
@@ -1152,7 +1152,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">SUPERSECRET</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">***</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-secrets-context" title="Example usage of the secrets context">Example usage of the <code>secrets</code> context<a href="#example-usage-of-the-secrets-context" aria-label="Link to heading 'Example usage of the secrets context'" data-heading-content="Example usage of the secrets context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-secrets-context">Example usage of the <code>secrets</code> context<a href="#example-usage-of-the-secrets-context" aria-label="Link to heading 'Example usage of the secrets context'" data-heading-content="Example usage of the secrets context" class="anchor"></a></h3>
 <p>This example workflow uses the <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-github-cli.html">GitHub CLI</a>, which requires the <code>GITHUB_TOKEN</code> as the value for the <code>GH_TOKEN</code> input parameter:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Open new issue
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">workflow_dispatch
@@ -1208,7 +1208,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-strategy-context" title="Example contents of the strategy context">Example contents of the <code>strategy</code> context<a href="#example-contents-of-the-strategy-context" aria-label="Link to heading 'Example contents of the strategy context'" data-heading-content="Example contents of the strategy context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-strategy-context">Example contents of the <code>strategy</code> context<a href="#example-contents-of-the-strategy-context" aria-label="Link to heading 'Example contents of the strategy context'" data-heading-content="Example contents of the strategy context" class="anchor"></a></h3>
 <p>The following example contents of the <code>strategy</code> context is from a matrix with four jobs, and is taken from the final job. Note the difference between the zero-based <code>job-index</code> number, and <code>job-total</code> which is not zero-based.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">fail-fast</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">,
@@ -1217,7 +1217,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">max-parallel</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">4
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-strategy-context" title="Example usage of the strategy context">Example usage of the <code>strategy</code> context<a href="#example-usage-of-the-strategy-context" aria-label="Link to heading 'Example usage of the strategy context'" data-heading-content="Example usage of the strategy context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-strategy-context">Example usage of the <code>strategy</code> context<a href="#example-usage-of-the-strategy-context" aria-label="Link to heading 'Example usage of the strategy context'" data-heading-content="Example usage of the strategy context" class="anchor"></a></h3>
 <p>This example workflow uses the <code>strategy.job-index</code> property to set a unique name for a log file for each job in a matrix.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Test strategy
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1250,25 +1250,25 @@ When creating workflows and actions, you should always consider whether your cod
 </thead>
 <tbody>
 <tr>
-<td><code>matrix</code></td>
+<td><code class="keyword">matrix</code></td>
 <td><code>object</code></td>
 <td>This context is only available for jobs in a matrix, and changes for each job in a workflow run. You can access this context from any job or step in a workflow. This object contains the properties listed below.</td>
 </tr>
 <tr>
-<td><code>matrix.&lt;property_name&gt;</code></td>
+<td><code class="keyword">matrix.&lt;property_name&gt;</code></td>
 <td><code>string</code></td>
 <td>The value of a matrix property.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-matrix-context" title="Example contents of the matrix context">Example contents of the <code>matrix</code> context<a href="#example-contents-of-the-matrix-context" aria-label="Link to heading 'Example contents of the matrix context'" data-heading-content="Example contents of the matrix context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-matrix-context">Example contents of the <code>matrix</code> context<a href="#example-contents-of-the-matrix-context" aria-label="Link to heading 'Example contents of the matrix context'" data-heading-content="Example contents of the matrix context" class="anchor"></a></h3>
 <p>The following example contents of the <code>matrix</code> context is from a job in a matrix that has the <code>os</code> and <code>node</code> matrix properties defined in the workflow. The job is executing the matrix combination of an <code>ubuntu-latest</code> OS and Node.js version <code>16</code>.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">os</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">ubuntu-latest</span><span style="color:#c0c5ce;">",
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">node</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">16
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-matrix-context" title="Example usage of the matrix context">Example usage of the <code>matrix</code> context<a href="#example-usage-of-the-matrix-context" aria-label="Link to heading 'Example usage of the matrix context'" data-heading-content="Example usage of the matrix context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-matrix-context">Example usage of the <code>matrix</code> context<a href="#example-usage-of-the-matrix-context" aria-label="Link to heading 'Example usage of the matrix context'" data-heading-content="Example usage of the matrix context" class="anchor"></a></h3>
 <p>This example workflow creates a matrix with <code>os</code> and <code>node</code> keys. It uses the <code>matrix.os</code> property to set the runner type for each job, and uses the <code>matrix.node</code> property to set the Node.js version for each job.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Test matrix
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1325,7 +1325,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-needs-context" title="Example contents of the needs context">Example contents of the <code>needs</code> context<a href="#example-contents-of-the-needs-context" aria-label="Link to heading 'Example contents of the needs context'" data-heading-content="Example contents of the needs context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-needs-context">Example contents of the <code>needs</code> context<a href="#example-contents-of-the-needs-context" aria-label="Link to heading 'Example contents of the needs context'" data-heading-content="Example contents of the needs context" class="anchor"></a></h3>
 <p>The following example contents of the <code>needs</code> context shows information for two jobs that the current job depends on.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">build</span><span style="color:#c0c5ce;">": {
@@ -1340,7 +1340,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-needs-context" title="Example usage of the needs context">Example usage of the <code>needs</code> context<a href="#example-usage-of-the-needs-context" aria-label="Link to heading 'Example usage of the needs context'" data-heading-content="Example usage of the needs context" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-needs-context">Example usage of the <code>needs</code> context<a href="#example-usage-of-the-needs-context" aria-label="Link to heading 'Example usage of the needs context'" data-heading-content="Example usage of the needs context" class="anchor"></a></h3>
 <p>This example workflow has three jobs: a <code>build</code> job that does a build, a <code>deploy</code> job that requires the <code>build</code> job, and a <code>debug</code> job that requires both the <code>build</code> and <code>deploy</code> jobs and runs only if there is a failure in the workflow. The <code>deploy</code> job also uses the <code>needs</code> context to access an output from the <code>build</code> job.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Build and deploy
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">push
@@ -1390,7 +1390,7 @@ When creating workflows and actions, you should always consider whether your cod
 </tr>
 </tbody>
 </table>
-<h3 id="example-contents-of-the-inputs-context" title="Example contents of the inputs context">Example contents of the <code>inputs</code> context<a href="#example-contents-of-the-inputs-context" aria-label="Link to heading 'Example contents of the inputs context'" data-heading-content="Example contents of the inputs context" class="anchor"></a></h3>
+<h3 id="example-contents-of-the-inputs-context">Example contents of the <code>inputs</code> context<a href="#example-contents-of-the-inputs-context" aria-label="Link to heading 'Example contents of the inputs context'" data-heading-content="Example contents of the inputs context" class="anchor"></a></h3>
 <p>The following example contents of the <code>inputs</code> context is from a workflow that has defined the <code>build_id</code>, <code>deploy_target</code>, and <code>perform_deploy</code> inputs.</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">build_id</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">123456768</span><span style="color:#c0c5ce;">,
@@ -1398,7 +1398,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">perform_deploy</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">true
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h3 id="example-usage-of-the-inputs-context-in-a-reusable-workflow" title="Example usage of the inputs context in a reusable workflow">Example usage of the <code>inputs</code> context in a reusable workflow<a href="#example-usage-of-the-inputs-context-in-a-reusable-workflow" aria-label="Link to heading 'Example usage of the inputs context in a reusable workflow'" data-heading-content="Example usage of the inputs context in a reusable workflow" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-inputs-context-in-a-reusable-workflow">Example usage of the <code>inputs</code> context in a reusable workflow<a href="#example-usage-of-the-inputs-context-in-a-reusable-workflow" aria-label="Link to heading 'Example usage of the inputs context in a reusable workflow'" data-heading-content="Example usage of the inputs context in a reusable workflow" class="anchor"></a></h3>
 <p>This example reusable workflow uses the <code>inputs</code> context to get the values of the <code>build_id</code>, <code>deploy_target</code>, and <code>perform_deploy</code> inputs that were passed to the reusable workflow from the caller workflow.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Reusable deploy workflow
 </span><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -1422,7 +1422,7 @@ When creating workflows and actions, you should always consider whether your cod
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Deploy build to target
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Deploying build:${{ inputs.build_id }} to target:${{ inputs.deploy_target }}"
 </span></code></pre>
-<h3 id="example-usage-of-the-inputs-context-in-a-manually-triggered-workflow" title="Example usage of the inputs context in a manually triggered workflow">Example usage of the <code>inputs</code> context in a manually triggered workflow<a href="#example-usage-of-the-inputs-context-in-a-manually-triggered-workflow" aria-label="Link to heading 'Example usage of the inputs context in a manually triggered workflow'" data-heading-content="Example usage of the inputs context in a manually triggered workflow" class="anchor"></a></h3>
+<h3 id="example-usage-of-the-inputs-context-in-a-manually-triggered-workflow">Example usage of the <code>inputs</code> context in a manually triggered workflow<a href="#example-usage-of-the-inputs-context-in-a-manually-triggered-workflow" aria-label="Link to heading 'Example usage of the inputs context in a manually triggered workflow'" data-heading-content="Example usage of the inputs context in a manually triggered workflow" class="anchor"></a></h3>
 <p>This example workflow triggered by a <code>workflow_dispatch</code> event uses the <code>inputs</code> context to get the values of the <code>build_id</code>, <code>deploy_target</code>, and <code>perform_deploy</code> inputs that were passed to the workflow.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">workflow_dispatch</span><span style="color:#c0c5ce;">:

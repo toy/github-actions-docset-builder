@@ -11,7 +11,7 @@
 <p>Dependabot runs its checks for version updates at a frequency set by you in the configuration file, where the required field, <code>schedule.interval</code>, must be set to <code>daily</code>, <code>weekly</code>, <code>monthly</code>, <code>quarterly</code>, <code>semiannually</code>, <code>yearly</code>, or <code>cron</code> (see <a href="../../reference/supply-chain-security/dependabot-options-reference.html#cronjob"><code>cronjob</code></a>).</p>
 <p>By default, Dependabot balances its workload by assigning a random time to check and raise pull requests for dependency updates.</p>
 <p>However, to reduce distraction, or to better organize time and resources for reviewing and addressing version updates, you might find it useful to modify the frequency and timings. For example, you may prefer Dependabot to run weekly rather than daily checks for updates, and at a time that ensures pull requests are raised before for your team's triage session.</p>
-<h3 id="modifying-the-frequency-and-timings-for-dependency-updates" title="Controlling the frequency and timings of dependency updates / Modifying the frequency and timings for dependency updates">Modifying the frequency and timings for dependency updates<a href="#modifying-the-frequency-and-timings-for-dependency-updates" aria-label="Link to heading 'Modifying the frequency and timings for dependency updates'" data-heading-content="Modifying the frequency and timings for dependency updates" class="anchor"></a></h3>
+<h3 id="modifying-the-frequency-and-timings-for-dependency-updates">Modifying the frequency and timings for dependency updates<a href="#modifying-the-frequency-and-timings-for-dependency-updates" aria-label="Link to heading 'Modifying the frequency and timings for dependency updates'" data-heading-content="Modifying the frequency and timings for dependency updates" class="anchor"></a></h3>
 <p>You can use <code>schedule</code> with a combination of options to modify the frequency and timings of when Dependabot checks for version updates.</p>
 <p>The example <code>dependabot.yml</code> file below changes the npm configuration to specify that Dependabot should check for version updates to npm dependencies every Tuesday at 02:00 Japanese Standard Time (UTC +09:00).</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># `dependabot.yml` file with
@@ -30,7 +30,7 @@
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">timezone</span><span style="color:#c0c5ce;">: "</span><span style="color:#a3be8c;">Asia/Tokyo</span><span style="color:#c0c5ce;">"
 </span></code></pre>
 <p>See also <a href="../../reference/supply-chain-security/dependabot-options-reference.html#schedule-">schedule</a>.</p>
-<h3 id="setting-up-a-cooldown-period-for-dependency-updates" title="Controlling the frequency and timings of dependency updates / Setting up a cooldown period for dependency updates">Setting up a cooldown period for dependency updates<a href="#setting-up-a-cooldown-period-for-dependency-updates" aria-label="Link to heading 'Setting up a cooldown period for dependency updates'" data-heading-content="Setting up a cooldown period for dependency updates" class="anchor"></a></h3>
+<h3 id="setting-up-a-cooldown-period-for-dependency-updates">Setting up a cooldown period for dependency updates<a href="#setting-up-a-cooldown-period-for-dependency-updates" aria-label="Link to heading 'Setting up a cooldown period for dependency updates'" data-heading-content="Setting up a cooldown period for dependency updates" class="anchor"></a></h3>
 <p>You can use <code>cooldown</code> with a combination of options to control when Dependabot creates pull requests for <strong>version updates</strong>, but not <strong>security updates</strong>.</p>
 <p>By default, Dependabot applies a cooldown period of 3 days to version updates, so a new version is not considered for a version update until 3 days after its release. <strong>This default cooldown does not apply to security updates.</strong></p>
 <p>The example <code>dependabot.yml</code> file below shows a cooldown period being applied to the dependencies <code>requests</code>, <code>numpy</code>, and those prefixed with <code>pandas</code> or <code>django</code>, but not to the dependency called <code>pandas</code> (exact match), which is excluded via the <strong>exclude</strong> list.</p>
@@ -74,7 +74,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 </ul>
 <p>See also <a href="../../reference/supply-chain-security/dependabot-options-reference.html#cooldown-"><code>cooldown</code></a>.</p>
 <h2 id="prioritizing-meaningful-updates" title="Prioritizing meaningful updates">Prioritizing meaningful updates<a href="#prioritizing-meaningful-updates" aria-label="Link to heading 'Prioritizing meaningful updates'" data-heading-content="Prioritizing meaningful updates" class="anchor"></a></h2>
-<h3 id="grouping-related-dependencies-together" title="Prioritizing meaningful updates / Grouping related dependencies together">Grouping related dependencies together<a href="#grouping-related-dependencies-together" aria-label="Link to heading 'Grouping related dependencies together'" data-heading-content="Grouping related dependencies together" class="anchor"></a></h3>
+<h3 id="grouping-related-dependencies-together">Grouping related dependencies together<a href="#grouping-related-dependencies-together" aria-label="Link to heading 'Grouping related dependencies together'" data-heading-content="Grouping related dependencies together" class="anchor"></a></h3>
 <p>You can use <code>groups</code> to consolidate updates for multiple dependencies into a single pull request. This helps you focus your review time on higher risk updates, and minimize the time spent reviewing minor version updates. For example, you can combine updates for minor or patch updates for development dependencies into a single pull request, and have a dedicated group for security or version updates that impact a key area of your codebase.</p>
 <p>You must configure groups per individual package ecosystem, then you can create multiple groups per package ecosystem using a combination of criteria:</p>
 <ul>
@@ -85,7 +85,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 </ul>
 <p>To see all supported values for each criterion, see <a href="../../reference/supply-chain-security/dependabot-options-reference.html#groups--"><code>groups</code></a>.</p>
 <p>The below examples present several different methods to create groups of dependencies using the criteria.</p>
-<h3 id="example-1-three-version-update-groups" title="Prioritizing meaningful updates / Example 1: Three version update groups">Example 1: Three version update groups<a href="#example-1-three-version-update-groups" aria-label="Link to heading 'Example 1: Three version update groups'" data-heading-content="Example 1: Three version update groups" class="anchor"></a></h3>
+<h3 id="example-1-three-version-update-groups">Example 1: Three version update groups<a href="#example-1-three-version-update-groups" aria-label="Link to heading 'Example 1: Three version update groups'" data-heading-content="Example 1: Three version update groups" class="anchor"></a></h3>
 <p>In this example, the <code>dependabot.yml</code> file:</p>
 <ul>
 <li>Creates three groups, called "<code>production-dependencies</code>", "<code>development-dependencies</code>", and "<code>rubocop</code>".</li>
@@ -117,7 +117,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 <li>Instead, development dependencies matching <code>rubocop*</code> will be included in the <code>rubocop</code> group. Due to the ordering, production dependencies matching <code>rubocop*</code> will be included in the <code>production-dependencies</code> group.</li>
 <li>In addition, all groups default to applying to version updates only, since the <code>applies-to</code> key is absent.</li>
 </ul>
-<h3 id="example-2-grouped-updates-with-excluded-dependencies" title="Prioritizing meaningful updates / Example 2: Grouped updates with excluded dependencies">Example 2: Grouped updates with excluded dependencies<a href="#example-2-grouped-updates-with-excluded-dependencies" aria-label="Link to heading 'Example 2: Grouped updates with excluded dependencies'" data-heading-content="Example 2: Grouped updates with excluded dependencies" class="anchor"></a></h3>
+<h3 id="example-2-grouped-updates-with-excluded-dependencies">Example 2: Grouped updates with excluded dependencies<a href="#example-2-grouped-updates-with-excluded-dependencies" aria-label="Link to heading 'Example 2: Grouped updates with excluded dependencies'" data-heading-content="Example 2: Grouped updates with excluded dependencies" class="anchor"></a></h3>
 <p>In this example, the <code>dependabot.yml</code> file:</p>
 <ul>
 <li>Creates a group called "<code>support-dependencies</code>," as part of a customized Bundler configuration.</li>
@@ -161,7 +161,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 <li>Dependencies that match <code>gc_ruboconfig</code> and <code>gocardless-*</code> are excluded from the group, and Dependabot continues to raise single pull requests for these dependencies. This can be helpful if updates for these dependencies need to be reviewed with closer scrutiny.</li>
 <li>For <code>support-dependencies</code>, Dependabot will only raise pull requests for version updates.</li>
 </ul>
-<h3 id="example-3-individual-pull-requests-for-major-updates-and-grouped-for-minorpatch-updates" title="Prioritizing meaningful updates / Example 3: Individual pull requests for major updates and grouped for minor/patch updates">Example 3: Individual pull requests for major updates and grouped for minor/patch updates<a href="#example-3-individual-pull-requests-for-major-updates-and-grouped-for-minorpatch-updates" aria-label="Link to heading 'Example 3: Individual pull requests for major updates and grouped for minor/patch updates'" data-heading-content="Example 3: Individual pull requests for major updates and grouped for minor/patch updates" class="anchor"></a></h3>
+<h3 id="example-3-individual-pull-requests-for-major-updates-and-grouped-for-minorpatch-updates">Example 3: Individual pull requests for major updates and grouped for minor/patch updates<a href="#example-3-individual-pull-requests-for-major-updates-and-grouped-for-minorpatch-updates" aria-label="Link to heading 'Example 3: Individual pull requests for major updates and grouped for minor/patch updates'" data-heading-content="Example 3: Individual pull requests for major updates and grouped for minor/patch updates" class="anchor"></a></h3>
 <p>In this example, the <code>dependabot.yml</code> file:</p>
 <ul>
 <li>Creates a group called "<code>angular</code>."</li>
@@ -191,7 +191,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 <li>Dependabot will create a grouped pull request for all Angular dependencies that have a minor or patch update.</li>
 <li>All major updates will continue to be raised as individual pull requests.</li>
 </ul>
-<h3 id="example-4-grouped-pull-requests-for-minorpatch-updates-and-no-pull-requests-for-major-updates" title="Prioritizing meaningful updates / Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates">Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates<a href="#example-4-grouped-pull-requests-for-minorpatch-updates-and-no-pull-requests-for-major-updates" aria-label="Link to heading 'Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates'" data-heading-content="Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates" class="anchor"></a></h3>
+<h3 id="example-4-grouped-pull-requests-for-minorpatch-updates-and-no-pull-requests-for-major-updates">Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates<a href="#example-4-grouped-pull-requests-for-minorpatch-updates-and-no-pull-requests-for-major-updates" aria-label="Link to heading 'Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates'" data-heading-content="Example 4: Grouped pull requests for minor/patch updates and no pull requests for major updates" class="anchor"></a></h3>
 <p>In this example, the <code>dependabot.yml</code> file:</p>
 <ul>
 <li>Creates two groups called "<code>angular</code>" and "<code>minor-and-patch</code>".</li>
@@ -231,7 +231,7 @@ We recommend the use of <code>exclude</code> to <strong>only</strong> exclude <s
 <li>Minor and patch security updates for Angular dependencies are also grouped together into a single pull request.</li>
 <li>Dependabot won't automatically open pull requests for major updates for Angular.</li>
 </ul>
-<h3 id="grouping-updates-across-directories-in-a-monorepo" title="Prioritizing meaningful updates / Grouping updates across directories in a monorepo">Grouping updates across directories in a monorepo<a href="#grouping-updates-across-directories-in-a-monorepo" aria-label="Link to heading 'Grouping updates across directories in a monorepo'" data-heading-content="Grouping updates across directories in a monorepo" class="anchor"></a></h3>
+<h3 id="grouping-updates-across-directories-in-a-monorepo">Grouping updates across directories in a monorepo<a href="#grouping-updates-across-directories-in-a-monorepo" aria-label="Link to heading 'Grouping updates across directories in a monorepo'" data-heading-content="Grouping updates across directories in a monorepo" class="anchor"></a></h3>
 <p>If you manage a monorepo with multiple directories that share common dependencies, you can reduce the number of pull requests for version updates by grouping updates by dependency name across all directories.</p>
 <p>When you configure Dependabot to monitor multiple directories and enable grouping by dependency name, Dependabot will:</p>
 <ul>

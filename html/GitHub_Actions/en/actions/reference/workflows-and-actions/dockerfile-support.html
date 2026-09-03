@@ -1,8 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Dockerfile support for GitHub Actions</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Workflows and actions</a> / </nav><h1 id="dockerfile-support-for-github-actions">Dockerfile support for GitHub Actions<a href="#dockerfile-support-for-github-actions" aria-label="Link to heading 'Dockerfile support for GitHub Actions'" data-heading-content="Dockerfile support for GitHub Actions" class="anchor"></a></h1>
 <p>When creating a Dockerfile for a Docker container action, you should be aware of how some Docker instructions interact with GitHub Actions and an action's metadata file.</p>
-<h3 id="user" title="USER">USER<a href="#user" aria-label="Link to heading 'USER'" data-heading-content="USER" class="anchor"></a></h3>
+<h3 id="user">USER<a href="#user" aria-label="Link to heading 'USER'" data-heading-content="USER" class="anchor"></a></h3>
 <p>Docker actions must be run by the default Docker user (root). Do not use the <code>USER</code> instruction in your <code>Dockerfile</code>, because you won't be able to access the <code>GITHUB_WORKSPACE</code> directory. For more information, see <a href="variables.html#default-environment-variables">Variables reference</a> and <a href="https://docs.docker.com/engine/reference/builder/#user" class="external">USER reference</a> in the Docker documentation.</p>
-<h3 id="from" title="FROM">FROM<a href="#from" aria-label="Link to heading 'FROM'" data-heading-content="FROM" class="anchor"></a></h3>
+<h3 id="from">FROM<a href="#from" aria-label="Link to heading 'FROM'" data-heading-content="FROM" class="anchor"></a></h3>
 <p>The first instruction in the <code>Dockerfile</code> must be <code>FROM</code>, which selects a Docker base image. For more information, see the <a href="https://docs.docker.com/engine/reference/builder/#from" class="external">FROM reference</a> in the Docker documentation.</p>
 <p>These are some best practices when setting the <code>FROM</code> argument:</p>
 <ul>
@@ -10,9 +10,9 @@
 <li>Use a version tag if it exists, preferably with a major version. For example, use <code>node:10</code> instead of <code>node:latest</code>.</li>
 <li>It's recommended to use Docker images based on the <a href="https://www.debian.org/" class="external">Debian</a> operating system.</li>
 </ul>
-<h3 id="workdir" title="WORKDIR">WORKDIR<a href="#workdir" aria-label="Link to heading 'WORKDIR'" data-heading-content="WORKDIR" class="anchor"></a></h3>
+<h3 id="workdir">WORKDIR<a href="#workdir" aria-label="Link to heading 'WORKDIR'" data-heading-content="WORKDIR" class="anchor"></a></h3>
 <p>GitHub sets the working directory path in the <code>GITHUB_WORKSPACE</code> environment variable. It's recommended to not use the <code>WORKDIR</code> instruction in your <code>Dockerfile</code>. Before the action executes, GitHub will mount the <code>GITHUB_WORKSPACE</code> directory on top of anything that was at that location in the Docker image and set <code>GITHUB_WORKSPACE</code> as the working directory. For more information, see <a href="variables.html#default-environment-variables">Variables reference</a> and the <a href="https://docs.docker.com/engine/reference/builder/#workdir" class="external">WORKDIR reference</a> in the Docker documentation.</p>
-<h3 id="entrypoint" title="ENTRYPOINT">ENTRYPOINT<a href="#entrypoint" aria-label="Link to heading 'ENTRYPOINT'" data-heading-content="ENTRYPOINT" class="anchor"></a></h3>
+<h3 id="entrypoint">ENTRYPOINT<a href="#entrypoint" aria-label="Link to heading 'ENTRYPOINT'" data-heading-content="ENTRYPOINT" class="anchor"></a></h3>
 <p>If you define <code>entrypoint</code> in an action's metadata file, it will override the <code>ENTRYPOINT</code> defined in the <code>Dockerfile</code>. For more information, see <a href="metadata-syntax.html#runsentrypoint">Metadata syntax reference</a>.</p>
 <p>The Docker <code>ENTRYPOINT</code> instruction has a <em>shell</em> form and <em>exec</em> form. The Docker <code>ENTRYPOINT</code> documentation recommends using the <em>exec</em> form of the <code>ENTRYPOINT</code> instruction. For more information about <em>exec</em> and <em>shell</em> form, see the <a href="https://docs.docker.com/engine/reference/builder/#entrypoint" class="external">ENTRYPOINT reference</a> in the Docker documentation.</p>
 <p>You should not use <code>WORKDIR</code> to specify your entrypoint in your Dockerfile. Instead, you should use an absolute path. For more information, see <a href="#workdir">WORKDIR</a>.</p>
@@ -48,7 +48,7 @@
 <p>When an <code>ENTRYPOINT</code> shell script is not executable, you'll receive an error similar to this:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused "exec: \"/entrypoint.sh\": permission denied": unknown
 </span></code></pre>
-<h3 id="cmd" title="CMD">CMD<a href="#cmd" aria-label="Link to heading 'CMD'" data-heading-content="CMD" class="anchor"></a></h3>
+<h3 id="cmd">CMD<a href="#cmd" aria-label="Link to heading 'CMD'" data-heading-content="CMD" class="anchor"></a></h3>
 <p>If you define <code>args</code> in the action's metadata file, <code>args</code> will override the <code>CMD</code> instruction specified in the <code>Dockerfile</code>. For more information, see <a href="metadata-syntax.html#runsargs">Metadata syntax reference</a>.</p>
 <p>If you use <code>CMD</code> in your <code>Dockerfile</code>, follow these guidelines:</p>
 <ol>

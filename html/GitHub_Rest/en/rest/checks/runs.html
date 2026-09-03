@@ -8,7 +8,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="create-a-check-run" title="Create a check run">Create a check run<a href="#create-a-check-run" aria-label="Link to heading 'Create a check run'" data-heading-content="Create a check run" class="anchor"></a></h2>
+<h2 id="create-a-check-run" title="POST /repos/{owner}/{repo}/check-runs (Create a check run)">Create a check run<a href="#create-a-check-run" aria-label="Link to heading 'Create a check run'" data-heading-content="Create a check run" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/check-runs
 </span></code></pre>
 <p>Creates a new check run for a specific commit in a repository.<br>
@@ -16,7 +16,7 @@ To create a check run, you must use a GitHub App. OAuth apps and authenticated u
 In a check suite, GitHub limits the number of check runs with the same name to 1000. Once these check runs exceed 1000, GitHub will start to automatically delete older check runs.<br>
 Note</p>
 <p>The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array.</p>
-<h3 id="parameters" title="Create a check run / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -38,11 +38,11 @@ The name of the repository without the .git extension. The name is not case sens
 <li><strong><code>status</code></strong> (string) (required)<br>
 Can be one of: <code>completed</code></li>
 </ul>
-<h3 id="http-response-status-codes" title="Create a check run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>201</strong> - Created</li>
 </ul>
-<h3 id="code-examples" title="Create a check run / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-of-an-in_progress-conclusion">Example of an in<span data-escaped-char="">_</span>progress conclusion<a href="#example-of-an-in_progress-conclusion" aria-label="Link to heading 'Example of an in_progress conclusion'" data-heading-content="Example of an in_progress conclusion" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -431,14 +431,14 @@ Can be one of: <code>completed</code></li>
 </ul>
 </li>
 </ul>
-<h2 id="get-a-check-run" title="Get a check run">Get a check run<a href="#get-a-check-run" aria-label="Link to heading 'Get a check run'" data-heading-content="Get a check run" class="anchor"></a></h2>
+<h2 id="get-a-check-run" title="GET /repos/{owner}/{repo}/check-runs/{check_run_id} (Get a check run)">Get a check run<a href="#get-a-check-run" aria-label="Link to heading 'Get a check run'" data-heading-content="Get a check run" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/check-runs/{check_run_id}
 </span></code></pre>
 <p>Gets a single check run using its id.<br>
 Note</p>
 <p>The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-1" title="Get a check run / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -459,11 +459,11 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the check run.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Get a check run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-1" title="Get a check run / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -472,14 +472,14 @@ The unique identifier of the check run.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-check-run">Create a check run</a>.</p>
-<h2 id="update-a-check-run" title="Update a check run">Update a check run<a href="#update-a-check-run" aria-label="Link to heading 'Update a check run'" data-heading-content="Update a check run" class="anchor"></a></h2>
+<h2 id="update-a-check-run" title="PATCH /repos/{owner}/{repo}/check-runs/{check_run_id} (Update a check run)">Update a check run<a href="#update-a-check-run" aria-label="Link to heading 'Update a check run'" data-heading-content="Update a check run" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}
 </span></code></pre>
 <p>Updates a check run for a specific commit in a repository.<br>
 Note</p>
 <p>The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array.</p>
 <p>OAuth apps and personal access tokens (classic) cannot use this endpoint.</p>
-<h3 id="parameters-2" title="Update a check run / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -593,11 +593,11 @@ A reference for the action on the integrator's system. The maximum size is 20 ch
 </ul>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2" title="Update a check run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-2" title="Update a check run / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -644,12 +644,12 @@ A reference for the action on the integrator's system. The maximum size is 20 ch
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-check-run">Create a check run</a>.</p>
-<h2 id="list-check-run-annotations" title="List check run annotations">List check run annotations<a href="#list-check-run-annotations" aria-label="Link to heading 'List check run annotations'" data-heading-content="List check run annotations" class="anchor"></a></h2>
+<h2 id="list-check-run-annotations" title="GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations (List check run annotations)">List check run annotations<a href="#list-check-run-annotations" aria-label="Link to heading 'List check run annotations'" data-heading-content="List check run annotations" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
 </span></code></pre>
 <p>Lists annotations for a check run using the annotation id.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-3" title="List check run annotations / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -680,11 +680,11 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="List check run annotations / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-3" title="List check run annotations / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -705,12 +705,12 @@ Default: <code>1</code></p>
 <li><code>raw_details</code>: required, string or null</li>
 <li><code>blob_href</code>: required, string</li>
 </ul>
-<h2 id="rerequest-a-check-run" title="Rerequest a check run">Rerequest a check run<a href="#rerequest-a-check-run" aria-label="Link to heading 'Rerequest a check run'" data-heading-content="Rerequest a check run" class="anchor"></a></h2>
+<h2 id="rerequest-a-check-run" title="POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest (Rerequest a check run)">Rerequest a check run<a href="#rerequest-a-check-run" aria-label="Link to heading 'Rerequest a check run'" data-heading-content="Rerequest a check run" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
 </span></code></pre>
 <p>Triggers GitHub to rerequest an existing check run, without pushing new code to a repository. This endpoint will trigger the check<span data-escaped-char="">_</span>run webhook event with the action rerequested. When a check run is rerequested, the status of the check suite it belongs to is reset to queued and the conclusion is cleared. The check run itself is not updated. GitHub apps recieving the check<span data-escaped-char="">_</span>run webhook with the rerequested action should then decide if the check run should be reset or updated and call the update check<span data-escaped-char="">_</span>run endpoint to update the check<span data-escaped-char="">_</span>run if desired.<br>
 For more information about how to re-run GitHub Actions jobs, see "Re-run a job from a workflow run".</p>
-<h3 id="parameters-4" title="Rerequest a check run / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -731,7 +731,7 @@ The name of the repository without the .git extension. The name is not case sens
 The unique identifier of the check run.</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Rerequest a check run / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>201</strong> - Created</p>
@@ -746,7 +746,7 @@ The unique identifier of the check run.</p>
 <p><strong>422</strong> - Validation error if the check run is not rerequestable</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Rerequest a check run / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -754,14 +754,14 @@ The unique identifier of the check run.</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/check-runs/CHECK_RUN_ID/rerequest
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
-<h2 id="list-check-runs-in-a-check-suite" title="List check runs in a check suite">List check runs in a check suite<a href="#list-check-runs-in-a-check-suite" aria-label="Link to heading 'List check runs in a check suite'" data-heading-content="List check runs in a check suite" class="anchor"></a></h2>
+<h2 id="list-check-runs-in-a-check-suite" title="GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs (List check runs in a check suite)">List check runs in a check suite<a href="#list-check-runs-in-a-check-suite" aria-label="Link to heading 'List check runs in a check suite'" data-heading-content="List check runs in a check suite" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
 </span></code></pre>
 <p>Lists check runs for a check suite using its id.<br>
 Note</p>
 <p>The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array.</p>
 <p>OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-5" title="List check runs in a check suite / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -807,11 +807,11 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="List check runs in a check suite / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-5" title="List check runs in a check suite / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -982,7 +982,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="list-check-runs-for-a-git-reference" title="List check runs for a Git reference">List check runs for a Git reference<a href="#list-check-runs-for-a-git-reference" aria-label="Link to heading 'List check runs for a Git reference'" data-heading-content="List check runs for a Git reference" class="anchor"></a></h2>
+<h2 id="list-check-runs-for-a-git-reference" title="GET /repos/{owner}/{repo}/commits/{ref}/check-runs (List check runs for a Git reference)">List check runs for a Git reference<a href="#list-check-runs-for-a-git-reference" aria-label="Link to heading 'List check runs for a Git reference'" data-heading-content="List check runs for a Git reference" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/commits/{ref}/check-runs
 </span></code></pre>
 <p>Lists check runs for a commit ref. The ref can be a SHA, branch name, or a tag name.<br>
@@ -990,7 +990,7 @@ Note</p>
 <p>The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty pull<span data-escaped-char="">_</span>requests array.</p>
 <p>If there are more than 1000 check suites on a single git reference, this endpoint will limit check runs to the 1000 most recent check suites. To iterate over all possible check runs, use the List check suites for a Git reference endpoint and provide the check<span data-escaped-char="">_</span>suite<span data-escaped-char="">_</span>id parameter to the List check runs in a check suite endpoint.<br>
 OAuth app tokens and personal access tokens (classic) need the repo scope to use this endpoint on a private repository.</p>
-<h3 id="parameters-6" title="List check runs for a Git reference / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1039,11 +1039,11 @@ Default: <code>1</code></p>
 <p><strong><code>app_id</code></strong> (integer)</p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="List check runs for a Git reference / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-6" title="List check runs for a Git reference / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

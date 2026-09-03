@@ -4,20 +4,20 @@
 <p>GitHub limits the number of REST API requests that you can make within a specific amount of time. This limit helps prevent abuse and denial-of-service attacks, and ensures that the API remains available for all users.</p>
 <p>Some endpoints, like the search endpoints, have more restrictive limits. For more information about these endpoints, see <a href="../rate-limit/rate-limit.html">REST API endpoints for rate limits</a>. The GraphQL API also has a separate primary rate limit. See <a href="https://docs.github.com/en/graphql/overview/rate-limits-and-query-limits-for-the-graphql-api" class="external">Rate limits and query limits for the GraphQL API</a>.</p>
 <p>In general, you can calculate your primary rate limit for the REST API based on your method of authentication, as described below.</p>
-<h3 id="primary-rate-limit-for-unauthenticated-users" title="About primary rate limits / Primary rate limit for unauthenticated users">Primary rate limit for unauthenticated users<a href="#primary-rate-limit-for-unauthenticated-users" aria-label="Link to heading 'Primary rate limit for unauthenticated users'" data-heading-content="Primary rate limit for unauthenticated users" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-unauthenticated-users">Primary rate limit for unauthenticated users<a href="#primary-rate-limit-for-unauthenticated-users" aria-label="Link to heading 'Primary rate limit for unauthenticated users'" data-heading-content="Primary rate limit for unauthenticated users" class="anchor"></a></h3>
 <p>You can make unauthenticated requests if you are only fetching public data. Unauthenticated requests are associated with the originating IP address, not with the user or application that made the request.</p>
 <p>The primary rate limit for unauthenticated requests is 60 requests per hour.</p>
-<h3 id="primary-rate-limit-for-authenticated-users" title="About primary rate limits / Primary rate limit for authenticated users">Primary rate limit for authenticated users<a href="#primary-rate-limit-for-authenticated-users" aria-label="Link to heading 'Primary rate limit for authenticated users'" data-heading-content="Primary rate limit for authenticated users" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-authenticated-users">Primary rate limit for authenticated users<a href="#primary-rate-limit-for-authenticated-users" aria-label="Link to heading 'Primary rate limit for authenticated users'" data-heading-content="Primary rate limit for authenticated users" class="anchor"></a></h3>
 <p>You can use a personal access token to make API requests. Additionally, you can authorize a GitHub App or OAuth app, which can then make API requests on your behalf.</p>
 <p>All of these requests count towards your personal rate limit of 5,000 requests per hour. Requests made on your behalf by a GitHub App that is owned by a GitHub Enterprise Cloud organization have a higher rate limit of 15,000 requests per hour. Similarly, requests made on your behalf by a OAuth app that is owned or approved by a GitHub Enterprise Cloud organization have a higher rate limit of 15,000 requests per hour if you are a member of the GitHub Enterprise Cloud organization. However, requests made by a higher-limit app reduce the remaining budget available for lower-limit authentication methods. For example, if an app with a 15,000 request limit makes 10,000 requests on your behalf, you will have exhausted the 5,000 request budget for your personal access tokens, even though the app has 5,000 requests remaining.</p>
-<h3 id="primary-rate-limit-for-git-lfs-access" title="About primary rate limits / Primary rate limit for Git LFS access">Primary rate limit for Git LFS access<a href="#primary-rate-limit-for-git-lfs-access" aria-label="Link to heading 'Primary rate limit for Git LFS access'" data-heading-content="Primary rate limit for Git LFS access" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-git-lfs-access">Primary rate limit for Git LFS access<a href="#primary-rate-limit-for-git-lfs-access" aria-label="Link to heading 'Primary rate limit for Git LFS access'" data-heading-content="Primary rate limit for Git LFS access" class="anchor"></a></h3>
 <p>API requests are required when you upload or download Git LFS content. These count towards a separate rate limiting bucket with a limit of 300 requests per minute for unauthenticated requests and 3,000 requests per minute for authenticated requests.</p>
 <p>Git LFS uses a batch API which processes 100 Git LFS objects per API request by default. That means unauthenticated users can download 30,000 Git LFS objects per minute and authenticated users can upload/download 300,000 Git LFS objects per minute.</p>
-<h3 id="primary-rate-limit-for-github-app-installations" title="About primary rate limits / Primary rate limit for GitHub App installations">Primary rate limit for GitHub App installations<a href="#primary-rate-limit-for-github-app-installations" aria-label="Link to heading 'Primary rate limit for GitHub App installations'" data-heading-content="Primary rate limit for GitHub App installations" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-github-app-installations">Primary rate limit for GitHub App installations<a href="#primary-rate-limit-for-github-app-installations" aria-label="Link to heading 'Primary rate limit for GitHub App installations'" data-heading-content="Primary rate limit for GitHub App installations" class="anchor"></a></h3>
 <p>GitHub Apps authenticating with an installation access token use the installation's minimum rate limit of 5,000 requests per hour. If the installation is on a GitHub Enterprise Cloud organization, the installation has a rate limit of 15,000 requests per hour.</p>
 <p>For installations that are not on a GitHub Enterprise Cloud organization, the rate limit for the installation will scale with the number of users and repositories. Installations that have more than 20 repositories receive another 50 requests per hour for each repository. Installations that are on an organization that have more than 20 users receive another 50 requests per hour for each user. The rate limit cannot increase beyond 12,500 requests per hour.</p>
 <p>Primary rate limits for GitHub App user access tokens (as opposed to installation access tokens) are dictated by the primary rate limits for the authenticated user. This rate limit is combined with any requests that another GitHub App or OAuth app makes on that user's behalf and any requests that the user makes with a personal access token. For more information, see <a href="#primary-rate-limit-for-authenticated-users">Rate limits for the REST API</a>.</p>
-<h3 id="primary-rate-limit-for-oauth-apps" title="About primary rate limits / Primary rate limit for OAuth apps">Primary rate limit for OAuth apps<a href="#primary-rate-limit-for-oauth-apps" aria-label="Link to heading 'Primary rate limit for OAuth apps'" data-heading-content="Primary rate limit for OAuth apps" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-oauth-apps">Primary rate limit for OAuth apps<a href="#primary-rate-limit-for-oauth-apps" aria-label="Link to heading 'Primary rate limit for OAuth apps'" data-heading-content="Primary rate limit for OAuth apps" class="anchor"></a></h3>
 <p>Primary rate limits for OAuth access tokens generated by a OAuth app are dictated by the primary rate limits for authenticated users. This rate limit is combined with any requests that another GitHub App or OAuth app makes on that user's behalf and any requests that the user makes with a personal access token. See <a href="#primary-rate-limit-for-authenticated-users">Primary rate limit for authenticated users</a>.</p>
 <p>OAuth apps can also use their client ID and client secret to fetch public data. For example:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -u YOUR_CLIENT_ID:YOUR_CLIENT_SECRET -I https://api.github.com/meta
@@ -27,7 +27,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Never include your app's client secret in client-side code or in code that runs on a user device. The client secret can be used to generate OAuth access tokens for users who have authorized your app, so you should always keep the client secret secure.</p>
 </div>
-<h3 id="primary-rate-limit-for-github_token-in-github-actions" title="About primary rate limits / Primary rate limit for GITHUB_TOKEN in GitHub Actions">Primary rate limit for <code>GITHUB_TOKEN</code> in GitHub Actions<a href="#primary-rate-limit-for-github_token-in-github-actions" aria-label="Link to heading 'Primary rate limit for GITHUB_TOKEN in GitHub Actions'" data-heading-content="Primary rate limit for GITHUB_TOKEN in GitHub Actions" class="anchor"></a></h3>
+<h3 id="primary-rate-limit-for-github_token-in-github-actions">Primary rate limit for <code>GITHUB_TOKEN</code> in GitHub Actions<a href="#primary-rate-limit-for-github_token-in-github-actions" aria-label="Link to heading 'Primary rate limit for GITHUB_TOKEN in GitHub Actions'" data-heading-content="Primary rate limit for GITHUB_TOKEN in GitHub Actions" class="anchor"></a></h3>
 <p>You can use the built-in <code>GITHUB_TOKEN</code> to authenticate requests in GitHub Actions workflows. See <a href="https://docs.github.com/en/actions/tutorials/authenticate-with-github_token" class="external">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a>.</p>
 <p>The rate limit for <code>GITHUB_TOKEN</code> is 1,000 requests per hour per repository. For requests to resources that belong to a GitHub Enterprise Cloud account, the limit is 15,000 requests per hour per repository.</p>
 <h2 id="about-secondary-rate-limits" title="About secondary rate limits">About secondary rate limits<a href="#about-secondary-rate-limits" aria-label="Link to heading 'About secondary rate limits'" data-heading-content="About secondary rate limits" class="anchor"></a></h2>
@@ -42,7 +42,7 @@
 <li><em>Make too many OAuth access token requests in a short period of time.</em> No more than 2,000 OAuth access token requests per hour are allowed for GitHub Apps and OAuth apps.</li>
 </ul>
 <p>These secondary rate limits are subject to change without notice. You may also encounter a secondary rate limit for undisclosed reasons.</p>
-<h3 id="calculating-points-for-the-secondary-rate-limit" title="About secondary rate limits / Calculating points for the secondary rate limit">Calculating points for the secondary rate limit<a href="#calculating-points-for-the-secondary-rate-limit" aria-label="Link to heading 'Calculating points for the secondary rate limit'" data-heading-content="Calculating points for the secondary rate limit" class="anchor"></a></h3>
+<h3 id="calculating-points-for-the-secondary-rate-limit">Calculating points for the secondary rate limit<a href="#calculating-points-for-the-secondary-rate-limit" aria-label="Link to heading 'Calculating points for the secondary rate limit'" data-heading-content="Calculating points for the secondary rate limit" class="anchor"></a></h3>
 <p>Some secondary rate limits are determined by the point values of requests. For GraphQL requests, these point values are separate from the point value calculations for the primary rate limit.</p>
 <table>
 <thead>
@@ -82,23 +82,23 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">x-ratelimit-limit</code></td>
+<td><code>x-ratelimit-limit</code></td>
 <td>The maximum number of requests that you can make per hour</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-remaining</code></td>
+<td><code>x-ratelimit-remaining</code></td>
 <td>The number of requests remaining in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-used</code></td>
+<td><code>x-ratelimit-used</code></td>
 <td>The number of requests you have made in the current rate limit window</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-reset</code></td>
+<td><code>x-ratelimit-reset</code></td>
 <td>The time at which the current rate limit window resets, in UTC epoch seconds</td>
 </tr>
 <tr>
-<td><code class="keyword">x-ratelimit-resource</code></td>
+<td><code>x-ratelimit-resource</code></td>
 <td>The rate limit resource that the request counted against. For more information about the different resources, see <a href="../rate-limit/rate-limit.html#get-rate-limit-status-for-the-authenticated-user">REST API endpoints for rate limits</a>.</td>
 </tr>
 </tbody>

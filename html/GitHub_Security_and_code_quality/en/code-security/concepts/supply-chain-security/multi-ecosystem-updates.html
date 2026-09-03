@@ -38,7 +38,7 @@
 <li>Better for organizing dependencies within a single package manager</li>
 </ul>
 <p>Use multi-ecosystem groups when you want to combine updates across different package managers. Use single-ecosystem groups when you want to organize dependencies within a single package manager (for example, grouping all AWS-related npm packages together).</p>
-<h3 id="configuration-merging-behavior" title="Multi-ecosystem versus single-ecosystem groups / Configuration merging behavior">Configuration merging behavior<a href="#configuration-merging-behavior" aria-label="Link to heading 'Configuration merging behavior'" data-heading-content="Configuration merging behavior" class="anchor"></a></h3>
+<h3 id="configuration-merging-behavior">Configuration merging behavior<a href="#configuration-merging-behavior" aria-label="Link to heading 'Configuration merging behavior'" data-heading-content="Configuration merging behavior" class="anchor"></a></h3>
 <p>Some configuration options can be set at both the group level and ecosystem level. Dependabot combines these values differently depending on the option:</p>
 <p><strong>Additive options</strong> (values are merged):</p>
 <ul>
@@ -56,19 +56,19 @@
 <p>Attempting to set these options at the ecosystem level will cause a configuration error.</p>
 <p>For a complete reference of all available configuration options and their behavior, see <a href="../../reference/supply-chain-security/dependabot-options-reference.html#multi-ecosystem-groups-">Dependabot options reference</a>.</p>
 <h2 id="use-cases" title="Use cases">Use cases<a href="#use-cases" aria-label="Link to heading 'Use cases'" data-heading-content="Use cases" class="anchor"></a></h2>
-<h3 id="infrastructure-projects" title="Use cases / Infrastructure projects">Infrastructure projects<a href="#infrastructure-projects" aria-label="Link to heading 'Infrastructure projects'" data-heading-content="Infrastructure projects" class="anchor"></a></h3>
+<h3 id="infrastructure-projects">Infrastructure projects<a href="#infrastructure-projects" aria-label="Link to heading 'Infrastructure projects'" data-heading-content="Infrastructure projects" class="anchor"></a></h3>
 <p>Infrastructure code often uses multiple technologies—Docker containers, Terraform for cloud resources, and Python scripts for automation. Grouping these updates together simplifies review and deployment coordination.</p>
 <p><strong>Why group these together:</strong> Infrastructure changes often need to be deployed together. Having separate PRs for each technology creates coordination overhead and makes it harder to track what needs to be deployed as a unit.</p>
 <p><strong>Example scenario:</strong> You have Docker images for your services, Terraform modules for AWS resources, and Python scripts for automation tasks. A single weekly "infrastructure" pull request contains updates for all three, making it easier to review and deploy infrastructure changes together.</p>
-<h3 id="full-stack-applications" title="Use cases / Full-stack applications">Full-stack applications<a href="#full-stack-applications" aria-label="Link to heading 'Full-stack applications'" data-heading-content="Full-stack applications" class="anchor"></a></h3>
+<h3 id="full-stack-applications">Full-stack applications<a href="#full-stack-applications" aria-label="Link to heading 'Full-stack applications'" data-heading-content="Full-stack applications" class="anchor"></a></h3>
 <p>Web applications with frontend and backend components benefit from updating dependencies together to ensure compatibility and streamline testing.</p>
 <p><strong>Why group these together:</strong> Frontend and backend often depend on each other. Updating them together ensures you can test the full application stack in one go, rather than merging frontend changes and then discovering backend incompatibilities later.</p>
 <p><strong>Example scenario:</strong> Your React frontend and Rails backend are updated daily in a single "app-dependencies" pull request, allowing you to test the complete application together before merging.</p>
-<h3 id="cross-platform-libraries" title="Use cases / Cross-platform libraries">Cross-platform libraries<a href="#cross-platform-libraries" aria-label="Link to heading 'Cross-platform libraries'" data-heading-content="Cross-platform libraries" class="anchor"></a></h3>
+<h3 id="cross-platform-libraries">Cross-platform libraries<a href="#cross-platform-libraries" aria-label="Link to heading 'Cross-platform libraries'" data-heading-content="Cross-platform libraries" class="anchor"></a></h3>
 <p>Libraries or services that use the same protocols across different languages (like gRPC and Protocol Buffers) need to keep library versions synchronized across all implementations.</p>
 <p><strong>Why group these together:</strong> Protocol libraries need to stay compatible across different language implementations. Updating them together prevents version mismatches that could cause communication failures between services.</p>
 <p><strong>Example scenario:</strong> Your Node.js and Ruby services both use gRPC. A single pull request updates both <code>@grpc/grpc-js</code> (npm) and <code>grpc</code> (bundler) together, ensuring protocol compatibility.</p>
-<h3 id="monorepos-with-multiple-services" title="Use cases / Monorepos with multiple services">Monorepos with multiple services<a href="#monorepos-with-multiple-services" aria-label="Link to heading 'Monorepos with multiple services'" data-heading-content="Monorepos with multiple services" class="anchor"></a></h3>
+<h3 id="monorepos-with-multiple-services">Monorepos with multiple services<a href="#monorepos-with-multiple-services" aria-label="Link to heading 'Monorepos with multiple services'" data-heading-content="Monorepos with multiple services" class="anchor"></a></h3>
 <p>Large repositories containing multiple services in different languages benefit from grouping updates by team responsibility or deployment cadence.</p>
 <p><strong>Why group these together:</strong> Different teams own different parts of the monorepo, and updates should be routed to the appropriate reviewers. Or services are deployed together and need coordinated updates.</p>
 <p><strong>Example scenario:</strong> Your monorepo has a Python API service, a Go worker service, and a Node.js frontend. You create separate groups for "backend-services" (Python + Go) and "frontend" (Node.js), each with different schedules and assignees.</p>

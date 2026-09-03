@@ -13,12 +13,12 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword"><span style="white-space: nowrap;"><span data-escaped-char="">&lt;</span>scope/name<span data-escaped-char="">@</span>version:path&gt;</span></code></td>
+<td><code><span style="white-space: nowrap;"><span data-escaped-char="">&lt;</span>scope/name<span data-escaped-char="">@</span>version:path&gt;</span></code></td>
 <td align="center"><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-check" aria-label="Required" role="img"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg></td>
 <td>Specify the scope and name of one or more CodeQL query packs to download using a comma-separated list. Optionally, include the version to download and unzip. By default the latest version of this pack is downloaded. Optionally, include a path to a query, directory, or query suite to run. If no path is included, then run the default queries of this pack.</td>
 </tr>
 <tr>
-<td><code class="keyword"><span style="white-space: nowrap;">--github-auth-stdin</span></code></td>
+<td><code><span style="white-space: nowrap;">--github-auth-stdin</span></code></td>
 <td align="center"><svg version="1.1" width="16" height="16" viewBox="0 0 16 16" class="octicon octicon-x" aria-label="Optional" role="img"><path d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"></path></svg></td>
 <td>Pass the CLI the GitHub App or personal access token created for authentication with GitHub's REST API from your secret store via standard input. This is not needed if the command has access to a <code>GITHUB_TOKEN</code> environment variable set with this token.</td>
 </tr>
@@ -29,7 +29,7 @@
 <p>If you specify a particular version of a query pack to use, be aware that the version you specify may eventually become too old for the latest version of CodeQL to make efficient use of. To ensure optimal performance, if you need to specify exact query pack versions, you should reevaluate which versions you pin to whenever you upgrade the CodeQL CLI you're using.</p>
 <p>For more information about pack compatibility, see <a href="../../reference/code-scanning/codeql/codeql-cli/codeql-query-packs.html#codeql-pack-compatibility">CodeQL query packs reference</a>.</p>
 </div>
-<h3 id="basic-example-of-downloading-and-using-query-packs" title="Downloading and using CodeQL query packs / Basic example of downloading and using query packs">Basic example of downloading and using query packs<a href="#basic-example-of-downloading-and-using-query-packs" aria-label="Link to heading 'Basic example of downloading and using query packs'" data-heading-content="Basic example of downloading and using query packs" class="anchor"></a></h3>
+<h3 id="basic-example-of-downloading-and-using-query-packs">Basic example of downloading and using query packs<a href="#basic-example-of-downloading-and-using-query-packs" aria-label="Link to heading 'Basic example of downloading and using query packs'" data-heading-content="Basic example of downloading and using query packs" class="anchor"></a></h3>
 <p>This example runs the <code>codeql database analyze</code> command with the <code>--download</code> option to:</p>
 <ol>
 <li>Download the latest version of the <code>octo-org/security-queries</code> pack.</li>
@@ -56,11 +56,11 @@
 </span><span style="color:#c0c5ce;">&gt; Shutting down query evaluator.
 </span><span style="color:#c0c5ce;">&gt; Interpreting results.
 </span></code></pre>
-<h3 id="direct-download-of-codeql-packs" title="Downloading and using CodeQL query packs / Direct download of CodeQL packs">Direct download of CodeQL packs<a href="#direct-download-of-codeql-packs" aria-label="Link to heading 'Direct download of CodeQL packs'" data-heading-content="Direct download of CodeQL packs" class="anchor"></a></h3>
+<h3 id="direct-download-of-codeql-packs">Direct download of CodeQL packs<a href="#direct-download-of-codeql-packs" aria-label="Link to heading 'Direct download of CodeQL packs'" data-heading-content="Direct download of CodeQL packs" class="anchor"></a></h3>
 <p>If you want to download a CodeQL pack without running it immediately, then you can use the <code>codeql pack download</code> command. This is useful if you want to avoid accessing the internet when running CodeQL queries. When you run the CodeQL analysis, you can specify packs, versions, and paths in the same way as in the previous example:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">echo $OCTO-ORG_ACCESS_TOKEN | codeql pack download &lt;scope/name@version:path&gt; &lt;scope/name@version:path&gt; ...
 </span></code></pre>
-<h3 id="downloading-codeql-packs-from-multiple-github-container-registries" title="Downloading and using CodeQL query packs / Downloading CodeQL packs from multiple GitHub container registries">Downloading CodeQL packs from multiple GitHub container registries<a href="#downloading-codeql-packs-from-multiple-github-container-registries" aria-label="Link to heading 'Downloading CodeQL packs from multiple GitHub container registries'" data-heading-content="Downloading CodeQL packs from multiple GitHub container registries" class="anchor"></a></h3>
+<h3 id="downloading-codeql-packs-from-multiple-github-container-registries">Downloading CodeQL packs from multiple GitHub container registries<a href="#downloading-codeql-packs-from-multiple-github-container-registries" aria-label="Link to heading 'Downloading CodeQL packs from multiple GitHub container registries'" data-heading-content="Downloading CodeQL packs from multiple GitHub container registries" class="anchor"></a></h3>
 <p>If your CodeQL packs reside on multiple container registries, then you must instruct the CodeQL CLI where to find each pack. For more information, see <a href="../../reference/code-scanning/workflow-configuration-options.html#downloading-codeql-packs-from-github-enterprise-server">Workflow configuration options for code scanning</a>.</p>
 <h2 id="specifying-which-queries-to-run-in-a-codeql-pack" title="Specifying which queries to run in a CodeQL pack">Specifying which queries to run in a CodeQL pack<a href="#specifying-which-queries-to-run-in-a-codeql-pack" aria-label="Link to heading 'Specifying which queries to run in a CodeQL pack'" data-heading-content="Specifying which queries to run in a CodeQL pack" class="anchor"></a></h2>
 <p>Query specifiers are used by <code>codeql database analyze</code> and other commands that operate on a set of queries.<br>
@@ -82,7 +82,7 @@ of the current process. Glob patterns are not supported.</p>
 <p>If you specify both a <code>scope/name</code> and <code>path</code>, then the <code>path</code> cannot<br>
 be absolute. It is considered relative to the root of the CodeQL<br>
 pack.</p>
-<h3 id="example-query-specifiers" title="Specifying which queries to run in a CodeQL pack / Example query specifiers">Example query specifiers<a href="#example-query-specifiers" aria-label="Link to heading 'Example query specifiers'" data-heading-content="Example query specifiers" class="anchor"></a></h3>
+<h3 id="example-query-specifiers">Example query specifiers<a href="#example-query-specifiers" aria-label="Link to heading 'Example query specifiers'" data-heading-content="Example query specifiers" class="anchor"></a></h3>
 <ul>
 <li>
 <p><code>codeql/python-queries</code> - All the queries in the default query suite of the latest version of the <code>codeql/python-queries</code> pack.</p>
@@ -125,7 +125,7 @@ pack.</p>
 <p>In this example, the relevant queries in the standard query pack <code>codeql/java-queries</code> will use the dependency information from the model pack, <code>my-repo/my-java-model-pack</code>, to check for vulnerabilities in code that calls those dependencies.</p>
 <p>You can specify multiple published model packs in an analysis.</p>
 <p>For more information about writing your own model packs, see <a href="create-and-work-with-codeql-packs.html#creating-a-codeql-model-pack">Creating and working with CodeQL packs</a>.</p>
-<h3 id="about-published-packs" title="Using model packs to analyze calls to custom dependencies / About published packs">About published packs<a href="#about-published-packs" aria-label="Link to heading 'About published packs'" data-heading-content="About published packs" class="anchor"></a></h3>
+<h3 id="about-published-packs">About published packs<a href="#about-published-packs" aria-label="Link to heading 'About published packs'" data-heading-content="About published packs" class="anchor"></a></h3>
 <p>When a pack is published for use in analyses, the <code>codeql pack create</code> or <code>codeql pack publish</code> command verifies that the content is complete and also adds some additional pieces of content to it:</p>
 <ul>
 <li>

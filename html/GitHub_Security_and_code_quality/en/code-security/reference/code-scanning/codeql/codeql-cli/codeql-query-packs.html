@@ -18,7 +18,7 @@
 find query suite definitions.</p>
 <p>The contents of the CodeQL pack (queries or libraries used in CodeQL analysis) is included in the same directory as <code>qlpack.yml</code>, or its subdirectories.</p>
 <p>The directory containing the <code>qlpack.yml</code> file serves as the root directory for the content of the CodeQL pack. That is, for all <code>.ql</code> and <code>.qll</code> files in the pack, CodeQL will resolve all import statements relative to the directory containing the <code>qlpack.yml</code> file at the pack’s root.</p>
-<h3 id="qlpackyml-properties" title="qlpack.yml files / qlpack.yml properties"><code>qlpack.yml</code> properties<a href="#qlpackyml-properties" aria-label="Link to heading 'qlpack.yml properties'" data-heading-content="qlpack.yml properties" class="anchor"></a></h3>
+<h3 id="qlpackyml-properties"><code>qlpack.yml</code> properties<a href="#qlpackyml-properties" aria-label="Link to heading 'qlpack.yml properties'" data-heading-content="qlpack.yml properties" class="anchor"></a></h3>
 <p>The following properties are supported in <code>qlpack.yml</code> files.</p>
 <h4 id="name"><code>name</code><a href="#name" aria-label="Link to heading 'name'" data-heading-content="name" class="anchor"></a></h4>
 <ul>
@@ -247,7 +247,7 @@ find query suite definitions.</p>
 <p>In most cases, the <code>codeql-pack.lock.yml</code> file is only relevant for query packs since library packs are non-executable and usually do not need their transitive dependencies to be fixed. The exception to this is for library packs that contain tests. In this case, the <code>codeql-pack.lock.yml</code> file is used to ensure that the tests are always run with the same versions of dependencies to avoid spurious failures when there are mismatched dependencies.</p>
 <h2 id="example-custom-codeql-packs" title="Example custom CodeQL packs">Example custom CodeQL packs<a href="#example-custom-codeql-packs" aria-label="Link to heading 'Example custom CodeQL packs'" data-heading-content="Example custom CodeQL packs" class="anchor"></a></h2>
 <p>You should save files for custom queries and tests in separate packs, and organize custom packs into specific folders for each target language.</p>
-<h3 id="codeql-packs-for-custom-libraries" title="Example custom CodeQL packs / CodeQL packs for custom libraries">CodeQL packs for custom libraries<a href="#codeql-packs-for-custom-libraries" aria-label="Link to heading 'CodeQL packs for custom libraries'" data-heading-content="CodeQL packs for custom libraries" class="anchor"></a></h3>
+<h3 id="codeql-packs-for-custom-libraries">CodeQL packs for custom libraries<a href="#codeql-packs-for-custom-libraries" aria-label="Link to heading 'CodeQL packs for custom libraries'" data-heading-content="CodeQL packs for custom libraries" class="anchor"></a></h3>
 <p>A custom CodeQL pack containing custom C++ libraries, with no queries or tests, may have a <code>qlpack.yml</code> file containing:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">my-github-user/my-custom-libraries
 </span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1.2.3
@@ -257,7 +257,7 @@ find query suite definitions.</p>
 </span></code></pre>
 <p>where <code>codeql/cpp-all</code> is the name of the CodeQL pack for C/C++ analysis included in the CodeQL repository. The version range <code>^0.1.2</code> indicates that this pack is compatible with all versions of <code>codeql/cpp-all</code> that are greater than or equal to <code>0.1.2</code> and less than <code>0.2.0</code>. Any CodeQL library file (a file with a <code>.qll</code> extension) defined in this pack will be available to queries defined in any query pack that includes this pack in its dependencies block.</p>
 <p>The <code>library</code> property indicates that this pack is a library pack and does not contain any queries.</p>
-<h3 id="codeql-packs-for-custom-queries" title="Example custom CodeQL packs / CodeQL packs for custom queries">CodeQL packs for custom queries<a href="#codeql-packs-for-custom-queries" aria-label="Link to heading 'CodeQL packs for custom queries'" data-heading-content="CodeQL packs for custom queries" class="anchor"></a></h3>
+<h3 id="codeql-packs-for-custom-queries">CodeQL packs for custom queries<a href="#codeql-packs-for-custom-queries" aria-label="Link to heading 'CodeQL packs for custom queries'" data-heading-content="CodeQL packs for custom queries" class="anchor"></a></h3>
 <p>A custom CodeQL pack containing custom C++ queries and libraries may have a <code>qlpack.yml</code> file containing:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">my-github-user/my-custom-queries
 </span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">1.2.3
@@ -266,7 +266,7 @@ find query suite definitions.</p>
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">my-github-user/my-custom-libraries</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">^1.2.3
 </span></code></pre>
 <p>where <code>codeql/cpp-all</code> is the name of the CodeQL pack for C/C++ analysis included in the CodeQL repository. The version range <code>^0.1.2</code> indicates that this pack is compatible with all versions of <code>codeql/cpp-all</code> that are greater than or equal to <code>0.1.2</code> and less than <code>0.2.0</code>. <code>my-github-user/my-custom-libraries</code> is the name of a CodeQL pack containing custom CodeQL libraries for C++. Any CodeQL library file (a file with a <code>.qll</code> extension) defined in this pack will be available to queries in the <code>my-github-user/my-custom-queries</code> pack.</p>
-<h3 id="codeql-packs-for-custom-tests" title="Example custom CodeQL packs / CodeQL packs for custom tests">CodeQL packs for custom tests<a href="#codeql-packs-for-custom-tests" aria-label="Link to heading 'CodeQL packs for custom tests'" data-heading-content="CodeQL packs for custom tests" class="anchor"></a></h3>
+<h3 id="codeql-packs-for-custom-tests">CodeQL packs for custom tests<a href="#codeql-packs-for-custom-tests" aria-label="Link to heading 'CodeQL packs for custom tests'" data-heading-content="CodeQL packs for custom tests" class="anchor"></a></h3>
 <p>For custom CodeQL packs containing test files, you also need to include an<br>
 <code>extractor</code> property so that the <code>test run</code> command knows how to create test<br>
 databases. You may also wish to specify the <code>tests</code> property.</p>
@@ -296,7 +296,7 @@ with their query suites at <code>&lt;language&gt;/ql/src</code></p>
 <p>Example queries for the language at <code>&lt;language&gt;/ql/examples</code></p>
 </li>
 </ul>
-<h3 id="core-library-pack" title="Example CodeQL packs in the CodeQL repository / Core library pack">Core library pack<a href="#core-library-pack" aria-label="Link to heading 'Core library pack'" data-heading-content="Core library pack" class="anchor"></a></h3>
+<h3 id="core-library-pack">Core library pack<a href="#core-library-pack" aria-label="Link to heading 'Core library pack'" data-heading-content="Core library pack" class="anchor"></a></h3>
 <p>Here is an example <code>qlpack.yml</code> file for the <a href="https://github.com/github/codeql/blob/main/cpp/ql/lib/qlpack.yml" class="external">C/C++ analysis libraries</a><br>
 core language pack:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql/cpp-all
@@ -314,7 +314,7 @@ core language pack:</p>
 <p><code>dbscheme</code> and <code>upgrades</code>: These properties are internal to the CodeQL CLI and should only be defined in the core CodeQL query pack for a language.</p>
 </li>
 </ul>
-<h3 id="core-query-pack" title="Example CodeQL packs in the CodeQL repository / Core query pack">Core query pack<a href="#core-query-pack" aria-label="Link to heading 'Core query pack'" data-heading-content="Core query pack" class="anchor"></a></h3>
+<h3 id="core-query-pack">Core query pack<a href="#core-query-pack" aria-label="Link to heading 'Core query pack'" data-heading-content="Core query pack" class="anchor"></a></h3>
 <p>Here is an example <code>qlpack.yml</code> file for <a href="https://github.com/github/codeql/blob/main/cpp/ql/src/qlpack.yml" class="external">C/C++ analysis queries</a><br>
 core query pack:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql/cpp-queries
@@ -337,7 +337,7 @@ core query pack:</p>
 <p><code>defaultSuiteFile</code>: The name of the default query suite file that is used when no query suite is specified.</p>
 </li>
 </ul>
-<h3 id="tests-for-the-core-codeql-pack" title="Example CodeQL packs in the CodeQL repository / Tests for the core CodeQL pack">Tests for the core CodeQL pack<a href="#tests-for-the-core-codeql-pack" aria-label="Link to heading 'Tests for the core CodeQL pack'" data-heading-content="Tests for the core CodeQL pack" class="anchor"></a></h3>
+<h3 id="tests-for-the-core-codeql-pack">Tests for the core CodeQL pack<a href="#tests-for-the-core-codeql-pack" aria-label="Link to heading 'Tests for the core CodeQL pack'" data-heading-content="Tests for the core CodeQL pack" class="anchor"></a></h3>
 <p>Here is an example <code>qlpack.yml</code> file for <a href="https://github.com/github/codeql/blob/main/cpp/ql/src/qlpack.yml" class="external">C/C++ analysis tests</a><br>
 core test pack:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">codeql/cpp-tests

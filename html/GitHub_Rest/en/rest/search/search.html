@@ -3,13 +3,13 @@
 <h2 id="about-search" title="About search">About search<a href="#about-search" aria-label="Link to heading 'About search'" data-heading-content="About search" class="anchor"></a></h2>
 <p>You can use the REST API to search for the specific item you want to find. For example, you can find a user or a specific file in a repository. Think of it the way you think of performing a search on Google. It's designed to help you find the one result you're looking for (or maybe the few results you're looking for). Just like searching on Google, you sometimes want to see a few pages of search results so that you can find the item that best meets your needs. To satisfy that need, the GitHub REST API provides <strong>up to 1,000 results for each search</strong>.</p>
 <p>You can narrow your search using queries. To learn more about the search query syntax, see <a href="#constructing-a-search-query">REST API endpoints for search</a>.</p>
-<h3 id="ranking-search-results" title="About search / Ranking search results">Ranking search results<a href="#ranking-search-results" aria-label="Link to heading 'Ranking search results'" data-heading-content="Ranking search results" class="anchor"></a></h3>
+<h3 id="ranking-search-results">Ranking search results<a href="#ranking-search-results" aria-label="Link to heading 'Ranking search results'" data-heading-content="Ranking search results" class="anchor"></a></h3>
 <p>Unless another sort option is provided as a query parameter, results are sorted by best match in descending order. Multiple factors are combined to boost the most relevant item to the top of the result list.</p>
-<h3 id="rate-limit" title="About search / Rate limit">Rate limit<a href="#rate-limit" aria-label="Link to heading 'Rate limit'" data-heading-content="Rate limit" class="anchor"></a></h3>
+<h3 id="rate-limit">Rate limit<a href="#rate-limit" aria-label="Link to heading 'Rate limit'" data-heading-content="Rate limit" class="anchor"></a></h3>
 <p>The REST API has a custom rate limit for searching. For authenticated requests, you can make up to<br>
 30 requests per minute for all search endpoints except for the <a href="#search-code">Search code</a> endpoint. The <a href="#search-code">Search code</a> endpoint requires you to authenticate and limits you to 10 requests per minute. For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.</p>
 <p>For information about how to determine your current rate limit status, see <a href="../rate-limit/rate-limit.html">Rate Limit</a>.</p>
-<h3 id="constructing-a-search-query" title="About search / Constructing a search query">Constructing a search query<a href="#constructing-a-search-query" aria-label="Link to heading 'Constructing a search query'" data-heading-content="Constructing a search query" class="anchor"></a></h3>
+<h3 id="constructing-a-search-query">Constructing a search query<a href="#constructing-a-search-query" aria-label="Link to heading 'Constructing a search query'" data-heading-content="Constructing a search query" class="anchor"></a></h3>
 <p>Each endpoint for searching uses <a href="https://en.wikipedia.org/wiki/Query_string" class="external">query parameters</a> to perform searches on GitHub. See the individual endpoints for examples that include the endpoint and query parameters.</p>
 <p>A query can contain any combination of search qualifiers supported on GitHub. The format of the search query is:</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">SEARCH_KEYWORD_1 SEARCH_KEYWORD_N QUALIFIER_1 QUALIFIER_N
@@ -27,27 +27,27 @@ following query with the <em>search repositories</em> endpoint:</p>
 for a complete list of available qualifiers, their format, and an example of<br>
 how to use them. For information about how to use operators to match specific<br>
 quantities, dates, or to exclude results, see <a href="https://docs.github.com/en/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax" class="external">Understanding the search syntax</a>.</p>
-<h3 id="limitations-on-query-length" title="About search / Limitations on query length">Limitations on query length<a href="#limitations-on-query-length" aria-label="Link to heading 'Limitations on query length'" data-heading-content="Limitations on query length" class="anchor"></a></h3>
+<h3 id="limitations-on-query-length">Limitations on query length<a href="#limitations-on-query-length" aria-label="Link to heading 'Limitations on query length'" data-heading-content="Limitations on query length" class="anchor"></a></h3>
 <p>You cannot use queries that:</p>
 <ul>
 <li>Are longer than 256 characters (not including operators or qualifiers).</li>
 <li>Have more than five <code>AND</code>, <code>OR</code>, or <code>NOT</code> operators.</li>
 </ul>
 <p>These search queries will return a "Validation failed" error message.</p>
-<h3 id="search-scope-limits" title="About search / Search scope limits">Search scope limits<a href="#search-scope-limits" aria-label="Link to heading 'Search scope limits'" data-heading-content="Search scope limits" class="anchor"></a></h3>
+<h3 id="search-scope-limits">Search scope limits<a href="#search-scope-limits" aria-label="Link to heading 'Search scope limits'" data-heading-content="Search scope limits" class="anchor"></a></h3>
 <p>To keep the REST API fast for everyone, we limit the number of repositories a query will search through. The REST API will find up to 4,000 repositories that match your filters and return results from those repositories.</p>
-<h3 id="timeouts-and-incomplete-results" title="About search / Timeouts and incomplete results">Timeouts and incomplete results<a href="#timeouts-and-incomplete-results" aria-label="Link to heading 'Timeouts and incomplete results'" data-heading-content="Timeouts and incomplete results" class="anchor"></a></h3>
+<h3 id="timeouts-and-incomplete-results">Timeouts and incomplete results<a href="#timeouts-and-incomplete-results" aria-label="Link to heading 'Timeouts and incomplete results'" data-heading-content="Timeouts and incomplete results" class="anchor"></a></h3>
 <p>To keep the REST API fast for everyone, we limit how long any individual query<br>
 can run. For queries that <a href="https://developer.github.com/changes/2014-04-07-understanding-search-results-and-potential-timeouts/" class="external">exceed the time limit</a>,<br>
 the API returns the matches that were already found prior to the timeout, and<br>
 the response has the <code>incomplete_results</code> property set to <code>true</code>.</p>
 <p>Reaching a timeout does not necessarily mean that search results are incomplete.<br>
 More results might have been found, but also might not.</p>
-<h3 id="access-errors-or-missing-search-results" title="About search / Access errors or missing search results">Access errors or missing search results<a href="#access-errors-or-missing-search-results" aria-label="Link to heading 'Access errors or missing search results'" data-heading-content="Access errors or missing search results" class="anchor"></a></h3>
+<h3 id="access-errors-or-missing-search-results">Access errors or missing search results<a href="#access-errors-or-missing-search-results" aria-label="Link to heading 'Access errors or missing search results'" data-heading-content="Access errors or missing search results" class="anchor"></a></h3>
 <p>You need to successfully authenticate and have access to the repositories in your search queries, otherwise, you'll see a <code>422 Unprocessable Entry</code> error with a "Validation Failed" message. For example, your search will fail if your query includes <code>repo:</code>, <code>user:</code>, or <code>org:</code> qualifiers that request resources that you don't have access to when you sign in on GitHub.</p>
 <p>When your search query requests multiple resources, the response will only contain the resources that you have access to and will <strong>not</strong> provide an error message listing the resources that were not returned.</p>
 <p>For example, if your search query searches for the <code>octocat/test</code> and <code>codertocat/test</code> repositories, but you only have access to <code>octocat/test</code>, your response will show search results for <code>octocat/test</code> and nothing for <code>codertocat/test</code>. This behavior mimics how search works on GitHub.</p>
-<h3 id="text-match-metadata" title="About search / Text match metadata">Text match metadata<a href="#text-match-metadata" aria-label="Link to heading 'Text match metadata'" data-heading-content="Text match metadata" class="anchor"></a></h3>
+<h3 id="text-match-metadata">Text match metadata<a href="#text-match-metadata" aria-label="Link to heading 'Text match metadata'" data-heading-content="Text match metadata" class="anchor"></a></h3>
 <p>On GitHub, you can use the context provided by code snippets and highlights in search results. The endpoints for searching return additional metadata that allows you to highlight the matching search terms when displaying search results.</p>
 <p>Requests can opt to receive those text fragments in the response, and every fragment is accompanied by numeric offsets identifying the exact location of each matching search term.</p>
 <p>To get this metadata in your search results, specify the <code>text-match</code> media type in your <code>Accept</code> header.</p>
@@ -64,23 +64,23 @@ the following attributes:</p>
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">object_url</code></td>
+<td><code>object_url</code></td>
 <td>The URL for the resource that contains a string property matching one of the search terms.</td>
 </tr>
 <tr>
-<td><code class="keyword">object_type</code></td>
+<td><code>object_type</code></td>
 <td>The name for the type of resource that exists at the given <code>object_url</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">property</code></td>
+<td><code>property</code></td>
 <td>The name of a property of the resource that exists at <code>object_url</code>. That property is a string that matches one of the search terms. (In the JSON returned from <code>object_url</code>, the full content for the <code>fragment</code> will be found in the property with this name.)</td>
 </tr>
 <tr>
-<td><code class="keyword">fragment</code></td>
+<td><code>fragment</code></td>
 <td>A subset of the value of <code>property</code>. This is the text fragment that matches one or more of the search terms.</td>
 </tr>
 <tr>
-<td><code class="keyword">matches</code></td>
+<td><code>matches</code></td>
 <td>An array of one or more search terms that are present in <code>fragment</code>. The indices (i.e., "offsets") are relative to the fragment. (They are not relative to the <em>full</em> content of <code>property</code>.)</td>
 </tr>
 </tbody>
@@ -145,7 +145,7 @@ request would look like this:</p>
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="search-code" title="Search code">Search code<a href="#search-code" aria-label="Link to heading 'Search code'" data-heading-content="Search code" class="anchor"></a></h2>
+<h2 id="search-code" title="GET /search/code (Search code)">Search code<a href="#search-code" aria-label="Link to heading 'Search code'" data-heading-content="Search code" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/code
 </span></code></pre>
 <p>Searches for query terms inside of a file. This method returns up to 100 results per page.<br>
@@ -159,7 +159,7 @@ Due to the complexity of searching code, there are a few restrictions on how sea
 Only files smaller than 384 KB are searchable.<br>
 You must always include at least one search term when searching source code. For example, searching for language:go is not valid, while amazing language:go is.</p>
 <p>This endpoint requires you to authenticate and limits you to 10 requests per minute.</p>
-<h3 id="parameters" title="Search code / Parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -193,7 +193,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes" title="Search code / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -211,7 +211,7 @@ Default: <code>1</code></p>
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples" title="Search code / Code examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -447,7 +447,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="search-commits" title="Search commits">Search commits<a href="#search-commits" aria-label="Link to heading 'Search commits'" data-heading-content="Search commits" class="anchor"></a></h2>
+<h2 id="search-commits" title="GET /search/commits (Search commits)">Search commits<a href="#search-commits" aria-label="Link to heading 'Search commits'" data-heading-content="Search commits" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/commits
 </span></code></pre>
 <p>Find commits via various criteria on the default branch (usually main). This method returns up to 100 results per page.<br>
@@ -455,7 +455,7 @@ When searching for commits, you can get text match metadata for the message fiel
 metadata.<br>
 For example, if you want to find commits related to CSS in the octocat/Spoon-Knife repository. Your query would look something like this:<br>
 q=repo:octocat/Spoon-Knife+css</p>
-<h3 id="parameters-1" title="Search commits / Parameters">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -489,7 +489,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-1" title="Search commits / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -498,7 +498,7 @@ Default: <code>1</code></p>
 <p><strong>304</strong> - Not modified</p>
 </li>
 </ul>
-<h3 id="code-examples-1" title="Search commits / Code examples">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -789,7 +789,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="search-issues-and-pull-requests" title="Search issues and pull requests">Search issues and pull requests<a href="#search-issues-and-pull-requests" aria-label="Link to heading 'Search issues and pull requests'" data-heading-content="Search issues and pull requests" class="anchor"></a></h2>
+<h2 id="search-issues-and-pull-requests" title="GET /search/issues (Search issues and pull requests)">Search issues and pull requests<a href="#search-issues-and-pull-requests" aria-label="Link to heading 'Search issues and pull requests'" data-heading-content="Search issues and pull requests" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/issues
 </span></code></pre>
 <p>Find issues by state and keyword. This method returns up to 100 results per page.<br>
@@ -800,7 +800,7 @@ q=windows+label:bug+language:python+state:open<span data-escaped-char="">&amp;</
 This query searches for the keyword windows, within any open issue that is labeled as bug. The search runs across repositories whose primary language is Python. The results are sorted by creation date in ascending order, which means the oldest issues appear first in the search results.<br>
 Note</p>
 <p>For requests made by GitHub Apps with a user access token, you can't retrieve a combination of issues and pull requests in a single query. Requests that don't include the is:issue or is:pull-request qualifier will receive an HTTP 422 Unprocessable Entity response. To get results for both issues and pull requests, you must send separate queries for issues and pull requests. For more information about the is qualifier, see "Searching only issues or pull requests."</p>
-<h3 id="parameters-2" title="Search issues and pull requests / Parameters">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -848,7 +848,7 @@ hybrid — combines semantic search with lexical search for best results.</p>
 <p>Semantic and hybrid search require authentication and are rate limited to 10 requests per minute.<br>
 Only applies to issue searches (/search/issues).<br>
 Can be one of: <code>semantic</code>, <code>hybrid</code></p>
-<h3 id="http-response-status-codes-2" title="Search issues and pull requests / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -869,7 +869,7 @@ Can be one of: <code>semantic</code>, <code>hybrid</code></p>
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-2" title="Search issues and pull requests / Code examples">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200">Example 1: Status Code 200<a href="#example-1-status-code-200" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1754,7 +1754,7 @@ Can be one of: <code>semantic</code>, <code>hybrid</code></p>
 <li><code>search_type</code>: required, string, enum: <code>lexical</code>, <code>semantic</code>, <code>hybrid</code></li>
 <li><code>lexical_fallback_reason</code>: array of string, enum: <code>no_text_terms</code>, <code>quoted_text</code>, <code>non_issue_target</code>, <code>or_boolean_not_supported</code>, <code>no_accessible_repos</code>, <code>server_error</code>, <code>only_non_semantic_fields_requested</code>, <code>service_unavailable</code></li>
 </ul>
-<h2 id="search-labels" title="Search labels">Search labels<a href="#search-labels" aria-label="Link to heading 'Search labels'" data-heading-content="Search labels" class="anchor"></a></h2>
+<h2 id="search-labels" title="GET /search/labels (Search labels)">Search labels<a href="#search-labels" aria-label="Link to heading 'Search labels'" data-heading-content="Search labels" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/labels
 </span></code></pre>
 <p>Find labels in a repository with names or descriptions that match search keywords. Returns up to 100 results per page.<br>
@@ -1762,7 +1762,7 @@ When searching for labels, you can get text match metadata for the label name an
 For example, if you want to find labels in the linguist repository that match bug, defect, or enhancement. Your query might look like this:<br>
 q=bug+defect+enhancement<span data-escaped-char="">&amp;</span>repository<span data-escaped-char="">_</span>id=64778136<br>
 The labels that best match the query appear first in the search results.</p>
-<h3 id="parameters-3" title="Search labels / Parameters">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1800,7 +1800,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-3" title="Search labels / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1818,7 +1818,7 @@ Default: <code>1</code></p>
 <p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
 </li>
 </ul>
-<h3 id="code-examples-3" title="Search labels / Code examples">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -1856,7 +1856,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="search-repositories" title="Search repositories">Search repositories<a href="#search-repositories" aria-label="Link to heading 'Search repositories'" data-heading-content="Search repositories" class="anchor"></a></h2>
+<h2 id="search-repositories" title="GET /search/repositories (Search repositories)">Search repositories<a href="#search-repositories" aria-label="Link to heading 'Search repositories'" data-heading-content="Search repositories" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/repositories
 </span></code></pre>
 <p>Find repositories via various criteria. This method returns up to 100 results per page.<br>
@@ -1864,7 +1864,7 @@ When searching for repositories, you can get text match metadata for the name an
 For example, if you want to search for popular Tetris repositories written in assembly code, your query might look like this:<br>
 q=tetris+language:assembly<span data-escaped-char="">&amp;</span>sort=stars<span data-escaped-char="">&amp;</span>order=desc<br>
 This query searches for repositories with the word tetris in the name, the description, or the README. The results are limited to repositories where the primary language is assembly. The results are sorted by stars in descending order, so that the most popular repositories appear first in the search results.</p>
-<h3 id="parameters-4" title="Search repositories / Parameters">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -1898,7 +1898,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-4" title="Search repositories / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -1913,7 +1913,7 @@ Default: <code>1</code></p>
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-4" title="Search repositories / Code examples">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -2085,7 +2085,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="search-topics" title="Search topics">Search topics<a href="#search-topics" aria-label="Link to heading 'Search topics'" data-heading-content="Search topics" class="anchor"></a></h2>
+<h2 id="search-topics" title="GET /search/topics (Search topics)">Search topics<a href="#search-topics" aria-label="Link to heading 'Search topics'" data-heading-content="Search topics" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/topics
 </span></code></pre>
 <p>Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results per page. See "Searching topics" for a detailed list of qualifiers.<br>
@@ -2093,7 +2093,7 @@ When searching for topics, you can get text match metadata for the topic's short
 For example, if you want to search for topics related to Ruby that are featured on <a href="https://github.com/topics" class="external">https://github.com/topics</a>. Your query might look like this:<br>
 q=ruby+is:featured<br>
 This query searches for topics with the keyword ruby and limits the results to find only topics that are featured. The topics that are the best match for the query appear first in the search results.</p>
-<h3 id="parameters-5" title="Search topics / Parameters">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -2116,7 +2116,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-5" title="Search topics / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -2125,7 +2125,7 @@ Default: <code>1</code></p>
 <p><strong>304</strong> - Not modified</p>
 </li>
 </ul>
-<h3 id="code-examples-5" title="Search topics / Code examples">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -2192,7 +2192,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="search-users" title="Search users">Search users<a href="#search-users" aria-label="Link to heading 'Search users'" data-heading-content="Search users" class="anchor"></a></h2>
+<h2 id="search-users" title="GET /search/users (Search users)">Search users<a href="#search-users" aria-label="Link to heading 'Search users'" data-heading-content="Search users" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /search/users
 </span></code></pre>
 <p>Find users via various criteria. This method returns up to 100 results per page.<br>
@@ -2201,7 +2201,7 @@ For example, if you're looking for a list of popular users, you might try this q
 q=tom+repos:%3E42+followers:%3E1000<br>
 This query searches for users with the name tom. The results are restricted to users with more than 42 repositories and over 1,000 followers.<br>
 This endpoint does not accept authentication and will only include publicly visible users. As an alternative, you can use the GraphQL API. The GraphQL API requires authentication and will return private users, including Enterprise Managed Users (EMUs), that you are authorized to view. For more information, see "GraphQL Queries."</p>
-<h3 id="parameters-6" title="Search users / Parameters">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
@@ -2235,7 +2235,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6" title="Search users / HTTP response status codes">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -2250,7 +2250,7 @@ Default: <code>1</code></p>
 <p><strong>503</strong> - Service unavailable</p>
 </li>
 </ul>
-<h3 id="code-examples-6" title="Search users / Code examples">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-6">Example<a href="#example-6" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \

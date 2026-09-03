@@ -11,7 +11,7 @@
 <li><a href="#add-the-github-trustroot-and-a-clusterimagepolicy">Add the GitHub <code>TrustRoot</code> and a <code>ClusterImagePolicy</code> to your cluster</a>.</li>
 <li><a href="#enable-the-policy-in-your-namespace">Enable the policy in your namespace</a>.</li>
 </ol>
-<h3 id="deploy-the-sigstore-policy-controller" title="Getting started with Kubernetes admission controller / Deploy the Sigstore Policy Controller">Deploy the Sigstore Policy Controller<a href="#deploy-the-sigstore-policy-controller" aria-label="Link to heading 'Deploy the Sigstore Policy Controller'" data-heading-content="Deploy the Sigstore Policy Controller" class="anchor"></a></h3>
+<h3 id="deploy-the-sigstore-policy-controller">Deploy the Sigstore Policy Controller<a href="#deploy-the-sigstore-policy-controller" aria-label="Link to heading 'Deploy the Sigstore Policy Controller'" data-heading-content="Deploy the Sigstore Policy Controller" class="anchor"></a></h3>
 <p>The Sigstore Policy Controller has been packaged and made available via a <a href="https://github.com/sigstore/helm-charts" class="external">Helm chart</a>. Before you begin, ensure you have the following prerequisites:</p>
 <ul>
 <li>A Kubernetes cluster with version 1.27 or later</li>
@@ -25,7 +25,7 @@
 </span><span style="color:#bf616a;">  --version</span><span style="color:#c0c5ce;"> 0.10.5
 </span></code></pre>
 <p>This installs the Policy Controller into the <code>artifact-attestations</code> namespace. At this point, no policies have been configured, and it will not enforce any attestations.</p>
-<h3 id="add-the-github-trustroot-and-a-clusterimagepolicy" title="Getting started with Kubernetes admission controller / Add the GitHub TrustRoot and a ClusterImagePolicy">Add the GitHub <code>TrustRoot</code> and a <code>ClusterImagePolicy</code><a href="#add-the-github-trustroot-and-a-clusterimagepolicy" aria-label="Link to heading 'Add the GitHub TrustRoot and a ClusterImagePolicy'" data-heading-content="Add the GitHub TrustRoot and a ClusterImagePolicy" class="anchor"></a></h3>
+<h3 id="add-the-github-trustroot-and-a-clusterimagepolicy">Add the GitHub <code>TrustRoot</code> and a <code>ClusterImagePolicy</code><a href="#add-the-github-trustroot-and-a-clusterimagepolicy" aria-label="Link to heading 'Add the GitHub TrustRoot and a ClusterImagePolicy'" data-heading-content="Add the GitHub TrustRoot and a ClusterImagePolicy" class="anchor"></a></h3>
 <p>Once the policy controller has been deployed, you need to add the GitHub <code>TrustRoot</code> and a <code>ClusterImagePolicy</code> to your cluster. Use the Helm chart we provide to do this. Make sure to replace <code>MY-ORGANIZATION</code> with your GitHub organization's name (e.g., <code>github</code> or <code>octocat-inc</code>).</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">helm</span><span style="color:#c0c5ce;"> upgrade trust-policies</span><span style="color:#bf616a;"> --install --atomic </span><span style="color:#c0c5ce;">\
 </span><span style="color:#bf616a;"> --namespace</span><span style="color:#c0c5ce;"> artifact-attestations \
@@ -35,7 +35,7 @@
 </span><span style="color:#bf616a;"> --set</span><span style="color:#c0c5ce;"> policy.organization=MY-ORGANIZATION
 </span></code></pre>
 <p>You've now installed the GitHub trust root, and an artifact attestation policy into your cluster. This policy will reject artifacts that have not originated from within your GitHub organization.</p>
-<h3 id="enable-the-policy-in-your-namespace" title="Getting started with Kubernetes admission controller / Enable the policy in your namespace">Enable the policy in your namespace<a href="#enable-the-policy-in-your-namespace" aria-label="Link to heading 'Enable the policy in your namespace'" data-heading-content="Enable the policy in your namespace" class="anchor"></a></h3>
+<h3 id="enable-the-policy-in-your-namespace">Enable the policy in your namespace<a href="#enable-the-policy-in-your-namespace" aria-label="Link to heading 'Enable the policy in your namespace'" data-heading-content="Enable the policy in your namespace" class="anchor"></a></h3>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>
 <p>This policy will not be enforced until you specify which namespaces it should apply to.</p>
@@ -49,7 +49,7 @@
 <p>Alternatively, you may run:</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">kubectl</span><span style="color:#c0c5ce;"> label namespace MY-NAMESPACE policy.sigstore.dev/include=true
 </span></code></pre>
-<h3 id="matching-images" title="Getting started with Kubernetes admission controller / Matching images">Matching images<a href="#matching-images" aria-label="Link to heading 'Matching images'" data-heading-content="Matching images" class="anchor"></a></h3>
+<h3 id="matching-images">Matching images<a href="#matching-images" aria-label="Link to heading 'Matching images'" data-heading-content="Matching images" class="anchor"></a></h3>
 <p>By default, the policy installed with the <code>trust-policies</code> Helm chart will verify attestations for all images before admitting them into the cluster. If you only intend to enforce attestations for a subset of images, you can use the Helm values <code>policy.images</code> and <code>policy.exemptImages</code> to specify a list of images to match against. These values can be set to a list of glob patterns that match the image names. The globbing syntax uses Go <a href="https://pkg.go.dev/path/filepath#Match" class="external">filepath</a> semantics, with the addition of <code>**</code> to match any character sequence, including slashes.</p>
 <p>For example, to enforce attestations for images that match the pattern <code>ghcr.io/MY-ORGANIZATION/*</code> and admit <code>busybox</code> without a valid attestation, you can run:</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">helm</span><span style="color:#c0c5ce;"> upgrade trust-policies</span><span style="color:#bf616a;"> --install --atomic </span><span style="color:#c0c5ce;">\
@@ -63,7 +63,7 @@
 </span></code></pre>
 <p>All patterns must use the fully-qualified name, even if the images originate from Docker Hub. In this example, if we want to exempt the image <code>busybox</code>, we must provide the full name including the domain and double-star glob to match all image versions: <code>index.docker.io/library/busybox**</code>.</p>
 <p>Note that any image you intend to admit <em>must</em> have a matching glob pattern in the <code>policy.images</code> list. If an image does not match any pattern, it will be rejected. Additionally, if an image matches both <code>policy.images</code> and <code>policy.exemptImages</code>, it will be rejected.</p>
-<h3 id="advanced-usage" title="Getting started with Kubernetes admission controller / Advanced usage">Advanced usage<a href="#advanced-usage" aria-label="Link to heading 'Advanced usage'" data-heading-content="Advanced usage" class="anchor"></a></h3>
+<h3 id="advanced-usage">Advanced usage<a href="#advanced-usage" aria-label="Link to heading 'Advanced usage'" data-heading-content="Advanced usage" class="anchor"></a></h3>
 <p>To see the full set of options you may configure with the Helm chart, you can run either of the following commands.<br>
 For policy controller options:</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">helm</span><span style="color:#c0c5ce;"> show values oci://ghcr.io/sigstore/helm-charts/policy-controller</span><span style="color:#bf616a;"> --version</span><span style="color:#c0c5ce;"> 0.10.5

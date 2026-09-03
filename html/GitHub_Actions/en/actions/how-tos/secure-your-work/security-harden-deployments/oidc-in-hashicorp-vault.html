@@ -84,7 +84,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 </li>
 </ul>
 <p>This example demonstrates how to use OIDC with the official action to request a secret from HashiCorp Vault.</p>
-<h3 id="adding-permissions-settings" title="Updating your GitHub Actions workflow / Adding permissions settings">Adding permissions settings<a href="#adding-permissions-settings" aria-label="Link to heading 'Adding permissions settings'" data-heading-content="Adding permissions settings" class="anchor"></a></h3>
+<h3 id="adding-permissions-settings">Adding permissions settings<a href="#adding-permissions-settings" aria-label="Link to heading 'Adding permissions settings'" data-heading-content="Adding permissions settings" class="anchor"></a></h3>
 <p>The job or workflow run requires a <code>permissions</code> setting with <a href="../../../tutorials/authenticate-with-github_token.html#modifying-the-permissions-for-the-github_token"><code>id-token: write</code></a> to allow GitHub's OIDC provider to create a JSON Web Token for every run.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -95,7 +95,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 <p class="markdown-alert-title">Note</p>
 <p>When the <code>permissions</code> key is used, all unspecified permissions are set to <em>no access</em>, with the exception of the metadata scope, which always gets <em>read</em> access. As a result, you may need to add other permissions, such as <code>contents: read</code>. See <a href="../../../tutorials/authenticate-with-github_token.html">Automatic token authentication</a> for more information.</p>
 </div>
-<h3 id="requesting-the-access-token" title="Updating your GitHub Actions workflow / Requesting the access token">Requesting the access token<a href="#requesting-the-access-token" aria-label="Link to heading 'Requesting the access token'" data-heading-content="Requesting the access token" class="anchor"></a></h3>
+<h3 id="requesting-the-access-token">Requesting the access token<a href="#requesting-the-access-token" aria-label="Link to heading 'Requesting the access token'" data-heading-content="Requesting the access token" class="anchor"></a></h3>
 <p>The <code>hashicorp/vault-action</code> action receives a JWT from the GitHub OIDC provider, and then requests an access token from your HashiCorp Vault instance to retrieve secrets. For more information, see the HashiCorp Vault GitHub Action <a href="https://github.com/hashicorp/vault-action" class="external">documentation</a>.</p>
 <p>This example demonstrates how to create a job that requests a secret from HashiCorp Vault.</p>
 <ul>
@@ -135,7 +135,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 <li><code>VAULT-NAMESPACE</code> must be set for a Vault Enterprise (including HCP Vault) deployment. For more information, see <a href="https://www.vaultproject.io/docs/enterprise/namespaces" class="external">Vault namespace</a>.</li>
 </ul>
 </div>
-<h3 id="revoking-the-access-token" title="Updating your GitHub Actions workflow / Revoking the access token">Revoking the access token<a href="#revoking-the-access-token" aria-label="Link to heading 'Revoking the access token'" data-heading-content="Revoking the access token" class="anchor"></a></h3>
+<h3 id="revoking-the-access-token">Revoking the access token<a href="#revoking-the-access-token" aria-label="Link to heading 'Revoking the access token'" data-heading-content="Revoking the access token" class="anchor"></a></h3>
 <p>By default, the Vault server will automatically revoke access tokens when their TTL is expired, so you don't have to manually revoke the access tokens. However, if you do want to revoke access tokens immediately after your job has completed or failed, you can manually revoke the issued token using the <a href="https://www.vaultproject.io/api/auth/token#revoke-a-token-self" class="external">Vault API</a>.</p>
 <ol>
 <li>Set the <code>exportToken</code> option to <code>true</code> (default: <code>false</code>). This exports the issued Vault access token as an environment variable: <code>VAULT_TOKEN</code>.</li>
