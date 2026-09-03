@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for enterprise teams</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Enterprise teams</a> / </nav><h1 id="rest-api-endpoints-for-enterprise-teams">REST API endpoints for enterprise teams<a href="#rest-api-endpoints-for-enterprise-teams" aria-label="Link to heading 'REST API endpoints for enterprise teams'" data-heading-content="REST API endpoints for enterprise teams" class="anchor"></a></h1>
 <p>Use the REST API to create and manage enterprise teams in your GitHub enterprise.</p>
-<h2 id="about-enterprise-teams" title="About enterprise teams">About enterprise teams<a href="#about-enterprise-teams" aria-label="Link to heading 'About enterprise teams'" data-heading-content="About enterprise teams" class="anchor"></a></h2>
+<h2 id="about-enterprise-teams" title="About enterprise teams" data-entry-type="Section">About enterprise teams<a href="#about-enterprise-teams" aria-label="Link to heading 'About enterprise teams'" data-heading-content="About enterprise teams" class="anchor"></a></h2>
 <p>These endpoints are only available to authenticated members of the enterprise team's enterprise with classic personal access tokens with the <code>read:enterprise</code> <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">scope</a> for <code>GET</code> APIs and <code>admin:enterprise</code> for other APIs.</p>
 <p>These endpoints are not compatible with fine-grained personal access tokens or GitHub App access tokens.</p>
 <p>GitHub generates the enterprise team's <code>slug</code> from the team <code>name</code> and adds the <code>ent:</code> prefix.</p>
@@ -8,7 +8,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-enterprise-teams" title="GET /enterprises/{enterprise}/teams (List enterprise teams)">List enterprise teams<a href="#list-enterprise-teams" aria-label="Link to heading 'List enterprise teams'" data-heading-content="List enterprise teams" class="anchor"></a></h2>
+<h2 id="list-enterprise-teams" title="GET /enterprises/{enterprise}/teams (List enterprise teams)" data-entry-type="Resource">List enterprise teams<a href="#list-enterprise-teams" aria-label="Link to heading 'List enterprise teams'" data-heading-content="List enterprise teams" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/teams
 </span></code></pre>
 <p>List all teams in the enterprise for the authenticated user</p>
@@ -69,7 +69,7 @@ Default: <code>1</code></p>
 <li><code>updated_at</code>: required, string, format: date-time</li>
 <li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
 </ul>
-<h2 id="create-an-enterprise-team" title="POST /enterprises/{enterprise}/teams (Create an enterprise team)">Create an enterprise team<a href="#create-an-enterprise-team" aria-label="Link to heading 'Create an enterprise team'" data-heading-content="Create an enterprise team" class="anchor"></a></h2>
+<h2 id="create-an-enterprise-team" title="POST /enterprises/{enterprise}/teams (Create an enterprise team)" data-entry-type="Resource">Create an enterprise team<a href="#create-an-enterprise-team" aria-label="Link to heading 'Create an enterprise team'" data-heading-content="Create an enterprise team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /enterprises/{enterprise}/teams
 </span></code></pre>
 <p>To create an enterprise team, the authenticated user must be an owner of the enterprise.</p>
@@ -157,7 +157,7 @@ Can be one of: <code>notifications_enabled</code>, <code>notifications_disabled<
 <li><code>updated_at</code>: required, string, format: date-time</li>
 <li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
 </ul>
-<h2 id="get-an-enterprise-team" title="GET /enterprises/{enterprise}/teams/{team_slug} (Get an enterprise team)">Get an enterprise team<a href="#get-an-enterprise-team" aria-label="Link to heading 'Get an enterprise team'" data-heading-content="Get an enterprise team" class="anchor"></a></h2>
+<h2 id="get-an-enterprise-team" title="GET /enterprises/{enterprise}/teams/{team_slug} (Get an enterprise team)" data-entry-type="Resource">Get an enterprise team<a href="#get-an-enterprise-team" aria-label="Link to heading 'Get an enterprise team'" data-heading-content="Get an enterprise team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /enterprises/{enterprise}/teams/{team_slug}
 </span></code></pre>
 <p>Gets a team using the team's slug. To create the slug, GitHub replaces special characters in the name string, changes all words to lowercase, and replaces spaces with a - separator and adds the "ent:" prefix. For example, "My TEam Näme" would become ent:my-team-name.</p>
@@ -212,7 +212,7 @@ The slug of the team name.</p>
 <li><code>updated_at</code>: required, string, format: date-time</li>
 <li><code>notification_setting</code>: string, enum: <code>notifications_enabled</code>, <code>notifications_disabled</code></li>
 </ul>
-<h2 id="update-an-enterprise-team" title="PATCH /enterprises/{enterprise}/teams/{team_slug} (Update an enterprise team)">Update an enterprise team<a href="#update-an-enterprise-team" aria-label="Link to heading 'Update an enterprise team'" data-heading-content="Update an enterprise team" class="anchor"></a></h2>
+<h2 id="update-an-enterprise-team" title="PATCH /enterprises/{enterprise}/teams/{team_slug} (Update an enterprise team)" data-entry-type="Resource">Update an enterprise team<a href="#update-an-enterprise-team" aria-label="Link to heading 'Update an enterprise team'" data-heading-content="Update an enterprise team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /enterprises/{enterprise}/teams/{team_slug}
 </span></code></pre>
 <p>To edit a team, the authenticated user must be an enterprise owner.</p>
@@ -295,7 +295,7 @@ Can be one of: <code>notifications_enabled</code>, <code>notifications_disabled<
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-an-enterprise-team">Create an enterprise team</a>.</p>
-<h2 id="delete-an-enterprise-team" title="DELETE /enterprises/{enterprise}/teams/{team_slug} (Delete an enterprise team)">Delete an enterprise team<a href="#delete-an-enterprise-team" aria-label="Link to heading 'Delete an enterprise team'" data-heading-content="Delete an enterprise team" class="anchor"></a></h2>
+<h2 id="delete-an-enterprise-team" title="DELETE /enterprises/{enterprise}/teams/{team_slug} (Delete an enterprise team)" data-entry-type="Resource">Delete an enterprise team<a href="#delete-an-enterprise-team" aria-label="Link to heading 'Delete an enterprise team'" data-heading-content="Delete an enterprise team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /enterprises/{enterprise}/teams/{team_slug}
 </span></code></pre>
 <p>To delete an enterprise team, the authenticated user must be an enterprise owner.<br>

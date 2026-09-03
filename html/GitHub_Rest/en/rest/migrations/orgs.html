@@ -1,13 +1,13 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for organization migrations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Migrations</a> / </nav><h1 id="rest-api-endpoints-for-organization-migrations">REST API endpoints for organization migrations<a href="#rest-api-endpoints-for-organization-migrations" aria-label="Link to heading 'REST API endpoints for organization migrations'" data-heading-content="REST API endpoints for organization migrations" class="anchor"></a></h1>
 <p>Use the REST API to export one or more repositories so you can move them to  GitHub Enterprise Server.</p>
-<h2 id="about-organization-migrations" title="About organization migrations">About organization migrations<a href="#about-organization-migrations" aria-label="Link to heading 'About organization migrations'" data-heading-content="About organization migrations" class="anchor"></a></h2>
+<h2 id="about-organization-migrations" title="About organization migrations" data-entry-type="Section">About organization migrations<a href="#about-organization-migrations" aria-label="Link to heading 'About organization migrations'" data-heading-content="About organization migrations" class="anchor"></a></h2>
 <p>These endpoints are only available to authenticated organization owners. For more information, see <a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/roles-in-an-organization#organization-owners" class="external">Roles in an organization</a> and <a href="../authentication/authenticating-to-the-rest-api.html">Authenticating to the REST API</a>.</p>
 <p>You can use these endpoints to export one or more repositories so you can move them to a GitHub Enterprise Server instance. For more information, see <a href="https://docs.github.com/en/migrations/using-ghe-migrator/exporting-migration-data-from-githubcom" class="external">Exporting migration data from GitHub.com</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-organization-migrations" title="GET /orgs/{org}/migrations (List organization migrations)">List organization migrations<a href="#list-organization-migrations" aria-label="Link to heading 'List organization migrations'" data-heading-content="List organization migrations" class="anchor"></a></h2>
+<h2 id="list-organization-migrations" title="GET /orgs/{org}/migrations (List organization migrations)" data-entry-type="Resource">List organization migrations<a href="#list-organization-migrations" aria-label="Link to heading 'List organization migrations'" data-heading-content="List organization migrations" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/migrations
 </span></code></pre>
 <p>Lists the most recent migrations, including both exports (which can be started through the REST API) and imports (which cannot be started using the REST API).<br>
@@ -151,7 +151,7 @@ Exclude attributes from the API response to improve performance</p>
 <li><code>archive_url</code>: string, format: uri</li>
 <li><code>exclude</code>: array of string</li>
 </ul>
-<h2 id="start-an-organization-migration" title="POST /orgs/{org}/migrations (Start an organization migration)">Start an organization migration<a href="#start-an-organization-migration" aria-label="Link to heading 'Start an organization migration'" data-heading-content="Start an organization migration" class="anchor"></a></h2>
+<h2 id="start-an-organization-migration" title="POST /orgs/{org}/migrations (Start an organization migration)" data-entry-type="Resource">Start an organization migration<a href="#start-an-organization-migration" aria-label="Link to heading 'Start an organization migration'" data-heading-content="Start an organization migration" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/migrations
 </span></code></pre>
 <p>Initiates the generation of a migration archive.</p>
@@ -338,7 +338,7 @@ Supported values are: repositories</p>
 <li><code>archive_url</code>: string, format: uri</li>
 <li><code>exclude</code>: array of string</li>
 </ul>
-<h2 id="get-an-organization-migration-status" title="GET /orgs/{org}/migrations/{migration_id} (Get an organization migration status)">Get an organization migration status<a href="#get-an-organization-migration-status" aria-label="Link to heading 'Get an organization migration status'" data-heading-content="Get an organization migration status" class="anchor"></a></h2>
+<h2 id="get-an-organization-migration-status" title="GET /orgs/{org}/migrations/{migration_id} (Get an organization migration status)" data-entry-type="Resource">Get an organization migration status<a href="#get-an-organization-migration-status" aria-label="Link to heading 'Get an organization migration status'" data-heading-content="Get an organization migration status" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/migrations/{migration_id}
 </span></code></pre>
 <p>Fetches the status of a migration.<br>
@@ -389,7 +389,7 @@ failed, which means the migration failed.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#start-an-organization-migration">Start an organization migration</a>.</p>
-<h2 id="download-an-organization-migration-archive" title="GET /orgs/{org}/migrations/{migration_id}/archive (Download an organization migration archive)">Download an organization migration archive<a href="#download-an-organization-migration-archive" aria-label="Link to heading 'Download an organization migration archive'" data-heading-content="Download an organization migration archive" class="anchor"></a></h2>
+<h2 id="download-an-organization-migration-archive" title="GET /orgs/{org}/migrations/{migration_id}/archive (Download an organization migration archive)" data-entry-type="Resource">Download an organization migration archive<a href="#download-an-organization-migration-archive" aria-label="Link to heading 'Download an organization migration archive'" data-heading-content="Download an organization migration archive" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/migrations/{migration_id}/archive
 </span></code></pre>
 <p>Fetches the URL to a migration archive.</p>
@@ -427,7 +427,7 @@ The unique identifier of the migration.</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/migrations/MIGRATION_ID/archive
 </span></code></pre>
 <p><strong>Response schema (Status: 302):</strong></p>
-<h2 id="delete-an-organization-migration-archive" title="DELETE /orgs/{org}/migrations/{migration_id}/archive (Delete an organization migration archive)">Delete an organization migration archive<a href="#delete-an-organization-migration-archive" aria-label="Link to heading 'Delete an organization migration archive'" data-heading-content="Delete an organization migration archive" class="anchor"></a></h2>
+<h2 id="delete-an-organization-migration-archive" title="DELETE /orgs/{org}/migrations/{migration_id}/archive (Delete an organization migration archive)" data-entry-type="Resource">Delete an organization migration archive<a href="#delete-an-organization-migration-archive" aria-label="Link to heading 'Delete an organization migration archive'" data-heading-content="Delete an organization migration archive" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/migrations/{migration_id}/archive
 </span></code></pre>
 <p>Deletes a previous migration archive. Migration archives are automatically deleted after seven days.</p>
@@ -465,7 +465,7 @@ The unique identifier of the migration.</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/migrations/MIGRATION_ID/archive
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="unlock-an-organization-repository" title="DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock (Unlock an organization repository)">Unlock an organization repository<a href="#unlock-an-organization-repository" aria-label="Link to heading 'Unlock an organization repository'" data-heading-content="Unlock an organization repository" class="anchor"></a></h2>
+<h2 id="unlock-an-organization-repository" title="DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock (Unlock an organization repository)" data-entry-type="Resource">Unlock an organization repository<a href="#unlock-an-organization-repository" aria-label="Link to heading 'Unlock an organization repository'" data-heading-content="Unlock an organization repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock
 </span></code></pre>
 <p>Unlocks a repository that was locked for migration. You should unlock each migrated repository and delete them when the migration is complete and you no longer need the source data.</p>
@@ -507,7 +507,7 @@ repo<span data-escaped-char="">_</span>name parameter</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/migrations/MIGRATION_ID/repos/REPO_NAME/lock
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-repositories-in-an-organization-migration" title="GET /orgs/{org}/migrations/{migration_id}/repositories (List repositories in an organization migration)">List repositories in an organization migration<a href="#list-repositories-in-an-organization-migration" aria-label="Link to heading 'List repositories in an organization migration'" data-heading-content="List repositories in an organization migration" class="anchor"></a></h2>
+<h2 id="list-repositories-in-an-organization-migration" title="GET /orgs/{org}/migrations/{migration_id}/repositories (List repositories in an organization migration)" data-entry-type="Resource">List repositories in an organization migration<a href="#list-repositories-in-an-organization-migration" aria-label="Link to heading 'List repositories in an organization migration'" data-heading-content="List repositories in an organization migration" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/migrations/{migration_id}/repositories
 </span></code></pre>
 <p>List all the repositories for this organization migration.</p>

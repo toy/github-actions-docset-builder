@@ -1,12 +1,12 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>CodeQL build options and steps for compiled languages</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">Reference</a> / <a href="../index.html">Code scanning</a> / <a href="index.html">CodeQL</a> / </nav><h1 id="codeql-build-options-and-steps-for-compiled-languages">CodeQL build options and steps for compiled languages<a href="#codeql-build-options-and-steps-for-compiled-languages" aria-label="Link to heading 'CodeQL build options and steps for compiled languages'" data-heading-content="CodeQL build options and steps for compiled languages" class="anchor"></a></h1>
 <p>Learn how CodeQL builds compiled languages, including available build modes and language-specific autobuild behavior for C/C++, C#, Go, Java, Kotlin, Rust, and Swift.</p>
-<h2 id="autobuild-steps-for-compiled-languages" title="Autobuild steps for compiled languages">Autobuild steps for compiled languages<a href="#autobuild-steps-for-compiled-languages" aria-label="Link to heading 'Autobuild steps for compiled languages'" data-heading-content="Autobuild steps for compiled languages" class="anchor"></a></h2>
+<h2 id="autobuild-steps-for-compiled-languages" title="Autobuild steps for compiled languages" data-entry-type="Section">Autobuild steps for compiled languages<a href="#autobuild-steps-for-compiled-languages" aria-label="Link to heading 'Autobuild steps for compiled languages'" data-heading-content="Autobuild steps for compiled languages" class="anchor"></a></h2>
 <p>GitHub-hosted runners are always run with the software required by <code>autobuild</code>. If you use self-hosted runners for GitHub Actions, you may need to install additional software to use the <code>autobuild</code> process. Additionally, if your repository requires a specific version of a build tool, you may need to install it manually.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>If your workflow uses a <code>language</code> matrix, <code>autobuild</code> attempts to build each of the compiled languages listed in the matrix. Without a matrix <code>autobuild</code> attempts to build the supported compiled language that has the most source files in the repository. With the exception of Go, analysis of other compiled languages in your repository will fail unless you supply explicit build commands.</p>
 </div>
-<h2 id="building-cc" title="Building C/C++">Building C/C++<a href="#building-cc" aria-label="Link to heading 'Building C/C++'" data-heading-content="Building C/C++" class="anchor"></a></h2>
+<h2 id="building-cc" title="Building C/C++" data-entry-type="Section">Building C/C++<a href="#building-cc" aria-label="Link to heading 'Building C/C++'" data-heading-content="Building C/C++" class="anchor"></a></h2>
 <p>CodeQL supports build modes <code>none</code>, <code>autobuild</code> or <code>manual</code> for C/C++ code.</p>
 <p>When you enable default setup for a repository that contains C/C++ code, the build mode is set to <code>none</code> automatically.</p>
 <h3 id="no-build-for-cc">No build for C/C++<a href="#no-build-for-cc" aria-label="Link to heading 'No build for C/C++'" data-heading-content="No build for C/C++" class="anchor"></a></h3>
@@ -62,7 +62,7 @@ If <code>autobuild</code> detects multiple solution or project files at the same
 <p>For self-hosted runners, unless automatic installation of dependencies is enabled, you will likely need to install the <code>gcc</code> compiler, and specific projects may also require access to <code>clang</code> or <code>msvc</code> executables. You will also need to install the build system (for example <code>msbuild</code>, <code>make</code>, <code>cmake</code>, <code>bazel</code>) and utilities (such as <code>python</code>, <code>perl</code>, <code>lex</code>, and <code>yacc</code>) that your projects depend on.<br>
 If you enable automatic installation of dependencies, you must ensure that the runner is using Ubuntu and that it can run <code>sudo apt-get</code> without requiring a password.</p>
 <p>Windows runners require <code>powershell.exe</code> to be on the <code>PATH</code>.</p>
-<h2 id="building-c" title="Building C#">Building C<span data-escaped-char="">#</span><a href="#building-c" aria-label="Link to heading 'Building C#'" data-heading-content="Building C#" class="anchor"></a></h2>
+<h2 id="building-c" title="Building C#" data-entry-type="Section">Building C<span data-escaped-char="">#</span><a href="#building-c" aria-label="Link to heading 'Building C#'" data-heading-content="Building C#" class="anchor"></a></h2>
 <p>CodeQL supports build modes <code>none</code>, <code>autobuild</code> or <code>manual</code> for C# code.</p>
 <p>When you enable default setup for a repository that contains C# code, the build mode is set to <code>none</code> automatically.</p>
 <h3 id="no-build-for-c">No build for C<span data-escaped-char="">#</span><a href="#no-build-for-c" aria-label="Link to heading 'No build for C#'" data-heading-content="No build for C#" class="anchor"></a></h3>
@@ -135,7 +135,7 @@ If <code>autobuild</code> detects multiple solution or project files at the same
 <h4 id="pemitcompilergeneratedfilestrue"><code>/p:EmitCompilerGeneratedFiles=true</code><a href="#pemitcompilergeneratedfilestrue" aria-label="Link to heading '/p:EmitCompilerGeneratedFiles=true'" data-heading-content="/p:EmitCompilerGeneratedFiles=true" class="anchor"></a></h4>
 <p>Setting this option to <code>true</code> will emit compiler-generated files during the build process. This option causes the compiler to generate additional source files that are used to support features such as improved regular expression support, serialization, and web application view generation. These generated artifacts are typically not written to disk by the compiler, but setting the option to <code>true</code> forces writing the files to disk, and so the extractor can process the files.</p>
 <p>For some legacy projects, and projects that use <code>.sqlproj</code> files, you may see that the injected <code>/p:EmitCompilerGeneratedFiles=true</code> property causes unexpected issues with <code>msbuild</code>. For information about troubleshooting this, see <a href="../troubleshoot-analysis-errors/c-sharp-compiler-unexpectedly-failing.html">C# compiler unexpectedly failing</a>.</p>
-<h2 id="building-go" title="Building Go">Building Go<a href="#building-go" aria-label="Link to heading 'Building Go'" data-heading-content="Building Go" class="anchor"></a></h2>
+<h2 id="building-go" title="Building Go" data-entry-type="Section">Building Go<a href="#building-go" aria-label="Link to heading 'Building Go'" data-heading-content="Building Go" class="anchor"></a></h2>
 <p>CodeQL supports build modes <code>autobuild</code> or <code>manual</code> for Go code.</p>
 <h3 id="autobuild-summary-for-go">Autobuild summary for Go<a href="#autobuild-summary-for-go" aria-label="Link to heading 'Autobuild summary for Go'" data-heading-content="Autobuild summary for Go" class="anchor"></a></h3>
 <table>
@@ -171,7 +171,7 @@ If <code>autobuild</code> detects multiple solution or project files at the same
 <h3 id="extractor-options-for-go">Extractor options for Go<a href="#extractor-options-for-go" aria-label="Link to heading 'Extractor options for Go'" data-heading-content="Extractor options for Go" class="anchor"></a></h3>
 <p>By default, test code (code in files ending in <code>_test.go</code>) is not analyzed. You can override this with the option <code>--extractor-option extract_tests=true</code> when using the CodeQL CLI, or by setting the environment variable <code>CODEQL_EXTRACTOR_GO_OPTION_EXTRACT_TESTS</code> to <code>true</code>.</p>
 <p>Additionally, <code>vendor</code> directories are excluded from CodeQL Go analysis by default. You can override this by passing the <code>--extractor-option extract_vendor_dirs=true</code> option when using the CodeQL CLI, or by setting the environment variable <code>CODEQL_EXTRACTOR_GO_OPTION_EXTRACT_VENDOR_DIRS</code> to <code>true</code>.</p>
-<h2 id="building-java-and-kotlin" title="Building Java and Kotlin">Building Java and Kotlin<a href="#building-java-and-kotlin" aria-label="Link to heading 'Building Java and Kotlin'" data-heading-content="Building Java and Kotlin" class="anchor"></a></h2>
+<h2 id="building-java-and-kotlin" title="Building Java and Kotlin" data-entry-type="Section">Building Java and Kotlin<a href="#building-java-and-kotlin" aria-label="Link to heading 'Building Java and Kotlin'" data-heading-content="Building Java and Kotlin" class="anchor"></a></h2>
 <p>CodeQL supports the following build modes.</p>
 <ul>
 <li>Java: <code>none</code>, <code>autobuild</code>, or <code>manual</code></li>
@@ -239,13 +239,13 @@ If <code>autobuild</code> detects multiple solution or project files at the same
 </ul>
 <p>You will also need to install the build system (for example <code>make</code>, <code>cmake</code>, <code>bazel</code>) and utilities (such as <code>python</code>, <code>perl</code>, <code>lex</code>, and <code>yacc</code>) that your projects depend on.</p>
 <p>Windows runners require <code>powershell.exe</code> to be on the <code>PATH</code>.</p>
-<h2 id="building-rust" title="Building Rust">Building Rust<a href="#building-rust" aria-label="Link to heading 'Building Rust'" data-heading-content="Building Rust" class="anchor"></a></h2>
+<h2 id="building-rust" title="Building Rust" data-entry-type="Section">Building Rust<a href="#building-rust" aria-label="Link to heading 'Building Rust'" data-heading-content="Building Rust" class="anchor"></a></h2>
 <p>CodeQL supports build mode <code>none</code> for Rust code.</p>
 <h3 id="no-build-for-rust">No build for Rust<a href="#no-build-for-rust" aria-label="Link to heading 'No build for Rust'" data-heading-content="No build for Rust" class="anchor"></a></h3>
 <p>CodeQL uses <code>rust-analyzer</code> to compile and run build scripts (<code>build.rs</code> files) and compile macro code, but does not invoke a full build. A database is created from all Rust files present. A <code>Cargo.toml</code> or <code>rust-project.json</code> file must be present.</p>
 <h3 id="runner-requirements-for-rust">Runner requirements for Rust<a href="#runner-requirements-for-rust" aria-label="Link to heading 'Runner requirements for Rust'" data-heading-content="Runner requirements for Rust" class="anchor"></a></h3>
 <p>Rust analysis requires <code>rustup</code> and <code>cargo</code> to be installed.</p>
-<h2 id="building-swift" title="Building Swift">Building Swift<a href="#building-swift" aria-label="Link to heading 'Building Swift'" data-heading-content="Building Swift" class="anchor"></a></h2>
+<h2 id="building-swift" title="Building Swift" data-entry-type="Section">Building Swift<a href="#building-swift" aria-label="Link to heading 'Building Swift'" data-heading-content="Building Swift" class="anchor"></a></h2>
 <p>CodeQL supports build modes <code>autobuild</code> or <code>manual</code> for Swift code.</p>
 <h3 id="autobuild-summary-for-swift">Autobuild summary for Swift<a href="#autobuild-summary-for-swift" aria-label="Link to heading 'Autobuild summary for Swift'" data-heading-content="Autobuild summary for Swift" class="anchor"></a></h3>
 <table>

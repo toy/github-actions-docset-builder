@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Using incremental analysis with the CodeQL CLI</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Scan from the command line</a> / </nav><h1 id="using-incremental-analysis-with-the-codeql-cli">Using incremental analysis with the CodeQL CLI<a href="#using-incremental-analysis-with-the-codeql-cli" aria-label="Link to heading 'Using incremental analysis with the CodeQL CLI'" data-heading-content="Using incremental analysis with the CodeQL CLI" class="anchor"></a></h1>
 <p>Get faster CodeQL results on pull requests by analyzing only what changed. Incremental analysis can reduce scan times by up to 10x when you run the CodeQL CLI in your own CI/CD system.</p>
-<h2 id="about-incremental-analysis" title="About incremental analysis">About incremental analysis<a href="#about-incremental-analysis" aria-label="Link to heading 'About incremental analysis'" data-heading-content="About incremental analysis" class="anchor"></a></h2>
+<h2 id="about-incremental-analysis" title="About incremental analysis" data-entry-type="Section">About incremental analysis<a href="#about-incremental-analysis" aria-label="Link to heading 'About incremental analysis'" data-heading-content="About incremental analysis" class="anchor"></a></h2>
 <p>Full CodeQL scans on every pull request can be slow, especially in large codebases. If you run the CodeQL CLI in your own CI/CD system, incremental analysis gives you two ways to speed things up:</p>
 <ul>
 <li><strong>Diff-informed analysis</strong> reports only alerts in lines you added or changed, so queries run faster and results are more relevant.</li>
@@ -8,7 +8,7 @@
 </ul>
 <p>You can use these features independently or together. For most teams analyzing pull requests in established codebases, we recommend using both: overlay analysis for fast database creation and query evaluation, and diff-informed analysis for focused, relevant results.</p>
 <p>If you use code scanning default setup or the <code>codeql-action</code> on GitHub, incremental analysis is already handled automatically. This article is for teams running the CodeQL CLI directly in their own CI/CD infrastructure.</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>Before setting up incremental analysis, make sure you meet the following requirements:</p>
 <ul>
 <li><strong>CodeQL CLI bundle version:</strong> 2.21.0 or later for diff-informed analysis; 2.23.8 or later for overlay analysis (with per-language minimums, see <a href="#minimum-cli-bundle-versions">Minimum CLI bundle versions</a>)</li>
@@ -18,7 +18,7 @@
 <li><strong>Git index</strong> must accurately reflect the source tree being analyzed</li>
 <li><strong>Build mode:</strong> Overlay analysis supports only <code>build-mode: none</code> (traced builds are not supported). Go works with overlay analysis despite not explicitly supporting this mode.</li>
 </ul>
-<h2 id="choosing-an-approach" title="Choosing an approach">Choosing an approach<a href="#choosing-an-approach" aria-label="Link to heading 'Choosing an approach'" data-heading-content="Choosing an approach" class="anchor"></a></h2>
+<h2 id="choosing-an-approach" title="Choosing an approach" data-entry-type="Section">Choosing an approach<a href="#choosing-an-approach" aria-label="Link to heading 'Choosing an approach'" data-heading-content="Choosing an approach" class="anchor"></a></h2>
 <table>
 <thead>
 <tr>
@@ -51,7 +51,7 @@
 </tbody>
 </table>
 <p>For complete working examples in various CI systems, see the <a href="https://github.com/advanced-security/sample-codeql-pipeline-config" class="external">sample CodeQL pipeline configurations</a> repository.</p>
-<h2 id="diff-informed-analysis" title="Diff-informed analysis">Diff-informed analysis<a href="#diff-informed-analysis" aria-label="Link to heading 'Diff-informed analysis'" data-heading-content="Diff-informed analysis" class="anchor"></a></h2>
+<h2 id="diff-informed-analysis" title="Diff-informed analysis" data-entry-type="Section">Diff-informed analysis<a href="#diff-informed-analysis" aria-label="Link to heading 'Diff-informed analysis'" data-heading-content="Diff-informed analysis" class="anchor"></a></h2>
 <p>Diff-informed analysis is an optimization for pull request analysis. Instead of reporting all alerts found in the codebase, it reports only alerts in lines that were added or modified in the pull request diff.</p>
 <h3 id="step-1-identify-the-diff-ranges">Step 1: Identify the diff ranges<a href="#step-1-identify-the-diff-ranges" aria-label="Link to heading 'Step 1: Identify the diff ranges'" data-heading-content="Step 1: Identify the diff ranges" class="anchor"></a></h3>
 <p>You need the added or modified line ranges from the pull request diff. The input can come from any source (<code>git diff</code>, your CI platform's API, or another mechanism).</p>
@@ -193,7 +193,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="overlay-analysis" title="Overlay analysis">Overlay analysis<a href="#overlay-analysis" aria-label="Link to heading 'Overlay analysis'" data-heading-content="Overlay analysis" class="anchor"></a></h2>
+<h2 id="overlay-analysis" title="Overlay analysis" data-entry-type="Section">Overlay analysis<a href="#overlay-analysis" aria-label="Link to heading 'Overlay analysis'" data-heading-content="Overlay analysis" class="anchor"></a></h2>
 <p>Overlay analysis speeds up CodeQL database creation and query evaluation for pull requests by building on top of a pre-existing "base" database:</p>
 <ol>
 <li><strong>On the default branch:</strong> Build an "overlay-base" database (a full database with cached intermediate results). This can be any long-lived branch that pull requests target.</li>

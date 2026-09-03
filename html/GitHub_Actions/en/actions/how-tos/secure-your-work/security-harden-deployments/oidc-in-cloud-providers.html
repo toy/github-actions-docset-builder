@@ -1,9 +1,9 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in cloud providers</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1 id="configuring-openid-connect-in-cloud-providers">Configuring OpenID Connect in cloud providers<a href="#configuring-openid-connect-in-cloud-providers" aria-label="Link to heading 'Configuring OpenID Connect in cloud providers'" data-heading-content="Configuring OpenID Connect in cloud providers" class="anchor"></a></h1>
 <p>Use OpenID Connect within your workflows to authenticate with cloud providers.</p>
-<h2 id="overview" title="Overview">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
+<h2 id="overview" title="Overview" data-entry-type="Section">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
 <p>OpenID Connect (OIDC) allows your GitHub Actions workflows to access resources in your cloud provider, without having to store any credentials as long-lived GitHub secrets.</p>
 <p>To use OIDC, you will first need to configure your cloud provider to trust GitHub's OIDC as a federated identity, and must then update your workflows to authenticate using tokens.</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <ul>
 <li>
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
@@ -12,7 +12,7 @@
 <p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../reference/security/oidc.html#oidc-claims-used-to-define-trust-conditions-on-cloud-roles">OpenID Connect reference</a>.</p>
 </li>
 </ul>
-<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
+<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow" data-entry-type="Section">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
 <p>To update your workflows for OIDC, you will need to make two changes to your YAML:</p>
 <ol>
 <li>Add permissions settings for the token.</li>
@@ -33,7 +33,7 @@
 <h3 id="using-official-actions">Using official actions<a href="#using-official-actions" aria-label="Link to heading 'Using official actions'" data-heading-content="Using official actions" class="anchor"></a></h3>
 <p>If your cloud provider has created an official action for using OIDC with GitHub Actions, it will allow you to easily exchange the OIDC token for an access token. You can then update your workflows to use this token when accessing cloud resources.</p>
 <p>For example, Alibaba Cloud created <a href="https://github.com/aliyun/configure-aliyun-credentials-action" class="external"><code>aliyun/configure-aliyun-credentials-action</code></a> to integrate with using OIDC with GitHub.</p>
-<h2 id="using-custom-actions" title="Using custom actions">Using custom actions<a href="#using-custom-actions" aria-label="Link to heading 'Using custom actions'" data-heading-content="Using custom actions" class="anchor"></a></h2>
+<h2 id="using-custom-actions" title="Using custom actions" data-entry-type="Section">Using custom actions<a href="#using-custom-actions" aria-label="Link to heading 'Using custom actions'" data-heading-content="Using custom actions" class="anchor"></a></h2>
 <p>If your cloud provider doesn't have an official action, or if you prefer to create custom scripts, you can manually request the JSON Web Token (JWT) from GitHub's OIDC provider.</p>
 <p>If you're not using an official action, then GitHub recommends that you use the Actions core toolkit. Alternatively, you can use the following environment variables to retrieve the token: <code>ACTIONS_ID_TOKEN_REQUEST_TOKEN</code>, <code>ACTIONS_ID_TOKEN_REQUEST_URL</code>.</p>
 <p>To update your workflows using this approach, you will need to make three changes to your YAML:</p>
@@ -100,7 +100,7 @@
 <p>Once you've obtained the access token, you can use specific cloud actions or scripts to authenticate to the cloud provider and deploy to its resources. These steps could differ for each cloud provider.</p>
 <p>For example, Alibaba Cloud maintains their own instructions for OIDC authentication. For more information, see <a href="https://www.alibabacloud.com/help/en/ram/user-guide/overview-of-oidc-based-sso" class="external">Overview of OIDC-based SSO</a> in the Alibaba Cloud documentation.</p>
 <p>In addition, the default expiration time of this access token could vary between each cloud and can be configurable at the cloud provider's side.</p>
-<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
+<h2 id="further-reading" title="Further reading" data-entry-type="Section">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>
 <li><a href="oidc-with-reusable-workflows.html">Using OpenID Connect with reusable workflows</a></li>
 <li><a href="../../../reference/runners/self-hosted-runners.html">Self-hosted runners reference</a></li>

@@ -1,15 +1,15 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Analyzing your code with CodeQL queries</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">Security and code quality</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Customize code scanning</a> / </nav><h1 id="analyzing-your-code-with-codeql-queries">Analyzing your code with CodeQL queries<a href="#analyzing-your-code-with-codeql-queries" aria-label="Link to heading 'Analyzing your code with CodeQL queries'" data-heading-content="Analyzing your code with CodeQL queries" class="anchor"></a></h1>
 <p>You can run queries against a CodeQL database extracted from a codebase.</p>
-<h2 id="about-analyzing-databases-with-the-codeql-cli" title="About analyzing databases with the CodeQL CLI">About analyzing databases with the CodeQL CLI<a href="#about-analyzing-databases-with-the-codeql-cli" aria-label="Link to heading 'About analyzing databases with the CodeQL CLI'" data-heading-content="About analyzing databases with the CodeQL CLI" class="anchor"></a></h2>
+<h2 id="about-analyzing-databases-with-the-codeql-cli" title="About analyzing databases with the CodeQL CLI" data-entry-type="Section">About analyzing databases with the CodeQL CLI<a href="#about-analyzing-databases-with-the-codeql-cli" aria-label="Link to heading 'About analyzing databases with the CodeQL CLI'" data-heading-content="About analyzing databases with the CodeQL CLI" class="anchor"></a></h2>
 <p>To analyze a codebase, you run queries against a CodeQL database extracted from the code. CodeQL analyses produce results that can be uploaded to GitHub to generate code scanning alerts.</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>Before starting an analysis you must:</p>
 <ul>
 <li><a href="../../how-tos/find-and-fix-code-vulnerabilities/scan-from-the-command-line/set-up-codeql-cli.html">Set up the CodeQL CLI</a> to run commands locally.</li>
 <li><a href="prepare-code-for-analysis.html">Create a CodeQL database</a> for the source code you want to analyze.</li>
 </ul>
 <p>The simplest way to run <code>codeql database analyze</code> is using the standard queries included in the CodeQL CLI bundle.</p>
-<h2 id="running-codeql-database-analyze" title="Running codeql database analyze">Running <code>codeql database analyze</code><a href="#running-codeql-database-analyze" aria-label="Link to heading 'Running codeql database analyze'" data-heading-content="Running codeql database analyze" class="anchor"></a></h2>
+<h2 id="running-codeql-database-analyze" title="Running codeql database analyze" data-entry-type="Section">Running <code>codeql database analyze</code><a href="#running-codeql-database-analyze" aria-label="Link to heading 'Running codeql database analyze'" data-heading-content="Running codeql database analyze" class="anchor"></a></h2>
 <p>When you run <code>database analyze</code>, it:</p>
 <ol>
 <li>Optionally downloads any referenced CodeQL packages that are not available locally.</li>
@@ -130,7 +130,7 @@ that your database needs to be upgraded when you run <code>database analyze</cod
 </span><span style="color:#c0c5ce;">    --sarif-add-baseline-file-info \ --format=sarif-latest \
 </span><span style="color:#c0c5ce;">    --output=/temp/example-repo-js.sarif
 </span></code></pre>
-<h2 id="examples-of-running-database-analyses" title="Examples of running database analyses">Examples of running database analyses<a href="#examples-of-running-database-analyses" aria-label="Link to heading 'Examples of running database analyses'" data-heading-content="Examples of running database analyses" class="anchor"></a></h2>
+<h2 id="examples-of-running-database-analyses" title="Examples of running database analyses" data-entry-type="Section">Examples of running database analyses<a href="#examples-of-running-database-analyses" aria-label="Link to heading 'Examples of running database analyses'" data-heading-content="Examples of running database analyses" class="anchor"></a></h2>
 <p>The following examples show how to run <code>database analyze</code> using CodeQL packs, and how to use a local checkout of the CodeQL repository. These examples assume your CodeQL databases have been created in a directory that is a sibling of your local copies of the CodeQL repository.</p>
 <h3 id="running-a-codeql-query-pack">Running a CodeQL query pack<a href="#running-a-codeql-query-pack" aria-label="Link to heading 'Running a CodeQL query pack'" data-heading-content="Running a CodeQL query pack" class="anchor"></a></h3>
 <p>To run an existing CodeQL query pack from the GitHub Container registry, you can specify one or more pack names:</p>
@@ -241,16 +241,16 @@ For more information, see <a href="create-query-suites.html">Creating CodeQL que
 </span><span style="color:#c0c5ce;">  --output=/temp/my-company.sarif codeql/java-queries
 </span></code></pre>
 <p>In this example, the relevant queries in the standard query pack <code>codeql/java-queries</code> will use the <code>local</code> threat model as well as the default threat model for <code>remote</code> dataflow sources. You should use the <code>local</code> threat model if you consider data from local sources (for example: file systems, command-line arguments, databases, and environment variables) to be potential sources of tainted data for your codebase.</p>
-<h2 id="results" title="Results">Results<a href="#results" aria-label="Link to heading 'Results'" data-heading-content="Results" class="anchor"></a></h2>
+<h2 id="results" title="Results" data-entry-type="Section">Results<a href="#results" aria-label="Link to heading 'Results'" data-heading-content="Results" class="anchor"></a></h2>
 <p>You can save analysis results in a number of different formats, including SARIF and CSV.</p>
 <p>The SARIF format is designed to represent the output of a broad range of static analysis tools. For more information, see <a href="../../reference/code-scanning/codeql/codeql-cli/sarif-output.html">CodeQL CLI SARIF output</a>.</p>
 <p>For more information about what the results look like in CSV format, see <a href="../../reference/code-scanning/codeql/codeql-cli/csv-output.html">CodeQL CLI CSV output</a>.</p>
 <p>Results files can be integrated into your own code-review or debugging infrastructure. For example, SARIF file output can be used to highlight alerts in the correct location in your source code using a SARIF viewer plugin for your IDE.</p>
-<h2 id="viewing-log-and-diagnostic-information" title="Viewing log and diagnostic information">Viewing log and diagnostic information<a href="#viewing-log-and-diagnostic-information" aria-label="Link to heading 'Viewing log and diagnostic information'" data-heading-content="Viewing log and diagnostic information" class="anchor"></a></h2>
+<h2 id="viewing-log-and-diagnostic-information" title="Viewing log and diagnostic information" data-entry-type="Section">Viewing log and diagnostic information<a href="#viewing-log-and-diagnostic-information" aria-label="Link to heading 'Viewing log and diagnostic information'" data-heading-content="Viewing log and diagnostic information" class="anchor"></a></h2>
 <p>When you analyze a CodeQL database using a code scanning query suite, in addition to generating detailed information about alerts, the CLI reports diagnostic data from the database generation step and summary metrics. If you choose to generate SARIF output, the additional data is also included in the SARIF file. For repositories with few alerts, you may find this information useful for determining if there are genuinely few problems in the code, or if there were errors generating the CodeQL database. For more detailed output from <code>codeql database analyze</code>, use the <code>--verbose</code> option.</p>
 <p>For more information about the type of diagnostic information available, see <a href="../../reference/code-scanning/code-scanning-logs.html">Code scanning logs</a>.</p>
 <p>You can choose to export and upload diagnostic information to GitHub even if a CodeQL analysis fails. For more information, see <a href="upload-results.html#uploading-diagnostic-information-to-github-if-the-analysis-fails">Uploading CodeQL analysis results to GitHub</a>.</p>
-<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<h2 id="next-steps" title="Next steps" data-entry-type="Section">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
 <ul>
 <li>To learn how to upload your CodeQL analysis results to GitHub, see <a href="upload-results.html">Uploading CodeQL analysis results to GitHub</a>.</li>
 </ul>

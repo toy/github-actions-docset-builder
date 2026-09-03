@@ -1,10 +1,10 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Introduction to GraphQL</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="introduction-to-graphql">Introduction to GraphQL<a href="#introduction-to-graphql" aria-label="Link to heading 'Introduction to GraphQL'" data-heading-content="Introduction to GraphQL" class="anchor"></a></h1>
 <p>Learn useful terminology and concepts for using the GitHub GraphQL API.</p>
-<h2 id="graphql-terminology" title="GraphQL terminology">GraphQL terminology<a href="#graphql-terminology" aria-label="Link to heading 'GraphQL terminology'" data-heading-content="GraphQL terminology" class="anchor"></a></h2>
+<h2 id="graphql-terminology" title="GraphQL terminology" data-entry-type="Section">GraphQL terminology<a href="#graphql-terminology" aria-label="Link to heading 'GraphQL terminology'" data-heading-content="GraphQL terminology" class="anchor"></a></h2>
 <p>The GitHub GraphQL API represents an architectural and conceptual shift from the GitHub REST API. You will likely encounter some new terminology in the GraphQL API <a href="../index.html">reference docs</a>.</p>
-<h2 id="schema" title="Schema">Schema<a href="#schema" aria-label="Link to heading 'Schema'" data-heading-content="Schema" class="anchor"></a></h2>
+<h2 id="schema" title="Schema" data-entry-type="Section">Schema<a href="#schema" aria-label="Link to heading 'Schema'" data-heading-content="Schema" class="anchor"></a></h2>
 <p>A schema defines a GraphQL API's type system. It describes the complete set of possible data (objects, fields, relationships, everything) that a client can access. Calls from the client are <a href="https://graphql.org/learn/validation/" class="external">validated</a> and <a href="https://graphql.org/learn/execution/" class="external">executed</a> against the schema. A client can find information about the schema via <a href="#discovering-the-graphql-api">introspection</a>. A schema resides on the GraphQL API server. For more information, see <a href="#discovering-the-graphql-api">Discovering the GraphQL API</a>.</p>
-<h2 id="field" title="Field">Field<a href="#field" aria-label="Link to heading 'Field'" data-heading-content="Field" class="anchor"></a></h2>
+<h2 id="field" title="Field" data-entry-type="Section">Field<a href="#field" aria-label="Link to heading 'Field'" data-heading-content="Field" class="anchor"></a></h2>
 <p>A field is a unit of data you can retrieve from an object. As the <a href="https://graphql.org/learn/schema/" class="external">official GraphQL docs</a> say:<br>
 "The GraphQL query language is basically about selecting fields on objects."</p>
 <p>The <a href="https://spec.graphql.org/June2018/#sec-Language.Fields" class="external">official spec</a> also says about fields:</p>
@@ -12,9 +12,9 @@
 <p>All GraphQL operations must specify their selections down to fields which return scalar values to ensure an unambiguously shaped response.</p>
 </blockquote>
 <p>This means that if you try to return a field that is not a scalar, schema validation will throw an error. You must add nested subfields until all fields return scalars.</p>
-<h2 id="argument" title="Argument">Argument<a href="#argument" aria-label="Link to heading 'Argument'" data-heading-content="Argument" class="anchor"></a></h2>
+<h2 id="argument" title="Argument" data-entry-type="Section">Argument<a href="#argument" aria-label="Link to heading 'Argument'" data-heading-content="Argument" class="anchor"></a></h2>
 <p>An argument is a set of key-value pairs attached to a specific field. Some fields require an argument. <a href="forming-calls-with-graphql.html#about-mutations">Mutations</a> require an input object as an argument.</p>
-<h2 id="implementation" title="Implementation">Implementation<a href="#implementation" aria-label="Link to heading 'Implementation'" data-heading-content="Implementation" class="anchor"></a></h2>
+<h2 id="implementation" title="Implementation" data-entry-type="Section">Implementation<a href="#implementation" aria-label="Link to heading 'Implementation'" data-heading-content="Implementation" class="anchor"></a></h2>
 <p>A GraphQL schema may use the term <em>implements</em> to define how an object inherits from an interface.</p>
 <p>Here's a contrived example of a schema that defines interface <code>X</code> and object <code>Y</code>:</p>
 <pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">interface X {
@@ -38,14 +38,14 @@
 <p>Each interface lists the objects <em>that inherit from it</em> under <strong>Implementations</strong>.</p>
 </li>
 </ul>
-<h2 id="connection" title="Connection">Connection<a href="#connection" aria-label="Link to heading 'Connection'" data-heading-content="Connection" class="anchor"></a></h2>
+<h2 id="connection" title="Connection" data-entry-type="Section">Connection<a href="#connection" aria-label="Link to heading 'Connection'" data-heading-content="Connection" class="anchor"></a></h2>
 <p>Connections let you query related objects as part of the same call. With connections, you can use a single GraphQL call where you would have to use multiple calls to a REST API. For more information, see <a href="migrating-from-rest-to-graphql.html">Migrating from REST to GraphQL</a>.</p>
 <p>It's helpful to picture a graph: dots connected by lines. The dots are nodes, the lines are edges. A connection defines a relationship between nodes.</p>
-<h2 id="edge" title="Edge">Edge<a href="#edge" aria-label="Link to heading 'Edge'" data-heading-content="Edge" class="anchor"></a></h2>
+<h2 id="edge" title="Edge" data-entry-type="Section">Edge<a href="#edge" aria-label="Link to heading 'Edge'" data-heading-content="Edge" class="anchor"></a></h2>
 <p>Edges represent connections between nodes. When you query a connection, you traverse its edges to get to its nodes. Every <code>edges</code> field has a <code>node</code> field and a <code>cursor</code> field. Cursors are used for pagination. For more information, see <a href="using-pagination-in-the-graphql-api.html">Using pagination in the GraphQL API</a>.</p>
-<h2 id="node" title="Node">Node<a href="#node" aria-label="Link to heading 'Node'" data-heading-content="Node" class="anchor"></a></h2>
+<h2 id="node" title="Node" data-entry-type="Section">Node<a href="#node" aria-label="Link to heading 'Node'" data-heading-content="Node" class="anchor"></a></h2>
 <p><em>Node</em> is a generic term for an object. You can look up a node directly, or you can access related nodes via a connection. If you specify a <code>node</code> that does not return a scalar, you must include subfields until all fields return scalars. For information on accessing node IDs via the REST API and using them in GraphQL queries, see <a href="using-global-node-ids.html">Using global node IDs</a>.</p>
-<h2 id="discovering-the-graphql-api" title="Discovering the GraphQL API">Discovering the GraphQL API<a href="#discovering-the-graphql-api" aria-label="Link to heading 'Discovering the GraphQL API'" data-heading-content="Discovering the GraphQL API" class="anchor"></a></h2>
+<h2 id="discovering-the-graphql-api" title="Discovering the GraphQL API" data-entry-type="Section">Discovering the GraphQL API<a href="#discovering-the-graphql-api" aria-label="Link to heading 'Discovering the GraphQL API'" data-heading-content="Discovering the GraphQL API" class="anchor"></a></h2>
 <p>GraphQL is <a href="https://graphql.org/learn/introspection/" class="external">introspective</a>. This means you can query a GraphQL schema for details about itself.</p>
 <ul>
 <li>

@@ -1,13 +1,13 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GPG keys</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Users</a> / </nav><h1 id="rest-api-endpoints-for-gpg-keys">REST API endpoints for GPG keys<a href="#rest-api-endpoints-for-gpg-keys" aria-label="Link to heading 'REST API endpoints for GPG keys'" data-heading-content="REST API endpoints for GPG keys" class="anchor"></a></h1>
 <p>Use the REST API to manage GPG keys of authenticated users.</p>
-<h2 id="about-user-gpg-key-administration" title="About user GPG key administration">About user GPG key administration<a href="#about-user-gpg-key-administration" aria-label="Link to heading 'About user GPG key administration'" data-heading-content="About user GPG key administration" class="anchor"></a></h2>
+<h2 id="about-user-gpg-key-administration" title="About user GPG key administration" data-entry-type="Section">About user GPG key administration<a href="#about-user-gpg-key-administration" aria-label="Link to heading 'About user GPG key administration'" data-heading-content="About user GPG key administration" class="anchor"></a></h2>
 <p>The data returned in the <code>public_key</code> response field is not a GPG formatted key. When a user uploads a GPG key, it is parsed and the cryptographic public key is extracted and stored. This cryptographic key is what the endpoints in this category will return. This key is not suitable for direct use in programs such as GPG.</p>
 <p>If a request URL does not include a <code>{username}</code> parameter then the response will be for the signed-in user (and you must pass <a href="../authentication/authenticating-to-the-rest-api.html">authentication information</a> with your request). Additional private information, such as whether a user has two-factor authentication enabled, is included when authenticated through OAuth with the <code>user</code> scope.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-gpg-keys-for-the-authenticated-user" title="GET /user/gpg_keys (List GPG keys for the authenticated user)">List GPG keys for the authenticated user<a href="#list-gpg-keys-for-the-authenticated-user" aria-label="Link to heading 'List GPG keys for the authenticated user'" data-heading-content="List GPG keys for the authenticated user" class="anchor"></a></h2>
+<h2 id="list-gpg-keys-for-the-authenticated-user" title="GET /user/gpg_keys (List GPG keys for the authenticated user)" data-entry-type="Resource">List GPG keys for the authenticated user<a href="#list-gpg-keys-for-the-authenticated-user" aria-label="Link to heading 'List GPG keys for the authenticated user'" data-heading-content="List GPG keys for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/gpg_keys
 </span></code></pre>
 <p>Lists the current user's GPG keys.<br>
@@ -102,7 +102,7 @@ Default: <code>1</code></p>
 <li><code>revoked</code>: required, boolean</li>
 <li><code>raw_key</code>: required, string or null</li>
 </ul>
-<h2 id="create-a-gpg-key-for-the-authenticated-user" title="POST /user/gpg_keys (Create a GPG key for the authenticated user)">Create a GPG key for the authenticated user<a href="#create-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Create a GPG key for the authenticated user'" data-heading-content="Create a GPG key for the authenticated user" class="anchor"></a></h2>
+<h2 id="create-a-gpg-key-for-the-authenticated-user" title="POST /user/gpg_keys (Create a GPG key for the authenticated user)" data-entry-type="Resource">Create a GPG key for the authenticated user<a href="#create-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Create a GPG key for the authenticated user'" data-heading-content="Create a GPG key for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /user/gpg_keys
 </span></code></pre>
 <p>Adds a GPG key to the authenticated user's GitHub account.<br>
@@ -201,7 +201,7 @@ A GPG key in ASCII-armored format.</p>
 <li><code>revoked</code>: required, boolean</li>
 <li><code>raw_key</code>: required, string or null</li>
 </ul>
-<h2 id="get-a-gpg-key-for-the-authenticated-user" title="GET /user/gpg_keys/{gpg_key_id} (Get a GPG key for the authenticated user)">Get a GPG key for the authenticated user<a href="#get-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Get a GPG key for the authenticated user'" data-heading-content="Get a GPG key for the authenticated user" class="anchor"></a></h2>
+<h2 id="get-a-gpg-key-for-the-authenticated-user" title="GET /user/gpg_keys/{gpg_key_id} (Get a GPG key for the authenticated user)" data-entry-type="Resource">Get a GPG key for the authenticated user<a href="#get-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Get a GPG key for the authenticated user'" data-heading-content="Get a GPG key for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/gpg_keys/{gpg_key_id}
 </span></code></pre>
 <p>View extended details for a single GPG key.<br>
@@ -244,7 +244,7 @@ The unique identifier of the GPG key.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-gpg-key-for-the-authenticated-user">Create a GPG key for the authenticated user</a>.</p>
-<h2 id="delete-a-gpg-key-for-the-authenticated-user" title="DELETE /user/gpg_keys/{gpg_key_id} (Delete a GPG key for the authenticated user)">Delete a GPG key for the authenticated user<a href="#delete-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Delete a GPG key for the authenticated user'" data-heading-content="Delete a GPG key for the authenticated user" class="anchor"></a></h2>
+<h2 id="delete-a-gpg-key-for-the-authenticated-user" title="DELETE /user/gpg_keys/{gpg_key_id} (Delete a GPG key for the authenticated user)" data-entry-type="Resource">Delete a GPG key for the authenticated user<a href="#delete-a-gpg-key-for-the-authenticated-user" aria-label="Link to heading 'Delete a GPG key for the authenticated user'" data-heading-content="Delete a GPG key for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/gpg_keys/{gpg_key_id}
 </span></code></pre>
 <p>Removes a GPG key from the authenticated user's GitHub account.<br>
@@ -289,7 +289,7 @@ The unique identifier of the GPG key.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/user/gpg_keys/GPG_KEY_ID
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-gpg-keys-for-a-user" title="GET /users/{username}/gpg_keys (List GPG keys for a user)">List GPG keys for a user<a href="#list-gpg-keys-for-a-user" aria-label="Link to heading 'List GPG keys for a user'" data-heading-content="List GPG keys for a user" class="anchor"></a></h2>
+<h2 id="list-gpg-keys-for-a-user" title="GET /users/{username}/gpg_keys (List GPG keys for a user)" data-entry-type="Resource">List GPG keys for a user<a href="#list-gpg-keys-for-a-user" aria-label="Link to heading 'List GPG keys for a user'" data-heading-content="List GPG keys for a user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/gpg_keys
 </span></code></pre>
 <p>Lists the GPG keys for a user. This information is accessible by anyone.</p>

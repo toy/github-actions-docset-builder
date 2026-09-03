@@ -1,8 +1,8 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Triggering a workflow</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Write workflows</a> / <a href="index.html">Choose when workflows run</a> / </nav><h1 id="triggering-a-workflow">Triggering a workflow<a href="#triggering-a-workflow" aria-label="Link to heading 'Triggering a workflow'" data-heading-content="Triggering a workflow" class="anchor"></a></h1>
 <p>How to automatically trigger GitHub Actions workflows</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>To learn more about workflows and triggering workflows, see <a href="../../../concepts/workflows-and-actions/workflows.html">Workflows</a>.</p>
-<h2 id="triggering-a-workflow-from-a-workflow" title="Triggering a workflow from a workflow">Triggering a workflow from a workflow<a href="#triggering-a-workflow-from-a-workflow" aria-label="Link to heading 'Triggering a workflow from a workflow'" data-heading-content="Triggering a workflow from a workflow" class="anchor"></a></h2>
+<h2 id="triggering-a-workflow-from-a-workflow" title="Triggering a workflow from a workflow" data-entry-type="Section">Triggering a workflow from a workflow<a href="#triggering-a-workflow-from-a-workflow" aria-label="Link to heading 'Triggering a workflow from a workflow'" data-heading-content="Triggering a workflow from a workflow" class="anchor"></a></h2>
 <p>When you use the repository's <code>GITHUB_TOKEN</code> to perform tasks, events triggered by the <code>GITHUB_TOKEN</code> will not create a new workflow run, with the following exceptions:</p>
 <ul>
 <li><code>workflow_dispatch</code> and <code>repository_dispatch</code> events always create workflow runs.</li>
@@ -44,7 +44,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">|
 </span><span style="color:#a3be8c;">          gh issue edit $ISSUE_URL --add-label "triage"
 </span></code></pre>
-<h2 id="using-events-to-trigger-workflows" title="Using events to trigger workflows">Using events to trigger workflows<a href="#using-events-to-trigger-workflows" aria-label="Link to heading 'Using events to trigger workflows'" data-heading-content="Using events to trigger workflows" class="anchor"></a></h2>
+<h2 id="using-events-to-trigger-workflows" title="Using events to trigger workflows" data-entry-type="Section">Using events to trigger workflows<a href="#using-events-to-trigger-workflows" aria-label="Link to heading 'Using events to trigger workflows'" data-heading-content="Using events to trigger workflows" class="anchor"></a></h2>
 <p>Use the <code>on</code> key to specify what events trigger your workflow. For more information about events you can use, see <a href="../../../reference/workflows-and-actions/events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
 <h3 id="using-a-single-event">Using a single event<a href="#using-a-single-event" aria-label="Link to heading 'Using a single event'" data-heading-content="Using a single event" class="anchor"></a></h3>
 <p>For example, a workflow with the following <code>on</code> value will run when a push is made to any branch in the workflow's repository:</p>
@@ -72,7 +72,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">main
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">page_build</span><span style="color:#c0c5ce;">:
 </span></code></pre>
-<h2 id="using-event-activity-types" title="Using event activity types">Using event activity types<a href="#using-event-activity-types" aria-label="Link to heading 'Using event activity types'" data-heading-content="Using event activity types" class="anchor"></a></h2>
+<h2 id="using-event-activity-types" title="Using event activity types" data-entry-type="Section">Using event activity types<a href="#using-event-activity-types" aria-label="Link to heading 'Using event activity types'" data-heading-content="Using event activity types" class="anchor"></a></h2>
 <p>Some events have activity types that give you more control over when your workflow should run. Use <code>on.&lt;event_name&gt;.types</code> to define the type of event activity that will trigger a workflow run.</p>
 <p>For example, the <code>issue_comment</code> event has the <code>created</code>, <code>edited</code>, and <code>deleted</code> activity types. If your workflow triggers on the <code>label</code> event, it will run whenever a label is created, edited, or deleted. If you specify the <code>created</code> activity type for the <code>label</code> event, your workflow will run when a label is created but not when a label is edited or deleted.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -88,7 +88,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">labeled
 </span></code></pre>
 <p>For more information about each event and their activity types, see <a href="../../../reference/workflows-and-actions/events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
-<h2 id="using-filters" title="Using filters">Using filters<a href="#using-filters" aria-label="Link to heading 'Using filters'" data-heading-content="Using filters" class="anchor"></a></h2>
+<h2 id="using-filters" title="Using filters" data-entry-type="Section">Using filters<a href="#using-filters" aria-label="Link to heading 'Using filters'" data-heading-content="Using filters" class="anchor"></a></h2>
 <p>Some events have filters that give you more control over when your workflow should run.</p>
 <p>For example, the <code>push</code> event has a <code>branches</code> filter that causes your workflow to run only when a push to a branch that matches the <code>branches</code> filter occurs, instead of when any push occurs.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">:
@@ -301,7 +301,7 @@
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">releases/**</span><span style="color:#c0c5ce;">'
 </span><span style="color:#c0c5ce;">      - '</span><span style="color:#a3be8c;">!releases/**-alpha</span><span style="color:#c0c5ce;">'
 </span></code></pre>
-<h2 id="defining-inputs-for-manually-triggered-workflows" title="Defining inputs for manually triggered workflows">Defining inputs for manually triggered workflows<a href="#defining-inputs-for-manually-triggered-workflows" aria-label="Link to heading 'Defining inputs for manually triggered workflows'" data-heading-content="Defining inputs for manually triggered workflows" class="anchor"></a></h2>
+<h2 id="defining-inputs-for-manually-triggered-workflows" title="Defining inputs for manually triggered workflows" data-entry-type="Section">Defining inputs for manually triggered workflows<a href="#defining-inputs-for-manually-triggered-workflows" aria-label="Link to heading 'Defining inputs for manually triggered workflows'" data-heading-content="Defining inputs for manually triggered workflows" class="anchor"></a></h2>
 <p>When using the <code>workflow_dispatch</code> event, you can optionally specify inputs that are passed to the workflow.</p>
 <p>This trigger only receives events when the workflow file is on the default branch.<br>
 The triggered workflow receives the inputs in the <code>inputs</code> context. For more information, see <a href="../../../reference/workflows-and-actions/contexts.html#inputs-context">Contexts</a>.</p>
@@ -346,9 +346,9 @@ The triggered workflow receives the inputs in the <code>inputs</code> context. F
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Print the input tag to STDOUT
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo  The tags are ${{ inputs.tags }} 
 </span></code></pre>
-<h2 id="defining-inputs-outputs-and-secrets-for-reusable-workflows" title="Defining inputs, outputs, and secrets for reusable workflows">Defining inputs, outputs, and secrets for reusable workflows<a href="#defining-inputs-outputs-and-secrets-for-reusable-workflows" aria-label="Link to heading 'Defining inputs, outputs, and secrets for reusable workflows'" data-heading-content="Defining inputs, outputs, and secrets for reusable workflows" class="anchor"></a></h2>
+<h2 id="defining-inputs-outputs-and-secrets-for-reusable-workflows" title="Defining inputs, outputs, and secrets for reusable workflows" data-entry-type="Section">Defining inputs, outputs, and secrets for reusable workflows<a href="#defining-inputs-outputs-and-secrets-for-reusable-workflows" aria-label="Link to heading 'Defining inputs, outputs, and secrets for reusable workflows'" data-heading-content="Defining inputs, outputs, and secrets for reusable workflows" class="anchor"></a></h2>
 <p>You can define inputs and secrets that a reusable workflow should receive from a calling workflow. You can also specify outputs that a reusable workflow will make available to a calling workflow. For more information, see <a href="../../reuse-automations/reuse-workflows.html">Reuse workflows</a>.</p>
-<h2 id="using-event-information" title="Using event information">Using event information<a href="#using-event-information" aria-label="Link to heading 'Using event information'" data-heading-content="Using event information" class="anchor"></a></h2>
+<h2 id="using-event-information" title="Using event information" data-entry-type="Section">Using event information<a href="#using-event-information" aria-label="Link to heading 'Using event information'" data-heading-content="Using event information" class="anchor"></a></h2>
 <p>Information about the event that triggered a workflow run is available in the <code>github.event</code> context. The properties in the <code>github.event</code> context depend on the type of event that triggered the workflow. For example, a workflow triggered when an issue is labeled would have information about the issue and label.</p>
 <h3 id="viewing-all-properties-of-an-event">Viewing all properties of an event<a href="#viewing-all-properties-of-an-event" aria-label="Link to heading 'Viewing all properties of an event'" data-heading-content="Viewing all properties of an event" class="anchor"></a></h3>
 <p>Reference the webhook event documentation for common properties and example payloads. For more information, see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads" class="external">Webhook events and payloads</a>.</p>
@@ -389,7 +389,7 @@ The triggered workflow receives the inputs in the <code>inputs</code> context. F
 </span><span style="color:#a3be8c;">          gh pr comment $PR --body 'It looks like you edited `package*.json`, `.github/CODEOWNERS`, or `.github/workflows/**`. We do not allow contributions to these files. Please review our [contributing guidelines](https://github.com/octo-org/octo-repo/blob/main/CONTRIBUTING.md) for what contributions are accepted.'
 </span></code></pre>
 <p>For more information about contexts, see <a href="../../../reference/workflows-and-actions/contexts.html">Contexts reference</a>. For more information about event payloads, see <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads" class="external">Webhook events and payloads</a>.</p>
-<h2 id="further-controlling-how-your-workflow-will-run" title="Further controlling how your workflow will run">Further controlling how your workflow will run<a href="#further-controlling-how-your-workflow-will-run" aria-label="Link to heading 'Further controlling how your workflow will run'" data-heading-content="Further controlling how your workflow will run" class="anchor"></a></h2>
+<h2 id="further-controlling-how-your-workflow-will-run" title="Further controlling how your workflow will run" data-entry-type="Section">Further controlling how your workflow will run<a href="#further-controlling-how-your-workflow-will-run" aria-label="Link to heading 'Further controlling how your workflow will run'" data-heading-content="Further controlling how your workflow will run" class="anchor"></a></h2>
 <p>If you want more granular control than events, event activity types, or event filters provide, you can use conditionals and environments to control whether individual jobs or steps in your workflow will run.</p>
 <h3 id="using-conditionals">Using conditionals<a href="#using-conditionals" aria-label="Link to heading 'Using conditionals'" data-heading-content="Using conditionals" class="anchor"></a></h3>
 <p>You can use conditionals to further control whether jobs or steps in your workflow will run.</p>
@@ -460,6 +460,6 @@ The triggered workflow receives the inputs in the <code>inputs</code> context. F
 <p class="markdown-alert-title">Note</p>
 <p>Environments, environment secrets, and deployment protection rules are available in public repositories for all current GitHub plans. They are not available on legacy plans, such as Bronze, Silver, or Gold. For access to environments, environment secrets, and deployment branches in private or internal repositories, you must use GitHub Pro, GitHub Team, or GitHub Enterprise. If you are on a GitHub Free, GitHub Pro, or GitHub Team plan, other deployment protection rules, such as a wait timer or required reviewers, are only available for public repositories.</p>
 </div>
-<h2 id="available-events" title="Available events">Available events<a href="#available-events" aria-label="Link to heading 'Available events'" data-heading-content="Available events" class="anchor"></a></h2>
+<h2 id="available-events" title="Available events" data-entry-type="Section">Available events<a href="#available-events" aria-label="Link to heading 'Available events'" data-heading-content="Available events" class="anchor"></a></h2>
 <p>For a full list of available events, see <a href="../../../reference/workflows-and-actions/events-that-trigger-workflows.html">Events that trigger workflows</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

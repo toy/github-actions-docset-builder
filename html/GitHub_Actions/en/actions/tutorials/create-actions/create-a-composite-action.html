@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Creating a composite action</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Create actions</a> / </nav><h1 id="creating-a-composite-action">Creating a composite action<a href="#creating-a-composite-action" aria-label="Link to heading 'Creating a composite action'" data-heading-content="Creating a composite action" class="anchor"></a></h1>
 <p>In this tutorial, you'll learn how to build a composite action.</p>
-<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<h2 id="introduction" title="Introduction" data-entry-type="Section">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>In this guide, you'll learn about the basic components needed to create and use a packaged composite action. To focus this guide on the components needed to package the action, the functionality of the action's code is minimal. The action prints "Hello World" and then "Goodbye", or if you provide a custom name, it prints "Hello <span data-escaped-char="">[</span>who-to-greet]" and then "Goodbye". The action also maps a random number to the <code>random-number</code> output variable, and runs a script named <code>goodbye.sh</code>.</p>
 <p>Once you complete this project, you should understand how to build your own composite action and test it in a workflow.</p>
 <div class="markdown-alert markdown-alert-warning">
@@ -9,7 +9,7 @@
 </div>
 <h3 id="composite-actions-and-reusable-workflows">Composite actions and reusable workflows<a href="#composite-actions-and-reusable-workflows" aria-label="Link to heading 'Composite actions and reusable workflows'" data-heading-content="Composite actions and reusable workflows" class="anchor"></a></h3>
 <p>Composite actions allow you to collect a series of workflow job steps into a single action which you can then run as a single job step in multiple workflows. Reusable workflows provide another way of avoiding duplication, by allowing you to run a complete workflow from within other workflows. For more information, see <a href="../../concepts/workflows-and-actions/reusing-workflow-configurations.html">Reusing workflow configurations</a>.</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>This example explains how to create a composite action within a separate repository. However, it is possible to create a composite action within the same repository. For more information, see <a href="#creating-a-composite-action-within-the-same-repository">Creating a composite action</a>.</p>
@@ -68,7 +68,7 @@
 </div>
 </li>
 </ol>
-<h2 id="creating-an-action-metadata-file" title="Creating an action metadata file">Creating an action metadata file<a href="#creating-an-action-metadata-file" aria-label="Link to heading 'Creating an action metadata file'" data-heading-content="Creating an action metadata file" class="anchor"></a></h2>
+<h2 id="creating-an-action-metadata-file" title="Creating an action metadata file" data-entry-type="Section">Creating an action metadata file<a href="#creating-an-action-metadata-file" aria-label="Link to heading 'Creating an action metadata file'" data-heading-content="Creating an action metadata file" class="anchor"></a></h2>
 <ol>
 <li>
 <p>In the <code>hello-world-composite-action</code> repository, create a new file called <code>action.yml</code> and add the following example code. For more information about this syntax, see <a href="../../reference/workflows-and-actions/metadata-syntax.html#runs-for-composite-actions">Metadata syntax reference</a>.</p>
@@ -126,7 +126,7 @@
 </span></code></pre>
 </li>
 </ol>
-<h2 id="testing-out-your-action-in-a-workflow" title="Testing out your action in a workflow">Testing out your action in a workflow<a href="#testing-out-your-action-in-a-workflow" aria-label="Link to heading 'Testing out your action in a workflow'" data-heading-content="Testing out your action in a workflow" class="anchor"></a></h2>
+<h2 id="testing-out-your-action-in-a-workflow" title="Testing out your action in a workflow" data-entry-type="Section">Testing out your action in a workflow<a href="#testing-out-your-action-in-a-workflow" aria-label="Link to heading 'Testing out your action in a workflow'" data-heading-content="Testing out your action in a workflow" class="anchor"></a></h2>
 <p>The following workflow code uses the completed hello world action that you made in <a href="#creating-an-action-metadata-file">Creating a composite action</a>.</p>
 <p>Copy the workflow code into a <code>.github/workflows/main.yml</code> file in another repository, replacing <code>OWNER</code> and <code>SHA</code> with the repository owner and the SHA of the commit you want to use, respectively. You can also replace the <code>who-to-greet</code> input with your name.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#d08770;">on</span><span style="color:#c0c5ce;">: [</span><span style="color:#a3be8c;">push</span><span style="color:#c0c5ce;">]
@@ -147,7 +147,7 @@
 </span><span style="color:#c0c5ce;">          </span><span style="color:#bf616a;">RANDOM_NUMBER</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ steps.foo.outputs.random-number }}
 </span></code></pre>
 <p>From your repository, click the <strong>Actions</strong> tab, and select the latest workflow run. The output should include: "Hello Mona the Octocat", the result of the "Goodbye" script, and a random number.</p>
-<h2 id="creating-a-composite-action-within-the-same-repository" title="Creating a composite action within the same repository">Creating a composite action within the same repository<a href="#creating-a-composite-action-within-the-same-repository" aria-label="Link to heading 'Creating a composite action within the same repository'" data-heading-content="Creating a composite action within the same repository" class="anchor"></a></h2>
+<h2 id="creating-a-composite-action-within-the-same-repository" title="Creating a composite action within the same repository" data-entry-type="Section">Creating a composite action within the same repository<a href="#creating-a-composite-action-within-the-same-repository" aria-label="Link to heading 'Creating a composite action within the same repository'" data-heading-content="Creating a composite action within the same repository" class="anchor"></a></h2>
 <ol>
 <li>
 <p>Create a new subfolder called <code>hello-world-composite-action</code>, this can be placed in any subfolder within the repository. However, it is recommended that this be placed in the <code>.github/actions</code> subfolder to make organization easier.</p>

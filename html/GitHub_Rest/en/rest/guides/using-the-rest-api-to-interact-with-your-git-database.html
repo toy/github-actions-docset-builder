@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Using the REST API to interact with your Git database</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Guides</a> / </nav><h1 id="using-the-rest-api-to-interact-with-your-git-database">Using the REST API to interact with your Git database<a href="#using-the-rest-api-to-interact-with-your-git-database" aria-label="Link to heading 'Using the REST API to interact with your Git database'" data-heading-content="Using the REST API to interact with your Git database" class="anchor"></a></h1>
 <p>Use the REST API to read and write raw Git objects to your Git database on GitHub and to list and update your references (branch heads and tags).</p>
-<h2 id="overview" title="Overview">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
+<h2 id="overview" title="Overview" data-entry-type="Section">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
 <p>This basically allows you to reimplement a lot of Git functionality with the REST API - by creating raw objects directly into the database and updating branch references you could technically do just about anything that Git can do without having Git installed.</p>
 <p>The REST API will return a <code>409 Conflict</code> if the Git repository is empty<br>
 or unavailable. An unavailable repository typically means GitHub is in the process of creating the repository. For an empty repository, you can use the <a href="../repos/contents.html#create-or-update-file-contents"><code>PUT /repos/{owner}/{repo}/contents/{path}</code></a> REST API endpoint to create content and initialize the repository so you can use the API to manage the Git database. Contact us through the <a href="https://support.github.com" class="external">GitHub Support portal</a> if this response status persists.</p>
@@ -20,7 +20,7 @@ repository, you would:</p>
 </ul>
 <p>It might seem complex, but it's actually pretty simple when you understand<br>
 the model and it opens up a ton of things you could potentially do with the API.</p>
-<h2 id="checking-mergeability-of-pull-requests" title="Checking mergeability of pull requests">Checking mergeability of pull requests<a href="#checking-mergeability-of-pull-requests" aria-label="Link to heading 'Checking mergeability of pull requests'" data-heading-content="Checking mergeability of pull requests" class="anchor"></a></h2>
+<h2 id="checking-mergeability-of-pull-requests" title="Checking mergeability of pull requests" data-entry-type="Section">Checking mergeability of pull requests<a href="#checking-mergeability-of-pull-requests" aria-label="Link to heading 'Checking mergeability of pull requests'" data-heading-content="Checking mergeability of pull requests" class="anchor"></a></h2>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>
 <p>Please do not depend on using Git directly or <a href="../git/refs.html#get-a-reference"><code>GET /repos/{owner}/{repo}/git/refs/{ref}</code></a> for updates to <code>merge</code> Git refs, because this content becomes outdated without warning.</p>

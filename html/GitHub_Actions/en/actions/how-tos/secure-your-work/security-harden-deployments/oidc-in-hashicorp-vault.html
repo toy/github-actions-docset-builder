@@ -1,9 +1,9 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Configuring OpenID Connect in HashiCorp Vault</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your work</a> / <a href="index.html">Security harden deployments</a> / </nav><h1 id="configuring-openid-connect-in-hashicorp-vault">Configuring OpenID Connect in HashiCorp Vault<a href="#configuring-openid-connect-in-hashicorp-vault" aria-label="Link to heading 'Configuring OpenID Connect in HashiCorp Vault'" data-heading-content="Configuring OpenID Connect in HashiCorp Vault" class="anchor"></a></h1>
 <p>Use OpenID Connect within your workflows to authenticate with HashiCorp Vault.</p>
-<h2 id="overview" title="Overview">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
+<h2 id="overview" title="Overview" data-entry-type="Section">Overview<a href="#overview" aria-label="Link to heading 'Overview'" data-heading-content="Overview" class="anchor"></a></h2>
 <p>OpenID Connect (OIDC) allows your GitHub Actions workflows to authenticate with a HashiCorp Vault to retrieve secrets.</p>
 <p>This guide gives an overview of how to configure HashiCorp Vault to trust GitHub's OIDC as a federated identity, and demonstrates how to use this configuration in the <a href="https://github.com/hashicorp/vault-action" class="external">hashicorp/vault-action</a> action to retrieve secrets from HashiCorp Vault.</p>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <ul>
 <li>
 <p>To learn the basic concepts of how GitHub uses OpenID Connect (OIDC), and its architecture and benefits, see <a href="../../../concepts/security/openid-connect.html">OpenID Connect</a>.</p>
@@ -12,7 +12,7 @@
 <p>Before proceeding, you must plan your security strategy to ensure that access tokens are only allocated in a predictable way. To control how your cloud provider issues access tokens, you <strong>must</strong> define at least one condition, so that untrusted repositories can’t request access tokens for your cloud resources. For more information, see <a href="../../../reference/security/oidc.html#oidc-claims-used-to-define-trust-conditions-on-cloud-roles">OpenID Connect reference</a>.</p>
 </li>
 </ul>
-<h2 id="adding-the-identity-provider-to-hashicorp-vault" title="Adding the identity provider to HashiCorp Vault">Adding the identity provider to HashiCorp Vault<a href="#adding-the-identity-provider-to-hashicorp-vault" aria-label="Link to heading 'Adding the identity provider to HashiCorp Vault'" data-heading-content="Adding the identity provider to HashiCorp Vault" class="anchor"></a></h2>
+<h2 id="adding-the-identity-provider-to-hashicorp-vault" title="Adding the identity provider to HashiCorp Vault" data-entry-type="Section">Adding the identity provider to HashiCorp Vault<a href="#adding-the-identity-provider-to-hashicorp-vault" aria-label="Link to heading 'Adding the identity provider to HashiCorp Vault'" data-heading-content="Adding the identity provider to HashiCorp Vault" class="anchor"></a></h2>
 <p>To use OIDC with HashiCorp Vault, you will need to add a trust configuration for the GitHub OIDC provider. For more information, see the HashiCorp Vault <a href="https://www.vaultproject.io/docs/auth/jwt" class="external">documentation</a>.</p>
 <p>To configure your Vault server to accept JSON Web Tokens (JWT) for authentication:</p>
 <ol>
@@ -60,7 +60,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 <li>To see all the available claims supported by GitHub's OIDC provider, see <a href="../../../reference/security/oidc.html#oidc-token-claims">OpenID Connect reference</a>.</li>
 </ul>
 <p>For more information, see the HashiCorp Vault <a href="https://www.vaultproject.io/docs/auth/jwt" class="external">documentation</a>.</p>
-<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
+<h2 id="updating-your-github-actions-workflow" title="Updating your GitHub Actions workflow" data-entry-type="Section">Updating your GitHub Actions workflow<a href="#updating-your-github-actions-workflow" aria-label="Link to heading 'Updating your GitHub Actions workflow'" data-heading-content="Updating your GitHub Actions workflow" class="anchor"></a></h2>
 <p>To update your workflows for OIDC, you will need to make two changes to your YAML:</p>
 <ol>
 <li>Add permissions settings for the token.</li>
@@ -172,7 +172,7 @@ For <code>oidc_discovery_url</code> and <code>bound_issuer</code> parameters, us
 </span><span style="color:#a3be8c;">          curl -X POST -sv -H "X-Vault-Token: ${{ env.VAULT_TOKEN }}" \
 </span><span style="color:#a3be8c;">            VAULT-URL/v1/auth/token/revoke-self
 </span></code></pre>
-<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
+<h2 id="further-reading" title="Further reading" data-entry-type="Section">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>
 <li><a href="oidc-with-reusable-workflows.html">Using OpenID Connect with reusable workflows</a></li>
 <li><a href="../../../reference/runners/self-hosted-runners.html">Self-hosted runners reference</a></li>

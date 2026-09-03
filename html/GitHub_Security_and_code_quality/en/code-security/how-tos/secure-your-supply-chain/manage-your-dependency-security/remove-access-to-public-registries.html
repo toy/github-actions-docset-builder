@@ -1,17 +1,17 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Removing Dependabot access to public registries</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Secure your supply chain</a> / <a href="index.html">Manage your dependency security</a> / </nav><h1 id="removing-dependabot-access-to-public-registries">Removing Dependabot access to public registries<a href="#removing-dependabot-access-to-public-registries" aria-label="Link to heading 'Removing Dependabot access to public registries'" data-heading-content="Removing Dependabot access to public registries" class="anchor"></a></h1>
 <p>Examples of how you can configure Dependabot to only access private registries by removing calls to public registries.</p>
-<h2 id="about-configuring-dependabot-to-only-access-private-registries" title="About configuring Dependabot to only access private registries">About configuring Dependabot to only access private registries<a href="#about-configuring-dependabot-to-only-access-private-registries" aria-label="Link to heading 'About configuring Dependabot to only access private registries'" data-heading-content="About configuring Dependabot to only access private registries" class="anchor"></a></h2>
+<h2 id="about-configuring-dependabot-to-only-access-private-registries" title="About configuring Dependabot to only access private registries" data-entry-type="Section">About configuring Dependabot to only access private registries<a href="#about-configuring-dependabot-to-only-access-private-registries" aria-label="Link to heading 'About configuring Dependabot to only access private registries'" data-heading-content="About configuring Dependabot to only access private registries" class="anchor"></a></h2>
 <p>Dependabot can access public registries by default, and you can configure Dependabot to also access private registries. For more information about private registry support and configuration, see <a href="configure-access-to-private-registries.html">Configuring access to private registries for Dependabot</a>. For in-depth information about available options, as well as recommendations and advice when configuring private registries, see <a href="configure-private-registries.html">Guidance for the configuration of private registries for Dependabot</a>.</p>
 <p>To have greater control over Dependabot's access to your private registries and internal network resources, you can configure Dependabot to run on GitHub Actions self-hosted runners. For more information, see <a href="../../../concepts/supply-chain-security/dependabot-on-actions.html">Dependabot on GitHub Actions runners</a> and <a href="configure-on-self-hosted-runners.html">Configuring Dependabot on self-hosted runners</a>.</p>
 <p>You can configure Dependabot to access <em>only</em> private registries by removing calls to public registries. This can only be configured for the ecosystems listed in this article.</p>
-<h2 id="bundler" title="Bundler">Bundler<a href="#bundler" aria-label="Link to heading 'Bundler'" data-heading-content="Bundler" class="anchor"></a></h2>
+<h2 id="bundler" title="Bundler" data-entry-type="Section">Bundler<a href="#bundler" aria-label="Link to heading 'Bundler'" data-heading-content="Bundler" class="anchor"></a></h2>
 <p>To configure the Bundler ecosystem to only access private registries, you can set <code>replaces-base: true</code> in the <code>dependabot.yml</code> file. For more information, see <a href="configure-access-to-private-registries.html#rubygems-server">Configuring access to private registries for Dependabot</a>.</p>
 <p>The Bundler ecosystem additionally requires a <code>Gemfile</code> file with the private registry URL to be checked into the repository.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># Example Gemfile
 </span><span style="color:#c0c5ce;">
 </span><span style="color:#c0c5ce;"> </span><span style="color:#a3be8c;">source "https://private_registry_url"
 </span></code></pre>
-<h2 id="docker" title="Docker">Docker<a href="#docker" aria-label="Link to heading 'Docker'" data-heading-content="Docker" class="anchor"></a></h2>
+<h2 id="docker" title="Docker" data-entry-type="Section">Docker<a href="#docker" aria-label="Link to heading 'Docker'" data-heading-content="Docker" class="anchor"></a></h2>
 <p>To configure the Docker ecosystem to only access private registries, you can use these configuration methods.</p>
 <p><strong>Option 1</strong></p>
 <p>Define the private registry configuration in a <code>dependabot.yml</code> file without <code>replaces-base</code>. For more information, see <a href="configure-access-to-private-registries.html#docker-registry">Configuring access to private registries for Dependabot</a>.</p>
@@ -32,7 +32,7 @@
 </span></code></pre>
 <p><strong>Option 2</strong></p>
 <p>Set <code>replaces-base: true</code> in the <code>dependabot.yml</code> file. For more information, see <a href="configure-access-to-private-registries.html#docker-registry">Configuring access to private registries for Dependabot</a>. The registry configured with the <code>replaces-base</code> can be used as a mirror or a pull through cache. For further details, see <a href="https://docs.docker.com/registry/recipes/mirror/" class="external">Registry as a pull through cache</a> in the Docker documentation.</p>
-<h2 id="gradle" title="Gradle">Gradle<a href="#gradle" aria-label="Link to heading 'Gradle'" data-heading-content="Gradle" class="anchor"></a></h2>
+<h2 id="gradle" title="Gradle" data-entry-type="Section">Gradle<a href="#gradle" aria-label="Link to heading 'Gradle'" data-heading-content="Gradle" class="anchor"></a></h2>
 <p>To configure the Gradle ecosystem to only access private registries, you can use these configuration methods.</p>
 <p>Define the private registry configuration in a <code>dependabot.yml</code> file. For more information, see <a href="configure-access-to-private-registries.html#maven-repository">Configuring access to private registries for Dependabot</a>.</p>
 <div class="markdown-alert markdown-alert-note">
@@ -48,7 +48,7 @@
 </span><span style="color:#c0c5ce;">    }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h2 id="maven" title="Maven">Maven<a href="#maven" aria-label="Link to heading 'Maven'" data-heading-content="Maven" class="anchor"></a></h2>
+<h2 id="maven" title="Maven" data-entry-type="Section">Maven<a href="#maven" aria-label="Link to heading 'Maven'" data-heading-content="Maven" class="anchor"></a></h2>
 <p>To configure the Maven ecosystem to only access private registries, you can use these configuration methods.</p>
 <p><strong>Option 1</strong></p>
 <p>Set <code>replaces-base: true</code> in the <code>dependabot.yml</code> file. For more information, see <a href="configure-access-to-private-registries.html#maven-repository">Configuring access to private registries for Dependabot</a>.</p>
@@ -65,7 +65,7 @@
 </span><span style="color:#c0c5ce;">...
 </span><span style="color:#c0c5ce;">&lt;/</span><span style="color:#bf616a;">project</span><span style="color:#c0c5ce;">&gt;
 </span></code></pre>
-<h2 id="node" title="Node">Node<a href="#node" aria-label="Link to heading 'Node'" data-heading-content="Node" class="anchor"></a></h2>
+<h2 id="node" title="Node" data-entry-type="Section">Node<a href="#node" aria-label="Link to heading 'Node'" data-heading-content="Node" class="anchor"></a></h2>
 <h3 id="npm">npm<a href="#npm" aria-label="Link to heading 'npm'" data-heading-content="npm" class="anchor"></a></h3>
 <p>To configure the npm ecosystem to only access private registries, you can use these configuration methods.</p>
 <p><strong>Option 1</strong></p>
@@ -146,7 +146,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>For scoped dependencies (<code>@my-org/my-dep</code>), Dependabot requires that the private registry is defined in the project's <code>.yarnrc</code> file. To define private registries for individual scopes, use <code>"@myscope:registry" "https://private_registry_url"</code>.</p>
 </div>
-<h2 id="nuget" title="NuGet">NuGet<a href="#nuget" aria-label="Link to heading 'NuGet'" data-heading-content="NuGet" class="anchor"></a></h2>
+<h2 id="nuget" title="NuGet" data-entry-type="Section">NuGet<a href="#nuget" aria-label="Link to heading 'NuGet'" data-heading-content="NuGet" class="anchor"></a></h2>
 <p>To allow the NuGet ecosystem to only access private registries, you can configure the <code>dependabot.yml</code> file. For more information, see <a href="configure-access-to-private-registries.html#nuget-feed">Configuring access to private registries for Dependabot</a>.</p>
 <p>The NuGet ecosystem additionally requires a <code>nuget.config</code> file to be checked into the repository, with either a <code>&lt; clear /&gt;</code> tag in <code>&lt;packageSources&gt;</code> section or a key <code>nuget.org</code> as true in the <code>disabledPackageSources</code> section of the <code>nuget.config</code> file.</p>
 <p>This is an example of a <code>&lt; clear /&gt;</code> tag in the <code>packageSources</code> section of the <code>nuget.config</code>.</p>
@@ -187,7 +187,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">schedule</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">interval</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">daily
 </span></code></pre>
-<h2 id="python" title="Python">Python<a href="#python" aria-label="Link to heading 'Python'" data-heading-content="Python" class="anchor"></a></h2>
+<h2 id="python" title="Python" data-entry-type="Section">Python<a href="#python" aria-label="Link to heading 'Python'" data-heading-content="Python" class="anchor"></a></h2>
 <p>Pip, Pip-compile, Pipenv, and Poetry are the four package managers that the Python ecosystem currently supports.</p>
 <h3 id="pip">Pip<a href="#pip" aria-label="Link to heading 'Pip'" data-heading-content="Pip" class="anchor"></a></h3>
 <p>To configure the Pip ecosystem to only access private registries, you can use these configuration methods.</p>

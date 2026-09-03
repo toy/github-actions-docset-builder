@@ -1,13 +1,13 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for teams</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Teams</a> / </nav><h1 id="rest-api-endpoints-for-teams">REST API endpoints for teams<a href="#rest-api-endpoints-for-teams" aria-label="Link to heading 'REST API endpoints for teams'" data-heading-content="REST API endpoints for teams" class="anchor"></a></h1>
 <p>Use the REST API to create and manage teams in your GitHub organization.</p>
-<h2 id="about-teams" title="About teams">About teams<a href="#about-teams" aria-label="Link to heading 'About teams'" data-heading-content="About teams" class="anchor"></a></h2>
+<h2 id="about-teams" title="About teams" data-entry-type="Section">About teams<a href="#about-teams" aria-label="Link to heading 'About teams'" data-heading-content="About teams" class="anchor"></a></h2>
 <p>These endpoints are only available to authenticated members of the team's <a href="../orgs/index.html">organization</a>. OAuth access tokens require the <code>read:org</code> <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps" class="external">scope</a>. GitHub generates the team's <code>slug</code> from the team <code>name</code>.</p>
 <p>Where <code>pull</code> and <code>push</code> permissions are accepted, these will map to the <strong>Read</strong> and <strong>Write</strong> roles for an organization repository. For more information about repository roles, see <a href="https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization" class="external">Repository roles for an organization</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-teams" title="GET /orgs/{org}/teams (List teams)">List teams<a href="#list-teams" aria-label="Link to heading 'List teams'" data-heading-content="List teams" class="anchor"></a></h2>
+<h2 id="list-teams" title="GET /orgs/{org}/teams (List teams)" data-entry-type="Resource">List teams<a href="#list-teams" aria-label="Link to heading 'List teams'" data-heading-content="List teams" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams
 </span></code></pre>
 <p>Lists all teams in an organization that are visible to the authenticated user.</p>
@@ -110,7 +110,7 @@ Can be one of: <code>all</code>, <code>enterprise</code>, <code>organization</co
 </ul>
 </li>
 </ul>
-<h2 id="create-a-team" title="POST /orgs/{org}/teams (Create a team)">Create a team<a href="#create-a-team" aria-label="Link to heading 'Create a team'" data-heading-content="Create a team" class="anchor"></a></h2>
+<h2 id="create-a-team" title="POST /orgs/{org}/teams (Create a team)" data-entry-type="Resource">Create a team<a href="#create-a-team" aria-label="Link to heading 'Create a team'" data-heading-content="Create a team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /orgs/{org}/teams
 </span></code></pre>
 <p>To create a team, the authenticated user must be a member or owner of {org}. By default, organization members can create teams. Organization owners can limit team creation to organization owners. For more information, see "Setting team creation permissions."<br>
@@ -310,7 +310,7 @@ The slug of a team to set as the parent team. Ignored when parent<span data-esca
 <li><code>organization_id</code>: integer</li>
 <li><code>enterprise_id</code>: integer</li>
 </ul>
-<h2 id="get-a-team-by-name" title="GET /orgs/{org}/teams/{team_slug} (Get a team by name)">Get a team by name<a href="#get-a-team-by-name" aria-label="Link to heading 'Get a team by name'" data-heading-content="Get a team by name" class="anchor"></a></h2>
+<h2 id="get-a-team-by-name" title="GET /orgs/{org}/teams/{team_slug} (Get a team by name)" data-entry-type="Resource">Get a team by name<a href="#get-a-team-by-name" aria-label="Link to heading 'Get a team by name'" data-heading-content="Get a team by name" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}
 </span></code></pre>
 <p>Gets a team using the team's slug. To create the slug, GitHub replaces special characters in the name string, changes all words to lowercase, and replaces spaces with a - separator. For example, "My TEam Näme" would become my-team-name.<br>
@@ -351,7 +351,7 @@ The slug of the team name.</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
-<h2 id="update-a-team" title="PATCH /orgs/{org}/teams/{team_slug} (Update a team)">Update a team<a href="#update-a-team" aria-label="Link to heading 'Update a team'" data-heading-content="Update a team" class="anchor"></a></h2>
+<h2 id="update-a-team" title="PATCH /orgs/{org}/teams/{team_slug} (Update a team)" data-entry-type="Resource">Update a team<a href="#update-a-team" aria-label="Link to heading 'Update a team'" data-heading-content="Update a team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /orgs/{org}/teams/{team_slug}
 </span></code></pre>
 <p>To edit a team, the authenticated user must either be an organization owner or a team maintainer.<br>
@@ -465,7 +465,7 @@ The slug of a team to set as the parent team. Ignored when parent<span data-esca
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
 <p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
-<h2 id="delete-a-team" title="DELETE /orgs/{org}/teams/{team_slug} (Delete a team)">Delete a team<a href="#delete-a-team" aria-label="Link to heading 'Delete a team'" data-heading-content="Delete a team" class="anchor"></a></h2>
+<h2 id="delete-a-team" title="DELETE /orgs/{org}/teams/{team_slug} (Delete a team)" data-entry-type="Resource">Delete a team<a href="#delete-a-team" aria-label="Link to heading 'Delete a team'" data-heading-content="Delete a team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/teams/{team_slug}
 </span></code></pre>
 <p>To delete a team, the authenticated user must be an organization owner or team maintainer.<br>
@@ -506,7 +506,7 @@ The slug of the team name.</p>
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-team-repositories" title="GET /orgs/{org}/teams/{team_slug}/repos (List team repositories)">List team repositories<a href="#list-team-repositories" aria-label="Link to heading 'List team repositories'" data-heading-content="List team repositories" class="anchor"></a></h2>
+<h2 id="list-team-repositories" title="GET /orgs/{org}/teams/{team_slug}/repos (List team repositories)" data-entry-type="Resource">List team repositories<a href="#list-team-repositories" aria-label="Link to heading 'List team repositories'" data-heading-content="List team repositories" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/repos
 </span></code></pre>
 <p>Lists a team's repositories visible to the authenticated user.<br>
@@ -752,7 +752,7 @@ Default: <code>1</code></p>
 </li>
 <li><code>custom_properties</code>: object, additional properties allowed</li>
 </ul>
-<h2 id="check-team-permissions-for-a-repository" title="GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Check team permissions for a repository)">Check team permissions for a repository<a href="#check-team-permissions-for-a-repository" aria-label="Link to heading 'Check team permissions for a repository'" data-heading-content="Check team permissions for a repository" class="anchor"></a></h2>
+<h2 id="check-team-permissions-for-a-repository" title="GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Check team permissions for a repository)" data-entry-type="Resource">Check team permissions for a repository<a href="#check-team-permissions-for-a-repository" aria-label="Link to heading 'Check team permissions for a repository'" data-heading-content="Check team permissions for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
 </span></code></pre>
 <p>Checks whether a team has admin, push, maintain, triage, or pull permission for a repository. Repositories inherited through a parent team will also be checked.<br>
@@ -948,7 +948,7 @@ The name of the repository without the .git extension. The name is not case sens
 <li><code>watchers</code>: required, integer</li>
 <li><code>master_branch</code>: string</li>
 </ul>
-<h2 id="add-or-update-team-repository-permissions" title="PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Add or update team repository permissions)">Add or update team repository permissions<a href="#add-or-update-team-repository-permissions" aria-label="Link to heading 'Add or update team repository permissions'" data-heading-content="Add or update team repository permissions" class="anchor"></a></h2>
+<h2 id="add-or-update-team-repository-permissions" title="PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Add or update team repository permissions)" data-entry-type="Resource">Add or update team repository permissions<a href="#add-or-update-team-repository-permissions" aria-label="Link to heading 'Add or update team repository permissions'" data-heading-content="Add or update team repository permissions" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
 </span></code></pre>
 <p>To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a 422 Unprocessable Entity status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."<br>
@@ -1000,7 +1000,7 @@ The permission to grant the team on this repository. We accept the following per
 </span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="remove-a-repository-from-a-team" title="DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Remove a repository from a team)">Remove a repository from a team<a href="#remove-a-repository-from-a-team" aria-label="Link to heading 'Remove a repository from a team'" data-heading-content="Remove a repository from a team" class="anchor"></a></h2>
+<h2 id="remove-a-repository-from-a-team" title="DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo} (Remove a repository from a team)" data-entry-type="Resource">Remove a repository from a team<a href="#remove-a-repository-from-a-team" aria-label="Link to heading 'Remove a repository from a team'" data-heading-content="Remove a repository from a team" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
 </span></code></pre>
 <p>If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.<br>
@@ -1043,7 +1043,7 @@ The name of the repository without the .git extension. The name is not case sens
 </span><span style="color:#c0c5ce;">  https://api.github.com/orgs/ORG/teams/TEAM_SLUG/repos/OWNER/REPO
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-child-teams" title="GET /orgs/{org}/teams/{team_slug}/teams (List child teams)">List child teams<a href="#list-child-teams" aria-label="Link to heading 'List child teams'" data-heading-content="List child teams" class="anchor"></a></h2>
+<h2 id="list-child-teams" title="GET /orgs/{org}/teams/{team_slug}/teams (List child teams)" data-entry-type="Resource">List child teams<a href="#list-child-teams" aria-label="Link to heading 'List child teams'" data-heading-content="List child teams" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /orgs/{org}/teams/{team_slug}/teams
 </span></code></pre>
 <p>Lists the child teams of the team specified by {team<span data-escaped-char="">_</span>slug}.<br>
@@ -1089,7 +1089,7 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-teams">List teams</a>.</p>
-<h2 id="get-a-team-legacy" title="GET /teams/{team_id} (Get a team (Legacy))">Get a team (Legacy)<a href="#get-a-team-legacy" aria-label="Link to heading 'Get a team (Legacy)'" data-heading-content="Get a team (Legacy)" class="anchor"></a></h2>
+<h2 id="get-a-team-legacy" title="GET /teams/{team_id} (Get a team (Legacy))" data-entry-type="Resource">Get a team (Legacy)<a href="#get-a-team-legacy" aria-label="Link to heading 'Get a team (Legacy)'" data-heading-content="Get a team (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}
 </span></code></pre>
 <p>Warning</p>
@@ -1123,7 +1123,7 @@ The unique identifier of the team.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
-<h2 id="update-a-team-legacy" title="PATCH /teams/{team_id} (Update a team (Legacy))">Update a team (Legacy)<a href="#update-a-team-legacy" aria-label="Link to heading 'Update a team (Legacy)'" data-heading-content="Update a team (Legacy)" class="anchor"></a></h2>
+<h2 id="update-a-team-legacy" title="PATCH /teams/{team_id} (Update a team (Legacy))" data-entry-type="Resource">Update a team (Legacy)<a href="#update-a-team-legacy" aria-label="Link to heading 'Update a team (Legacy)'" data-heading-content="Update a team (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /teams/{team_id}
 </span></code></pre>
 <p>Warning</p>
@@ -1233,7 +1233,7 @@ The slug of a team to set as the parent team. Ignored when parent<span data-esca
 </span></code></pre>
 <p><strong>Response schema (Status: 201):</strong></p>
 <p>Same response schema as <a href="#create-a-team">Create a team</a>.</p>
-<h2 id="delete-a-team-legacy" title="DELETE /teams/{team_id} (Delete a team (Legacy))">Delete a team (Legacy)<a href="#delete-a-team-legacy" aria-label="Link to heading 'Delete a team (Legacy)'" data-heading-content="Delete a team (Legacy)" class="anchor"></a></h2>
+<h2 id="delete-a-team-legacy" title="DELETE /teams/{team_id} (Delete a team (Legacy))" data-entry-type="Resource">Delete a team (Legacy)<a href="#delete-a-team-legacy" aria-label="Link to heading 'Delete a team (Legacy)'" data-heading-content="Delete a team (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /teams/{team_id}
 </span></code></pre>
 <p>Warning</p>
@@ -1271,7 +1271,7 @@ The unique identifier of the team.</li>
 </span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-team-repositories-legacy" title="GET /teams/{team_id}/repos (List team repositories (Legacy))">List team repositories (Legacy)<a href="#list-team-repositories-legacy" aria-label="Link to heading 'List team repositories (Legacy)'" data-heading-content="List team repositories (Legacy)" class="anchor"></a></h2>
+<h2 id="list-team-repositories-legacy" title="GET /teams/{team_id}/repos (List team repositories (Legacy))" data-entry-type="Resource">List team repositories (Legacy)<a href="#list-team-repositories-legacy" aria-label="Link to heading 'List team repositories (Legacy)'" data-heading-content="List team repositories (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/repos
 </span></code></pre>
 <p>Warning</p>
@@ -1317,7 +1317,7 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-team-repositories">List team repositories</a>.</p>
-<h2 id="check-team-permissions-for-a-repository-legacy" title="GET /teams/{team_id}/repos/{owner}/{repo} (Check team permissions for a repository (Legacy))">Check team permissions for a repository (Legacy)<a href="#check-team-permissions-for-a-repository-legacy" aria-label="Link to heading 'Check team permissions for a repository (Legacy)'" data-heading-content="Check team permissions for a repository (Legacy)" class="anchor"></a></h2>
+<h2 id="check-team-permissions-for-a-repository-legacy" title="GET /teams/{team_id}/repos/{owner}/{repo} (Check team permissions for a repository (Legacy))" data-entry-type="Resource">Check team permissions for a repository (Legacy)<a href="#check-team-permissions-for-a-repository-legacy" aria-label="Link to heading 'Check team permissions for a repository (Legacy)'" data-heading-content="Check team permissions for a repository (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/repos/{owner}/{repo}
 </span></code></pre>
 <p>Warning</p>
@@ -1367,7 +1367,7 @@ The name of the repository without the .git extension. The name is not case sens
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#check-team-permissions-for-a-repository">Check team permissions for a repository</a>.</p>
-<h2 id="add-or-update-team-repository-permissions-legacy" title="PUT /teams/{team_id}/repos/{owner}/{repo} (Add or update team repository permissions (Legacy))">Add or update team repository permissions (Legacy)<a href="#add-or-update-team-repository-permissions-legacy" aria-label="Link to heading 'Add or update team repository permissions (Legacy)'" data-heading-content="Add or update team repository permissions (Legacy)" class="anchor"></a></h2>
+<h2 id="add-or-update-team-repository-permissions-legacy" title="PUT /teams/{team_id}/repos/{owner}/{repo} (Add or update team repository permissions (Legacy))" data-entry-type="Resource">Add or update team repository permissions (Legacy)<a href="#add-or-update-team-repository-permissions-legacy" aria-label="Link to heading 'Add or update team repository permissions (Legacy)'" data-heading-content="Add or update team repository permissions (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /teams/{team_id}/repos/{owner}/{repo}
 </span></code></pre>
 <p>Warning</p>
@@ -1424,7 +1424,7 @@ Can be one of: <code>pull</code>, <code>push</code>, <code>admin</code></li>
 </span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="remove-a-repository-from-a-team-legacy" title="DELETE /teams/{team_id}/repos/{owner}/{repo} (Remove a repository from a team (Legacy))">Remove a repository from a team (Legacy)<a href="#remove-a-repository-from-a-team-legacy" aria-label="Link to heading 'Remove a repository from a team (Legacy)'" data-heading-content="Remove a repository from a team (Legacy)" class="anchor"></a></h2>
+<h2 id="remove-a-repository-from-a-team-legacy" title="DELETE /teams/{team_id}/repos/{owner}/{repo} (Remove a repository from a team (Legacy))" data-entry-type="Resource">Remove a repository from a team (Legacy)<a href="#remove-a-repository-from-a-team-legacy" aria-label="Link to heading 'Remove a repository from a team (Legacy)'" data-heading-content="Remove a repository from a team (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /teams/{team_id}/repos/{owner}/{repo}
 </span></code></pre>
 <p>Warning</p>
@@ -1463,7 +1463,7 @@ The name of the repository without the .git extension. The name is not case sens
 </span><span style="color:#c0c5ce;">  https://api.github.com/teams/TEAM_ID/repos/OWNER/REPO
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="list-child-teams-legacy" title="GET /teams/{team_id}/teams (List child teams (Legacy))">List child teams (Legacy)<a href="#list-child-teams-legacy" aria-label="Link to heading 'List child teams (Legacy)'" data-heading-content="List child teams (Legacy)" class="anchor"></a></h2>
+<h2 id="list-child-teams-legacy" title="GET /teams/{team_id}/teams (List child teams (Legacy))" data-entry-type="Resource">List child teams (Legacy)<a href="#list-child-teams-legacy" aria-label="Link to heading 'List child teams (Legacy)'" data-heading-content="List child teams (Legacy)" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /teams/{team_id}/teams
 </span></code></pre>
 <p>Warning</p>
@@ -1515,7 +1515,7 @@ Default: <code>1</code></p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#list-teams">List teams</a>.</p>
-<h2 id="list-teams-for-the-authenticated-user" title="GET /user/teams (List teams for the authenticated user)">List teams for the authenticated user<a href="#list-teams-for-the-authenticated-user" aria-label="Link to heading 'List teams for the authenticated user'" data-heading-content="List teams for the authenticated user" class="anchor"></a></h2>
+<h2 id="list-teams-for-the-authenticated-user" title="GET /user/teams (List teams for the authenticated user)" data-entry-type="Resource">List teams for the authenticated user<a href="#list-teams-for-the-authenticated-user" aria-label="Link to heading 'List teams for the authenticated user'" data-heading-content="List teams for the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/teams
 </span></code></pre>
 <p>List all of the teams across all of the organizations to which the authenticated<br>

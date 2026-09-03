@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Testing custom queries</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Scan from the command line</a> / </nav><h1 id="testing-custom-queries">Testing custom queries<a href="#testing-custom-queries" aria-label="Link to heading 'Testing custom queries'" data-heading-content="Testing custom queries" class="anchor"></a></h1>
 <p>Verify your custom CodeQL queries and catch breaking changes before they affect your code scanning results following new releases of the CodeQL CLI.</p>
-<h2 id="testing-custom-queries-1" title="Testing custom queries">Testing custom queries<a href="#testing-custom-queries-1" aria-label="Link to heading 'Testing custom queries'" data-heading-content="Testing custom queries" class="anchor"></a></h2>
+<h2 id="testing-custom-queries-1" title="Testing custom queries" data-entry-type="Section">Testing custom queries<a href="#testing-custom-queries-1" aria-label="Link to heading 'Testing custom queries'" data-heading-content="Testing custom queries" class="anchor"></a></h2>
 <p>CodeQL provides a simple test framework for automated regression testing<br>
 of queries. Test your queries to ensure that they behave as expected.</p>
 <p>During a query test, CodeQL compares the results the user expects<br>
@@ -9,7 +9,7 @@ actual results differ, the query test fails. To fix the test, you should iterate
 on the query and the expected results until the actual results and the expected<br>
 results exactly match. This topic shows you how to create test files and execute<br>
 tests on them using the <code>test run</code> subcommand.</p>
-<h2 id="setting-up-a-test-codeql-pack-for-custom-queries" title="Setting up a test CodeQL pack for custom queries">Setting up a test CodeQL pack for custom queries<a href="#setting-up-a-test-codeql-pack-for-custom-queries" aria-label="Link to heading 'Setting up a test CodeQL pack for custom queries'" data-heading-content="Setting up a test CodeQL pack for custom queries" class="anchor"></a></h2>
+<h2 id="setting-up-a-test-codeql-pack-for-custom-queries" title="Setting up a test CodeQL pack for custom queries" data-entry-type="Section">Setting up a test CodeQL pack for custom queries<a href="#setting-up-a-test-codeql-pack-for-custom-queries" aria-label="Link to heading 'Setting up a test CodeQL pack for custom queries'" data-heading-content="Setting up a test CodeQL pack for custom queries" class="anchor"></a></h2>
 <p>All CodeQL tests must be stored in a special "test" CodeQL pack. That is, a directory for test files with a <code>qlpack.yml</code> file that defines:</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">&lt;name-of-test-pack&gt;
 </span><span style="color:#bf616a;">version</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0.0.0
@@ -31,7 +31,7 @@ these libraries and queries.</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql pack install
 </span></code></pre>
 <p>This will generate a <code>codeql-pack.lock.yml</code> file that specifies all of the transitive dependencies required to run queries in this pack. This file should be checked in to source control.</p>
-<h2 id="setting-up-the-test-files-for-a-query" title="Setting up the test files for a query">Setting up the test files for a query<a href="#setting-up-the-test-files-for-a-query" aria-label="Link to heading 'Setting up the test files for a query'" data-heading-content="Setting up the test files for a query" class="anchor"></a></h2>
+<h2 id="setting-up-the-test-files-for-a-query" title="Setting up the test files for a query" data-entry-type="Section">Setting up the test files for a query<a href="#setting-up-the-test-files-for-a-query" aria-label="Link to heading 'Setting up the test files for a query'" data-heading-content="Setting up the test files for a query" class="anchor"></a></h2>
 <p>For each query you want to test, you should create a sub-directory in the test CodeQL pack.<br>
 Then add the following files to the subdirectory before you run the test command:</p>
 <ul>
@@ -55,7 +55,7 @@ the example code, by creating a file with the extension <code>.expected</code>. 
 <li>The names of the example code files don’t have to be consistent with the other test files. All example code files found next to the <code>.qlref</code> (or <code>.ql</code>) file and in any subdirectories will be used to create a test database. Therefore, for simplicity, we recommend you don’t save test files in directories that are ancestors of each other.</li>
 </ul>
 </div>
-<h2 id="running-codeql-test-run" title="Running codeql test run">Running <code>codeql test run</code><a href="#running-codeql-test-run" aria-label="Link to heading 'Running codeql test run'" data-heading-content="Running codeql test run" class="anchor"></a></h2>
+<h2 id="running-codeql-test-run" title="Running codeql test run" data-entry-type="Section">Running <code>codeql test run</code><a href="#running-codeql-test-run" aria-label="Link to heading 'Running codeql test run'" data-heading-content="Running codeql test run" class="anchor"></a></h2>
 <p>CodeQL query tests are executed by running the following command:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql test run &lt;test|dir&gt;
 </span></code></pre>
@@ -70,7 +70,7 @@ the example code, by creating a file with the extension <code>.expected</code>. 
 <li><code>--threads:</code> optionally, the number of threads to use when running queries. The default option is <code>1</code>. You can specify more threads to speed up query execution. Specifying <code>0</code> matches the number of threads to the number of logical processors.</li>
 </ul>
 <p>For full details of all the options you can use when testing queries, see <a href="../../../reference/code-scanning/codeql/codeql-cli-manual/test-run.html">test run</a>.</p>
-<h2 id="example" title="Example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h2>
+<h2 id="example" title="Example" data-entry-type="Section">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h2>
 <p>The following example shows you how to set up a test for a query that searches<br>
 Java code for <code>if</code> statements that have empty <code>then</code> blocks. It includes<br>
 steps to add the custom query and corresponding test files to separate CodeQL packs<br>
@@ -192,7 +192,7 @@ This information may be sufficient to debug trivial test failures.</p>
 <p>For failures that are harder to debug, you can import <code>EmptyThen.testproj</code><br>
 into CodeQL for VS Code, execute <code>EmptyThen.ql</code>, and view the results in the<br>
 <code>Test.java</code> example code. For more information, see <a href="../scan-from-vs-code/manage-codeql-databases.html#choosing-a-database-to-analyze">Managing CodeQL databases</a>.</p>
-<h2 id="further-reading" title="Further reading">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
+<h2 id="further-reading" title="Further reading" data-entry-type="Section">Further reading<a href="#further-reading" aria-label="Link to heading 'Further reading'" data-heading-content="Further reading" class="anchor"></a></h2>
 <ul>
 <li><a href="https://codeql.github.com/docs/writing-codeql-queries/codeql-queries/#codeql-queries" class="external">CodeQL queries</a></li>
 <li><a href="../scan-from-vs-code/testing-codeql-queries-in-vs-code.html">Testing CodeQL queries in Visual Studio Code</a>.</li>

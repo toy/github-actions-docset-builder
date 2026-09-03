@@ -2,7 +2,7 @@
 <p>You can build a CodeQL database containing the data needed to analyze your code.</p>
 <!--The CodeQL CLI man pages include a link to a section in this article. If you rename this article,
 make sure that you also update the MS short link: https://aka.ms/codeql-docs/indirect-tracing.-->
-<h2 id="about-preparing-your-code-for-analysis" title="About preparing your code for analysis">About preparing your code for analysis<a href="#about-preparing-your-code-for-analysis" aria-label="Link to heading 'About preparing your code for analysis'" data-heading-content="About preparing your code for analysis" class="anchor"></a></h2>
+<h2 id="about-preparing-your-code-for-analysis" title="About preparing your code for analysis" data-entry-type="Section">About preparing your code for analysis<a href="#about-preparing-your-code-for-analysis" aria-label="Link to heading 'About preparing your code for analysis'" data-heading-content="About preparing your code for analysis" class="anchor"></a></h2>
 <p>Before you analyze your code using CodeQL, you need to create a CodeQL database containing all the data required to run queries on your code. You can create CodeQL databases yourself using the CodeQL CLI.</p>
 <p>CodeQL analysis relies on extracting relational data from your code, and using it to build a <a href="https://codeql.github.com/docs/codeql-overview/codeql-glossary/#codeql-database" class="external">CodeQL database</a>. CodeQL databases contain all of the important information about a codebase, which can be analyzed by executing CodeQL queries against it.</p>
 <p>Before you generate a CodeQL database, you need to:</p>
@@ -18,7 +18,7 @@ make sure that you also update the MS short link: https://aka.ms/codeql-docs/ind
 <li>For the best results with compiled languages, find the build command, if any, for the codebase. Typically this is available in a configuration file in the CI system.</li>
 </ol>
 <p>Once the codebase is ready, you can run <code>codeql database create</code> to create the database. For more information, see <a href="#creating-databases-for-non-compiled-languages">Creating databases for non-compiled languages</a> and <a href="#creating-databases-for-compiled-languages">Creating databases for compiled languages</a>.</p>
-<h2 id="running-codeql-database-create" title="Running codeql database create">Running <code>codeql database create</code><a href="#running-codeql-database-create" aria-label="Link to heading 'Running codeql database create'" data-heading-content="Running codeql database create" class="anchor"></a></h2>
+<h2 id="running-codeql-database-create" title="Running codeql database create" data-entry-type="Section">Running <code>codeql database create</code><a href="#running-codeql-database-create" aria-label="Link to heading 'Running codeql database create'" data-heading-content="Running codeql database create" class="anchor"></a></h2>
 <p>CodeQL databases are created by running the following command from the checkout root of your project:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database create &lt;database&gt; --language=&lt;language-identifier&gt;
 </span></code></pre>
@@ -218,10 +218,10 @@ make sure that you also update the MS short link: https://aka.ms/codeql-docs/ind
 </span><span style="color:#c0c5ce;">Successfully created databases at /codeql-dbs/example-repo-multi.
 </span><span style="color:#c0c5ce;">$
 </span></code></pre>
-<h2 id="progress-and-results" title="Progress and results">Progress and results<a href="#progress-and-results" aria-label="Link to heading 'Progress and results'" data-heading-content="Progress and results" class="anchor"></a></h2>
+<h2 id="progress-and-results" title="Progress and results" data-entry-type="Section">Progress and results<a href="#progress-and-results" aria-label="Link to heading 'Progress and results'" data-heading-content="Progress and results" class="anchor"></a></h2>
 <p>Errors are reported if there are any problems with the options you have specified. For interpreted languages and when you specify <code>--build-mode none</code> for C/C++, C#, Java and Rust, the extraction progress is displayed in the console. For each source file, the console shows if extraction was successful or if it failed. When a compiled language is built, the console will display the output of the build system.</p>
 <p>When the database is successfully created, you’ll find a new directory at the path specified in the command. If you used the <code>--db-cluster</code> option to create more than one database, a subdirectory is created for each language. Each CodeQL database directory contains a number of subdirectories, including the relational data (required for analysis) and a source archive—a copy of the source files made at the time the database was created—which is used for displaying analysis results.</p>
-<h2 id="creating-databases-for-non-compiled-languages" title="Creating databases for non-compiled languages">Creating databases for non-compiled languages<a href="#creating-databases-for-non-compiled-languages" aria-label="Link to heading 'Creating databases for non-compiled languages'" data-heading-content="Creating databases for non-compiled languages" class="anchor"></a></h2>
+<h2 id="creating-databases-for-non-compiled-languages" title="Creating databases for non-compiled languages" data-entry-type="Section">Creating databases for non-compiled languages<a href="#creating-databases-for-non-compiled-languages" aria-label="Link to heading 'Creating databases for non-compiled languages'" data-heading-content="Creating databases for non-compiled languages" class="anchor"></a></h2>
 <p>The CodeQL CLI includes extractors to create databases for non-compiled languages—specifically, JavaScript (and TypeScript), Python, and Ruby. These extractors are automatically invoked when you specify JavaScript, Python, or Ruby as the <code>--language</code> option when executing <code>database create</code>. When creating databases for these languages you must ensure that all additional dependencies are available.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -248,7 +248,7 @@ make sure that you also update the MS short link: https://aka.ms/codeql-docs/ind
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">codeql database create --language=ruby --source-root &lt;folder-to-extract&gt; &lt;output-folder&gt;/ruby-database
 </span></code></pre>
 <p>Here, we have specified a <code>--source-root</code> path, which is the location where database creation is executed, but is not necessarily the checkout root of the codebase.</p>
-<h2 id="creating-databases-for-compiled-languages" title="Creating databases for compiled languages">Creating databases for compiled languages<a href="#creating-databases-for-compiled-languages" aria-label="Link to heading 'Creating databases for compiled languages'" data-heading-content="Creating databases for compiled languages" class="anchor"></a></h2>
+<h2 id="creating-databases-for-compiled-languages" title="Creating databases for compiled languages" data-entry-type="Section">Creating databases for compiled languages<a href="#creating-databases-for-compiled-languages" aria-label="Link to heading 'Creating databases for compiled languages'" data-heading-content="Creating databases for compiled languages" class="anchor"></a></h2>
 <p>For most compiled languages, CodeQL needs to invoke the required build system to generate a database, therefore the build method must be available to the CLI. This approach creates databases that include generated code. CodeQL has two methods for building codebases:</p>
 <ul>
 <li><a href="#automatically-detecting-the-build-system">Automatic build detection (autobuild)</a></li>
@@ -492,7 +492,7 @@ make sure that you also update the MS short link: https://aka.ms/codeql-docs/ind
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># `codeql database analyze`
 </span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;"># then `codeql github upload-results` ...
 </span></code></pre>
-<h2 id="next-steps" title="Next steps">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
+<h2 id="next-steps" title="Next steps" data-entry-type="Section">Next steps<a href="#next-steps" aria-label="Link to heading 'Next steps'" data-heading-content="Next steps" class="anchor"></a></h2>
 <ul>
 <li>To learn how to use the CodeQL CLI to analyze the database you created from your code, see <a href="analyze-code.html">Analyzing your code with CodeQL queries</a>.</li>
 </ul>

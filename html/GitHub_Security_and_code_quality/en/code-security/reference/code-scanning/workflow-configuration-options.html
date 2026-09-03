@@ -2,10 +2,10 @@
 <p>Edit your workflow file to configure how advanced setup scans the code in your project for vulnerabilities and errors.</p>
 <!--The CodeQL CLI man pages include a link to a section of the article. If you rename this article,
 make sure that you also update the MS short link: https://aka.ms/code-scanning-docs/config-file.-->
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>You must use advanced setup for code scanning and be able to edit the workflow file where your configuration is defined.</p>
 <p>The examples provided in this article relate to the CodeQL analysis workflow file. By default, this file is defined at <code>.github/workflows/codeql-analysis.yml</code>.</p>
-<h2 id="scan-frequency" title="Scan frequency">Scan frequency<a href="#scan-frequency" aria-label="Link to heading 'Scan frequency'" data-heading-content="Scan frequency" class="anchor"></a></h2>
+<h2 id="scan-frequency" title="Scan frequency" data-entry-type="Section">Scan frequency<a href="#scan-frequency" aria-label="Link to heading 'Scan frequency'" data-heading-content="Scan frequency" class="anchor"></a></h2>
 <p>You can configure the CodeQL analysis workflow to scan code on a schedule or when specific events occur in a repository.</p>
 <p>Scanning code when someone pushes a change, and whenever a pull request is created, prevents developers from introducing new vulnerabilities and errors into the code. Scanning code on a schedule informs you about the latest vulnerabilities and errors that GitHub, security researchers, and the community discover, even when developers aren't actively maintaining the repository.</p>
 <h3 id="scanning-on-push">Scanning on push<a href="#scanning-on-push" aria-label="Link to heading 'Scanning on push'" data-heading-content="Scanning on push" class="anchor"></a></h3>
@@ -59,7 +59,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 <li>Every pull request to the default branch</li>
 <li>The default branch every Monday at 14:20 UTC</li>
 </ul>
-<h2 id="operating-system" title="Operating system">Operating system<a href="#operating-system" aria-label="Link to heading 'Operating system'" data-heading-content="Operating system" class="anchor"></a></h2>
+<h2 id="operating-system" title="Operating system" data-entry-type="Section">Operating system<a href="#operating-system" aria-label="Link to heading 'Operating system'" data-heading-content="Operating system" class="anchor"></a></h2>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <ul>
@@ -86,7 +86,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 <p>CodeQL code scanning supports the latest versions of Ubuntu, Windows, and macOS. Typical values for this setting are therefore: <code>ubuntu-latest</code>, <code>windows-latest</code>, and <code>macos-latest</code>. For more information, see <a href="https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job" class="external">Choosing the runner for a job</a> and <a href="https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/apply-labels" class="external">Using labels with self-hosted runners</a>.</p>
 <p>If you use a self-hosted runner, you must ensure that Git is in the PATH variable. For more information, see <a href="https://docs.github.com/en/actions/concepts/runners/self-hosted-runners" class="external">Self-hosted runners</a> and <a href="https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/add-runners" class="external">Adding self-hosted runners</a>.</p>
 <p>For recommended specifications (RAM, CPU cores, and disk) for running CodeQL analysis on self-hosted machines, see <a href="codeql/hardware-resources-for-codeql.html">Recommended hardware resources for running CodeQL</a>.</p>
-<h2 id="codeql-database-location" title="CodeQL database location">CodeQL database location<a href="#codeql-database-location" aria-label="Link to heading 'CodeQL database location'" data-heading-content="CodeQL database location" class="anchor"></a></h2>
+<h2 id="codeql-database-location" title="CodeQL database location" data-entry-type="Section">CodeQL database location<a href="#codeql-database-location" aria-label="Link to heading 'CodeQL database location'" data-heading-content="CodeQL database location" class="anchor"></a></h2>
 <p>In general, you do not need to worry about where the CodeQL analysis workflow places CodeQL databases since later steps will automatically find databases created by previous steps. However, if you are writing a custom workflow step that requires the CodeQL database to be in a specific disk location, for example to upload the database as a workflow artifact, you can specify that location using the <code>db-location</code> parameter under the <code>init</code> action.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">github/codeql-action/init@v4
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">with</span><span style="color:#c0c5ce;">:
@@ -94,7 +94,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </span></code></pre>
 <p>The CodeQL analysis workflow will expect the path provided in <code>db-location</code> to be writable, and either not exist, or be an empty directory. When using this parameter in a job running on a self-hosted runner or using a Docker container, it's the responsibility of the user to ensure that the chosen directory is cleared between runs, or that the databases are removed once they are no longer needed. This is not necessary for jobs running on GitHub-hosted runners, which obtain a fresh instance and a clean filesystem each time they run. For more information, see <a href="https://docs.github.com/en/actions/concepts/runners/github-hosted-runners" class="external">GitHub-hosted runners</a>.</p>
 <p>If this parameter is not used, the CodeQL analysis workflow will create databases in a temporary location of its own choice. Currently the default value is <code>${{ github.runner_temp }}/codeql_databases</code>.</p>
-<h2 id="languages-to-be-analyzed" title="Languages to be analyzed">Languages to be analyzed<a href="#languages-to-be-analyzed" aria-label="Link to heading 'Languages to be analyzed'" data-heading-content="Languages to be analyzed" class="anchor"></a></h2>
+<h2 id="languages-to-be-analyzed" title="Languages to be analyzed" data-entry-type="Section">Languages to be analyzed<a href="#languages-to-be-analyzed" aria-label="Link to heading 'Languages to be analyzed'" data-heading-content="Languages to be analyzed" class="anchor"></a></h2>
 <p>CodeQL code scanning supports code written in the following languages:</p>
 <!-- If you update the list of supported languages for CodeQL, update docs-internal/content/get-started/learning-about-github/github-language-support.md to reflect the changes. -->
 <ul>
@@ -233,7 +233,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 <p class="markdown-alert-title">Note</p>
 <p>When analyzing languages sequentially, the default build-mode for every language will be used. Alternatively, if you provide an explicit <code>autobuild</code> step, then every language that supports the <code>autobuild</code> mode will use it while other languages use their default mode. If a more complex build-mode configuration than this is required, then you will need to configure a matrix.</p>
 </div>
-<h2 id="alert-severities-for-check-failures" title="Alert severities for check failures">Alert severities for check failures<a href="#alert-severities-for-check-failures" aria-label="Link to heading 'Alert severities for check failures'" data-heading-content="Alert severities for check failures" class="anchor"></a></h2>
+<h2 id="alert-severities-for-check-failures" title="Alert severities for check failures" data-entry-type="Section">Alert severities for check failures<a href="#alert-severities-for-check-failures" aria-label="Link to heading 'Alert severities for check failures'" data-heading-content="Alert severities for check failures" class="anchor"></a></h2>
 <p>You can use rulesets to prevent pull requests from being merged when one of the following conditions is met:</p>
 <ul>
 <li>A required tool finds a code scanning alert of a severity that is defined in the ruleset.</li>
@@ -241,7 +241,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 <li>A required tool is not configured for the repository.</li>
 </ul>
 <p>For more information, see <a href="../../how-tos/find-and-fix-code-vulnerabilities/manage-your-configuration/set-merge-protection.html">Set code scanning merge protection</a>. For more general information about rulesets, see <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets" class="external">About rulesets</a>.</p>
-<h2 id="analysis-category" title="Analysis category">Analysis category<a href="#analysis-category" aria-label="Link to heading 'Analysis category'" data-heading-content="Analysis category" class="anchor"></a></h2>
+<h2 id="analysis-category" title="Analysis category" data-entry-type="Section">Analysis category<a href="#analysis-category" aria-label="Link to heading 'Analysis category'" data-heading-content="Analysis category" class="anchor"></a></h2>
 <p>Use <code>category</code> to distinguish between multiple analyses for the same tool and commit, but performed on different languages or different parts of the code. The category you specify in your workflow will be included in the SARIF results file.</p>
 <p>This parameter is particularly useful if you work with monorepos and have multiple SARIF files for different components of the monorepo.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Perform CodeQL Analysis
@@ -259,7 +259,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </ul>
 <p>The <code>category</code> value will appear as the <code>&lt;run&gt;.automationDetails.id</code> property in SARIF v2.1.0. For more information, see <a href="sarif-files/sarif-support.html#runautomationdetails-object">SARIF support for code scanning</a>.</p>
 <p>Your specified category will not overwrite the details of the <code>runAutomationDetails</code> object in the SARIF file, if included.</p>
-<h2 id="codeql-model-packs" title="CodeQL model packs">CodeQL model packs<a href="#codeql-model-packs" aria-label="Link to heading 'CodeQL model packs'" data-heading-content="CodeQL model packs" class="anchor"></a></h2>
+<h2 id="codeql-model-packs" title="CodeQL model packs" data-entry-type="Section">CodeQL model packs<a href="#codeql-model-packs" aria-label="Link to heading 'CodeQL model packs'" data-heading-content="CodeQL model packs" class="anchor"></a></h2>
 <p>If your codebase depends on a library or framework that is not recognized by the standard queries in CodeQL, you can extend the CodeQL coverage in your code scanning workflow by specifying published CodeQL model packs. For more information about creating your own model packs, see <a href="../../tutorials/customize-code-scanning/create-and-work-with-codeql-packs.html#creating-a-codeql-model-pack">Creating and working with CodeQL packs</a>.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -275,7 +275,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">packs</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">my-company/my-java-queries@~7.8.9,my-repo/my-java-model-pack
 </span></code></pre>
 <p>In this example, the default queries will be run for Java, as well as the queries from a version greater than or equal to <code>7.8.9</code> and less than <code>7.9.0</code> of the query pack <code>my-company/my-java-queries</code>. The dependencies modeled in the latest version of the model pack <code>my-repo/my-java-model-pack</code> will be available to both the default queries and those in <code>my-company/my-java-queries</code>.</p>
-<h2 id="non-default-queries" title="Non-default queries">Non-default queries<a href="#non-default-queries" aria-label="Link to heading 'Non-default queries'" data-heading-content="Non-default queries" class="anchor"></a></h2>
+<h2 id="non-default-queries" title="Non-default queries" data-entry-type="Section">Non-default queries<a href="#non-default-queries" aria-label="Link to heading 'Non-default queries'" data-heading-content="Non-default queries" class="anchor"></a></h2>
 <p>When you use CodeQL to scan code, the CodeQL analysis engine generates a database from the code and runs queries on it. CodeQL analysis uses a default set of queries, but you can specify more queries to run, in addition to the default queries.</p>
 <div class="markdown-alert markdown-alert-tip">
 <p class="markdown-alert-title">Tip</p>
@@ -383,7 +383,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">packs</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">+scope/pack1,scope/pack2@1.2.3,scope/pack3@4.5.6:path/to/queries
 </span></code></pre>
 <!-- Anchor to maintain the current CodeQL CLI manual pages link: https://aka.ms/code-scanning-docs/config-file -->
-<h2 id="custom-configuration-files" title="Custom configuration files">Custom configuration files<a href="#custom-configuration-files" aria-label="Link to heading 'Custom configuration files'" data-heading-content="Custom configuration files" class="anchor"></a></h2>
+<h2 id="custom-configuration-files" title="Custom configuration files" data-entry-type="Section">Custom configuration files<a href="#custom-configuration-files" aria-label="Link to heading 'Custom configuration files'" data-heading-content="Custom configuration files" class="anchor"></a></h2>
 <p>A custom configuration file is an alternative way to specify additional packs and queries to run. You can also use the file to disable the default queries, exclude or include specific queries, and to specify which directories to scan during analysis.</p>
 <p>In the workflow file, use the <code>config-file</code> parameter of the <code>init</code> action to specify the path to the configuration file you want to use. This example loads the configuration file <em>./.github/codeql/codeql-config.yml</em>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">- </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">github/codeql-action/init@v4
@@ -527,7 +527,7 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">warning
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#a3be8c;">recommendation
 </span></code></pre>
-<h2 id="configuration-details" title="Configuration details">Configuration details<a href="#configuration-details" aria-label="Link to heading 'Configuration details'" data-heading-content="Configuration details" class="anchor"></a></h2>
+<h2 id="configuration-details" title="Configuration details" data-entry-type="Section">Configuration details<a href="#configuration-details" aria-label="Link to heading 'Configuration details'" data-heading-content="Configuration details" class="anchor"></a></h2>
 <p>If you'd prefer to specify additional configuration details in the workflow file, you can use the <code>config</code> input of the <code>init</code> command of the CodeQL action. The value of this input must be a YAML string that follows the configuration file format documented at <a href="#custom-configuration-files">Custom configuration files</a> above.</p>
 <h3 id="example-configuration">Example configuration<a href="#example-configuration" aria-label="Link to heading 'Example configuration'" data-heading-content="Example configuration" class="anchor"></a></h3>
 <p>This step in a GitHub Actions workflow file uses a <code>config</code> input to disable the default queries, add the <code>security-extended</code> query suite, and exclude queries that are tagged with <code>cwe-020</code>.</p>
@@ -554,8 +554,8 @@ make sure that you also update the MS short link: https://aka.ms/code-scanning-d
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">config</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">${{ vars.CODEQL_CONF }}
 </span></code></pre>
 </div>
-<h2 id="compiled-languages" title="Compiled languages">Compiled languages<a href="#compiled-languages" aria-label="Link to heading 'Compiled languages'" data-heading-content="Compiled languages" class="anchor"></a></h2>
+<h2 id="compiled-languages" title="Compiled languages" data-entry-type="Section">Compiled languages<a href="#compiled-languages" aria-label="Link to heading 'Compiled languages'" data-heading-content="Compiled languages" class="anchor"></a></h2>
 <p>For compiled languages, you can decide how the CodeQL action creates a CodeQL database for analysis. For information about the build options available, see <a href="../../how-tos/find-and-fix-code-vulnerabilities/manage-your-configuration/codeql-for-compiled-languages.html">CodeQL code scanning for compiled languages</a>.</p>
-<h2 id="data-upload" title="Data upload">Data upload<a href="#data-upload" aria-label="Link to heading 'Data upload'" data-heading-content="Data upload" class="anchor"></a></h2>
+<h2 id="data-upload" title="Data upload" data-entry-type="Section">Data upload<a href="#data-upload" aria-label="Link to heading 'Data upload'" data-heading-content="Data upload" class="anchor"></a></h2>
 <p>GitHub can display code analysis data generated externally by a third-party tool. You can upload code analysis data with the <code>upload-sarif</code> action. For more information, see <a href="../../how-tos/find-and-fix-code-vulnerabilities/integrate-with-existing-tools/upload-sarif-file.html">Uploading a SARIF file to GitHub</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

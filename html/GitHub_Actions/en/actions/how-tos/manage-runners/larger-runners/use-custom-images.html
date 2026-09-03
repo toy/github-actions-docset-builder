@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Using custom images</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Manage runners</a> / <a href="index.html">Larger runners</a> / </nav><h1 id="using-custom-images">Using custom images<a href="#using-custom-images" aria-label="Link to heading 'Using custom images'" data-heading-content="Using custom images" class="anchor"></a></h1>
 <p>Create, manage, and use custom images for GitHub-hosted larger runners in your organization or enterprise.</p>
-<h2 id="custom-images" title="Custom images">Custom images<a href="#custom-images" aria-label="Link to heading 'Custom images'" data-heading-content="Custom images" class="anchor"></a></h2>
+<h2 id="custom-images" title="Custom images" data-entry-type="Section">Custom images<a href="#custom-images" aria-label="Link to heading 'Custom images'" data-heading-content="Custom images" class="anchor"></a></h2>
 <p>You can create a custom image to define the exact environment that your GitHub-hosted larger runners use. Custom images let you preinstall tools, dependencies, and configurations to speed up workflows and improve consistency across jobs.</p>
 <p>When your runner uses a custom image, it acts as a “pre-warmed” environment, allowing workflows to complete quicker, by downloading packages and binaries once during image creation instead of every time a workflow is run. For more information about custom images, see <a href="../../../concepts/runners/github-hosted-runners.html#runner-images">Runner images</a>.</p>
 <p>The process of using a custom image involves three main steps:</p>
@@ -9,7 +9,7 @@
 <li><a href="#generating-a-custom-image">Generating a custom image</a>: Generate your custom image by running a workflow using the image-generation runner.</li>
 <li><a href="#installing-custom-images">Installing custom images</a>: Create a runner that uses your custom image.</li>
 </ol>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>Before you can create custom images, make sure the following requirements are met.</p>
 <ul>
 <li>
@@ -25,7 +25,7 @@
 <p>For more information, see <a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/permissions-of-custom-organization-roles" class="external">Permissions of custom organization roles</a>.</p>
 </li>
 </ul>
-<h2 id="setting-up-an-image-generation-runner" title="Setting up an image-generation runner">Setting up an image-generation runner<a href="#setting-up-an-image-generation-runner" aria-label="Link to heading 'Setting up an image-generation runner'" data-heading-content="Setting up an image-generation runner" class="anchor"></a></h2>
+<h2 id="setting-up-an-image-generation-runner" title="Setting up an image-generation runner" data-entry-type="Section">Setting up an image-generation runner<a href="#setting-up-an-image-generation-runner" aria-label="Link to heading 'Setting up an image-generation runner'" data-heading-content="Setting up an image-generation runner" class="anchor"></a></h2>
 <p>To create a custom image, you must first set up an image-generation runner. When you create the runner, the platform that you select for your runner must match the platform of the image you want to build. The platform of the runner can be Linux x64, Linux ARM64, or Windows x64.</p>
 <ol>
 <li>Create a larger runner:
@@ -48,7 +48,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="generating-a-custom-image" title="Generating a custom image">Generating a custom image<a href="#generating-a-custom-image" aria-label="Link to heading 'Generating a custom image'" data-heading-content="Generating a custom image" class="anchor"></a></h2>
+<h2 id="generating-a-custom-image" title="Generating a custom image" data-entry-type="Section">Generating a custom image<a href="#generating-a-custom-image" aria-label="Link to heading 'Generating a custom image'" data-heading-content="Generating a custom image" class="anchor"></a></h2>
 <p>After you create an image-generation runner, run a workflow that includes the <code>snapshot</code> keyword to generate a custom image.</p>
 <p>To configure a workflow for image generation:</p>
 <ul>
@@ -100,7 +100,7 @@
 </span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;"># Add any steps to download and setup any dependencies here
 </span></code></pre>
 <p>For more information about the <code>if</code> keyword, see <a href="../../write-workflows/choose-when-workflows-run/control-jobs-with-conditions.html">Using conditions to control job execution</a>.</p>
-<h2 id="versioning" title="Versioning">Versioning<a href="#versioning" aria-label="Link to heading 'Versioning'" data-heading-content="Versioning" class="anchor"></a></h2>
+<h2 id="versioning" title="Versioning" data-entry-type="Section">Versioning<a href="#versioning" aria-label="Link to heading 'Versioning'" data-heading-content="Versioning" class="anchor"></a></h2>
 <p>When you generate custom images, GitHub automatically assigns version numbers to help you manage updates and track image history.</p>
 <h3 id="default-behavior">Default behavior<a href="#default-behavior" aria-label="Link to heading 'Default behavior'" data-heading-content="Default behavior" class="anchor"></a></h3>
 <p>If an image with the specified name does not exist in your organization or enterprise, GitHub creates it with an initial version number of 1.0.0.<br>
@@ -120,13 +120,13 @@ If you specify an older major version in the YAML (for example, version: 1.<span
 <p class="markdown-alert-title">Note</p>
 <p>GitHub-hosted larger runner creation does not support wildcards in image version selection.</p>
 </div>
-<h2 id="expiration-for-images-built-from-custom-images" title="Expiration for images built from custom images">Expiration for images built from custom images<a href="#expiration-for-images-built-from-custom-images" aria-label="Link to heading 'Expiration for images built from custom images'" data-heading-content="Expiration for images built from custom images" class="anchor"></a></h2>
+<h2 id="expiration-for-images-built-from-custom-images" title="Expiration for images built from custom images" data-entry-type="Section">Expiration for images built from custom images<a href="#expiration-for-images-built-from-custom-images" aria-label="Link to heading 'Expiration for images built from custom images'" data-heading-content="Expiration for images built from custom images" class="anchor"></a></h2>
 <p>When a custom image is built from another custom image, the derived image inherits the expiration timeline of its base image. The maximum version age is calculated from when the base custom image was built, not when the derived image was created.</p>
 <p>For example, if Custom Image A is built on Day 2 and Custom Image B is built from A on Day 4 with a 7-day maximum version age policy, both A and B expire on Day 9.</p>
-<h2 id="billing-and-storage-for-custom-images" title="Billing and storage for custom images">Billing and storage for custom images<a href="#billing-and-storage-for-custom-images" aria-label="Link to heading 'Billing and storage for custom images'" data-heading-content="Billing and storage for custom images" class="anchor"></a></h2>
+<h2 id="billing-and-storage-for-custom-images" title="Billing and storage for custom images" data-entry-type="Section">Billing and storage for custom images<a href="#billing-and-storage-for-custom-images" aria-label="Link to heading 'Billing and storage for custom images'" data-heading-content="Billing and storage for custom images" class="anchor"></a></h2>
 <p>Jobs that use custom images are billed at the same per-minute rate as the larger runner that uses the image. Storage for custom images is billed separately through GitHub Actions storage.</p>
 <p>If you rebuild images frequently and retain older versions, your storage usage can grow quickly because each successful workflow job that includes the <code>snapshot</code> keyword creates a new image version. For more information, see <a href="https://docs.github.com/en/billing/concepts/product-billing/github-actions#custom-image-storage" class="external">GitHub Actions billing</a> and <a href="https://docs.github.com/en/enterprise-cloud@latest/admin/enforcing-policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise#custom-images-retention-policies" class="external">Enforcing policies for GitHub Actions in your enterprise</a>.</p>
-<h2 id="managing-custom-images" title="Managing custom images">Managing custom images<a href="#managing-custom-images" aria-label="Link to heading 'Managing custom images'" data-heading-content="Managing custom images" class="anchor"></a></h2>
+<h2 id="managing-custom-images" title="Managing custom images" data-entry-type="Section">Managing custom images<a href="#managing-custom-images" aria-label="Link to heading 'Managing custom images'" data-heading-content="Managing custom images" class="anchor"></a></h2>
 <p>You can view detailed information about each image, delete unused images or specific versions, and track image versions over time.</p>
 <ol>
 <li>
@@ -146,7 +146,7 @@ If you specify an older major version in the YAML (for example, version: 1.<span
 <p>To view details about a specific image, click the image name.</p>
 </li>
 </ol>
-<h2 id="installing-custom-images" title="Installing custom images">Installing custom images<a href="#installing-custom-images" aria-label="Link to heading 'Installing custom images'" data-heading-content="Installing custom images" class="anchor"></a></h2>
+<h2 id="installing-custom-images" title="Installing custom images" data-entry-type="Section">Installing custom images<a href="#installing-custom-images" aria-label="Link to heading 'Installing custom images'" data-heading-content="Installing custom images" class="anchor"></a></h2>
 <p>Once your custom image is ready, you can install it on a new GitHub-hosted larger runner.</p>
 <ol>
 <li>
@@ -187,7 +187,7 @@ If you specify an older major version in the YAML (for example, version: 1.<span
 <p>Run your workflow to verify that it completes successfully. The job logs will show the image name and version in the "Set up job" section.</p>
 </li>
 </ol>
-<h2 id="security-best-practices-for-custom-images" title="Security best practices for custom images">Security best practices for custom images<a href="#security-best-practices-for-custom-images" aria-label="Link to heading 'Security best practices for custom images'" data-heading-content="Security best practices for custom images" class="anchor"></a></h2>
+<h2 id="security-best-practices-for-custom-images" title="Security best practices for custom images" data-entry-type="Section">Security best practices for custom images<a href="#security-best-practices-for-custom-images" aria-label="Link to heading 'Security best practices for custom images'" data-heading-content="Security best practices for custom images" class="anchor"></a></h2>
 <p>To prevent unauthorized changes to your images, follow these best practices.</p>
 <ul>
 <li><strong>Use dedicated runner groups for image generation.</strong> Runners that generate production images must remain in a dedicated runner group. Do not share runner groups between production and development or test repositories, as anyone with access to a development or test repository could inject malicious code into a production image.</li>

@@ -2,7 +2,7 @@
 <p>Find information for supported variables, naming conventions, limits, and contexts in GitHub Actions workflows.</p>
 <p>This article lists the supported variables you can use in GitHub Actions workflows, including environment variables, configuration variables, and default variables provided by GitHub. Use this reference to look up variable names, naming conventions, limits, and supported contexts when configuring your workflows.</p>
 <p>For more information about variables, see <a href="../../concepts/workflows-and-actions/variables.html">Variables</a>.</p>
-<h2 id="default-environment-variables" title="Default environment variables">Default environment variables<a href="#default-environment-variables" aria-label="Link to heading 'Default environment variables'" data-heading-content="Default environment variables" class="anchor"></a></h2>
+<h2 id="default-environment-variables" title="Default environment variables" data-entry-type="Section">Default environment variables<a href="#default-environment-variables" aria-label="Link to heading 'Default environment variables'" data-heading-content="Default environment variables" class="anchor"></a></h2>
 <p>The default environment variables that GitHub sets are available to every step in a workflow.</p>
 <p>Because default environment variables are set by GitHub and not defined in a workflow, they are not accessible through the <code>env</code> context. However, most of the default variables have a corresponding, and similarly named, context property. For example, the value of the <code>GITHUB_REF</code> variable can be read during workflow processing using the <code>${{ github.ref }}</code> context property.</p>
 <p>You can't overwrite the value of the default environment variables named <code>GITHUB_*</code> and <code>RUNNER_*</code>. Currently you can overwrite the value of the <code>CI</code> variable. However, it's not guaranteed that this will always be possible. For more information about setting environment variables, see <a href="../../how-tos/write-workflows/choose-what-workflows-do/use-variables.html#defining-environment-variables-for-a-single-workflow">Store information in variables</a> and <a href="workflow-commands.html#setting-an-environment-variable">Workflow commands for GitHub Actions</a>.</p>
@@ -16,35 +16,35 @@
 </thead>
 <tbody>
 <tr>
-<td><code class="keyword">CI</code></td>
+<td><code data-entry-type="Variable">CI</code></td>
 <td>Always set to <code>true</code>. You can use this variable to differentiate when tests are being run locally or by GitHub Actions.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTION</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTION</code></td>
 <td>The name of the action currently running, or the <a href="workflow-syntax.html#jobsjob_idstepsid"><code>id</code></a> of a step. For example, for an action, <code>__repo-owner_name-of-action-repo</code>.<br><br>GitHub removes special characters, and uses the name <code>__run</code> when the current step runs a script without an <code>id</code>. If you use the same script or action more than once in the same job, the name will include a suffix that consists of the sequence number preceded by an underscore. For example, the first script you run will have the name <code>__run</code>, and the second script will be named <code>__run_2</code>. Similarly, the second invocation of <code>actions/checkout</code> will be <code>actionscheckout2</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTION_PATH</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTION_PATH</code></td>
 <td>The path where an action is located. This property is only supported in composite actions. You can use this path to change directories to where the action is located and access other files in that same repository. For example, <code>/home/runner/work/_actions/repo-owner/name-of-action-repo/v1</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTION_REPOSITORY</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTION_REPOSITORY</code></td>
 <td>For a step executing an action, this is the owner and repository name of the action. For example, <code>actions/checkout</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTIONS</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTIONS</code></td>
 <td>Always set to <code>true</code> when GitHub Actions is running the workflow. You can use this variable to differentiate when tests are being run locally or by GitHub Actions.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTOR</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTOR</code></td>
 <td>The name of the person or app that initiated the workflow. For example, <code>octocat</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ACTOR_ID</code></td>
+<td><code data-entry-type="Variable">GITHUB_ACTOR_ID</code></td>
 <td>The account ID of the person or app that triggered the initial workflow run. For example, <code>1234567</code>. Note that this is different from the actor username.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_API_URL</code></td>
+<td><code data-entry-type="Variable">GITHUB_API_URL</code></td>
 <td>Returns the API URL. For example: <code>https://api.github.com</code>.</td>
 </tr>
 <tr>
@@ -52,11 +52,11 @@
 <td></td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ARTIFACTS</code></td>
+<td><code data-entry-type="Variable">GITHUB_ARTIFACTS</code></td>
 <td>The path on the runner to the file that declares workflow artifacts for the current step. Write one declaration per line to identify files or OCI digest references as workflow artifacts. For more information, see <a href="workflow-commands.html#declaring-workflow-artifacts">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ARTIFACTS_LIST</code></td>
+<td><code data-entry-type="Variable">GITHUB_ARTIFACTS_LIST</code></td>
 <td>The path on the runner to a read-only file that contains aggregated workflow artifact metadata for the current job as a JSON object. For more information, see <a href="workflow-commands.html#reading-workflow-artifacts">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
@@ -64,147 +64,147 @@
 <td></td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_BASE_REF</code></td>
+<td><code data-entry-type="Variable">GITHUB_BASE_REF</code></td>
 <td>The name of the base ref or target branch of the pull request in a workflow run. This is only set when the event that triggers a workflow run is either <code>pull_request</code> or <code>pull_request_target</code>. For example, <code>main</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_ENV</code></td>
+<td><code data-entry-type="Variable">GITHUB_ENV</code></td>
 <td>The path on the runner to the file that sets variables from workflow commands. The path to this file is unique to the current step and changes for each step in a job. For example, <code>/home/runner/work/_temp/_runner_file_commands/set_env_87406d6e-4979-4d42-98e1-3dab1f48b13a</code>. For more information, see <a href="workflow-commands.html#setting-an-environment-variable">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_EVENT_NAME</code></td>
+<td><code data-entry-type="Variable">GITHUB_EVENT_NAME</code></td>
 <td>The name of the event that triggered the workflow. For example, <code>workflow_dispatch</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_EVENT_PATH</code></td>
+<td><code data-entry-type="Variable">GITHUB_EVENT_PATH</code></td>
 <td>The path to the file on the runner that contains the full event webhook payload. For example, <code>/github/workflow/event.json</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_GRAPHQL_URL</code></td>
+<td><code data-entry-type="Variable">GITHUB_GRAPHQL_URL</code></td>
 <td>Returns the GraphQL API URL. For example: <code>https://api.github.com/graphql</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_HEAD_REF</code></td>
+<td><code data-entry-type="Variable">GITHUB_HEAD_REF</code></td>
 <td>The head ref or source branch of the pull request in a workflow run. This property is only set when the event that triggers a workflow run is either <code>pull_request</code> or <code>pull_request_target</code>. For example, <code>feature-branch-1</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_JOB</code></td>
+<td><code data-entry-type="Variable">GITHUB_JOB</code></td>
 <td>The <a href="workflow-syntax.html#jobsjob_id">job<span data-escaped-char="">_</span>id</a> of the current job. For example, <code>greeting_job</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_OUTPUT</code></td>
+<td><code data-entry-type="Variable">GITHUB_OUTPUT</code></td>
 <td>The path on the runner to the file that sets the current step's outputs from workflow commands. The path to this file is unique to the current step and changes for each step in a job. For example, <code>/home/runner/work/_temp/_runner_file_commands/set_output_a50ef383-b063-46d9-9157-57953fc9f3f0</code>. For more information, see <a href="workflow-commands.html#setting-an-output-parameter">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_PATH</code></td>
+<td><code data-entry-type="Variable">GITHUB_PATH</code></td>
 <td>The path on the runner to the file that sets system <code>PATH</code> variables from workflow commands. The path to this file is unique to the current step and changes for each step in a job. For example, <code>/home/runner/work/_temp/_runner_file_commands/add_path_899b9445-ad4a-400c-aa89-249f18632cf5</code>. For more information, see <a href="workflow-commands.html#adding-a-system-path">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REF</code></td>
+<td><code data-entry-type="Variable">GITHUB_REF</code></td>
 <td>The fully-formed ref of the branch or tag that triggered the workflow run. For workflows triggered by <code>push</code>, this is the branch or tag ref that was pushed. For workflows triggered by <code>pull_request</code> that were not merged, this is the pull request merge branch. If the pull request was merged, this is the branch it was merged into. For workflows triggered by <code>release</code>, this is the release tag created. For other triggers, this is the branch or tag ref that triggered the workflow run. This is only set if a branch or tag is available for the event type. The ref given is fully-formed, meaning that for branches the format is <code>refs/heads/&lt;branch_name&gt;</code>. For pull request events except <code>pull_request_target</code> that were not merged, it is <code>refs/pull/&lt;pr_number&gt;/merge</code>. <code>pull_request_target</code> events have the <code>ref</code> from the base branch. For tags it is <code>refs/tags/&lt;tag_name&gt;</code>. For example, <code>refs/heads/feature-branch-1</code>. For more information about pull request merge branches, see <a href="https://docs.github.com/en/pull-requests/reference/pull-requests#pull-request-refs-and-merge-branches" class="external">Pull requests</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REF_NAME</code></td>
+<td><code data-entry-type="Variable">GITHUB_REF_NAME</code></td>
 <td>The short ref name of the branch or tag that triggered the workflow run. This value matches the branch or tag name shown on GitHub. For example, <code>feature-branch-1</code>.<br><br>For pull requests that were not merged, the format is <code>&lt;pr_number&gt;/merge</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REF_PROTECTED</code></td>
+<td><code data-entry-type="Variable">GITHUB_REF_PROTECTED</code></td>
 <td><code>true</code> if branch protections or <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/managing-rulesets-for-a-repository" class="external">rulesets</a> are configured for the ref that triggered the workflow run.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REF_TYPE</code></td>
+<td><code data-entry-type="Variable">GITHUB_REF_TYPE</code></td>
 <td>The type of ref that triggered the workflow run. Valid values are <code>branch</code> or <code>tag</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REPOSITORY</code></td>
+<td><code data-entry-type="Variable">GITHUB_REPOSITORY</code></td>
 <td>The owner and repository name. For example, <code>octocat/Hello-World</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REPOSITORY_ID</code></td>
+<td><code data-entry-type="Variable">GITHUB_REPOSITORY_ID</code></td>
 <td>The ID of the repository. For example, <code>123456789</code>. Note that this is different from the repository name.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REPOSITORY_OWNER</code></td>
+<td><code data-entry-type="Variable">GITHUB_REPOSITORY_OWNER</code></td>
 <td>The repository owner's name. For example, <code>octocat</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_REPOSITORY_OWNER_ID</code></td>
+<td><code data-entry-type="Variable">GITHUB_REPOSITORY_OWNER_ID</code></td>
 <td>The repository owner's account ID. For example, <code>1234567</code>. Note that this is different from the owner's name.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_RETENTION_DAYS</code></td>
+<td><code data-entry-type="Variable">GITHUB_RETENTION_DAYS</code></td>
 <td>The number of days that workflow run logs and artifacts are kept. For example, <code>90</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_RUN_ATTEMPT</code></td>
+<td><code data-entry-type="Variable">GITHUB_RUN_ATTEMPT</code></td>
 <td>A unique number for each attempt of a particular workflow run in a repository. This number begins at 1 for the workflow run's first attempt, and increments with each re-run. For example, <code>3</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_RUN_ID</code></td>
+<td><code data-entry-type="Variable">GITHUB_RUN_ID</code></td>
 <td>A unique number for each workflow run within a repository. This number does not change if you re-run the workflow run. For example, <code>1658821493</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_RUN_NUMBER</code></td>
+<td><code data-entry-type="Variable">GITHUB_RUN_NUMBER</code></td>
 <td>A unique number for each run of a particular workflow in a repository. This number begins at 1 for the workflow's first run, and increments with each new run. This number does not change if you re-run the workflow run. For example, <code>3</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_SERVER_URL</code></td>
+<td><code data-entry-type="Variable">GITHUB_SERVER_URL</code></td>
 <td>The URL of the GitHub server. For example: <code>https://github.com</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_SHA</code></td>
+<td><code data-entry-type="Variable">GITHUB_SHA</code></td>
 <td>The commit SHA that triggered the workflow. The value of this commit SHA depends on the event that triggered the workflow. For more information, see <a href="events-that-trigger-workflows.html">Events that trigger workflows</a>. For example, <code>ffac537e6cbbf934b08745a378932722df287a53</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_STEP_SUMMARY</code></td>
+<td><code data-entry-type="Variable">GITHUB_STEP_SUMMARY</code></td>
 <td>The path on the runner to the file that contains job summaries from workflow commands. The path to this file is unique to the current step and changes for each step in a job. For example, <code>/home/runner/_layout/_work/_temp/_runner_file_commands/step_summary_1cb22d7f-5663-41a8-9ffc-13472605c76c</code>. For more information, see <a href="workflow-commands.html#adding-a-job-summary">Workflow commands for GitHub Actions</a>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_TRIGGERING_ACTOR</code></td>
+<td><code data-entry-type="Variable">GITHUB_TRIGGERING_ACTOR</code></td>
 <td>The username of the user that initiated the workflow run. If the workflow run is a re-run, this value may differ from <code>github.actor</code>. Any workflow re-runs will use the privileges of <code>github.actor</code>, even if the actor initiating the re-run (<code>github.triggering_actor</code>) has different privileges.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_WORKFLOW</code></td>
+<td><code data-entry-type="Variable">GITHUB_WORKFLOW</code></td>
 <td>The name of the workflow. For example, <code>My test workflow</code>. If the workflow file doesn't specify a <code>name</code>, the value of this variable is the full path of the workflow file in the repository.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_WORKFLOW_REF</code></td>
+<td><code data-entry-type="Variable">GITHUB_WORKFLOW_REF</code></td>
 <td>The ref path to the workflow. For example, <code>octocat/hello-world/.github/workflows/my-workflow.yml@refs/heads/my_branch</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_WORKFLOW_SHA</code></td>
+<td><code data-entry-type="Variable">GITHUB_WORKFLOW_SHA</code></td>
 <td>The commit SHA for the workflow file.</td>
 </tr>
 <tr>
-<td><code class="keyword">GITHUB_WORKSPACE</code></td>
+<td><code data-entry-type="Variable">GITHUB_WORKSPACE</code></td>
 <td>The default working directory on the runner for steps, and the default location of your repository when using the <a href="https://github.com/actions/checkout" class="external"><code>checkout</code></a> action. For example, <code>/home/runner/work/my-repo-name/my-repo-name</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_ARCH</code></td>
+<td><code data-entry-type="Variable">RUNNER_ARCH</code></td>
 <td>The architecture of the runner executing the job. Possible values are <code>X86</code>, <code>X64</code>, <code>ARM</code>, or <code>ARM64</code>.</td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_DEBUG</code></td>
+<td><code data-entry-type="Variable">RUNNER_DEBUG</code></td>
 <td>This is set only if <a href="../../how-tos/monitor-workflows/enable-debug-logging.html">debug logging</a> is enabled, and always has the value of <code>1</code>. It can be useful as an indicator to enable additional debugging or verbose logging in your own job steps.</td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_ENVIRONMENT</code></td>
+<td><code data-entry-type="Variable">RUNNER_ENVIRONMENT</code></td>
 <td>The environment of the runner executing the job. Possible values are: <code>github-hosted</code> for GitHub-hosted runners provided by GitHub, and <code>self-hosted</code> for self-hosted runners configured by the repository owner.</td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_NAME</code></td>
+<td><code data-entry-type="Variable">RUNNER_NAME</code></td>
 <td>The name of the runner executing the job. This name may not be unique in a workflow run as runners at the repository and organization levels could use the same name. For example, <code>Hosted Agent</code></td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_OS</code></td>
+<td><code data-entry-type="Variable">RUNNER_OS</code></td>
 <td>The operating system of the runner executing the job. Possible values are <code>Linux</code>, <code>Windows</code>, or <code>macOS</code>. For example, <code>Windows</code></td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_TEMP</code></td>
+<td><code data-entry-type="Variable">RUNNER_TEMP</code></td>
 <td>The path to a temporary directory on the runner. This directory is emptied at the beginning and end of each job. Note that files will not be removed if the runner's user account does not have permission to delete them. For example, <code>D:\a\_temp</code></td>
 </tr>
 <tr>
-<td><code class="keyword">RUNNER_TOOL_CACHE</code></td>
+<td><code data-entry-type="Variable">RUNNER_TOOL_CACHE</code></td>
 <td>The path to the directory containing preinstalled tools for GitHub-hosted runners. For more information, see <a href="../../concepts/runners/github-hosted-runners.html#preinstalled-software-for-github-owned-images">GitHub-hosted runners</a>. For example, <code>C:\hostedtoolcache\windows</code></td>
 </tr>
 </tbody>
@@ -213,7 +213,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>If you need to use a workflow run's URL from within a job, you can combine these variables: <code>$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID</code></p>
 </div>
-<h2 id="naming-conventions-for-configuration-variables" title="Naming conventions for configuration variables">Naming conventions for configuration variables<a href="#naming-conventions-for-configuration-variables" aria-label="Link to heading 'Naming conventions for configuration variables'" data-heading-content="Naming conventions for configuration variables" class="anchor"></a></h2>
+<h2 id="naming-conventions-for-configuration-variables" title="Naming conventions for configuration variables" data-entry-type="Section">Naming conventions for configuration variables<a href="#naming-conventions-for-configuration-variables" aria-label="Link to heading 'Naming conventions for configuration variables'" data-heading-content="Naming conventions for configuration variables" class="anchor"></a></h2>
 <p>The following rules apply to configuration variable names:</p>
 <ul>
 <li>Can only contain alphanumeric characters (<code>[a-z]</code>, <code>[A-Z]</code>, <code>[0-9]</code>) or underscores (<code>_</code>). Spaces are not allowed.</li>
@@ -222,20 +222,20 @@
 <li>Are case insensitive when referenced. GitHub stores secret names as uppercase regardless of how they are entered.</li>
 <li>Must be unique to the repository, organization, or enterprise where they are created.</li>
 </ul>
-<h2 id="naming-conventions-for-environment-variables" title="Naming conventions for environment variables">Naming conventions for environment variables<a href="#naming-conventions-for-environment-variables" aria-label="Link to heading 'Naming conventions for environment variables'" data-heading-content="Naming conventions for environment variables" class="anchor"></a></h2>
+<h2 id="naming-conventions-for-environment-variables" title="Naming conventions for environment variables" data-entry-type="Section">Naming conventions for environment variables<a href="#naming-conventions-for-environment-variables" aria-label="Link to heading 'Naming conventions for environment variables'" data-heading-content="Naming conventions for environment variables" class="anchor"></a></h2>
 <p>When you set an environment variable, you cannot use any of the default environment variable names. For a complete list of default environment variables, see <a href="#default-environment-variables">Variables reference</a> below. If you attempt to override the value of one of these default variables, the assignment is ignored.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>You can list the entire set of environment variables that are available to a workflow step by using <span style="white-space: nowrap;"><code>run: env</code></span> in a step and then examining the output for the step.</p>
 </div>
-<h2 id="configuration-variable-precedence" title="Configuration variable precedence">Configuration variable precedence<a href="#configuration-variable-precedence" aria-label="Link to heading 'Configuration variable precedence'" data-heading-content="Configuration variable precedence" class="anchor"></a></h2>
+<h2 id="configuration-variable-precedence" title="Configuration variable precedence" data-entry-type="Section">Configuration variable precedence<a href="#configuration-variable-precedence" aria-label="Link to heading 'Configuration variable precedence'" data-heading-content="Configuration variable precedence" class="anchor"></a></h2>
 <p>If a variable with the same name exists at multiple levels, the variable at the lowest level takes precedence. For example, if an organization-level variable has the same name as a repository-level variable, then the repository-level variable takes precedence. Similarly, if an organization, repository, and environment all have a variable with the same name, the environment-level variable takes precedence.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Environment-level variables are only available on the runner after the job starts executing. This means that environment-level variables won't overwrite variables in the <code>env</code> and <code>vars</code> contexts.</p>
 </div>
 <p>For reusable workflows, the variables from the caller workflow's repository are used. Variables from the repository that contains the called workflow are not made available to the caller workflow.</p>
-<h2 id="limits-for-configuration-variables" title="Limits for configuration variables">Limits for configuration variables<a href="#limits-for-configuration-variables" aria-label="Link to heading 'Limits for configuration variables'" data-heading-content="Limits for configuration variables" class="anchor"></a></h2>
+<h2 id="limits-for-configuration-variables" title="Limits for configuration variables" data-entry-type="Section">Limits for configuration variables<a href="#limits-for-configuration-variables" aria-label="Link to heading 'Limits for configuration variables'" data-heading-content="Limits for configuration variables" class="anchor"></a></h2>
 <p>Individual variables are limited to 48 KB in size.</p>
 <p>You can store up to 1,000 organization variables, 500 variables per repository, and 100 variables per environment. The total combined size limit for organization and repository variables is 256 KB per workflow run.</p>
 <p>A workflow created in a repository can access the following number of variables:</p>
@@ -248,7 +248,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Environment-level variables do not count toward the 256 KB total size limit. If you exceed the combined size limit for repository and organization variables and still need additional variables, you can use an environment and define additional variables in the environment.</p>
 </div>
-<h2 id="supported-contexts" title="Supported contexts">Supported contexts<a href="#supported-contexts" aria-label="Link to heading 'Supported contexts'" data-heading-content="Supported contexts" class="anchor"></a></h2>
+<h2 id="supported-contexts" title="Supported contexts" data-entry-type="Section">Supported contexts<a href="#supported-contexts" aria-label="Link to heading 'Supported contexts'" data-heading-content="Supported contexts" class="anchor"></a></h2>
 <p>You will commonly use either the <code>env</code> or <code>github</code> context to access variable values in parts of the workflow that are processed before jobs are sent to runners.</p>
 <div class="markdown-alert markdown-alert-warning">
 <p class="markdown-alert-title">Warning</p>

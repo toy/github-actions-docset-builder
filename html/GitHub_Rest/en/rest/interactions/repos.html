@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for repository interactions</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Interactions</a> / </nav><h1 id="rest-api-endpoints-for-repository-interactions">REST API endpoints for repository interactions<a href="#rest-api-endpoints-for-repository-interactions" aria-label="Link to heading 'REST API endpoints for repository interactions'" data-heading-content="REST API endpoints for repository interactions" class="anchor"></a></h1>
 <p>Use the REST API to temporarily restrict which type of user can comment, open issues, or create pull requests in a public repository.</p>
-<h2 id="about-repository-interactions" title="About repository interactions">About repository interactions<a href="#about-repository-interactions" aria-label="Link to heading 'About repository interactions'" data-heading-content="About repository interactions" class="anchor"></a></h2>
+<h2 id="about-repository-interactions" title="About repository interactions" data-entry-type="Section">About repository interactions<a href="#about-repository-interactions" aria-label="Link to heading 'About repository interactions'" data-heading-content="About repository interactions" class="anchor"></a></h2>
 <p>People with owner or admin access can use the REST API to temporarily restrict which type of user can comment, open issues, or create pull requests in a public repository. When restrictions are enabled, only the specified type of GitHub user will be able to participate in interactions. Restrictions automatically expire after a defined duration. Here's more about the types of GitHub users:</p>
 <ul>
 <li><strong>Existing users:</strong> When you limit interactions to <code>existing_users</code>, new users with accounts less than 24 hours old who have not previously contributed and are not collaborators will be temporarily restricted in the repository.</li>
@@ -12,7 +12,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="get-interaction-restrictions-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits (Get interaction restrictions for a repository)">Get interaction restrictions for a repository<a href="#get-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Get interaction restrictions for a repository'" data-heading-content="Get interaction restrictions for a repository" class="anchor"></a></h2>
+<h2 id="get-interaction-restrictions-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits (Get interaction restrictions for a repository)" data-entry-type="Resource">Get interaction restrictions for a repository<a href="#get-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Get interaction restrictions for a repository'" data-heading-content="Get interaction restrictions for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/interaction-limits
 </span></code></pre>
 <p>Shows which type of GitHub user can interact with this repository and when the restriction expires. If there are no restrictions, you will see an empty response.</p>
@@ -59,7 +59,7 @@ The name of the repository without the .git extension. The name is not case sens
 </ul>
 </li>
 </ul>
-<h2 id="set-interaction-restrictions-for-a-repository" title="PUT /repos/{owner}/{repo}/interaction-limits (Set interaction restrictions for a repository)">Set interaction restrictions for a repository<a href="#set-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Set interaction restrictions for a repository'" data-heading-content="Set interaction restrictions for a repository" class="anchor"></a></h2>
+<h2 id="set-interaction-restrictions-for-a-repository" title="PUT /repos/{owner}/{repo}/interaction-limits (Set interaction restrictions for a repository)" data-entry-type="Resource">Set interaction restrictions for a repository<a href="#set-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Set interaction restrictions for a repository'" data-heading-content="Set interaction restrictions for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/interaction-limits
 </span></code></pre>
 <p>Temporarily restricts interactions to a certain type of GitHub user within the given repository. You must have owner or admin access to set these restrictions. If an interaction limit is set for the user or organization that owns this repository, you will receive a 409 Conflict response and will not be able to use this endpoint to change the interaction limit for a single repository.</p>
@@ -119,7 +119,7 @@ Can be one of: <code>one_day</code>, <code>three_days</code>, <code>one_week</co
 <li><code>origin</code>: required, string</li>
 <li><code>expires_at</code>: required, string, format: date-time</li>
 </ul>
-<h2 id="remove-interaction-restrictions-for-a-repository" title="DELETE /repos/{owner}/{repo}/interaction-limits (Remove interaction restrictions for a repository)">Remove interaction restrictions for a repository<a href="#remove-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Remove interaction restrictions for a repository'" data-heading-content="Remove interaction restrictions for a repository" class="anchor"></a></h2>
+<h2 id="remove-interaction-restrictions-for-a-repository" title="DELETE /repos/{owner}/{repo}/interaction-limits (Remove interaction restrictions for a repository)" data-entry-type="Resource">Remove interaction restrictions for a repository<a href="#remove-interaction-restrictions-for-a-repository" aria-label="Link to heading 'Remove interaction restrictions for a repository'" data-heading-content="Remove interaction restrictions for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/interaction-limits
 </span></code></pre>
 <p>Removes all interaction restrictions from the given repository. You must have owner or admin access to remove restrictions. If the interaction limit is set for the user or organization that owns this repository, you will receive a 409 Conflict response and will not be able to use this endpoint to change the interaction limit for a single repository.</p>
@@ -157,7 +157,7 @@ The name of the repository without the .git extension. The name is not case sens
 </span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/interaction-limits
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="get-pull-request-creation-cap-bypass-list-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Get pull request creation cap bypass list for a repository)">Get pull request creation cap bypass list for a repository<a href="#get-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Get pull request creation cap bypass list for a repository'" data-heading-content="Get pull request creation cap bypass list for a repository" class="anchor"></a></h2>
+<h2 id="get-pull-request-creation-cap-bypass-list-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Get pull request creation cap bypass list for a repository)" data-entry-type="Resource">Get pull request creation cap bypass list for a repository<a href="#get-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Get pull request creation cap bypass list for a repository'" data-heading-content="Get pull request creation cap bypass list for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list
 </span></code></pre>
 <p>Lists the users that are on the pull request creation cap bypass list for a<br>
@@ -226,7 +226,7 @@ The name of the repository without the .git extension. The name is not case sens
 <li><code>starred_at</code>: string</li>
 <li><code>user_view_type</code>: string</li>
 </ul>
-<h2 id="add-users-to-the-pull-request-creation-cap-bypass-list-for-a-repository" title="PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Add users to the pull request creation cap bypass list for a repository)">Add users to the pull request creation cap bypass list for a repository<a href="#add-users-to-the-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Add users to the pull request creation cap bypass list for a repository'" data-heading-content="Add users to the pull request creation cap bypass list for a repository" class="anchor"></a></h2>
+<h2 id="add-users-to-the-pull-request-creation-cap-bypass-list-for-a-repository" title="PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Add users to the pull request creation cap bypass list for a repository)" data-entry-type="Resource">Add users to the pull request creation cap bypass list for a repository<a href="#add-users-to-the-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Add users to the pull request creation cap bypass list for a repository'" data-heading-content="Add users to the pull request creation cap bypass list for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list
 </span></code></pre>
 <p>Adds users to the pull request creation cap bypass list for a repository.<br>
@@ -286,7 +286,7 @@ A list of user logins to add or remove from the bypass list.</li>
 </span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="remove-users-from-the-pull-request-creation-cap-bypass-list-for-a-repository" title="DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Remove users from the pull request creation cap bypass list for a repository)">Remove users from the pull request creation cap bypass list for a repository<a href="#remove-users-from-the-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Remove users from the pull request creation cap bypass list for a repository'" data-heading-content="Remove users from the pull request creation cap bypass list for a repository" class="anchor"></a></h2>
+<h2 id="remove-users-from-the-pull-request-creation-cap-bypass-list-for-a-repository" title="DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list (Remove users from the pull request creation cap bypass list for a repository)" data-entry-type="Resource">Remove users from the pull request creation cap bypass list for a repository<a href="#remove-users-from-the-pull-request-creation-cap-bypass-list-for-a-repository" aria-label="Link to heading 'Remove users from the pull request creation cap bypass list for a repository'" data-heading-content="Remove users from the pull request creation cap bypass list for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list
 </span></code></pre>
 <p>Removes users from the pull request creation cap bypass list for a repository.<br>
@@ -343,7 +343,7 @@ A list of user logins to add or remove from the bypass list.</li>
 </span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="get-pull-request-creation-cap-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap (Get pull request creation cap for a repository)">Get pull request creation cap for a repository<a href="#get-pull-request-creation-cap-for-a-repository" aria-label="Link to heading 'Get pull request creation cap for a repository'" data-heading-content="Get pull request creation cap for a repository" class="anchor"></a></h2>
+<h2 id="get-pull-request-creation-cap-for-a-repository" title="GET /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap (Get pull request creation cap for a repository)" data-entry-type="Resource">Get pull request creation cap for a repository<a href="#get-pull-request-creation-cap-for-a-repository" aria-label="Link to heading 'Get pull request creation cap for a repository'" data-heading-content="Get pull request creation cap for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap
 </span></code></pre>
 <p>Gets the pull request creation cap configuration for a repository.<br>
@@ -393,7 +393,7 @@ The name of the repository without the .git extension. The name is not case sens
 <li><code>enabled</code>: required, boolean</li>
 <li><code>max_open_pull_requests</code>: required, integer, minimum: 1, maximum: 1000</li>
 </ul>
-<h2 id="update-pull-request-creation-cap-for-a-repository" title="PATCH /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap (Update pull request creation cap for a repository)">Update pull request creation cap for a repository<a href="#update-pull-request-creation-cap-for-a-repository" aria-label="Link to heading 'Update pull request creation cap for a repository'" data-heading-content="Update pull request creation cap for a repository" class="anchor"></a></h2>
+<h2 id="update-pull-request-creation-cap-for-a-repository" title="PATCH /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap (Update pull request creation cap for a repository)" data-entry-type="Resource">Update pull request creation cap for a repository<a href="#update-pull-request-creation-cap-for-a-repository" aria-label="Link to heading 'Update pull request creation cap for a repository'" data-heading-content="Update pull request creation cap for a repository" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap
 </span></code></pre>
 <p>Updates the pull request creation cap for a repository. The cap limits the number<br>

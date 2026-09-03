@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Workflow commands for GitHub Actions</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Reference</a> / <a href="index.html">Workflows and actions</a> / </nav><h1 id="workflow-commands-for-github-actions">Workflow commands for GitHub Actions<a href="#workflow-commands-for-github-actions" aria-label="Link to heading 'Workflow commands for GitHub Actions'" data-heading-content="Workflow commands for GitHub Actions" class="anchor"></a></h1>
 <p>You can use workflow commands when running shell commands in a workflow or in an action's code.</p>
-<h2 id="about-workflow-commands" title="About workflow commands">About workflow commands<a href="#about-workflow-commands" aria-label="Link to heading 'About workflow commands'" data-heading-content="About workflow commands" class="anchor"></a></h2>
+<h2 id="about-workflow-commands" title="About workflow commands" data-entry-type="Section">About workflow commands<a href="#about-workflow-commands" aria-label="Link to heading 'About workflow commands'" data-heading-content="About workflow commands" class="anchor"></a></h2>
 <p>Actions can communicate with the runner machine to set environment variables, output values used by other actions, add debug messages to the output logs, and other tasks.</p>
 <p>Most workflow commands use the <code>echo</code> command in a specific format, while others are invoked by writing to a file. For more information, see <a href="#environment-files">Environment files</a>.</p>
 <h3 id="example-of-a-workflow-command">Example of a workflow command<a href="#example-of-a-workflow-command" aria-label="Link to heading 'Example of a workflow command'" data-heading-content="Example of a workflow command" class="anchor"></a></h3>
@@ -20,7 +20,7 @@
 <p class="markdown-alert-title">Warning</p>
 <p>If you are using Command Prompt, omit double quote characters (<code>"</code>) when using workflow commands.</p>
 </div>
-<h2 id="using-workflow-commands-to-access-toolkit-functions" title="Using workflow commands to access toolkit functions">Using workflow commands to access toolkit functions<a href="#using-workflow-commands-to-access-toolkit-functions" aria-label="Link to heading 'Using workflow commands to access toolkit functions'" data-heading-content="Using workflow commands to access toolkit functions" class="anchor"></a></h2>
+<h2 id="using-workflow-commands-to-access-toolkit-functions" title="Using workflow commands to access toolkit functions" data-entry-type="Section">Using workflow commands to access toolkit functions<a href="#using-workflow-commands-to-access-toolkit-functions" aria-label="Link to heading 'Using workflow commands to access toolkit functions'" data-heading-content="Using workflow commands to access toolkit functions" class="anchor"></a></h2>
 <p>The <a href="https://github.com/actions/toolkit" class="external">actions/toolkit</a> includes a number of functions that can be executed as workflow commands. Use the <code>::</code> syntax to run the workflow commands within your YAML file; these commands are then sent to the runner over <code>stdout</code>.</p>
 <p>For example, instead of using code to create an error annotation, as below:</p>
 <pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#bf616a;">core</span><span style="color:#c0c5ce;">.</span><span style="color:#8fa1b3;">error</span><span style="color:#c0c5ce;">('</span><span style="color:#a3be8c;">Missing semicolon</span><span style="color:#c0c5ce;">', {file: '</span><span style="color:#a3be8c;">app.js</span><span style="color:#c0c5ce;">', startLine: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">})
@@ -116,7 +116,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="setting-a-debug-message" title="Setting a debug message">Setting a debug message<a href="#setting-a-debug-message" aria-label="Link to heading 'Setting a debug message'" data-heading-content="Setting a debug message" class="anchor"></a></h2>
+<h2 id="setting-a-debug-message" title="Setting a debug message" data-entry-type="Section">Setting a debug message<a href="#setting-a-debug-message" aria-label="Link to heading 'Setting a debug message'" data-heading-content="Setting a debug message" class="anchor"></a></h2>
 <p>Prints a debug message to the log. You must create a secret named <code>ACTIONS_STEP_DEBUG</code> with the value <code>true</code> to see the debug messages set by this command in the log. For more information, see <a href="../../how-tos/monitor-workflows/enable-debug-logging.html">Enabling debug logging</a>.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::debug::{message}
 </span></code></pre>
@@ -129,7 +129,7 @@
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Write-Output "::debug::Set the Octocat variable"
 </span></code></pre>
 </div>
-<h2 id="setting-a-notice-message" title="Setting a notice message">Setting a notice message<a href="#setting-a-notice-message" aria-label="Link to heading 'Setting a notice message'" data-heading-content="Setting a notice message" class="anchor"></a></h2>
+<h2 id="setting-a-notice-message" title="Setting a notice message" data-entry-type="Section">Setting a notice message<a href="#setting-a-notice-message" aria-label="Link to heading 'Setting a notice message'" data-heading-content="Setting a notice message" class="anchor"></a></h2>
 <p>Creates a notice message and prints the message to the log. This message will create an annotation, which can associate the message with a particular file in your repository. Optionally, your message can specify a position within the file.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::notice file={name},line={line},endLine={endLine},title={title}::{message}
 </span></code></pre>
@@ -190,7 +190,7 @@
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Write-Output "::notice file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
 </span></code></pre>
 </div>
-<h2 id="setting-a-warning-message" title="Setting a warning message">Setting a warning message<a href="#setting-a-warning-message" aria-label="Link to heading 'Setting a warning message'" data-heading-content="Setting a warning message" class="anchor"></a></h2>
+<h2 id="setting-a-warning-message" title="Setting a warning message" data-entry-type="Section">Setting a warning message<a href="#setting-a-warning-message" aria-label="Link to heading 'Setting a warning message'" data-heading-content="Setting a warning message" class="anchor"></a></h2>
 <p>Creates a warning message and prints the message to the log. This message will create an annotation, which can associate the message with a particular file in your repository. Optionally, your message can specify a position within the file.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::warning file={name},line={line},endLine={endLine},title={title}::{message}
 </span></code></pre>
@@ -251,7 +251,7 @@
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Write-Output "::warning file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
 </span></code></pre>
 </div>
-<h2 id="setting-an-error-message" title="Setting an error message">Setting an error message<a href="#setting-an-error-message" aria-label="Link to heading 'Setting an error message'" data-heading-content="Setting an error message" class="anchor"></a></h2>
+<h2 id="setting-an-error-message" title="Setting an error message" data-entry-type="Section">Setting an error message<a href="#setting-an-error-message" aria-label="Link to heading 'Setting an error message'" data-heading-content="Setting an error message" class="anchor"></a></h2>
 <p>Creates an error message and prints the message to the log. This message will create an annotation, which can associate the message with a particular file in your repository. Optionally, your message can specify a position within the file.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::error file={name},line={line},endLine={endLine},title={title}::{message}
 </span></code></pre>
@@ -312,7 +312,7 @@
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">Write-Output "::error file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
 </span></code></pre>
 </div>
-<h2 id="grouping-log-lines" title="Grouping log lines">Grouping log lines<a href="#grouping-log-lines" aria-label="Link to heading 'Grouping log lines'" data-heading-content="Grouping log lines" class="anchor"></a></h2>
+<h2 id="grouping-log-lines" title="Grouping log lines" data-entry-type="Section">Grouping log lines<a href="#grouping-log-lines" aria-label="Link to heading 'Grouping log lines'" data-heading-content="Grouping log lines" class="anchor"></a></h2>
 <p>Creates an expandable group in the log. To create a group, use the <code>group</code> command and specify a <code>title</code>. Anything you print to the log between the <code>group</code> and <code>endgroup</code> commands is nested inside an expandable entry in the log.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::group::{title}
 </span><span style="color:#c0c5ce;">::endgroup::
@@ -343,7 +343,7 @@
 </span></code></pre>
 </div>
 <p><img src="../../../..//assets/images/help/actions/actions-log-group.png" alt="Screenshot of the log for the workflow step. The second line, &quot;My title&quot;, is an expanded group. The next line, &quot;Inside group&quot;, is indented below."></p>
-<h2 id="masking-a-value-in-a-log" title="Masking a value in a log">Masking a value in a log<a href="#masking-a-value-in-a-log" aria-label="Link to heading 'Masking a value in a log'" data-heading-content="Masking a value in a log" class="anchor"></a></h2>
+<h2 id="masking-a-value-in-a-log" title="Masking a value in a log" data-entry-type="Section">Masking a value in a log<a href="#masking-a-value-in-a-log" aria-label="Link to heading 'Masking a value in a log'" data-heading-content="Masking a value in a log" class="anchor"></a></h2>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::add-mask::{value}
 </span></code></pre>
 <p>Masking a value prevents a string or variable from being printed in the log. Each masked word separated by whitespace is replaced with the <code>*</code> character. You can use an environment variable or string for the mask's <code>value</code>. This must be done once per value per job. When you mask a value, it is treated as a secret and will be redacted on the runner. For example, after you mask a value, you won't be able to set that value as an output.</p>
@@ -513,7 +513,7 @@
 </span><span style="color:#a3be8c;">        echo "We retrieved our masked secret: $Retrieved_Secret"
 </span></code></pre>
 </div>
-<h2 id="stopping-and-starting-workflow-commands" title="Stopping and starting workflow commands">Stopping and starting workflow commands<a href="#stopping-and-starting-workflow-commands" aria-label="Link to heading 'Stopping and starting workflow commands'" data-heading-content="Stopping and starting workflow commands" class="anchor"></a></h2>
+<h2 id="stopping-and-starting-workflow-commands" title="Stopping and starting workflow commands" data-entry-type="Section">Stopping and starting workflow commands<a href="#stopping-and-starting-workflow-commands" aria-label="Link to heading 'Stopping and starting workflow commands'" data-heading-content="Stopping and starting workflow commands" class="anchor"></a></h2>
 <p>Stops processing any workflow commands. This special command allows you to log anything without accidentally running a workflow command. For example, you could stop logging to output an entire script that has comments.</p>
 <pre lang="text" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">::stop-commands::{endtoken}
 </span></code></pre>
@@ -555,7 +555,7 @@
 </span><span style="color:#a3be8c;">          Write-Output '::warning:: This is a warning again, because stop-commands has been turned off.'
 </span></code></pre>
 </div>
-<h2 id="sending-values-to-the-pre-and-post-actions" title="Sending values to the pre and post actions">Sending values to the pre and post actions<a href="#sending-values-to-the-pre-and-post-actions" aria-label="Link to heading 'Sending values to the pre and post actions'" data-heading-content="Sending values to the pre and post actions" class="anchor"></a></h2>
+<h2 id="sending-values-to-the-pre-and-post-actions" title="Sending values to the pre and post actions" data-entry-type="Section">Sending values to the pre and post actions<a href="#sending-values-to-the-pre-and-post-actions" aria-label="Link to heading 'Sending values to the pre and post actions'" data-heading-content="Sending values to the pre and post actions" class="anchor"></a></h2>
 <p>You can create environment variables for sharing with your workflow's <code>pre:</code> or <code>post:</code> actions by writing to the file located at <code>GITHUB_STATE</code>. For example, you can create a file with the <code>pre:</code> action, pass the file location to the <code>main:</code> action, and then use the <code>post:</code> action to delete the file. Alternatively, you could create a file with the <code>main:</code> action, pass the file location to the <code>post:</code> action, and also use the <code>post:</code> action to delete the file.</p>
 <p>If you have multiple <code>pre:</code> or <code>post:</code> actions, you can only access the saved value in the action where it was written to <code>GITHUB_STATE</code>. For more information on the <code>post:</code> action, see <a href="metadata-syntax.html#runspost">Metadata syntax reference</a>.</p>
 <p>The <code>GITHUB_STATE</code> file is only available within an action. The saved value is stored as an environment value with the <code>STATE_</code> prefix.</p>
@@ -570,7 +570,7 @@
 <p>The <code>STATE_processID</code> variable is then exclusively available to the cleanup script running under the <code>main</code> action. This example runs in <code>main</code> and uses JavaScript to display the value assigned to the <code>STATE_processID</code> environment variable:</p>
 <pre lang="javascript" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">console.</span><span style="color:#96b5b4;">log</span><span style="color:#c0c5ce;">("</span><span style="color:#a3be8c;">The running PID from the main action is: </span><span style="color:#c0c5ce;">" + process.env.STATE_processID);
 </span></code></pre>
-<h2 id="environment-files" title="Environment files">Environment files<a href="#environment-files" aria-label="Link to heading 'Environment files'" data-heading-content="Environment files" class="anchor"></a></h2>
+<h2 id="environment-files" title="Environment files" data-entry-type="Section">Environment files<a href="#environment-files" aria-label="Link to heading 'Environment files'" data-heading-content="Environment files" class="anchor"></a></h2>
 <p>During the execution of a workflow, the runner generates temporary files that can be used to perform certain actions. The path to these files can be accessed and edited using GitHub's default environment variables. See <a href="variables.html#default-environment-variables">Variables reference</a>. You will need to use UTF-8 encoding when writing to these files to ensure proper processing of the commands. Multiple commands can be written to the same file, separated by newlines.<br>
 To use environment variables in a GitHub Action, you create or modify <code>.env</code> files using specific GitHub Actions commands.</p>
 <p>Here's how:</p>
@@ -621,7 +621,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 </span></code></pre>
 </div>
 </div>
-<h2 id="setting-an-environment-variable" title="Setting an environment variable">Setting an environment variable<a href="#setting-an-environment-variable" aria-label="Link to heading 'Setting an environment variable'" data-heading-content="Setting an environment variable" class="anchor"></a></h2>
+<h2 id="setting-an-environment-variable" title="Setting an environment variable" data-entry-type="Section">Setting an environment variable<a href="#setting-an-environment-variable" aria-label="Link to heading 'Setting an environment variable'" data-heading-content="Setting an environment variable" class="anchor"></a></h2>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>To avoid issues, it's good practice to treat environment variables as case sensitive, irrespective of the behavior of the operating system and shell you are using.</p>
@@ -711,7 +711,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">shell</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">pwsh
 </span></code></pre>
 </div>
-<h2 id="setting-an-output-parameter" title="Setting an output parameter">Setting an output parameter<a href="#setting-an-output-parameter" aria-label="Link to heading 'Setting an output parameter'" data-heading-content="Setting an output parameter" class="anchor"></a></h2>
+<h2 id="setting-an-output-parameter" title="Setting an output parameter" data-entry-type="Section">Setting an output parameter<a href="#setting-an-output-parameter" aria-label="Link to heading 'Setting an output parameter'" data-heading-content="Setting an output parameter" class="anchor"></a></h2>
 <p>Sets a step's output parameter. Note that the step will need an <code>id</code> to be defined to later retrieve the output value. You can set multi-line output values with the same technique used in the <a href="#multiline-strings">Multiline strings</a> section to define multi-line environment variables.</p>
 <div class="ghd-tool bash">
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">{name}={value}</span><span style="color:#c0c5ce;">" &gt;&gt; "$</span><span style="color:#bf616a;">GITHUB_OUTPUT</span><span style="color:#c0c5ce;">"
@@ -745,7 +745,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Write-Output "The selected color is $env:SELECTED_COLOR"
 </span></code></pre>
 </div>
-<h2 id="adding-a-job-summary" title="Adding a job summary">Adding a job summary<a href="#adding-a-job-summary" aria-label="Link to heading 'Adding a job summary'" data-heading-content="Adding a job summary" class="anchor"></a></h2>
+<h2 id="adding-a-job-summary" title="Adding a job summary" data-entry-type="Section">Adding a job summary<a href="#adding-a-job-summary" aria-label="Link to heading 'Adding a job summary'" data-heading-content="Adding a job summary" class="anchor"></a></h2>
 <div class="ghd-tool bash">
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">"</span><span style="color:#a3be8c;">{markdown content}</span><span style="color:#c0c5ce;">" &gt;&gt; $</span><span style="color:#bf616a;">GITHUB_STEP_SUMMARY
 </span></code></pre>
@@ -827,7 +827,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 <p>After a step has completed, job summaries are uploaded and subsequent steps cannot modify previously uploaded Markdown content. Summaries automatically mask any secrets that might have been added accidentally. If a job summary contains sensitive information that must be deleted, you can delete the entire workflow run to remove all its job summaries. For more information, see <a href="../../how-tos/manage-workflow-runs/delete-a-workflow-run.html">Deleting a workflow run</a>.</p>
 <h3 id="step-isolation-and-limits">Step isolation and limits<a href="#step-isolation-and-limits" aria-label="Link to heading 'Step isolation and limits'" data-heading-content="Step isolation and limits" class="anchor"></a></h3>
 <p>Job summaries are isolated between steps and each step is restricted to a maximum size of 1MiB. Isolation is enforced between steps so that potentially malformed Markdown from a single step cannot break Markdown rendering for subsequent steps. If more than 1MiB of content is added for a step, then the upload for the step will fail and an error annotation will be created. Upload failures for job summaries do not affect the overall status of a step or a job. A maximum of 20 job summaries from steps are displayed per job.</p>
-<h2 id="adding-a-system-path" title="Adding a system path">Adding a system path<a href="#adding-a-system-path" aria-label="Link to heading 'Adding a system path'" data-heading-content="Adding a system path" class="anchor"></a></h2>
+<h2 id="adding-a-system-path" title="Adding a system path" data-entry-type="Section">Adding a system path<a href="#adding-a-system-path" aria-label="Link to heading 'Adding a system path'" data-heading-content="Adding a system path" class="anchor"></a></h2>
 <p>Prepends a directory to the system <code>PATH</code> variable and automatically makes it available to all subsequent actions in the current job; the currently running action cannot access the updated path variable. To see the currently defined paths for your job, you can use <code>echo "$PATH"</code> in a step or an action.</p>
 <h3 id="example-of-adding-a-system-path">Example of adding a system path<a href="#example-of-adding-a-system-path" aria-label="Link to heading 'Example of adding a system path'" data-heading-content="Example of adding a system path" class="anchor"></a></h3>
 <div class="ghd-tool bash">
@@ -840,7 +840,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"$env:HOMEPATH/.local/bin" | Out-File -FilePath "$env:GITHUB_PATH" -Append
 </span></code></pre>
 </div>
-<h2 id="declaring-workflow-artifacts" title="Declaring workflow artifacts">Declaring workflow artifacts<a href="#declaring-workflow-artifacts" aria-label="Link to heading 'Declaring workflow artifacts'" data-heading-content="Declaring workflow artifacts" class="anchor"></a></h2>
+<h2 id="declaring-workflow-artifacts" title="Declaring workflow artifacts" data-entry-type="Section">Declaring workflow artifacts<a href="#declaring-workflow-artifacts" aria-label="Link to heading 'Declaring workflow artifacts'" data-heading-content="Declaring workflow artifacts" class="anchor"></a></h2>
 <p>Declare files or OCI references as workflow artifacts by writing one declaration per line to the <code>GITHUB_ARTIFACTS</code> environment file. Each step writes to a fresh, per-step file; the path is unique to that step.</p>
 <p>Metadata about declared artifacts is collected across all steps in a job and exposed through the <code>GITHUB_ARTIFACTS_LIST</code> file.</p>
 <p>Each line must be one of the following formats. Blank lines and lines starting with <code>#</code> are ignored.</p>
@@ -868,7 +868,7 @@ To use environment variables in a GitHub Action, you create or modify <code>.env
 <pre lang="powershell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">"oci://ghcr.io/octocat/myapp:1.0.0@sha256:914b38d45a65e4263a179d9c2b09cc04dcbcaa8257fa85100cf42f9a3b408cfb" &gt;&gt; $env:GITHUB_ARTIFACTS
 </span></code></pre>
 </div>
-<h2 id="reading-workflow-artifacts" title="Reading workflow artifacts">Reading workflow artifacts<a href="#reading-workflow-artifacts" aria-label="Link to heading 'Reading workflow artifacts'" data-heading-content="Reading workflow artifacts" class="anchor"></a></h2>
+<h2 id="reading-workflow-artifacts" title="Reading workflow artifacts" data-entry-type="Section">Reading workflow artifacts<a href="#reading-workflow-artifacts" aria-label="Link to heading 'Reading workflow artifacts'" data-heading-content="Reading workflow artifacts" class="anchor"></a></h2>
 <p>Read the aggregated workflow artifact metadata declared by earlier steps in the current job from the <code>GITHUB_ARTIFACTS_LIST</code> environment file. This file is read-only and is updated by the runner after each step completes. It contains a UTF-8-encoded JSON object with the following structure:</p>
 <pre lang="json" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">{
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">version</span><span style="color:#c0c5ce;">": </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">,

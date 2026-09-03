@@ -5,7 +5,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>In REST, the global node ID field is named <code>node_id</code>. In GraphQL, it's an <code>id</code> field on the <code>node</code> interface. For a refresher on what "node" means in GraphQL, see <a href="introduction-to-graphql.html#node">Introduction to GraphQL</a>.</p>
 </div>
-<h2 id="putting-global-node-ids-to-use" title="Putting global node IDs to use">Putting global node IDs to use<a href="#putting-global-node-ids-to-use" aria-label="Link to heading 'Putting global node IDs to use'" data-heading-content="Putting global node IDs to use" class="anchor"></a></h2>
+<h2 id="putting-global-node-ids-to-use" title="Putting global node IDs to use" data-entry-type="Section">Putting global node IDs to use<a href="#putting-global-node-ids-to-use" aria-label="Link to heading 'Putting global node IDs to use'" data-heading-content="Putting global node IDs to use" class="anchor"></a></h2>
 <p>You can follow three steps to use global node IDs effectively:</p>
 <ol>
 <li>Call a REST endpoint that returns an object's <code>node_id</code>.</li>
@@ -13,7 +13,7 @@
 <li>Use the ID and type to do a direct node lookup in GraphQL.</li>
 </ol>
 <p>Let's walk through an example.</p>
-<h2 id="1-call-a-rest-endpoint-that-returns-an-objects-node-id" title="1. Call a REST endpoint that returns an object's node ID">1. Call a REST endpoint that returns an object's node ID<a href="#1-call-a-rest-endpoint-that-returns-an-objects-node-id" aria-label="Link to heading '1. Call a REST endpoint that returns an object's node ID'" data-heading-content="1. Call a REST endpoint that returns an object's node ID" class="anchor"></a></h2>
+<h2 id="1-call-a-rest-endpoint-that-returns-an-objects-node-id" title="1. Call a REST endpoint that returns an object's node ID" data-entry-type="Section">1. Call a REST endpoint that returns an object's node ID<a href="#1-call-a-rest-endpoint-that-returns-an-objects-node-id" aria-label="Link to heading '1. Call a REST endpoint that returns an object's node ID'" data-heading-content="1. Call a REST endpoint that returns an object's node ID" class="anchor"></a></h2>
 <p>If you <a href="https://docs.github.com/en/rest/users/users#get-the-authenticated-user" class="external">request the authenticated user</a>:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -i --header "Authorization: Bearer YOUR-TOKEN" https://api.github.com/user
 </span></code></pre>
@@ -64,7 +64,7 @@
 </span><span style="color:#c0c5ce;">  "</span><span style="color:#a3be8c;">node_id</span><span style="color:#c0c5ce;">": "</span><span style="color:#a3be8c;">MDQ6VXNlcjU4MzIzMQ==</span><span style="color:#c0c5ce;">"
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h2 id="2-find-the-object-type-in-graphql" title="2. Find the object type in GraphQL">2. Find the object type in GraphQL<a href="#2-find-the-object-type-in-graphql" aria-label="Link to heading '2. Find the object type in GraphQL'" data-heading-content="2. Find the object type in GraphQL" class="anchor"></a></h2>
+<h2 id="2-find-the-object-type-in-graphql" title="2. Find the object type in GraphQL" data-entry-type="Section">2. Find the object type in GraphQL<a href="#2-find-the-object-type-in-graphql" aria-label="Link to heading '2. Find the object type in GraphQL'" data-heading-content="2. Find the object type in GraphQL" class="anchor"></a></h2>
 <p>In this example, the <code>node_id</code> value is <code>MDQ6VXNlcjU4MzIzMQ==</code>. You can use this value to query the same object in GraphQL.</p>
 <p>You'll need to know the object's <em>type</em> first, though. You can check the type with a simple GraphQL query:</p>
 <pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
@@ -75,7 +75,7 @@
 </span></code></pre>
 <p>This type of query—that is, finding the node by ID—is known as a "direct node lookup."</p>
 <p>When you run this query, you'll see that the <code>__typename</code> is <a href="../reference/users.html#object-user"><code>User</code></a>.</p>
-<h2 id="3-do-a-direct-node-lookup-in-graphql" title="3. Do a direct node lookup in GraphQL">3. Do a direct node lookup in GraphQL<a href="#3-do-a-direct-node-lookup-in-graphql" aria-label="Link to heading '3. Do a direct node lookup in GraphQL'" data-heading-content="3. Do a direct node lookup in GraphQL" class="anchor"></a></h2>
+<h2 id="3-do-a-direct-node-lookup-in-graphql" title="3. Do a direct node lookup in GraphQL" data-entry-type="Section">3. Do a direct node lookup in GraphQL<a href="#3-do-a-direct-node-lookup-in-graphql" aria-label="Link to heading '3. Do a direct node lookup in GraphQL'" data-heading-content="3. Do a direct node lookup in GraphQL" class="anchor"></a></h2>
 <p>Once you've confirmed the type, you can use an <a href="https://graphql.org/learn/queries/#inline-fragments" class="external">inline fragment</a> to access the object by its ID and return additional data. In this example, we define the fields on <code>User</code> that we'd like to query:</p>
 <pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">query {
 </span><span style="color:#c0c5ce;">  node(id:"MDQ6VXNlcjU4MzIzMQ==") {
@@ -87,6 +87,6 @@
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>This type of query is the standard approach for looking up an object by its global node ID.</p>
-<h2 id="using-global-node-ids-in-migrations" title="Using global node IDs in migrations">Using global node IDs in migrations<a href="#using-global-node-ids-in-migrations" aria-label="Link to heading 'Using global node IDs in migrations'" data-heading-content="Using global node IDs in migrations" class="anchor"></a></h2>
+<h2 id="using-global-node-ids-in-migrations" title="Using global node IDs in migrations" data-entry-type="Section">Using global node IDs in migrations<a href="#using-global-node-ids-in-migrations" aria-label="Link to heading 'Using global node IDs in migrations'" data-heading-content="Using global node IDs in migrations" class="anchor"></a></h2>
 <p>When building integrations that use either the REST API or the GraphQL API, it's best practice to persist the global node ID so you can easily reference objects across API versions. For more information on handling the transition between REST and GraphQL, see <a href="migrating-from-rest-to-graphql.html">Migrating from REST to GraphQL</a>.</p>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Migrating from REST to GraphQL</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Guides</a> / </nav><h1 id="migrating-from-rest-to-graphql">Migrating from REST to GraphQL<a href="#migrating-from-rest-to-graphql" aria-label="Link to heading 'Migrating from REST to GraphQL'" data-heading-content="Migrating from REST to GraphQL" class="anchor"></a></h1>
 <p>Learn best practices and considerations for migrating from GitHub's REST API to GitHub's GraphQL API.</p>
-<h2 id="differences-in-api-logic" title="Differences in API logic">Differences in API logic<a href="#differences-in-api-logic" aria-label="Link to heading 'Differences in API logic'" data-heading-content="Differences in API logic" class="anchor"></a></h2>
+<h2 id="differences-in-api-logic" title="Differences in API logic" data-entry-type="Section">Differences in API logic<a href="#differences-in-api-logic" aria-label="Link to heading 'Differences in API logic'" data-heading-content="Differences in API logic" class="anchor"></a></h2>
 <p>GitHub provides two APIs: a REST API and a GraphQL API. For more information about GitHub's APIs, see <a href="https://docs.github.com/en/rest/about-the-rest-api/comparing-githubs-rest-api-and-graphql-api" class="external">Comparing GitHub's REST API and GraphQL API</a>.</p>
 <p>Migrating from REST to GraphQL represents a significant shift in API logic. The differences between REST as a style and GraphQL as a specification make it difficult—and often undesirable—to replace REST API calls with GraphQL API queries on a one-to-one basis. We've included specific examples of migration below.</p>
 <p>To migrate your code from the <a href="https://docs.github.com/en/rest" class="external">REST API</a> to the GraphQL API:</p>
@@ -17,7 +17,7 @@
 <li><a href="#example-strong-typing">Strong typing</a></li>
 </ul>
 <p>Here are examples of each.</p>
-<h2 id="example-getting-the-data-you-need-and-nothing-more" title="Example: Getting the data you need and nothing more">Example: Getting the data you need and nothing more<a href="#example-getting-the-data-you-need-and-nothing-more" aria-label="Link to heading 'Example: Getting the data you need and nothing more'" data-heading-content="Example: Getting the data you need and nothing more" class="anchor"></a></h2>
+<h2 id="example-getting-the-data-you-need-and-nothing-more" title="Example: Getting the data you need and nothing more" data-entry-type="Section">Example: Getting the data you need and nothing more<a href="#example-getting-the-data-you-need-and-nothing-more" aria-label="Link to heading 'Example: Getting the data you need and nothing more'" data-heading-content="Example: Getting the data you need and nothing more" class="anchor"></a></h2>
 <p>A single REST API call retrieves a list of your organization's members:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/orgs/:org/members
 </span></code></pre>
@@ -55,7 +55,7 @@
 </span><span style="color:#c0c5ce;">  }
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
-<h2 id="example-nesting" title="Example: Nesting">Example: Nesting<a href="#example-nesting" aria-label="Link to heading 'Example: Nesting'" data-heading-content="Example: Nesting" class="anchor"></a></h2>
+<h2 id="example-nesting" title="Example: Nesting" data-entry-type="Section">Example: Nesting<a href="#example-nesting" aria-label="Link to heading 'Example: Nesting'" data-heading-content="Example: Nesting" class="anchor"></a></h2>
 <p>Querying with nested fields lets you replace multiple REST calls with fewer GraphQL queries. For example, retrieving a pull request along with its commits, non-review comments, and reviews using the <strong>REST API</strong> requires four separate calls:</p>
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number
 </span><span style="color:#c0c5ce;">curl -v https://api.github.com/repos/:owner/:repo/pulls/:number/commits
@@ -98,7 +98,7 @@
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>You can also extend the power of this query by <a href="forming-calls-with-graphql.html#working-with-variables">substituting a variable</a> for the pull request number.</p>
-<h2 id="example-strong-typing" title="Example: Strong typing">Example: Strong typing<a href="#example-strong-typing" aria-label="Link to heading 'Example: Strong typing'" data-heading-content="Example: Strong typing" class="anchor"></a></h2>
+<h2 id="example-strong-typing" title="Example: Strong typing" data-entry-type="Section">Example: Strong typing<a href="#example-strong-typing" aria-label="Link to heading 'Example: Strong typing'" data-heading-content="Example: Strong typing" class="anchor"></a></h2>
 <p>GraphQL schemas are strongly typed, making data handling safer.</p>
 <p>Consider an example of adding a comment to an issue or pull request using a GraphQL <a href="../reference/index.html">mutation</a>, and mistakenly specifying an integer rather than a string for the value of <a href="../reference/issues.html#mutation-addcomment"><code>clientMutationId</code></a>:</p>
 <pre lang="graphql" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">mutation {

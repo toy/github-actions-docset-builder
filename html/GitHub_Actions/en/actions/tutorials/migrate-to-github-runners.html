@@ -2,7 +2,7 @@
 <p>Learn how to assess your current CI infrastructure and migrate workflows from self-hosted runners to GitHub-hosted runners.</p>
 <p>You can run workflows on GitHub-hosted or self-hosted runners, or use a mixture of runner types.</p>
 <p>This tutorial shows you how to assess your current use of runners, then migrate workflows from self-hosted runners to GitHub-hosted runners efficiently.</p>
-<h2 id="1-assess-your-current-ci-infrastructure" title="1. Assess your current CI infrastructure">1. Assess your current CI infrastructure<a href="#1-assess-your-current-ci-infrastructure" aria-label="Link to heading '1. Assess your current CI infrastructure'" data-heading-content="1. Assess your current CI infrastructure" class="anchor"></a></h2>
+<h2 id="1-assess-your-current-ci-infrastructure" title="1. Assess your current CI infrastructure" data-entry-type="Section">1. Assess your current CI infrastructure<a href="#1-assess-your-current-ci-infrastructure" aria-label="Link to heading '1. Assess your current CI infrastructure'" data-heading-content="1. Assess your current CI infrastructure" class="anchor"></a></h2>
 <p>Migrating from self-hosted runners to GitHub-hosted larger runners begins with a thorough assessment of your current CI infrastructure. If you take the time to match specifications and environments carefully, you will minimize the time spent fixing problems when you start running workflows on different runners.</p>
 <ol>
 <li>Create an inventory of each machine specification used to run workflows, including CPU cores, RAM, storage, chip architecture, and operating system.</li>
@@ -11,14 +11,14 @@
 <li>Identify which workflows currently target self-hosted runners, and why. For example, in GitHub Actions usage metrics, use the <strong>Jobs</strong> tab and filter by runner label (such as <code>self-hosted</code> or a custom label) to see which repositories and jobs are using that label. If you need to validate specific workflow files, you can also use code search to find workflow files that reference <code>runs-on: self-hosted</code> or other self-hosted labels.</li>
 <li>Identify workflows that access private network resources (for example, internal package registries, private APIs, databases, or on-premises services), since these may require additional networking configuration.</li>
 </ol>
-<h2 id="2-map-your-processing-requirements-to-github-hosted-runner-types" title="2. Map your processing requirements to GitHub-hosted runner types">2. Map your processing requirements to GitHub-hosted runner types<a href="#2-map-your-processing-requirements-to-github-hosted-runner-types" aria-label="Link to heading '2. Map your processing requirements to GitHub-hosted runner types'" data-heading-content="2. Map your processing requirements to GitHub-hosted runner types" class="anchor"></a></h2>
+<h2 id="2-map-your-processing-requirements-to-github-hosted-runner-types" title="2. Map your processing requirements to GitHub-hosted runner types" data-entry-type="Section">2. Map your processing requirements to GitHub-hosted runner types<a href="#2-map-your-processing-requirements-to-github-hosted-runner-types" aria-label="Link to heading '2. Map your processing requirements to GitHub-hosted runner types'" data-heading-content="2. Map your processing requirements to GitHub-hosted runner types" class="anchor"></a></h2>
 <p>GitHub offers managed runners in multiple operating systems—Linux, Windows, and macOS—with options for GPU-enabled machines. See <a href="../reference/runners/larger-runners.html">Larger runners reference</a>.</p>
 <ol>
 <li>Map each distinct machine specification in your inventory to a suitable GitHub-hosted runner specification.</li>
 <li>Make a note of any self-hosted runners where there is no suitable GitHub-hosted runner.</li>
 <li>Exclude any workflows that must continue to run on self-hosted runners from your migration plans.</li>
 </ol>
-<h2 id="3-estimate-capacity-requirements" title="3. Estimate capacity requirements">3. Estimate capacity requirements<a href="#3-estimate-capacity-requirements" aria-label="Link to heading '3. Estimate capacity requirements'" data-heading-content="3. Estimate capacity requirements" class="anchor"></a></h2>
+<h2 id="3-estimate-capacity-requirements" title="3. Estimate capacity requirements" data-entry-type="Section">3. Estimate capacity requirements<a href="#3-estimate-capacity-requirements" aria-label="Link to heading '3. Estimate capacity requirements'" data-heading-content="3. Estimate capacity requirements" class="anchor"></a></h2>
 <p>Before you provision GitHub-hosted runners, estimate how much compute capacity your workflows will need. Reviewing your current self-hosted runner usage helps you choose appropriate runner sizes, set concurrency limits, and forecast potential cost changes.</p>
 <ol>
 <li>
@@ -63,7 +63,7 @@
 </li>
 </ol>
 <p>Your capacity plan will guide how many runners to provision, which machine types to use, and how to configure runner groups and policies in the next steps.</p>
-<h2 id="4-configure-runner-groups-and-policies" title="4. Configure runner groups and policies">4. Configure runner groups and policies<a href="#4-configure-runner-groups-and-policies" aria-label="Link to heading '4. Configure runner groups and policies'" data-heading-content="4. Configure runner groups and policies" class="anchor"></a></h2>
+<h2 id="4-configure-runner-groups-and-policies" title="4. Configure runner groups and policies" data-entry-type="Section">4. Configure runner groups and policies<a href="#4-configure-runner-groups-and-policies" aria-label="Link to heading '4. Configure runner groups and policies'" data-heading-content="4. Configure runner groups and policies" class="anchor"></a></h2>
 <p>After estimating your capacity needs, configure runner groups and access policies so your GitHub-hosted runners are available to the right organizations and workflows.</p>
 <p>Configuring runner groups before provisioning runners helps ensure that migration doesn’t accidentally open access too broadly or create unexpected cost increases.</p>
 <ol>
@@ -78,7 +78,7 @@
 <p>Review policy settings to ensure runners are only used by the intended workflows. For example, restricting use to specific repositories or preventing untrusted workflows from accessing more powerful machine types.</p>
 </li>
 </ol>
-<h2 id="5-set-up-github-hosted-runners" title="5. Set up GitHub-hosted runners">5. Set up GitHub-hosted runners<a href="#5-set-up-github-hosted-runners" aria-label="Link to heading '5. Set up GitHub-hosted runners'" data-heading-content="5. Set up GitHub-hosted runners" class="anchor"></a></h2>
+<h2 id="5-set-up-github-hosted-runners" title="5. Set up GitHub-hosted runners" data-entry-type="Section">5. Set up GitHub-hosted runners<a href="#5-set-up-github-hosted-runners" aria-label="Link to heading '5. Set up GitHub-hosted runners'" data-heading-content="5. Set up GitHub-hosted runners" class="anchor"></a></h2>
 <p>Next, provision your GitHub-hosted runners based on the machine types and capacity you identified earlier.</p>
 <ol>
 <li>
@@ -122,7 +122,7 @@
 <h4 id="use-oidc-with-an-api-gateway-for-trusted-access-to-private-resources">Use OIDC with an API gateway for trusted access to private resources<a href="#use-oidc-with-an-api-gateway-for-trusted-access-to-private-resources" aria-label="Link to heading 'Use OIDC with an API gateway for trusted access to private resources'" data-heading-content="Use OIDC with an API gateway for trusted access to private resources" class="anchor"></a></h4>
 <p>If you don’t need the runner to join your private network, you can use OIDC to establish trusted, short-lived access to a service you expose via an API gateway. This approach can reduce the need for long-lived secrets and limits network access to the specific endpoints your workflow needs.</p>
 <p>For detailed instructions and examples, see <a href="../how-tos/manage-runners/github-hosted-runners/connect-to-a-private-network/connect-with-oidc.html">Using an API gateway with OIDC</a>.</p>
-<h2 id="6-update-workflows-to-use-the-new-runners" title="6. Update workflows to use the new runners">6. Update workflows to use the new runners<a href="#6-update-workflows-to-use-the-new-runners" aria-label="Link to heading '6. Update workflows to use the new runners'" data-heading-content="6. Update workflows to use the new runners" class="anchor"></a></h2>
+<h2 id="6-update-workflows-to-use-the-new-runners" title="6. Update workflows to use the new runners" data-entry-type="Section">6. Update workflows to use the new runners<a href="#6-update-workflows-to-use-the-new-runners" aria-label="Link to heading '6. Update workflows to use the new runners'" data-heading-content="6. Update workflows to use the new runners" class="anchor"></a></h2>
 <p>After your GitHub-hosted runners are configured, update your workflow files to target them.</p>
 <ol>
 <li>
@@ -147,7 +147,7 @@
 <p>Test each updated workflow to ensure it runs correctly on the new runners. Monitor for any issues related to environment differences or missing dependencies.</p>
 </li>
 </ol>
-<h2 id="7-remove-unused-self-hosted-runners" title="7. Remove unused self-hosted runners">7. Remove unused self-hosted runners<a href="#7-remove-unused-self-hosted-runners" aria-label="Link to heading '7. Remove unused self-hosted runners'" data-heading-content="7. Remove unused self-hosted runners" class="anchor"></a></h2>
+<h2 id="7-remove-unused-self-hosted-runners" title="7. Remove unused self-hosted runners" data-entry-type="Section">7. Remove unused self-hosted runners<a href="#7-remove-unused-self-hosted-runners" aria-label="Link to heading '7. Remove unused self-hosted runners'" data-heading-content="7. Remove unused self-hosted runners" class="anchor"></a></h2>
 <p>After your workflows have been updated and tested on GitHub-hosted runners, remove any self-hosted runners that are no longer needed. This prevents jobs from accidentally targeting outdated infrastructure. See <a href="../how-tos/manage-runners/self-hosted-runners/remove-runners.html">Removing self-hosted runners</a>.</p>
 <p>Before you remove self-hosted runners, verify that you have fully migrated:</p>
 <ul>

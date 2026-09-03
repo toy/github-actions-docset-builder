@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Migrating from GitLab CI/CD to GitHub Actions</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">Tutorials</a> / <a href="../index.html">Migrate to GitHub Actions</a> / <a href="index.html">Manual migrations</a> / </nav><h1 id="migrating-from-gitlab-cicd-to-github-actions">Migrating from GitLab CI/CD to GitHub Actions<a href="#migrating-from-gitlab-cicd-to-github-actions" aria-label="Link to heading 'Migrating from GitLab CI/CD to GitHub Actions'" data-heading-content="Migrating from GitLab CI/CD to GitHub Actions" class="anchor"></a></h1>
 <p>GitHub Actions and GitLab CI/CD share several configuration similarities, which makes migrating to GitHub Actions relatively straightforward.</p>
-<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<h2 id="introduction" title="Introduction" data-entry-type="Section">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>GitLab CI/CD and GitHub Actions both allow you to create workflows that automatically build, test, publish, release, and deploy code. GitLab CI/CD and GitHub Actions share some similarities in workflow configuration:</p>
 <ul>
 <li>Workflow configuration files are written in YAML and are stored in the code's repository.</li>
@@ -9,7 +9,7 @@
 <li>Jobs can run on either managed or self-hosted machines.</li>
 </ul>
 <p>There are a few differences, and this guide will show you the important differences so that you can migrate your workflow to GitHub Actions.</p>
-<h2 id="jobs" title="Jobs">Jobs<a href="#jobs" aria-label="Link to heading 'Jobs'" data-heading-content="Jobs" class="anchor"></a></h2>
+<h2 id="jobs" title="Jobs" data-entry-type="Section">Jobs<a href="#jobs" aria-label="Link to heading 'Jobs'" data-heading-content="Jobs" class="anchor"></a></h2>
 <p>Jobs in GitLab CI/CD are very similar to jobs in GitHub Actions. In both systems, jobs have the following characteristics:</p>
 <ul>
 <li>Jobs contain a series of steps or scripts that run sequentially.</li>
@@ -32,7 +32,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">actions/checkout@v6
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Run your script here"
 </span></code></pre>
-<h2 id="runners" title="Runners">Runners<a href="#runners" aria-label="Link to heading 'Runners'" data-heading-content="Runners" class="anchor"></a></h2>
+<h2 id="runners" title="Runners" data-entry-type="Section">Runners<a href="#runners" aria-label="Link to heading 'Runners'" data-heading-content="Runners" class="anchor"></a></h2>
 <p>Runners are machines on which the jobs run. Both GitLab CI/CD and GitHub Actions offer managed and self-hosted variants of runners. In GitLab CI/CD, <code>tags</code> are used to run jobs on different platforms, while in GitHub Actions it is done with the <code>runs-on</code> key.</p>
 <p>Below is an example of the syntax for each system.</p>
 <h3 id="gitlab-cicd-syntax-for-runners">GitLab CI/CD syntax for runners<a href="#gitlab-cicd-syntax-for-runners" aria-label="Link to heading 'GitLab CI/CD syntax for runners'" data-heading-content="GitLab CI/CD syntax for runners" class="anchor"></a></h3>
@@ -60,7 +60,7 @@
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Hello, $USER!"
 </span></code></pre>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idruns-on">Workflow syntax for GitHub Actions</a>.</p>
-<h2 id="docker-images" title="Docker images">Docker images<a href="#docker-images" aria-label="Link to heading 'Docker images'" data-heading-content="Docker images" class="anchor"></a></h2>
+<h2 id="docker-images" title="Docker images" data-entry-type="Section">Docker images<a href="#docker-images" aria-label="Link to heading 'Docker images'" data-heading-content="Docker images" class="anchor"></a></h2>
 <p>Both GitLab CI/CD and GitHub Actions support running jobs in a Docker image. In GitLab CI/CD, Docker images are defined with an <code>image</code> key, while in GitHub Actions it is done with the <code>container</code> key.</p>
 <p>Below is an example of the syntax for each system.</p>
 <h3 id="gitlab-cicd-syntax-for-docker-images">GitLab CI/CD syntax for Docker images<a href="#gitlab-cicd-syntax-for-docker-images" aria-label="Link to heading 'GitLab CI/CD syntax for Docker images'" data-heading-content="GitLab CI/CD syntax for Docker images" class="anchor"></a></h3>
@@ -73,7 +73,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">container</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">node:20-bookworm-slim
 </span></code></pre>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idcontainer">Workflow syntax for GitHub Actions</a>.</p>
-<h2 id="condition-and-expression-syntax" title="Condition and expression syntax">Condition and expression syntax<a href="#condition-and-expression-syntax" aria-label="Link to heading 'Condition and expression syntax'" data-heading-content="Condition and expression syntax" class="anchor"></a></h2>
+<h2 id="condition-and-expression-syntax" title="Condition and expression syntax" data-entry-type="Section">Condition and expression syntax<a href="#condition-and-expression-syntax" aria-label="Link to heading 'Condition and expression syntax'" data-heading-content="Condition and expression syntax" class="anchor"></a></h2>
 <p>GitLab CI/CD uses <code>rules</code> to determine if a job will run for a specific condition. GitHub Actions uses the <code>if</code> keyword to prevent a job from running unless a condition is met.</p>
 <p>Below is an example of the syntax for each system.</p>
 <h3 id="gitlab-cicd-syntax-for-conditions-and-expressions">GitLab CI/CD syntax for conditions and expressions<a href="#gitlab-cicd-syntax-for-conditions-and-expressions" aria-label="Link to heading 'GitLab CI/CD syntax for conditions and expressions'" data-heading-content="GitLab CI/CD syntax for conditions and expressions" class="anchor"></a></h3>
@@ -93,7 +93,7 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "Deploy to production server"
 </span></code></pre>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/expressions.html">Evaluate expressions in workflows and actions</a>.</p>
-<h2 id="dependencies-between-jobs" title="Dependencies between Jobs">Dependencies between Jobs<a href="#dependencies-between-jobs" aria-label="Link to heading 'Dependencies between Jobs'" data-heading-content="Dependencies between Jobs" class="anchor"></a></h2>
+<h2 id="dependencies-between-jobs" title="Dependencies between Jobs" data-entry-type="Section">Dependencies between Jobs<a href="#dependencies-between-jobs" aria-label="Link to heading 'Dependencies between Jobs'" data-heading-content="Dependencies between Jobs" class="anchor"></a></h2>
 <p>Both GitLab CI/CD and GitHub Actions allow you to set dependencies for a job. In both systems, jobs run in parallel by default, but job dependencies in GitHub Actions can be specified explicitly with the <code>needs</code> key. GitLab CI/CD also has a concept of <code>stages</code>, where jobs in a stage run concurrently, but the next stage will start when all the jobs in the previous stage have completed. You can recreate this scenario in GitHub Actions with the <code>needs</code> key.</p>
 <p>Below is an example of the syntax for each system. The workflows start with two jobs named <code>build_a</code> and <code>build_b</code> running in parallel, and when those jobs complete, another job called <code>test_ab</code> will run. Finally, when <code>test_ab</code> completes, the <code>deploy_ab</code> job will run.</p>
 <h3 id="gitlab-cicd-syntax-for-dependencies-between-jobs">GitLab CI/CD syntax for dependencies between jobs<a href="#gitlab-cicd-syntax-for-dependencies-between-jobs" aria-label="Link to heading 'GitLab CI/CD syntax for dependencies between jobs'" data-heading-content="GitLab CI/CD syntax for dependencies between jobs" class="anchor"></a></h3>
@@ -147,13 +147,13 @@
 </span><span style="color:#c0c5ce;">      - </span><span style="color:#bf616a;">run</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">echo "This job will run after test_ab is complete"
 </span></code></pre>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idneeds">Workflow syntax for GitHub Actions</a>.</p>
-<h2 id="scheduling-workflows" title="Scheduling workflows">Scheduling workflows<a href="#scheduling-workflows" aria-label="Link to heading 'Scheduling workflows'" data-heading-content="Scheduling workflows" class="anchor"></a></h2>
+<h2 id="scheduling-workflows" title="Scheduling workflows" data-entry-type="Section">Scheduling workflows<a href="#scheduling-workflows" aria-label="Link to heading 'Scheduling workflows'" data-heading-content="Scheduling workflows" class="anchor"></a></h2>
 <p>Both GitLab CI/CD and GitHub Actions allow you to run workflows at a specific interval. In GitLab CI/CD, pipeline schedules are configured with the UI, while in GitHub Actions you can trigger a workflow on a scheduled interval with the "on" key.</p>
 <p>For more information, see <a href="../../../reference/workflows-and-actions/events-that-trigger-workflows.html#schedule">Events that trigger workflows</a>.</p>
-<h2 id="variables-and-secrets" title="Variables and secrets">Variables and secrets<a href="#variables-and-secrets" aria-label="Link to heading 'Variables and secrets'" data-heading-content="Variables and secrets" class="anchor"></a></h2>
+<h2 id="variables-and-secrets" title="Variables and secrets" data-entry-type="Section">Variables and secrets<a href="#variables-and-secrets" aria-label="Link to heading 'Variables and secrets'" data-heading-content="Variables and secrets" class="anchor"></a></h2>
 <p>GitLab CI/CD and GitHub Actions support setting variables in the pipeline or workflow configuration file, and creating secrets using the GitLab or GitHub UI.</p>
 <p>For more information, see <a href="../../../how-tos/write-workflows/choose-what-workflows-do/use-variables.html">Store information in variables</a> and <a href="../../../concepts/security/secrets.html">Secrets</a>.</p>
-<h2 id="caching" title="Caching">Caching<a href="#caching" aria-label="Link to heading 'Caching'" data-heading-content="Caching" class="anchor"></a></h2>
+<h2 id="caching" title="Caching" data-entry-type="Section">Caching<a href="#caching" aria-label="Link to heading 'Caching'" data-heading-content="Caching" class="anchor"></a></h2>
 <p>GitLab CI/CD and GitHub Actions provide a method in the configuration file to manually cache workflow files.</p>
 <p>Below is an example of the syntax for each system.</p>
 <h3 id="gitlab-cicd-syntax-for-caching">GitLab CI/CD syntax for caching<a href="#gitlab-cicd-syntax-for-caching" aria-label="Link to heading 'GitLab CI/CD syntax for caching'" data-heading-content="GitLab CI/CD syntax for caching" class="anchor"></a></h3>
@@ -183,7 +183,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">key</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">restore-keys</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">v1-npm-deps-
 </span></code></pre>
-<h2 id="artifacts" title="Artifacts">Artifacts<a href="#artifacts" aria-label="Link to heading 'Artifacts'" data-heading-content="Artifacts" class="anchor"></a></h2>
+<h2 id="artifacts" title="Artifacts" data-entry-type="Section">Artifacts<a href="#artifacts" aria-label="Link to heading 'Artifacts'" data-heading-content="Artifacts" class="anchor"></a></h2>
 <p>Both GitLab CI/CD and GitHub Actions can upload files and directories created by a job as artifacts. In GitHub Actions, artifacts can be used to persist data across multiple jobs.</p>
 <p>Below is an example of the syntax for each system.</p>
 <h3 id="gitlab-cicd-syntax-for-artifacts">GitLab CI/CD syntax for artifacts<a href="#gitlab-cicd-syntax-for-artifacts" aria-label="Link to heading 'GitLab CI/CD syntax for artifacts'" data-heading-content="GitLab CI/CD syntax for artifacts" class="anchor"></a></h3>
@@ -200,7 +200,7 @@
 </span><span style="color:#c0c5ce;">    </span><span style="color:#bf616a;">path</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">math-homework.txt
 </span></code></pre>
 <p>For more information, see <a href="../../store-and-share-data.html">Store and share data with workflow artifacts</a>.</p>
-<h2 id="databases-and-service-containers" title="Databases and service containers">Databases and service containers<a href="#databases-and-service-containers" aria-label="Link to heading 'Databases and service containers'" data-heading-content="Databases and service containers" class="anchor"></a></h2>
+<h2 id="databases-and-service-containers" title="Databases and service containers" data-entry-type="Section">Databases and service containers<a href="#databases-and-service-containers" aria-label="Link to heading 'Databases and service containers'" data-heading-content="Databases and service containers" class="anchor"></a></h2>
 <p>Both systems enable you to include additional containers for databases, caching, or other dependencies.</p>
 <p>In GitLab CI/CD, a container for the job is specified with the <code>image</code> key, while GitHub Actions uses the <code>container</code> key. In both systems, additional service containers are specified with the <code>services</code> key.</p>
 <p>Below is an example of the syntax for each system.</p>

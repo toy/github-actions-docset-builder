@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Creating a JavaScript action</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Create actions</a> / </nav><h1 id="creating-a-javascript-action">Creating a JavaScript action<a href="#creating-a-javascript-action" aria-label="Link to heading 'Creating a JavaScript action'" data-heading-content="Creating a JavaScript action" class="anchor"></a></h1>
 <p>In this tutorial, you'll learn how to build a JavaScript action using the actions toolkit.</p>
-<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<h2 id="introduction" title="Introduction" data-entry-type="Section">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>In this guide, you'll learn about the basic components needed to create and use a packaged JavaScript action. To focus this guide on the components needed to package the action, the functionality of the action's code is minimal. The action prints "Hello World" in the logs or "Hello <span data-escaped-char="">[</span>who-to-greet]" if you provide a custom name.</p>
 <p>This guide uses the GitHub Actions Toolkit Node.js module to speed up development. For more information, see the <a href="https://github.com/actions/toolkit" class="external">actions/toolkit</a> repository.</p>
 <p>Once you complete this project, you should understand how to build your own JavaScript action and test it in a workflow.</p>
@@ -9,7 +9,7 @@
 <p class="markdown-alert-title">Warning</p>
 <p>When creating workflows and actions, you should always consider whether your code might execute untrusted input from possible attackers. Certain contexts should be treated as untrusted input, as an attacker could insert their own malicious content. For more information, see <a href="../../reference/security/secure-use.html#good-practices-for-mitigating-script-injection-attacks">Secure use reference</a>.</p>
 </div>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>Before you begin, you'll need to download Node.js and create a public GitHub repository.</p>
 <ol>
 <li>
@@ -33,7 +33,7 @@
 </span></code></pre>
 </li>
 </ol>
-<h2 id="creating-an-action-metadata-file" title="Creating an action metadata file">Creating an action metadata file<a href="#creating-an-action-metadata-file" aria-label="Link to heading 'Creating an action metadata file'" data-heading-content="Creating an action metadata file" class="anchor"></a></h2>
+<h2 id="creating-an-action-metadata-file" title="Creating an action metadata file" data-entry-type="Section">Creating an action metadata file<a href="#creating-an-action-metadata-file" aria-label="Link to heading 'Creating an action metadata file'" data-heading-content="Creating an action metadata file" class="anchor"></a></h2>
 <p>Create a new file named <code>action.yml</code> in the <code>hello-world-javascript-action</code> directory with the following example code. For more information, see <a href="../../reference/workflows-and-actions/metadata-syntax.html">Metadata syntax reference</a>.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Hello World
 </span><span style="color:#bf616a;">description</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Greet someone and record the time
@@ -53,7 +53,7 @@
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">main</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">dist/index.js
 </span></code></pre>
 <p>This file defines the <code>who-to-greet</code> input and <code>time</code> output. It also tells the action runner how to start running this JavaScript action.</p>
-<h2 id="adding-actions-toolkit-packages" title="Adding actions toolkit packages">Adding actions toolkit packages<a href="#adding-actions-toolkit-packages" aria-label="Link to heading 'Adding actions toolkit packages'" data-heading-content="Adding actions toolkit packages" class="anchor"></a></h2>
+<h2 id="adding-actions-toolkit-packages" title="Adding actions toolkit packages" data-entry-type="Section">Adding actions toolkit packages<a href="#adding-actions-toolkit-packages" aria-label="Link to heading 'Adding actions toolkit packages'" data-heading-content="Adding actions toolkit packages" class="anchor"></a></h2>
 <p>The actions toolkit is a collection of Node.js packages that allow you to quickly build JavaScript actions with more consistency.</p>
 <p>The toolkit <a href="https://github.com/actions/toolkit/tree/main/packages/core" class="external"><code>@actions/core</code></a> package provides an interface to the workflow commands, input and output variables, exit statuses, and debug messages.</p>
 <p>The toolkit also offers a <a href="https://github.com/actions/toolkit/tree/main/packages/github" class="external"><code>@actions/github</code></a> package that returns an authenticated Octokit REST client and access to GitHub Actions contexts.</p>
@@ -62,7 +62,7 @@
 <pre lang="shell" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">npm install @actions/core @actions/github
 </span></code></pre>
 <p>You should now see a <code>node_modules</code> directory and a <code>package-lock.json</code> file which track any installed dependencies and their versions. You should not commit the <code>node_modules</code> directory to your repository.</p>
-<h2 id="writing-the-action-code" title="Writing the action code">Writing the action code<a href="#writing-the-action-code" aria-label="Link to heading 'Writing the action code'" data-heading-content="Writing the action code" class="anchor"></a></h2>
+<h2 id="writing-the-action-code" title="Writing the action code" data-entry-type="Section">Writing the action code<a href="#writing-the-action-code" aria-label="Link to heading 'Writing the action code'" data-heading-content="Writing the action code" class="anchor"></a></h2>
 <p>This action uses the toolkit to get the <code>who-to-greet</code> input variable required in the action's metadata file and prints "Hello <span data-escaped-char="">[</span>who-to-greet]" in a debug message in the log. Next, the script gets the current time and sets it as an output variable that actions running later in a job can use.</p>
 <p>GitHub Actions provide context information about the webhook event, Git refs, workflow, action, and the person who triggered the workflow. To access the context information, you can use the <code>github</code> package. The action you'll write will print the webhook event payload to the log.</p>
 <p>Add a new file called <code>src/index.js</code>, with the following code.</p>
@@ -86,7 +86,7 @@
 </span><span style="color:#c0c5ce;">}
 </span></code></pre>
 <p>If an error is thrown in the above <code>index.js</code> example, <code>core.setFailed(error.message);</code> uses the actions toolkit <a href="https://github.com/actions/toolkit/tree/main/packages/core" class="external"><code>@actions/core</code></a> package to log a message and set a failing exit code. For more information, see <a href="../../how-tos/create-and-publish-actions/set-exit-codes.html">Setting exit codes for actions</a>.</p>
-<h2 id="creating-a-readme" title="Creating a README">Creating a README<a href="#creating-a-readme" aria-label="Link to heading 'Creating a README'" data-heading-content="Creating a README" class="anchor"></a></h2>
+<h2 id="creating-a-readme" title="Creating a README" data-entry-type="Section">Creating a README<a href="#creating-a-readme" aria-label="Link to heading 'Creating a README'" data-heading-content="Creating a README" class="anchor"></a></h2>
 <p>To let people know how to use your action, you can create a README file. A README is most helpful when you plan to share your action publicly, but is also a great way to remind you or your team how to use the action.</p>
 <p>In your <code>hello-world-javascript-action</code> directory, create a <code>README.md</code> file that specifies the following information:</p>
 <ul>
@@ -121,7 +121,7 @@
 </span><span style="color:#c0c5ce;">  who-to-greet: Mona the Octocat
 </span><span style="color:#c0c5ce;">```
 </span></code></pre>
-<h2 id="commit-tag-and-push-your-action" title="Commit, tag, and push your action">Commit, tag, and push your action<a href="#commit-tag-and-push-your-action" aria-label="Link to heading 'Commit, tag, and push your action'" data-heading-content="Commit, tag, and push your action" class="anchor"></a></h2>
+<h2 id="commit-tag-and-push-your-action" title="Commit, tag, and push your action" data-entry-type="Section">Commit, tag, and push your action<a href="#commit-tag-and-push-your-action" aria-label="Link to heading 'Commit, tag, and push your action'" data-heading-content="Commit, tag, and push your action" class="anchor"></a></h2>
 <p>GitHub downloads each action run in a workflow during runtime and executes it as a complete package of code before you can use workflow commands like <code>run</code> to interact with the runner machine. This means you must include any package dependencies required to run the JavaScript code. For example, this action uses <code>@actions/core</code> and <code>@actions/github</code> packages.</p>
 <p>Checking in your <code>node_modules</code> directory can cause problems. As an alternative, you can use tools such as <a href="https://github.com/rollup/rollup" class="external"><code>rollup.js</code></a> or <a href="https://github.com/vercel/ncc" class="external"><code>@vercel/ncc</code></a> to combine your code and dependencies into one file for distribution.</p>
 <ol>
@@ -174,7 +174,7 @@
 </span><span style="color:#c0c5ce;">└── src/
 </span><span style="color:#c0c5ce;">    └── index.js
 </span></code></pre>
-<h2 id="testing-out-your-action-in-a-workflow" title="Testing out your action in a workflow">Testing out your action in a workflow<a href="#testing-out-your-action-in-a-workflow" aria-label="Link to heading 'Testing out your action in a workflow'" data-heading-content="Testing out your action in a workflow" class="anchor"></a></h2>
+<h2 id="testing-out-your-action-in-a-workflow" title="Testing out your action in a workflow" data-entry-type="Section">Testing out your action in a workflow<a href="#testing-out-your-action-in-a-workflow" aria-label="Link to heading 'Testing out your action in a workflow'" data-heading-content="Testing out your action in a workflow" class="anchor"></a></h2>
 <p>Now you're ready to test your action out in a workflow.</p>
 <p>Public actions can be used by workflows in any repository. When an action is in a private repository, the repository settings dictate whether the action is available only within the same repository or also to other repositories owned by the same user or organization. For more information, see <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository" class="external">Managing GitHub Actions settings for a repository</a>.</p>
 <h3 id="example-using-a-public-action">Example using a public action<a href="#example-using-a-public-action" aria-label="Link to heading 'Example using a public action'" data-heading-content="Example using a public action" class="anchor"></a></h3>
@@ -232,13 +232,13 @@
 </span></code></pre>
 <p>From your repository, click the <strong>Actions</strong> tab, and select the latest workflow run. Under <strong>Jobs</strong> or in the visualization graph, click <strong>A job to say hello</strong>.</p>
 <p>Click <strong>Hello world action step</strong>, and you should see "Hello Mona the Octocat" or the name you used for the <code>who-to-greet</code> input printed in the log. To see the timestamp, click <strong>Get the output time</strong>.</p>
-<h2 id="template-repositories-for-creating-javascript-actions" title="Template repositories for creating JavaScript actions">Template repositories for creating JavaScript actions<a href="#template-repositories-for-creating-javascript-actions" aria-label="Link to heading 'Template repositories for creating JavaScript actions'" data-heading-content="Template repositories for creating JavaScript actions" class="anchor"></a></h2>
+<h2 id="template-repositories-for-creating-javascript-actions" title="Template repositories for creating JavaScript actions" data-entry-type="Section">Template repositories for creating JavaScript actions<a href="#template-repositories-for-creating-javascript-actions" aria-label="Link to heading 'Template repositories for creating JavaScript actions'" data-heading-content="Template repositories for creating JavaScript actions" class="anchor"></a></h2>
 <p>GitHub provides template repositories for creating JavaScript and TypeScript actions. You can use these templates to quickly get started with creating a new action that includes tests, linting, and other recommended practices.</p>
 <ul>
 <li><a href="https://github.com/actions/javascript-action" class="external"><code>javascript-action</code> template repository</a></li>
 <li><a href="https://github.com/actions/typescript-action" class="external"><code>typescript-action</code> template repository</a></li>
 </ul>
-<h2 id="example-javascript-actions-on-githubcom" title="Example JavaScript actions on GitHub.com">Example JavaScript actions on GitHub.com<a href="#example-javascript-actions-on-githubcom" aria-label="Link to heading 'Example JavaScript actions on GitHub.com'" data-heading-content="Example JavaScript actions on GitHub.com" class="anchor"></a></h2>
+<h2 id="example-javascript-actions-on-githubcom" title="Example JavaScript actions on GitHub.com" data-entry-type="Section">Example JavaScript actions on GitHub.com<a href="#example-javascript-actions-on-githubcom" aria-label="Link to heading 'Example JavaScript actions on GitHub.com'" data-heading-content="Example JavaScript actions on GitHub.com" class="anchor"></a></h2>
 <p>You can find many examples of JavaScript actions on GitHub.com.</p>
 <ul>
 <li><a href="https://github.com/DevExpress/testcafe-action" class="external">DevExpress/testcafe-action</a></li>

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for deployments</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Deployments</a> / </nav><h1 id="rest-api-endpoints-for-deployments">REST API endpoints for deployments<a href="#rest-api-endpoints-for-deployments" aria-label="Link to heading 'REST API endpoints for deployments'" data-heading-content="REST API endpoints for deployments" class="anchor"></a></h1>
 <p>Use the REST API to create and delete deployments and deployment environments.</p>
-<h2 id="about-deployments" title="About deployments">About deployments<a href="#about-deployments" aria-label="Link to heading 'About deployments'" data-heading-content="About deployments" class="anchor"></a></h2>
+<h2 id="about-deployments" title="About deployments" data-entry-type="Section">About deployments<a href="#about-deployments" aria-label="Link to heading 'About deployments'" data-heading-content="About deployments" class="anchor"></a></h2>
 <p>Deployments are requests to deploy a specific ref (branch, SHA, tag). GitHub dispatches a <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#deployment" class="external"><code>deployment</code> event</a> that external services can listen for and act on when new deployments are created. Deployments enable developers and organizations to build loosely coupled tooling around deployments, without having to worry about the implementation details of delivering different types of applications (e.g., web, native).</p>
 <p>Deployment statuses allow external services to mark deployments with an <code>error</code>, <code>failure</code>, <code>pending</code>, <code>in_progress</code>, <code>queued</code>, or <code>success</code> state that systems listening to <a href="https://docs.github.com/en/webhooks/webhook-events-and-payloads#deployment_status" class="external"><code>deployment_status</code> events</a> can consume.</p>
 <p>Deployment statuses can also include an optional <code>description</code> and <code>log_url</code>, which are highly recommended because they make deployment statuses more useful. The <code>log_url</code> is the full URL to the deployment output, and<br>
@@ -41,7 +41,7 @@ the <code>description</code> is a high-level summary of what happened with the d
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="list-deployments" title="GET /repos/{owner}/{repo}/deployments (List deployments)">List deployments<a href="#list-deployments" aria-label="Link to heading 'List deployments'" data-heading-content="List deployments" class="anchor"></a></h2>
+<h2 id="list-deployments" title="GET /repos/{owner}/{repo}/deployments (List deployments)" data-entry-type="Resource">List deployments<a href="#list-deployments" aria-label="Link to heading 'List deployments'" data-heading-content="List deployments" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments
 </span></code></pre>
 <p>Simple filtering of deployments is available via query parameters:</p>
@@ -208,7 +208,7 @@ Default: <code>1</code></p>
 </ul>
 </li>
 </ul>
-<h2 id="create-a-deployment" title="POST /repos/{owner}/{repo}/deployments (Create a deployment)">Create a deployment<a href="#create-a-deployment" aria-label="Link to heading 'Create a deployment'" data-heading-content="Create a deployment" class="anchor"></a></h2>
+<h2 id="create-a-deployment" title="POST /repos/{owner}/{repo}/deployments (Create a deployment)" data-entry-type="Resource">Create a deployment<a href="#create-a-deployment" aria-label="Link to heading 'Create a deployment'" data-heading-content="Create a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /repos/{owner}/{repo}/deployments
 </span></code></pre>
 <p>Deployments offer a few configurable parameters with certain defaults.<br>
@@ -437,7 +437,7 @@ Specifies if the given environment is one that end-users directly interact with.
 </ul>
 </li>
 </ul>
-<h2 id="get-a-deployment" title="GET /repos/{owner}/{repo}/deployments/{deployment_id} (Get a deployment)">Get a deployment<a href="#get-a-deployment" aria-label="Link to heading 'Get a deployment'" data-heading-content="Get a deployment" class="anchor"></a></h2>
+<h2 id="get-a-deployment" title="GET /repos/{owner}/{repo}/deployments/{deployment_id} (Get a deployment)" data-entry-type="Resource">Get a deployment<a href="#get-a-deployment" aria-label="Link to heading 'Get a deployment'" data-heading-content="Get a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/deployments/{deployment_id}
 </span></code></pre>
 <h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
@@ -479,7 +479,7 @@ deployment<span data-escaped-char="">_</span>id parameter</p>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#create-a-deployment">Create a deployment</a>.</p>
-<h2 id="delete-a-deployment" title="DELETE /repos/{owner}/{repo}/deployments/{deployment_id} (Delete a deployment)">Delete a deployment<a href="#delete-a-deployment" aria-label="Link to heading 'Delete a deployment'" data-heading-content="Delete a deployment" class="anchor"></a></h2>
+<h2 id="delete-a-deployment" title="DELETE /repos/{owner}/{repo}/deployments/{deployment_id} (Delete a deployment)" data-entry-type="Resource">Delete a deployment<a href="#delete-a-deployment" aria-label="Link to heading 'Delete a deployment'" data-heading-content="Delete a deployment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /repos/{owner}/{repo}/deployments/{deployment_id}
 </span></code></pre>
 <p>If the repository only has one deployment, you can delete the deployment regardless of its status. If the repository has more than one deployment, you can only delete inactive deployments. This ensures that repositories with multiple deployments will always have an active deployment.<br>

@@ -1,13 +1,13 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for OAuth authorizations</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Apps</a> / </nav><h1 id="rest-api-endpoints-for-oauth-authorizations">REST API endpoints for OAuth authorizations<a href="#rest-api-endpoints-for-oauth-authorizations" aria-label="Link to heading 'REST API endpoints for OAuth authorizations'" data-heading-content="REST API endpoints for OAuth authorizations" class="anchor"></a></h1>
 <p>Use the REST API to interact with OAuth apps and OAuth authorizations of GitHub Apps</p>
-<h2 id="about-oauth-apps-and-oauth-authorizations-of-github-apps" title="About OAuth apps and OAuth authorizations of GitHub Apps">About OAuth apps and OAuth authorizations of GitHub Apps<a href="#about-oauth-apps-and-oauth-authorizations-of-github-apps" aria-label="Link to heading 'About OAuth apps and OAuth authorizations of GitHub Apps'" data-heading-content="About OAuth apps and OAuth authorizations of GitHub Apps" class="anchor"></a></h2>
+<h2 id="about-oauth-apps-and-oauth-authorizations-of-github-apps" title="About OAuth apps and OAuth authorizations of GitHub Apps" data-entry-type="Section">About OAuth apps and OAuth authorizations of GitHub Apps<a href="#about-oauth-apps-and-oauth-authorizations-of-github-apps" aria-label="Link to heading 'About OAuth apps and OAuth authorizations of GitHub Apps'" data-heading-content="About OAuth apps and OAuth authorizations of GitHub Apps" class="anchor"></a></h2>
 <p>You can use these endpoints to manage the OAuth tokens that OAuth apps or GitHub Apps use to access people's accounts on GitHub.</p>
 <p>Tokens for OAuth apps have the prefix <code>gho_</code>, while OAuth tokens for GitHub Apps, used for authenticating on behalf of the user, have the prefix <code>ghu_</code>. You can use the following endpoints for both types of OAuth tokens.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="delete-an-app-authorization" title="DELETE /applications/{client_id}/grant (Delete an app authorization)">Delete an app authorization<a href="#delete-an-app-authorization" aria-label="Link to heading 'Delete an app authorization'" data-heading-content="Delete an app authorization" class="anchor"></a></h2>
+<h2 id="delete-an-app-authorization" title="DELETE /applications/{client_id}/grant (Delete an app authorization)" data-entry-type="Resource">Delete an app authorization<a href="#delete-an-app-authorization" aria-label="Link to heading 'Delete an app authorization'" data-heading-content="Delete an app authorization" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /applications/{client_id}/grant
 </span></code></pre>
 <p>OAuth and GitHub application owners can revoke a grant for their application and a specific user. You must provide a valid OAuth access_token as an input parameter and the grant for the token's owner will be deleted.<br>
@@ -48,7 +48,7 @@ The OAuth access token used to authenticate to the GitHub API.</li>
 </span><span style="color:#c0c5ce;">}'
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="check-a-token" title="POST /applications/{client_id}/token (Check a token)">Check a token<a href="#check-a-token" aria-label="Link to heading 'Check a token'" data-heading-content="Check a token" class="anchor"></a></h2>
+<h2 id="check-a-token" title="POST /applications/{client_id}/token (Check a token)" data-entry-type="Resource">Check a token<a href="#check-a-token" aria-label="Link to heading 'Check a token'" data-heading-content="Check a token" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">POST /applications/{client_id}/token
 </span></code></pre>
 <p>OAuth applications and GitHub applications with OAuth authorizations can use this API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. Invalid tokens will return 404 NOT FOUND.</p>
@@ -217,7 +217,7 @@ The access_token of the OAuth or GitHub application.</li>
 </li>
 <li><code>expires_at</code>: required, string or null, format: date-time</li>
 </ul>
-<h2 id="reset-a-token" title="PATCH /applications/{client_id}/token (Reset a token)">Reset a token<a href="#reset-a-token" aria-label="Link to heading 'Reset a token'" data-heading-content="Reset a token" class="anchor"></a></h2>
+<h2 id="reset-a-token" title="PATCH /applications/{client_id}/token (Reset a token)" data-entry-type="Resource">Reset a token<a href="#reset-a-token" aria-label="Link to heading 'Reset a token'" data-heading-content="Reset a token" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PATCH /applications/{client_id}/token
 </span></code></pre>
 <p>OAuth applications and GitHub applications with OAuth authorizations can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. Invalid tokens will return 404 NOT FOUND.</p>
@@ -258,7 +258,7 @@ The access_token of the OAuth or GitHub application.</li>
 </span></code></pre>
 <p><strong>Response schema (Status: 200):</strong></p>
 <p>Same response schema as <a href="#check-a-token">Check a token</a>.</p>
-<h2 id="delete-an-app-token" title="DELETE /applications/{client_id}/token (Delete an app token)">Delete an app token<a href="#delete-an-app-token" aria-label="Link to heading 'Delete an app token'" data-heading-content="Delete an app token" class="anchor"></a></h2>
+<h2 id="delete-an-app-token" title="DELETE /applications/{client_id}/token (Delete an app token)" data-entry-type="Resource">Delete an app token<a href="#delete-an-app-token" aria-label="Link to heading 'Delete an app token'" data-heading-content="Delete an app token" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /applications/{client_id}/token
 </span></code></pre>
 <p>OAuth  or GitHub application owners can revoke a single token for an OAuth application or a GitHub application with an OAuth authorization.</p>

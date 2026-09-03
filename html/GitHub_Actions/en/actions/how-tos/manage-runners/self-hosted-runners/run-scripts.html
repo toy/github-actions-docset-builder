@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Running scripts before or after a job</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">GitHub Actions</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Manage runners</a> / <a href="index.html">Self-hosted runners</a> / </nav><h1 id="running-scripts-before-or-after-a-job">Running scripts before or after a job<a href="#running-scripts-before-or-after-a-job" aria-label="Link to heading 'Running scripts before or after a job'" data-heading-content="Running scripts before or after a job" class="anchor"></a></h1>
 <p>Scripts can automatically execute on a self-hosted runner, directly before or after a job.</p>
-<h2 id="about-pre--and-post-job-scripts" title="About pre- and post-job scripts">About pre- and post-job scripts<a href="#about-pre--and-post-job-scripts" aria-label="Link to heading 'About pre- and post-job scripts'" data-heading-content="About pre- and post-job scripts" class="anchor"></a></h2>
+<h2 id="about-pre--and-post-job-scripts" title="About pre- and post-job scripts" data-entry-type="Section">About pre- and post-job scripts<a href="#about-pre--and-post-job-scripts" aria-label="Link to heading 'About pre- and post-job scripts'" data-heading-content="About pre- and post-job scripts" class="anchor"></a></h2>
 <p>You can automatically execute scripts on a self-hosted runner, either before a job runs, or after a job finishes running. You could use these scripts to support the job's requirements, such as building or tearing down a runner environment, or cleaning out directories. You could also use these scripts to track telemetry of how your runners are used.</p>
 <p>The custom scripts are automatically triggered when a specific environment variable is set on the runner; the environment variable must contain the absolute path to the script. For more information, see <a href="#triggering-the-scripts">Triggering the scripts</a> below.</p>
 <p>The following scripting languages are supported:</p>
@@ -8,7 +8,7 @@
 <li><strong>Bash:</strong> Uses <code>bash</code> and can fallback to <code>sh</code>. Executes by running <code>-e {pathtofile}</code>.</li>
 <li><strong>PowerShell:</strong> Uses <code>pwsh</code> and can fallback to <code>powershell</code>. Executes by running <code>-command \". '{pathtofile}'\"</code>.</li>
 </ul>
-<h2 id="writing-the-scripts" title="Writing the scripts">Writing the scripts<a href="#writing-the-scripts" aria-label="Link to heading 'Writing the scripts'" data-heading-content="Writing the scripts" class="anchor"></a></h2>
+<h2 id="writing-the-scripts" title="Writing the scripts" data-entry-type="Section">Writing the scripts<a href="#writing-the-scripts" aria-label="Link to heading 'Writing the scripts'" data-heading-content="Writing the scripts" class="anchor"></a></h2>
 <p>Your custom scripts can use the following features:</p>
 <ul>
 <li><strong>Variables:</strong> Scripts have access to the default variables. The full webhook event payload can be found in <code>GITHUB_EVENT_PATH</code>. For more information, see <a href="../../../reference/workflows-and-actions/variables.html#default-environment-variables">Variables reference</a>.</li>
@@ -22,7 +22,7 @@
 <h3 id="handling-exit-codes">Handling exit codes<a href="#handling-exit-codes" aria-label="Link to heading 'Handling exit codes'" data-heading-content="Handling exit codes" class="anchor"></a></h3>
 <p>For pre-job scripts, exit code <code>0</code> indicates that the script completed successfully, and the job will then proceed to run. If there is any other exit code, the job will not run and will be marked as failed. To see the results of your pre-job scripts, check the logs for <code>Set up runner</code> entries. For more information on checking the logs, see <a href="../../monitor-workflows/use-workflow-run-logs.html#viewing-logs-to-diagnose-failures">Using workflow run logs</a>.</p>
 <p>The <a href="../../../reference/workflows-and-actions/workflow-syntax.html#jobsjob_idcontinue-on-error"><code>continue-on-error</code></a> setting is not supported for use by these scripts.</p>
-<h2 id="triggering-the-scripts" title="Triggering the scripts">Triggering the scripts<a href="#triggering-the-scripts" aria-label="Link to heading 'Triggering the scripts'" data-heading-content="Triggering the scripts" class="anchor"></a></h2>
+<h2 id="triggering-the-scripts" title="Triggering the scripts" data-entry-type="Section">Triggering the scripts<a href="#triggering-the-scripts" aria-label="Link to heading 'Triggering the scripts'" data-heading-content="Triggering the scripts" class="anchor"></a></h2>
 <p>The custom scripts must be located on the runner, but should not be stored in the <code>actions-runner</code> application directory. The scripts are executed in the security context of the service account that's running the runner service.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -41,7 +41,7 @@ For example, the following <code>.env</code> entry will have the runner automati
 <p class="markdown-alert-title">Note</p>
 <p>The script defined in <code>ACTIONS_RUNNER_HOOK_JOB_COMPLETED</code> is executed at the end of the job, before the job completes. This makes it unsuitable for use cases that may interrupt a runner, such as deleting the runner machine as part of an autoscaling implementation.</p>
 </div>
-<h2 id="troubleshooting" title="Troubleshooting">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
+<h2 id="troubleshooting" title="Troubleshooting" data-entry-type="Section">Troubleshooting<a href="#troubleshooting" aria-label="Link to heading 'Troubleshooting'" data-heading-content="Troubleshooting" class="anchor"></a></h2>
 <h3 id="permission-denied">Permission denied<a href="#permission-denied" aria-label="Link to heading 'Permission denied'" data-heading-content="Permission denied" class="anchor"></a></h3>
 <p>If you get a "permission denied" error when you attempt to run a script, make sure that the script is executable. For example, in a terminal on Linux or macOS you can use the following command to make a file executable.</p>
 <pre lang="bash" style="background-color:#2b303b;"><code><span style="color:#8fa1b3;">chmod</span><span style="color:#c0c5ce;"> +x PATH/TO/FILE

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>CodeQL code scanning for compiled languages</title><link rel="stylesheet" href="../../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../../index.html">Security and code quality</a> / <a href="../../index.html">How-tos</a> / <a href="../index.html">Find and fix code vulnerabilities</a> / <a href="index.html">Manage your configuration</a> / </nav><h1 id="codeql-code-scanning-for-compiled-languages">CodeQL code scanning for compiled languages<a href="#codeql-code-scanning-for-compiled-languages" aria-label="Link to heading 'CodeQL code scanning for compiled languages'" data-heading-content="CodeQL code scanning for compiled languages" class="anchor"></a></h1>
 <p>Understand how CodeQL analyzes compiled languages, the build options available, and learn how you can customize the database generation process if you need to.</p>
-<h2 id="compare-build-modes" title="Compare build modes">Compare build modes<a href="#compare-build-modes" aria-label="Link to heading 'Compare build modes'" data-heading-content="Compare build modes" class="anchor"></a></h2>
+<h2 id="compare-build-modes" title="Compare build modes" data-entry-type="Section">Compare build modes<a href="#compare-build-modes" aria-label="Link to heading 'Compare build modes'" data-heading-content="Compare build modes" class="anchor"></a></h2>
 <div class="ghd-tool rowheaders">
 <table>
 <thead>
@@ -39,10 +39,10 @@
 </tbody>
 </table>
 </div>
-<h2 id="choose-a-build-mode" title="Choose a build mode">Choose a build mode<a href="#choose-a-build-mode" aria-label="Link to heading 'Choose a build mode'" data-heading-content="Choose a build mode" class="anchor"></a></h2>
+<h2 id="choose-a-build-mode" title="Choose a build mode" data-entry-type="Section">Choose a build mode<a href="#choose-a-build-mode" aria-label="Link to heading 'Choose a build mode'" data-heading-content="Choose a build mode" class="anchor"></a></h2>
 <p>When you are setting up code scanning for the first time, or across multiple repositories, it's best to use default setup. Default setup uses the simplest method available to generate a CodeQL database and analyze your code, so that you can start fixing alerts as soon as possible. Once you have resolved the initial alerts, you may want to switch to advanced setup with a manual build process for high risk repositories.</p>
 <p>For language-specific <code>autobuild</code> behavior, runner requirements, and build-mode details for compiled languages, see <a href="../../../reference/code-scanning/codeql/build-options-for-compiled-languages.html">CodeQL build options and steps for compiled languages</a>.</p>
-<h2 id="use-multiple-build-modes-in-a-multi-language-repository" title="Use multiple build modes in a multi-language repository">Use multiple build modes in a multi-language repository<a href="#use-multiple-build-modes-in-a-multi-language-repository" aria-label="Link to heading 'Use multiple build modes in a multi-language repository'" data-heading-content="Use multiple build modes in a multi-language repository" class="anchor"></a></h2>
+<h2 id="use-multiple-build-modes-in-a-multi-language-repository" title="Use multiple build modes in a multi-language repository" data-entry-type="Section">Use multiple build modes in a multi-language repository<a href="#use-multiple-build-modes-in-a-multi-language-repository" aria-label="Link to heading 'Use multiple build modes in a multi-language repository'" data-heading-content="Use multiple build modes in a multi-language repository" class="anchor"></a></h2>
 <p>For repositories with multiple compiled languages, you can use different build modes for different languages. For example, if your repository contains C/C++, C# and Java, you might want to provide manual build steps for one language (here C/C++). This workflow specifies a different build mode for each language.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">strategy</span><span style="color:#c0c5ce;">:
 </span><span style="color:#c0c5ce;">  </span><span style="color:#bf616a;">matrix</span><span style="color:#c0c5ce;">:
@@ -76,7 +76,7 @@
 </span><span style="color:#a3be8c;">    exit 1
 </span></code></pre>
 <p>For information about the languages, libraries, and frameworks that are supported in the latest version of CodeQL, see <a href="https://codeql.github.com/docs/codeql-overview/supported-languages-and-frameworks" class="external">Supported languages and frameworks</a> in the CodeQL documentation. For information about the system requirements for running the latest version of CodeQL, see <a href="https://codeql.github.com/docs/codeql-overview/system-requirements/#additional-software-requirements" class="external">System requirements</a> in the CodeQL documentation.</p>
-<h2 id="enable-dependency-caching-for-codeql" title="Enable dependency caching for CodeQL">Enable dependency caching for CodeQL<a href="#enable-dependency-caching-for-codeql" aria-label="Link to heading 'Enable dependency caching for CodeQL'" data-heading-content="Enable dependency caching for CodeQL" class="anchor"></a></h2>
+<h2 id="enable-dependency-caching-for-codeql" title="Enable dependency caching for CodeQL" data-entry-type="Section">Enable dependency caching for CodeQL<a href="#enable-dependency-caching-for-codeql" aria-label="Link to heading 'Enable dependency caching for CodeQL'" data-heading-content="Enable dependency caching for CodeQL" class="anchor"></a></h2>
 <p>For default setup workflows, dependency caching is enabled only for GitHub-hosted runners in public and private repositories.</p>
 <p>For advanced setup workflows, dependency caching is disabled by default. To enable dependency caching for CodeQL, use the <code>dependency-caching</code> setting for the CodeQL action in your advanced setup workflow. This setting accepts the following values:</p>
 <ul>
@@ -93,7 +93,7 @@
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">languages</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">java
 </span><span style="color:#c0c5ce;">        </span><span style="color:#bf616a;">dependency-caching</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">true
 </span></code></pre>
-<h2 id="use-none-build-mode-for-codeql" title="Use none build mode for CodeQL">Use <code>none</code> build mode for CodeQL<a href="#use-none-build-mode-for-codeql" aria-label="Link to heading 'Use none build mode for CodeQL'" data-heading-content="Use none build mode for CodeQL" class="anchor"></a></h2>
+<h2 id="use-none-build-mode-for-codeql" title="Use none build mode for CodeQL" data-entry-type="Section">Use <code>none</code> build mode for CodeQL<a href="#use-none-build-mode-for-codeql" aria-label="Link to heading 'Use none build mode for CodeQL'" data-heading-content="Use none build mode for CodeQL" class="anchor"></a></h2>
 <p>For C/C++, C#, Java and Rust, CodeQL creates a database without requiring a build when you enable default setup for code scanning unless the repository also includes Kotlin code. If a repository contains Kotlin code in addition to Java code, default setup is enabled with the autobuild process because Kotlin analysis requires a build.</p>
 <p>Creating a CodeQL database without a build may produce less accurate results than using <code>autobuild</code> or manual build steps if:</p>
 <ul>
@@ -105,7 +105,7 @@
 <p class="markdown-alert-title">Note</p>
 <p>For Java analysis, if <code>build-mode</code> is set to <code>none</code> and Kotlin code is found in the repository, the Kotlin code will not be analyzed and a warning will be produced. See <a href="../../../reference/code-scanning/codeql/build-options-for-compiled-languages.html#building-java-and-kotlin">CodeQL build options and steps for compiled languages</a>.</p>
 </div>
-<h2 id="use-autobuild-for-codeql" title="Use autobuild for CodeQL">Use <code>autobuild</code> for CodeQL<a href="#use-autobuild-for-codeql" aria-label="Link to heading 'Use autobuild for CodeQL'" data-heading-content="Use autobuild for CodeQL" class="anchor"></a></h2>
+<h2 id="use-autobuild-for-codeql" title="Use autobuild for CodeQL" data-entry-type="Section">Use <code>autobuild</code> for CodeQL<a href="#use-autobuild-for-codeql" aria-label="Link to heading 'Use autobuild for CodeQL'" data-heading-content="Use autobuild for CodeQL" class="anchor"></a></h2>
 <p>The CodeQL action uses <code>autobuild</code> to analyze compiled languages in the following cases.</p>
 <ul>
 <li>Default setup is enabled and the language does not support <code>none</code> build (supported for C/C++, C#, Java and Rust).</li>
@@ -141,7 +141,7 @@
 </span><span style="color:#c0c5ce;">    - </span><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">Autobuild
 </span><span style="color:#c0c5ce;">      </span><span style="color:#bf616a;">uses</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">github/codeql-action/autobuild@v4
 </span></code></pre>
-<h2 id="specify-build-steps-manually" title="Specify build steps manually">Specify build steps manually<a href="#specify-build-steps-manually" aria-label="Link to heading 'Specify build steps manually'" data-heading-content="Specify build steps manually" class="anchor"></a></h2>
+<h2 id="specify-build-steps-manually" title="Specify build steps manually" data-entry-type="Section">Specify build steps manually<a href="#specify-build-steps-manually" aria-label="Link to heading 'Specify build steps manually'" data-heading-content="Specify build steps manually" class="anchor"></a></h2>
 <p>You can only specify manual build steps if you have enabled advanced setup, see <a href="../configure-code-scanning/configuring-advanced-setup-for-code-scanning.html#configuring-advanced-setup-for-code-scanning-with-codeql">Configuring advanced setup for code scanning</a>.</p>
 <p>If <code>autobuild</code> fails, or you want to analyze a different set of source files from those built by the <code>autobuild</code> process, you'll need to do the following:</p>
 <ul>

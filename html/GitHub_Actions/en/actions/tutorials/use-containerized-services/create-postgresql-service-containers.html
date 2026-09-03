@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Creating PostgreSQL service containers</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Use containerized services</a> / </nav><h1 id="creating-postgresql-service-containers">Creating PostgreSQL service containers<a href="#creating-postgresql-service-containers" aria-label="Link to heading 'Creating PostgreSQL service containers'" data-heading-content="Creating PostgreSQL service containers" class="anchor"></a></h1>
 <p>You can create a PostgreSQL service container to use in your workflow. This guide shows examples of creating a PostgreSQL service for jobs that run in containers or directly on the runner machine.</p>
-<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<h2 id="introduction" title="Introduction" data-entry-type="Section">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>This guide shows you workflow examples that configure a service container using the Docker Hub <code>postgres</code> image. The workflow runs a script that connects to the PostgreSQL service, creates a table, and then populates it with data. To test that the workflow creates and populates the PostgreSQL table, the script prints the data from the table to the console.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
@@ -10,14 +10,14 @@
 <li>If you are using self-hosted runners, you must use a Linux machine as your runner and Docker must be installed.</li>
 </ul>
 </div>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>You should be familiar with how service containers work with GitHub Actions and the networking differences between running jobs directly on the runner or in a container. For more information, see <a href="use-docker-service-containers.html">Communicating with Docker service containers</a>.</p>
 <p>You may also find it helpful to have a basic understanding of YAML, the syntax for GitHub Actions, and PostgreSQL. For more information, see:</p>
 <ul>
 <li><a href="../../how-tos/write-workflows/index.html">Writing workflows</a></li>
 <li><a href="https://www.postgresqltutorial.com/" class="external">PostgreSQL tutorial</a> in the PostgreSQL documentation</li>
 </ul>
-<h2 id="running-jobs-in-containers" title="Running jobs in containers">Running jobs in containers<a href="#running-jobs-in-containers" aria-label="Link to heading 'Running jobs in containers'" data-heading-content="Running jobs in containers" class="anchor"></a></h2>
+<h2 id="running-jobs-in-containers" title="Running jobs in containers" data-entry-type="Section">Running jobs in containers<a href="#running-jobs-in-containers" aria-label="Link to heading 'Running jobs in containers'" data-heading-content="Running jobs in containers" class="anchor"></a></h2>
 <p>Configuring jobs to run in a container simplifies networking configurations between the job and the service containers. Docker containers on the same user-defined bridge network expose all ports to each other, so you don't need to map any of the service container ports to the Docker host. You can access the service container from the job container using the label you configure in the workflow.</p>
 <p>You can copy this workflow file to the <code>.github/workflows</code> directory of your repository and modify it as needed.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">PostgreSQL service example
@@ -126,7 +126,7 @@
 </span></code></pre>
 <p>The <em>client.js</em> script looks for the <code>POSTGRES_HOST</code> and <code>POSTGRES_PORT</code> environment variables to create the client. The workflow sets those two environment variables as part of the "Connect to PostgreSQL" step to make them available to the <em>client.js</em> script. For more information about the script, see <a href="#testing-the-postgresql-service-container">Testing the PostgreSQL service container</a>.</p>
 <p>The hostname of the PostgreSQL service is the label you configured in your workflow, in this case, <code>postgres</code>. Because Docker containers on the same user-defined bridge network open all ports by default, you'll be able to access the service container on the default PostgreSQL port 5432.</p>
-<h2 id="running-jobs-directly-on-the-runner-machine" title="Running jobs directly on the runner machine">Running jobs directly on the runner machine<a href="#running-jobs-directly-on-the-runner-machine" aria-label="Link to heading 'Running jobs directly on the runner machine'" data-heading-content="Running jobs directly on the runner machine" class="anchor"></a></h2>
+<h2 id="running-jobs-directly-on-the-runner-machine" title="Running jobs directly on the runner machine" data-entry-type="Section">Running jobs directly on the runner machine<a href="#running-jobs-directly-on-the-runner-machine" aria-label="Link to heading 'Running jobs directly on the runner machine'" data-heading-content="Running jobs directly on the runner machine" class="anchor"></a></h2>
 <p>When you run a job directly on the runner machine, you'll need to map the ports on the service container to ports on the Docker host. You can access service containers from the Docker host using <code>localhost</code> and the Docker host port number.</p>
 <p>You can copy this workflow file to the <code>.github/workflows</code> directory of your repository and modify it as needed.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#bf616a;">name</span><span style="color:#c0c5ce;">: </span><span style="color:#a3be8c;">PostgreSQL Service Example
@@ -239,7 +239,7 @@
 </span></code></pre>
 <p>The <em>client.js</em> script looks for the <code>POSTGRES_HOST</code> and <code>POSTGRES_PORT</code> environment variables to create the client. The workflow sets those two environment variables as part of the "Connect to PostgreSQL" step to make them available to the <em>client.js</em> script. For more information about the script, see <a href="#testing-the-postgresql-service-container">Testing the PostgreSQL service container</a>.</p>
 <p>The hostname is <code>localhost</code> or <code>127.0.0.1</code>.</p>
-<h2 id="testing-the-postgresql-service-container" title="Testing the PostgreSQL service container">Testing the PostgreSQL service container<a href="#testing-the-postgresql-service-container" aria-label="Link to heading 'Testing the PostgreSQL service container'" data-heading-content="Testing the PostgreSQL service container" class="anchor"></a></h2>
+<h2 id="testing-the-postgresql-service-container" title="Testing the PostgreSQL service container" data-entry-type="Section">Testing the PostgreSQL service container<a href="#testing-the-postgresql-service-container" aria-label="Link to heading 'Testing the PostgreSQL service container'" data-heading-content="Testing the PostgreSQL service container" class="anchor"></a></h2>
 <p>You can test your workflow using the following script, which connects to the PostgreSQL service and adds a new table with some placeholder data. The script then prints the values stored in the PostgreSQL table to the terminal. Your script can use any language you'd like, but this example uses Node.js and the <code>pg</code> npm module. For more information, see the <a href="https://www.npmjs.com/package/pg" class="external">npm pg module</a>.</p>
 <p>You can modify <em>client.js</em> to include any PostgreSQL operations needed by your workflow. In this example, the script connects to the PostgreSQL service, adds a table to the <code>postgres</code> database, inserts some placeholder data, and then retrieves the data.</p>
 <p>Add a new file called <em>client.js</em> to your repository with the following code.</p>

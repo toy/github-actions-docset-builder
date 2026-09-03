@@ -1,12 +1,12 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Publishing Docker images</title><link rel="stylesheet" href="../../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../../index.html">GitHub Actions</a> / <a href="../index.html">Tutorials</a> / <a href="index.html">Publish packages</a> / </nav><h1 id="publishing-docker-images">Publishing Docker images<a href="#publishing-docker-images" aria-label="Link to heading 'Publishing Docker images'" data-heading-content="Publishing Docker images" class="anchor"></a></h1>
 <p>In this tutorial, you'll learn how to publish Docker images to a registry, such as Docker Hub or GitHub Packages, as part of your continuous integration (CI) workflow.</p>
-<h2 id="introduction" title="Introduction">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
+<h2 id="introduction" title="Introduction" data-entry-type="Section">Introduction<a href="#introduction" aria-label="Link to heading 'Introduction'" data-heading-content="Introduction" class="anchor"></a></h2>
 <p>This guide shows you how to create a workflow that performs a Docker build, and then publishes Docker images to Docker Hub or GitHub Packages. With a single workflow, you can publish images to a single registry or to multiple registries.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>If you want to push to another third-party Docker registry, the example in the <a href="#publishing-images-to-github-packages">Publishing images to GitHub Packages</a> section can serve as a good template.</p>
 </div>
-<h2 id="prerequisites" title="Prerequisites">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
+<h2 id="prerequisites" title="Prerequisites" data-entry-type="Section">Prerequisites<a href="#prerequisites" aria-label="Link to heading 'Prerequisites'" data-heading-content="Prerequisites" class="anchor"></a></h2>
 <p>We recommend that you have a basic understanding of workflow configuration options and how to create a workflow file. For more information, see <a href="../../how-tos/write-workflows/index.html">Writing workflows</a>.</p>
 <p>You might also find it helpful to have a basic understanding of the following:</p>
 <ul>
@@ -14,11 +14,11 @@
 <li><a href="../authenticate-with-github_token.html">Use GITHUB<span data-escaped-char="">_</span>TOKEN for authentication in workflows</a></li>
 <li><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry" class="external">Working with the Container registry</a></li>
 </ul>
-<h2 id="about-image-configuration" title="About image configuration">About image configuration<a href="#about-image-configuration" aria-label="Link to heading 'About image configuration'" data-heading-content="About image configuration" class="anchor"></a></h2>
+<h2 id="about-image-configuration" title="About image configuration" data-entry-type="Section">About image configuration<a href="#about-image-configuration" aria-label="Link to heading 'About image configuration'" data-heading-content="About image configuration" class="anchor"></a></h2>
 <p>This guide assumes that you have a complete definition for a Docker image stored in a GitHub repository. For example, your repository must contain a <em>Dockerfile</em>, and any other files needed to perform a Docker build to create an image.</p>
 <p>You can use pre-defined annotation keys to add metadata including a description, a license, and a source repository to your container image. For more information, see <a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#labelling-container-images" class="external">Working with the Container registry</a>.</p>
 <p>In this guide, we will use the Docker <code>build-push-action</code> action to build the Docker image and push it to one or more Docker registries. For more information, see <a href="https://github.com/marketplace/actions/build-and-push-docker-images" class="external"><code>build-push-action</code></a>.</p>
-<h2 id="publishing-images-to-docker-hub" title="Publishing images to Docker Hub">Publishing images to Docker Hub<a href="#publishing-images-to-docker-hub" aria-label="Link to heading 'Publishing images to Docker Hub'" data-heading-content="Publishing images to Docker Hub" class="anchor"></a></h2>
+<h2 id="publishing-images-to-docker-hub" title="Publishing images to Docker Hub" data-entry-type="Section">Publishing images to Docker Hub<a href="#publishing-images-to-docker-hub" aria-label="Link to heading 'Publishing images to Docker Hub'" data-heading-content="Publishing images to Docker Hub" class="anchor"></a></h2>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Docker Hub normally imposes rate limits on both push and pull operations which will affect jobs on self-hosted runners. However, GitHub-hosted runners are not subject to these limits based on an agreement between GitHub and Docker.</p>
@@ -98,7 +98,7 @@
 </span></code></pre>
 <p>The above workflow checks out the GitHub repository, uses the <code>login-action</code> to log in to the registry, and then uses the <code>build-push-action</code> action to: build a Docker image based on your repository's <code>Dockerfile</code>; push the image to Docker Hub, and apply a tag to the image.</p>
 <p>In the last step, it generates an artifact attestation for the image, which increases supply chain security. For more information, see <a href="../../how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations.html">Using artifact attestations to establish provenance for builds</a>.</p>
-<h2 id="publishing-images-to-github-packages" title="Publishing images to GitHub Packages">Publishing images to GitHub Packages<a href="#publishing-images-to-github-packages" aria-label="Link to heading 'Publishing images to GitHub Packages'" data-heading-content="Publishing images to GitHub Packages" class="anchor"></a></h2>
+<h2 id="publishing-images-to-github-packages" title="Publishing images to GitHub Packages" data-entry-type="Section">Publishing images to GitHub Packages<a href="#publishing-images-to-github-packages" aria-label="Link to heading 'Publishing images to GitHub Packages'" data-heading-content="Publishing images to GitHub Packages" class="anchor"></a></h2>
 <p>Each time you create a new release on GitHub, you can trigger a workflow to publish your image. The workflow in the example below runs when a change is pushed to the <code>release</code> branch.</p>
 <p>In the example workflow below, we use the Docker <code>login-action</code>, <code>metadata-action</code>, and <code>build-push-action</code> actions to build the Docker image, and if the build succeeds, push the built image to GitHub Packages.</p>
 <p>The <code>login-action</code> options required for GitHub Packages are:</p>
@@ -186,7 +186,7 @@
 </span><span style="color:#c0c5ce;">      
 </span></code></pre>
 <p>The above workflow is triggered by a push to the "release" branch. It checks out the GitHub repository, and uses the <code>login-action</code> to log in to the Container registry. It then extracts labels and tags for the Docker image. Finally, it uses the <code>build-push-action</code> action to build the image and publish it on the Container registry.</p>
-<h2 id="publishing-images-to-docker-hub-and-github-packages" title="Publishing images to Docker Hub and GitHub Packages">Publishing images to Docker Hub and GitHub Packages<a href="#publishing-images-to-docker-hub-and-github-packages" aria-label="Link to heading 'Publishing images to Docker Hub and GitHub Packages'" data-heading-content="Publishing images to Docker Hub and GitHub Packages" class="anchor"></a></h2>
+<h2 id="publishing-images-to-docker-hub-and-github-packages" title="Publishing images to Docker Hub and GitHub Packages" data-entry-type="Section">Publishing images to Docker Hub and GitHub Packages<a href="#publishing-images-to-docker-hub-and-github-packages" aria-label="Link to heading 'Publishing images to Docker Hub and GitHub Packages'" data-heading-content="Publishing images to Docker Hub and GitHub Packages" class="anchor"></a></h2>
 <p>In a single workflow, you can publish your Docker image to multiple registries by using the <code>login-action</code> and <code>build-push-action</code> actions for each registry.</p>
 <p>The following example workflow uses the steps from the previous sections (<a href="#publishing-images-to-docker-hub">Publishing images to Docker Hub</a> and <a href="#publishing-images-to-github-packages">Publishing images to GitHub Packages</a>) to create a single workflow that pushes to both registries.</p>
 <pre lang="yaml" style="background-color:#2b303b;"><code><span style="color:#65737e;"># This workflow uses actions that are not certified by GitHub.
@@ -256,7 +256,7 @@ Then the <code>build-push-action</code> action builds and pushes the Docker imag
 <li>If you choose to build and push to each registry separately instead, you must generate a distinct attestation for each one to ensure your artifacts remain verifiable.</li>
 </ul>
 </div>
-<h2 id="hands-on-practice" title="Hands-on practice">Hands-on practice<a href="#hands-on-practice" aria-label="Link to heading 'Hands-on practice'" data-heading-content="Hands-on practice" class="anchor"></a></h2>
+<h2 id="hands-on-practice" title="Hands-on practice" data-entry-type="Section">Hands-on practice<a href="#hands-on-practice" aria-label="Link to heading 'Hands-on practice'" data-heading-content="Hands-on practice" class="anchor"></a></h2>
 <p>Practice publishing Docker images with the <a href="https://github.com/skills/publish-docker-images" class="external">Publishing Docker images</a> GitHub Skills exercise.</p>
 <p>In this exercise, you will learn how to:</p>
 <ul>

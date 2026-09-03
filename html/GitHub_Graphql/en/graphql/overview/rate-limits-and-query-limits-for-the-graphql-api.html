@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Rate limits and query limits for the GraphQL API</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">GraphQL API</a> / <a href="index.html">Overview</a> / </nav><h1 id="rate-limits-and-query-limits-for-the-graphql-api">Rate limits and query limits for the GraphQL API<a href="#rate-limits-and-query-limits-for-the-graphql-api" aria-label="Link to heading 'Rate limits and query limits for the GraphQL API'" data-heading-content="Rate limits and query limits for the GraphQL API" class="anchor"></a></h1>
 <p>The GitHub GraphQL API has limitations in place to protect against excessive or abusive calls to GitHub's servers.</p>
-<h2 id="primary-rate-limit" title="Primary rate limit">Primary rate limit<a href="#primary-rate-limit" aria-label="Link to heading 'Primary rate limit'" data-heading-content="Primary rate limit" class="anchor"></a></h2>
+<h2 id="primary-rate-limit" title="Primary rate limit" data-entry-type="Section">Primary rate limit<a href="#primary-rate-limit" aria-label="Link to heading 'Primary rate limit'" data-heading-content="Primary rate limit" class="anchor"></a></h2>
 <p>The GraphQL API assigns points to each query and limits the points that you can use within a specific amount of time. This limit helps prevent abuse and denial-of-service attacks, and ensures that the API remains available for all users.</p>
 <p>The REST API also has a separate primary rate limit. For more information, see <a href="https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api" class="external">Rate limits for the REST API</a>.</p>
 <p>In general, you can calculate your primary rate limit for the GraphQL API based on your method of authentication:</p>
@@ -143,7 +143,7 @@
 <li>Total = <strong>5,101</strong></li>
 </ul>
 <p>Dividing by 100 and rounding gives us the final score of the query: <strong>51</strong></p>
-<h2 id="secondary-rate-limits" title="Secondary rate limits">Secondary rate limits<a href="#secondary-rate-limits" aria-label="Link to heading 'Secondary rate limits'" data-heading-content="Secondary rate limits" class="anchor"></a></h2>
+<h2 id="secondary-rate-limits" title="Secondary rate limits" data-entry-type="Section">Secondary rate limits<a href="#secondary-rate-limits" aria-label="Link to heading 'Secondary rate limits'" data-heading-content="Secondary rate limits" class="anchor"></a></h2>
 <p>In addition to primary rate limits, GitHub enforces secondary rate limits in order to prevent abuse and keep the API available for all users.</p>
 <p>You may encounter a secondary rate limit if you:</p>
 <ul>
@@ -184,15 +184,15 @@
 </tbody>
 </table>
 <p>Some REST API endpoints have a different point cost that is not shared publicly.</p>
-<h2 id="exceeding-the-rate-limit" title="Exceeding the rate limit">Exceeding the rate limit<a href="#exceeding-the-rate-limit" aria-label="Link to heading 'Exceeding the rate limit'" data-heading-content="Exceeding the rate limit" class="anchor"></a></h2>
+<h2 id="exceeding-the-rate-limit" title="Exceeding the rate limit" data-entry-type="Section">Exceeding the rate limit<a href="#exceeding-the-rate-limit" aria-label="Link to heading 'Exceeding the rate limit'" data-heading-content="Exceeding the rate limit" class="anchor"></a></h2>
 <p>If you exceed your primary rate limit, the response status will still be <code>200</code>, but you will receive an error message, and the value of the <code>x-ratelimit-remaining</code> header will be <code>0</code>. You should not retry your request until after the time specified by the <code>x-ratelimit-reset</code> header.</p>
 <p>If you exceed a secondary rate limit, the response status will be <code>200</code> or <code>403</code>, and you will receive an error message that indicates that you hit a secondary rate limit. If the <code>retry-after</code> response header is present, you should not retry your request until after that many seconds has elapsed. If the <code>x-ratelimit-remaining</code> header is <code>0</code>, you should not retry your request until after the time, in UTC epoch seconds, specified by the <code>x-ratelimit-reset</code> header. Otherwise, wait for at least one minute before retrying. If your request continues to fail due to a secondary rate limit, wait for an exponentially increasing amount of time between retries, and throw an error after a specific number of retries.</p>
 <p>Continuing to make requests while you are rate limited may result in the banning of your integration.</p>
-<h2 id="staying-under-the-rate-limit" title="Staying under the rate limit">Staying under the rate limit<a href="#staying-under-the-rate-limit" aria-label="Link to heading 'Staying under the rate limit'" data-heading-content="Staying under the rate limit" class="anchor"></a></h2>
+<h2 id="staying-under-the-rate-limit" title="Staying under the rate limit" data-entry-type="Section">Staying under the rate limit<a href="#staying-under-the-rate-limit" aria-label="Link to heading 'Staying under the rate limit'" data-heading-content="Staying under the rate limit" class="anchor"></a></h2>
 <p>To avoid exceeding a rate limit, you should pause at least 1 second between mutative requests and avoid concurrent requests.</p>
 <p>You should also subscribe to webhook events instead of polling the API for data. For more information, see <a href="https://docs.github.com/en/webhooks" class="external">Webhooks documentation</a>.</p>
 <p>You can also stream the audit log in order to view API requests. This can help you troubleshoot integrations that are exceeding the rate limit. For more information, see <a href="https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise" class="external">Streaming the audit log for your enterprise</a>.</p>
-<h2 id="node-limit" title="Node limit">Node limit<a href="#node-limit" aria-label="Link to heading 'Node limit'" data-heading-content="Node limit" class="anchor"></a></h2>
+<h2 id="node-limit" title="Node limit" data-entry-type="Section">Node limit<a href="#node-limit" aria-label="Link to heading 'Node limit'" data-heading-content="Node limit" class="anchor"></a></h2>
 <p>To pass <a href="../guides/introduction-to-graphql.html#schema">schema</a> validation, all GraphQL API <a href="../guides/forming-calls-with-graphql.html">calls</a> must meet these standards:</p>
 <ul>
 <li>Clients must supply a <code>first</code> or <code>last</code> argument on any <a href="../guides/introduction-to-graphql.html#connection">connection</a>.</li>
@@ -303,13 +303,13 @@
                  = 22,060 total nodes</pre>
 </li>
 </ol>
-<h2 id="timeouts" title="Timeouts">Timeouts<a href="#timeouts" aria-label="Link to heading 'Timeouts'" data-heading-content="Timeouts" class="anchor"></a></h2>
+<h2 id="timeouts" title="Timeouts" data-entry-type="Section">Timeouts<a href="#timeouts" aria-label="Link to heading 'Timeouts'" data-heading-content="Timeouts" class="anchor"></a></h2>
 <p>If GitHub takes more than 10 seconds to process an API request, GitHub will terminate the request and you will receive a timeout response and a message reporting that "We couldn't respond to your request in time".</p>
 <p>When this happens, you may receive either a <code>502</code> or <code>504</code> status code. Both status codes indicate that your request timed out.</p>
 <p>GitHub reserves the right to change the timeout window to protect the speed and reliability of the API.</p>
 <p>You can check the status of the GraphQL API at <a href="https://www.githubstatus.com/" class="external">githubstatus.com</a> to determine whether the timeout is due to a problem with the API. You can also try to simplify your request or try your request later. For tips on improving query performance, see <a href="#query-optimization-strategies">Query optimization strategies</a>.</p>
 <p>If a timeout occurs for any of your API requests, additional points will be deducted from your primary rate limit for the next hour to protect the speed and reliability of the API.</p>
-<h2 id="other-resource-limits" title="Other resource limits">Other resource limits<a href="#other-resource-limits" aria-label="Link to heading 'Other resource limits'" data-heading-content="Other resource limits" class="anchor"></a></h2>
+<h2 id="other-resource-limits" title="Other resource limits" data-entry-type="Section">Other resource limits<a href="#other-resource-limits" aria-label="Link to heading 'Other resource limits'" data-heading-content="Other resource limits" class="anchor"></a></h2>
 <p>To protect the speed and reliability of the API, GitHub also enforces other resource limitations. If your GraphQL query consumes too many resources, GitHub will terminate the request and return partial results along with an error indicating that resource limits were exceeded.</p>
 <p><strong>Examples of queries that may exceed resource limits:</strong></p>
 <ul>
@@ -317,7 +317,7 @@
 <li>Using large <code>first</code> or <code>last</code> arguments in multiple connections simultaneously.</li>
 <li>Fetching extensive details for each object, such as all comments, reactions, and related issues for every repository.</li>
 </ul>
-<h2 id="query-optimization-strategies" title="Query optimization strategies">Query optimization strategies<a href="#query-optimization-strategies" aria-label="Link to heading 'Query optimization strategies'" data-heading-content="Query optimization strategies" class="anchor"></a></h2>
+<h2 id="query-optimization-strategies" title="Query optimization strategies" data-entry-type="Section">Query optimization strategies<a href="#query-optimization-strategies" aria-label="Link to heading 'Query optimization strategies'" data-heading-content="Query optimization strategies" class="anchor"></a></h2>
 <ul>
 <li><strong>Limit the number of objects</strong>: Use smaller values for <code>first</code> or <code>last</code> arguments and paginate through results.</li>
 <li><strong>Reduce query depth</strong>: Avoid requesting deeply nested objects unless necessary.</li>
