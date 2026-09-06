@@ -1,16 +1,15 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Classroom</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Classroom</a> / </nav><h1 id="rest-api-endpoints-for--data-variablesproductprodname_classroom-">REST API endpoints for {% data variables.product.prodname_classroom %}<a href="#rest-api-endpoints-for--data-variablesproductprodname_classroom-" aria-label="Link to heading 'REST API endpoints for {% data variables.product.prodname_classroom %}'" data-heading-content="REST API endpoints for {% data variables.product.prodname_classroom %}" class="anchor"></a></h1>
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST API endpoints for GitHub Classroom</title><link rel="stylesheet" href="../../../assets/style.css"></head><body class="markdown-body"><nav><a href="../index.html">REST API</a> / <a href="index.html">Classroom</a> / </nav><h1 id="rest-api-endpoints-for-github-classroom">REST API endpoints for GitHub Classroom<a href="#rest-api-endpoints-for-github-classroom" aria-label="Link to heading 'REST API endpoints for GitHub Classroom'" data-heading-content="REST API endpoints for GitHub Classroom" class="anchor"></a></h1>
 <p>Use the REST API to interact with GitHub Classroom.</p>
 <div class="markdown-alert markdown-alert-note">
 <p class="markdown-alert-title">Note</p>
 <p>Most endpoints use <code>Authorization: Bearer &lt;YOUR-TOKEN&gt;</code> and <code>Accept: application/vnd.github+json</code> headers, plus <code>X-GitHub-Api-Version: 2026-03-10</code>. Curl examples below omit these standard headers for brevity.</p>
 </div>
-<h2 id="closing-down---get-an-assignment" title="GET /assignments/{assignment_id} (Closing down - Get an assignment)" data-entry-type="Resource">Closing down - Get an assignment<a href="#closing-down---get-an-assignment" aria-label="Link to heading 'Closing down - Get an assignment'" data-heading-content="Closing down - Get an assignment" class="anchor"></a></h2>
+<h2 id="closed---get-an-assignment" title="GET /assignments/{assignment_id} (Closed - Get an assignment)" data-entry-type="Resource">Closed - Get an assignment<a href="#closed---get-an-assignment" aria-label="Link to heading 'Closed - Get an assignment'" data-heading-content="Closed - Get an assignment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /assignments/{assignment_id}
 </span></code></pre>
 <p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
 For more information, see the GitHub Classroom sunset notice.</p>
-<p>Gets a GitHub Classroom assignment. Assignment will only be returned if the current user is an administrator of the GitHub Classroom for the assignment.</p>
 <h3 id="parameters">Parameters<a href="#parameters" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers">Headers<a href="#headers" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -24,78 +23,14 @@ The unique identifier of the classroom assignment.</li>
 </ul>
 <h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>404</strong> - Resource not found</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
+<li><strong>410</strong> - Gone</li>
 </ul>
-<h3 id="code-examples">Code examples<a href="#code-examples" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example">Example<a href="#example" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/assignments/ASSIGNMENT_ID
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>public_repo</code>: required, boolean</li>
-<li><code>title</code>: required, string</li>
-<li><code>type</code>: required, string, enum: <code>individual</code>, <code>group</code></li>
-<li><code>invite_link</code>: required, string</li>
-<li><code>invitations_enabled</code>: required, boolean</li>
-<li><code>slug</code>: required, string</li>
-<li><code>students_are_repo_admins</code>: required, boolean</li>
-<li><code>feedback_pull_requests_enabled</code>: required, boolean</li>
-<li><code>max_teams</code>: required, integer or null</li>
-<li><code>max_members</code>: required, integer or null</li>
-<li><code>editor</code>: required, string</li>
-<li><code>accepted</code>: required, integer</li>
-<li><code>submitted</code>: required, integer</li>
-<li><code>passing</code>: required, integer</li>
-<li><code>language</code>: required, string</li>
-<li><code>deadline</code>: required, string or null, format: date-time</li>
-<li><code>starter_code_repository</code>: required, <code>Simple Classroom Repository</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>full_name</code>: required, string</li>
-<li><code>html_url</code>: required, string, format: uri</li>
-<li><code>node_id</code>: required, string</li>
-<li><code>private</code>: required, boolean</li>
-<li><code>default_branch</code>: required, string</li>
-</ul>
-</li>
-<li><code>classroom</code>: required, <code>Classroom</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>archived</code>: required, boolean</li>
-<li><code>organization</code>: required, <code>Organization Simple for Classroom</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>login</code>: required, string</li>
-<li><code>node_id</code>: required, string</li>
-<li><code>html_url</code>: required, string, format: uri</li>
-<li><code>name</code>: required, string or null</li>
-<li><code>avatar_url</code>: required, string</li>
-</ul>
-</li>
-<li><code>url</code>: required, string</li>
-</ul>
-</li>
-</ul>
-<h2 id="closing-down---list-accepted-assignments-for-an-assignment" title="GET /assignments/{assignment_id}/accepted_assignments (Closing down - List accepted assignments for an assignment)" data-entry-type="Resource">Closing down - List accepted assignments for an assignment<a href="#closing-down---list-accepted-assignments-for-an-assignment" aria-label="Link to heading 'Closing down - List accepted assignments for an assignment'" data-heading-content="Closing down - List accepted assignments for an assignment" class="anchor"></a></h2>
+<h2 id="closed---list-accepted-assignments-for-an-assignment" title="GET /assignments/{assignment_id}/accepted_assignments (Closed - List accepted assignments for an assignment)" data-entry-type="Resource">Closed - List accepted assignments for an assignment<a href="#closed---list-accepted-assignments-for-an-assignment" aria-label="Link to heading 'Closed - List accepted assignments for an assignment'" data-heading-content="Closed - List accepted assignments for an assignment" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /assignments/{assignment_id}/accepted_assignments
 </span></code></pre>
 <p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
 For more information, see the GitHub Classroom sunset notice.</p>
-<p>Lists any assignment repositories that have been created by students accepting a GitHub Classroom assignment. Accepted assignments will only be returned if the current user is an administrator of the GitHub Classroom for the assignment.</p>
 <h3 id="parameters-1">Parameters<a href="#parameters-1" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-1">Headers<a href="#headers-1" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -104,100 +39,19 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
 <h4 id="path-and-query-parameters-1">Path and query parameters<a href="#path-and-query-parameters-1" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
-<li>
-<p><strong><code>assignment_id</code></strong> (integer) (required)<br>
-The unique identifier of the classroom assignment.</p>
-</li>
-<li>
-<p><strong><code>page</code></strong> (integer)<br>
-The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
-Default: <code>1</code></p>
-</li>
-<li>
-<p><strong><code>per_page</code></strong> (integer)<br>
-The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
-Default: <code>30</code></p>
-</li>
+<li><strong><code>assignment_id</code></strong> (integer) (required)<br>
+The unique identifier of the classroom assignment.</li>
 </ul>
 <h3 id="http-response-status-codes-1">HTTP response status codes<a href="#http-response-status-codes-1" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
+<li><strong>410</strong> - Gone</li>
 </ul>
-<h3 id="code-examples-1">Code examples<a href="#code-examples-1" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/assignments/ASSIGNMENT_ID/accepted_assignments
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Array of <code>Classroom Accepted Assignment</code>:</p>
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>submitted</code>: required, boolean</li>
-<li><code>passing</code>: required, boolean</li>
-<li><code>commit_count</code>: required, integer</li>
-<li><code>grade</code>: required, string</li>
-<li><code>students</code>: required, array of <code>Simple Classroom User</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>login</code>: required, string</li>
-<li><code>avatar_url</code>: required, string, format: uri</li>
-<li><code>html_url</code>: required, string, format: uri</li>
-</ul>
-</li>
-<li><code>repository</code>: required, <code>Simple Classroom Repository</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>full_name</code>: required, string</li>
-<li><code>html_url</code>: required, string, format: uri</li>
-<li><code>node_id</code>: required, string</li>
-<li><code>private</code>: required, boolean</li>
-<li><code>default_branch</code>: required, string</li>
-</ul>
-</li>
-<li><code>assignment</code>: required, <code>Simple Classroom Assignment</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>public_repo</code>: required, boolean</li>
-<li><code>title</code>: required, string</li>
-<li><code>type</code>: required, string, enum: <code>individual</code>, <code>group</code></li>
-<li><code>invite_link</code>: required, string</li>
-<li><code>invitations_enabled</code>: required, boolean</li>
-<li><code>slug</code>: required, string</li>
-<li><code>students_are_repo_admins</code>: required, boolean</li>
-<li><code>feedback_pull_requests_enabled</code>: required, boolean</li>
-<li><code>max_teams</code>: integer or null</li>
-<li><code>max_members</code>: integer or null</li>
-<li><code>editor</code>: required, string</li>
-<li><code>accepted</code>: required, integer</li>
-<li><code>submitted</code>: required, integer</li>
-<li><code>passing</code>: required, integer</li>
-<li><code>language</code>: required, string</li>
-<li><code>deadline</code>: required, string or null, format: date-time</li>
-<li><code>classroom</code>: required, <code>Simple Classroom</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>archived</code>: required, boolean</li>
-<li><code>url</code>: required, string</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="closing-down---get-assignment-grades" title="GET /assignments/{assignment_id}/grades (Closing down - Get assignment grades)" data-entry-type="Resource">Closing down - Get assignment grades<a href="#closing-down---get-assignment-grades" aria-label="Link to heading 'Closing down - Get assignment grades'" data-heading-content="Closing down - Get assignment grades" class="anchor"></a></h2>
+<h2 id="closed---get-assignment-grades" title="GET /assignments/{assignment_id}/grades (Closed - Get assignment grades)" data-entry-type="Resource">Closed - Get assignment grades<a href="#closed---get-assignment-grades" aria-label="Link to heading 'Closed - Get assignment grades'" data-heading-content="Closed - Get assignment grades" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /assignments/{assignment_id}/grades
 </span></code></pre>
 <p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
 For more information, see the GitHub Classroom sunset notice.</p>
-<p>Gets grades for a GitHub Classroom assignment. Grades will only be returned if the current user is an administrator of the GitHub Classroom for the assignment.</p>
 <h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -211,45 +65,24 @@ The unique identifier of the classroom assignment.</li>
 </ul>
 <h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>404</strong> - Resource not found</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
+<li><strong>410</strong> - Gone</li>
 </ul>
-<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/assignments/ASSIGNMENT_ID/grades
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Array of <code>Classroom Assignment Grade</code>:</p>
-<ul>
-<li><code>assignment_name</code>: required, string</li>
-<li><code>assignment_url</code>: required, string</li>
-<li><code>starter_code_url</code>: required, string</li>
-<li><code>github_username</code>: required, string</li>
-<li><code>roster_identifier</code>: required, string</li>
-<li><code>student_repository_name</code>: required, string</li>
-<li><code>student_repository_url</code>: required, string</li>
-<li><code>submission_timestamp</code>: required, string</li>
-<li><code>points_awarded</code>: required, integer</li>
-<li><code>points_available</code>: required, integer</li>
-<li><code>group_name</code>: string</li>
-</ul>
-<h2 id="closing-down---list-classrooms" title="GET /classrooms (Closing down - List classrooms)" data-entry-type="Resource">Closing down - List classrooms<a href="#closing-down---list-classrooms" aria-label="Link to heading 'Closing down - List classrooms'" data-heading-content="Closing down - List classrooms" class="anchor"></a></h2>
+<h2 id="closed---list-classrooms" title="GET /classrooms (Closed - List classrooms)" data-entry-type="Resource">Closed - List classrooms<a href="#closed---list-classrooms" aria-label="Link to heading 'Closed - List classrooms'" data-heading-content="Closed - List classrooms" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /classrooms
 </span></code></pre>
 <p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
 For more information, see the GitHub Classroom sunset notice.</p>
-<p>Lists GitHub Classroom classrooms for the current user. Classrooms will only be returned if the current user is an administrator of one or more GitHub Classrooms.</p>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li><strong>410</strong> - Gone</li>
+</ul>
+<h2 id="closed---get-a-classroom" title="GET /classrooms/{classroom_id} (Closed - Get a classroom)" data-entry-type="Resource">Closed - Get a classroom<a href="#closed---get-a-classroom" aria-label="Link to heading 'Closed - Get a classroom'" data-heading-content="Closed - Get a classroom" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /classrooms/{classroom_id}
+</span></code></pre>
+<p>Warning</p>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
+For more information, see the GitHub Classroom sunset notice.</p>
 <h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -258,48 +91,19 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
 <h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
-<li>
-<p><strong><code>page</code></strong> (integer)<br>
-The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
-Default: <code>1</code></p>
-</li>
-<li>
-<p><strong><code>per_page</code></strong> (integer)<br>
-The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
-Default: <code>30</code></p>
-</li>
+<li><strong><code>classroom_id</code></strong> (integer) (required)<br>
+The unique identifier of the classroom.</li>
 </ul>
-<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
+<li><strong>410</strong> - Gone</li>
 </ul>
-<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/classrooms
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Array of <code>Simple Classroom</code>:</p>
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>archived</code>: required, boolean</li>
-<li><code>url</code>: required, string</li>
-</ul>
-<h2 id="closing-down---get-a-classroom" title="GET /classrooms/{classroom_id} (Closing down - Get a classroom)" data-entry-type="Resource">Closing down - Get a classroom<a href="#closing-down---get-a-classroom" aria-label="Link to heading 'Closing down - Get a classroom'" data-heading-content="Closing down - Get a classroom" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /classrooms/{classroom_id}
+<h2 id="closed---list-assignments-for-a-classroom" title="GET /classrooms/{classroom_id}/assignments (Closed - List assignments for a classroom)" data-entry-type="Resource">Closed - List assignments for a classroom<a href="#closed---list-assignments-for-a-classroom" aria-label="Link to heading 'Closed - List assignments for a classroom'" data-heading-content="Closed - List assignments for a classroom" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /classrooms/{classroom_id}/assignments
 </span></code></pre>
 <p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
+<p>Closed notice: This operation is no longer available as of August 28, 2026.<br>
 For more information, see the GitHub Classroom sunset notice.</p>
-<p>Gets a GitHub Classroom classroom for the current user. Classroom will only be returned if the current user is an administrator of the GitHub Classroom.</p>
 <h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -311,115 +115,8 @@ Setting to <code>application/vnd.github+json</code> is recommended.</li>
 <li><strong><code>classroom_id</code></strong> (integer) (required)<br>
 The unique identifier of the classroom.</li>
 </ul>
-<h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
-<ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>404</strong> - Resource not found</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
-</ul>
-<h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/classrooms/CLASSROOM_ID
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>archived</code>: required, boolean</li>
-<li><code>organization</code>: required, <code>Organization Simple for Classroom</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>login</code>: required, string</li>
-<li><code>node_id</code>: required, string</li>
-<li><code>html_url</code>: required, string, format: uri</li>
-<li><code>name</code>: required, string or null</li>
-<li><code>avatar_url</code>: required, string</li>
-</ul>
-</li>
-<li><code>url</code>: required, string</li>
-</ul>
-<h2 id="closing-down---list-assignments-for-a-classroom" title="GET /classrooms/{classroom_id}/assignments (Closing down - List assignments for a classroom)" data-entry-type="Resource">Closing down - List assignments for a classroom<a href="#closing-down---list-assignments-for-a-classroom" aria-label="Link to heading 'Closing down - List assignments for a classroom'" data-heading-content="Closing down - List assignments for a classroom" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /classrooms/{classroom_id}/assignments
-</span></code></pre>
-<p>Warning</p>
-<p>Closing down notice: This operation is closing down and will be removed on August 28, 2026.<br>
-For more information, see the GitHub Classroom sunset notice.</p>
-<p>Lists GitHub Classroom assignments for a classroom. Assignments will only be returned if the current user is an administrator of the GitHub Classroom.</p>
-<h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
-<ul>
-<li><strong><code>accept</code></strong> (string)<br>
-Setting to <code>application/vnd.github+json</code> is recommended.</li>
-</ul>
-<h4 id="path-and-query-parameters-5">Path and query parameters<a href="#path-and-query-parameters-5" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
-<ul>
-<li>
-<p><strong><code>classroom_id</code></strong> (integer) (required)<br>
-The unique identifier of the classroom.</p>
-</li>
-<li>
-<p><strong><code>page</code></strong> (integer)<br>
-The page number of the results to fetch. For more information, see "Using pagination in the REST API."<br>
-Default: <code>1</code></p>
-</li>
-<li>
-<p><strong><code>per_page</code></strong> (integer)<br>
-The number of results per page (max 100). For more information, see "Using pagination in the REST API."<br>
-Default: <code>30</code></p>
-</li>
-</ul>
 <h3 id="http-response-status-codes-5">HTTP response status codes<a href="#http-response-status-codes-5" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
-<li>
-<p><strong>200</strong> - OK</p>
-</li>
-<li>
-<p><strong>410</strong> - Gone</p>
-</li>
-</ul>
-<h3 id="code-examples-5">Code examples<a href="#code-examples-5" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/classrooms/CLASSROOM_ID/assignments
-</span></code></pre>
-<p><strong>Response schema (Status: 200):</strong></p>
-<p>Array of <code>Simple Classroom Assignment</code>:</p>
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>public_repo</code>: required, boolean</li>
-<li><code>title</code>: required, string</li>
-<li><code>type</code>: required, string, enum: <code>individual</code>, <code>group</code></li>
-<li><code>invite_link</code>: required, string</li>
-<li><code>invitations_enabled</code>: required, boolean</li>
-<li><code>slug</code>: required, string</li>
-<li><code>students_are_repo_admins</code>: required, boolean</li>
-<li><code>feedback_pull_requests_enabled</code>: required, boolean</li>
-<li><code>max_teams</code>: integer or null</li>
-<li><code>max_members</code>: integer or null</li>
-<li><code>editor</code>: required, string</li>
-<li><code>accepted</code>: required, integer</li>
-<li><code>submitted</code>: required, integer</li>
-<li><code>passing</code>: required, integer</li>
-<li><code>language</code>: required, string</li>
-<li><code>deadline</code>: required, string or null, format: date-time</li>
-<li><code>classroom</code>: required, <code>Simple Classroom</code>:
-<ul>
-<li><code>id</code>: required, integer</li>
-<li><code>name</code>: required, string</li>
-<li><code>archived</code>: required, boolean</li>
-<li><code>url</code>: required, string</li>
-</ul>
-</li>
+<li><strong>410</strong> - Gone</li>
 </ul>
 <footer>Documentation is licensed under Creative Commons Attribution 4.0 (see <a href="../../../GitHub documentation LICENSE.txt">GitHub documentation LICENSE</a>)</footer></body></html>

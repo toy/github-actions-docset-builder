@@ -129,12 +129,10 @@ The name of the repository without the .git extension. The name is not case sens
 <ul>
 <li><code>count</code>: required, integer, minimum: 0</li>
 </ul>
-<h2 id="list-repositories-starred-by-the-authenticated-user" title="GET /user/starred (List repositories starred by the authenticated user)" data-entry-type="Resource">List repositories starred by the authenticated user<a href="#list-repositories-starred-by-the-authenticated-user" aria-label="Link to heading 'List repositories starred by the authenticated user'" data-heading-content="List repositories starred by the authenticated user" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/starred
+<h2 id="get-repository-star-history" title="GET /repos/{owner}/{repo}/stargazers/history (Get repository star history)" data-entry-type="Resource">Get repository star history<a href="#get-repository-star-history" aria-label="Link to heading 'Get repository star history'" data-heading-content="Get repository star history" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /repos/{owner}/{repo}/stargazers/history
 </span></code></pre>
-<p>Lists repositories the authenticated user has starred.<br>
-This endpoint supports the following custom media types. For more information, see "Media types."</p>
-<p>application/vnd.github.star+json: Includes a timestamp of when the star was created.</p>
+<p>Returns repository stars grouped by calendar weeks, most recent first. Pages move backward toward the repository's creation week, and weeks within a page are ordered newest to oldest, so concatenating pages produces one continuous series. Weeks without stars contain zero counts. Week and day boundaries are not guaranteed to align with UTC. The days array contains the number of stars created on each day of the week, starting on Sunday.</p>
 <h3 id="parameters-2">Parameters<a href="#parameters-2" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-2">Headers<a href="#headers-2" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -142,6 +140,62 @@ This endpoint supports the following custom media types. For more information, s
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
 <h4 id="path-and-query-parameters-2">Path and query parameters<a href="#path-and-query-parameters-2" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>per_page</code></strong> (integer)<br>
+The number of results per page (max 30). For more information, see "Using pagination in the REST API."<br>
+Default: <code>30</code></p>
+</li>
+<li>
+<p><strong><code>page</code></strong> (integer)<br>
+The page number of the results to fetch (max 100). For more information, see "Using pagination in the REST API."<br>
+Default: <code>1</code></p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>200</strong> - Repository star history</p>
+</li>
+<li>
+<p><strong>422</strong> - Validation failed, or the endpoint has been spammed.</p>
+</li>
+</ul>
+<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X GET \
+</span><span style="color:#c0c5ce;">  https://api.github.com/repos/OWNER/REPO/stargazers/history
+</span></code></pre>
+<p><strong>Response schema (Status: 200):</strong></p>
+<p>Array (maxItems: 30) of <code>Stargazer History</code>:</p>
+<ul>
+<li><code>days</code>: required, array of integer</li>
+<li><code>total</code>: required, integer</li>
+<li><code>week</code>: required, integer</li>
+</ul>
+<h2 id="list-repositories-starred-by-the-authenticated-user" title="GET /user/starred (List repositories starred by the authenticated user)" data-entry-type="Resource">List repositories starred by the authenticated user<a href="#list-repositories-starred-by-the-authenticated-user" aria-label="Link to heading 'List repositories starred by the authenticated user'" data-heading-content="List repositories starred by the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/starred
+</span></code></pre>
+<p>Lists repositories the authenticated user has starred.<br>
+This endpoint supports the following custom media types. For more information, see "Media types."</p>
+<p>application/vnd.github.star+json: Includes a timestamp of when the star was created.</p>
+<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>sort</code></strong> (string)<br>
@@ -166,7 +220,7 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-2">HTTP response status codes<a href="#http-response-status-codes-2" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
 <p><strong>200</strong> - OK</p>
@@ -181,7 +235,7 @@ Default: <code>1</code></p>
 <p><strong>403</strong> - Forbidden</p>
 </li>
 </ul>
-<h3 id="code-examples-2">Code examples<a href="#code-examples-2" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-1-status-code-200-1">Example 1: Status Code 200<a href="#example-1-status-code-200-1" aria-label="Link to heading 'Example 1: Status Code 200'" data-heading-content="Example 1: Status Code 200" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
@@ -505,53 +559,6 @@ Default: <code>1</code></p>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user/starred/{owner}/{repo}
 </span></code></pre>
 <p>Whether the authenticated user has starred the repository.</p>
-<h3 id="parameters-3">Parameters<a href="#parameters-3" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-3">Headers<a href="#headers-3" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
-<ul>
-<li><strong><code>accept</code></strong> (string)<br>
-Setting to <code>application/vnd.github+json</code> is recommended.</li>
-</ul>
-<h4 id="path-and-query-parameters-3">Path and query parameters<a href="#path-and-query-parameters-3" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
-<ul>
-<li>
-<p><strong><code>owner</code></strong> (string) (required)<br>
-The account owner of the repository. The name is not case sensitive.</p>
-</li>
-<li>
-<p><strong><code>repo</code></strong> (string) (required)<br>
-The name of the repository without the .git extension. The name is not case sensitive.</p>
-</li>
-</ul>
-<h3 id="http-response-status-codes-3">HTTP response status codes<a href="#http-response-status-codes-3" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
-<ul>
-<li>
-<p><strong>204</strong> - Response if this repository is starred by you</p>
-</li>
-<li>
-<p><strong>304</strong> - Not modified</p>
-</li>
-<li>
-<p><strong>401</strong> - Requires authentication</p>
-</li>
-<li>
-<p><strong>403</strong> - Forbidden</p>
-</li>
-<li>
-<p><strong>404</strong> - Not Found if this repository is not starred by you</p>
-</li>
-</ul>
-<h3 id="code-examples-3">Code examples<a href="#code-examples-3" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-1">Example<a href="#example-1" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
-<p><strong>Request:</strong></p>
-<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X GET \
-</span><span style="color:#c0c5ce;">  https://api.github.com/user/starred/OWNER/REPO
-</span></code></pre>
-<p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="star-a-repository-for-the-authenticated-user" title="PUT /user/starred/{owner}/{repo} (Star a repository for the authenticated user)" data-entry-type="Resource">Star a repository for the authenticated user<a href="#star-a-repository-for-the-authenticated-user" aria-label="Link to heading 'Star a repository for the authenticated user'" data-heading-content="Star a repository for the authenticated user" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /user/starred/{owner}/{repo}
-</span></code></pre>
-<p>Note that you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."</p>
 <h3 id="parameters-4">Parameters<a href="#parameters-4" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-4">Headers<a href="#headers-4" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -572,7 +579,7 @@ The name of the repository without the .git extension. The name is not case sens
 <h3 id="http-response-status-codes-4">HTTP response status codes<a href="#http-response-status-codes-4" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
-<p><strong>204</strong> - No Content</p>
+<p><strong>204</strong> - Response if this repository is starred by you</p>
 </li>
 <li>
 <p><strong>304</strong> - Not modified</p>
@@ -584,21 +591,21 @@ The name of the repository without the .git extension. The name is not case sens
 <p><strong>403</strong> - Forbidden</p>
 </li>
 <li>
-<p><strong>404</strong> - Resource not found</p>
+<p><strong>404</strong> - Not Found if this repository is not starred by you</p>
 </li>
 </ul>
 <h3 id="code-examples-4">Code examples<a href="#code-examples-4" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
 <h4 id="example-2">Example<a href="#example-2" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
-</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  -X GET \
 </span><span style="color:#c0c5ce;">  https://api.github.com/user/starred/OWNER/REPO
 </span></code></pre>
 <p><strong>Response schema (Status: 204):</strong></p>
-<h2 id="unstar-a-repository-for-the-authenticated-user" title="DELETE /user/starred/{owner}/{repo} (Unstar a repository for the authenticated user)" data-entry-type="Resource">Unstar a repository for the authenticated user<a href="#unstar-a-repository-for-the-authenticated-user" aria-label="Link to heading 'Unstar a repository for the authenticated user'" data-heading-content="Unstar a repository for the authenticated user" class="anchor"></a></h2>
-<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/starred/{owner}/{repo}
+<h2 id="star-a-repository-for-the-authenticated-user" title="PUT /user/starred/{owner}/{repo} (Star a repository for the authenticated user)" data-entry-type="Resource">Star a repository for the authenticated user<a href="#star-a-repository-for-the-authenticated-user" aria-label="Link to heading 'Star a repository for the authenticated user'" data-heading-content="Star a repository for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">PUT /user/starred/{owner}/{repo}
 </span></code></pre>
-<p>Unstar a repository that the authenticated user has previously starred.</p>
+<p>Note that you'll need to set Content-Length to zero when calling out to this endpoint. For more information, see "HTTP method."</p>
 <h3 id="parameters-5">Parameters<a href="#parameters-5" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
 <h4 id="headers-5">Headers<a href="#headers-5" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
@@ -638,6 +645,53 @@ The name of the repository without the .git extension. The name is not case sens
 <h4 id="example-3">Example<a href="#example-3" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
+</span><span style="color:#c0c5ce;">  -X PUT \
+</span><span style="color:#c0c5ce;">  https://api.github.com/user/starred/OWNER/REPO
+</span></code></pre>
+<p><strong>Response schema (Status: 204):</strong></p>
+<h2 id="unstar-a-repository-for-the-authenticated-user" title="DELETE /user/starred/{owner}/{repo} (Unstar a repository for the authenticated user)" data-entry-type="Resource">Unstar a repository for the authenticated user<a href="#unstar-a-repository-for-the-authenticated-user" aria-label="Link to heading 'Unstar a repository for the authenticated user'" data-heading-content="Unstar a repository for the authenticated user" class="anchor"></a></h2>
+<pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">DELETE /user/starred/{owner}/{repo}
+</span></code></pre>
+<p>Unstar a repository that the authenticated user has previously starred.</p>
+<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<ul>
+<li><strong><code>accept</code></strong> (string)<br>
+Setting to <code>application/vnd.github+json</code> is recommended.</li>
+</ul>
+<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<ul>
+<li>
+<p><strong><code>owner</code></strong> (string) (required)<br>
+The account owner of the repository. The name is not case sensitive.</p>
+</li>
+<li>
+<p><strong><code>repo</code></strong> (string) (required)<br>
+The name of the repository without the .git extension. The name is not case sensitive.</p>
+</li>
+</ul>
+<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<ul>
+<li>
+<p><strong>204</strong> - No Content</p>
+</li>
+<li>
+<p><strong>304</strong> - Not modified</p>
+</li>
+<li>
+<p><strong>401</strong> - Requires authentication</p>
+</li>
+<li>
+<p><strong>403</strong> - Forbidden</p>
+</li>
+<li>
+<p><strong>404</strong> - Resource not found</p>
+</li>
+</ul>
+<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<p><strong>Request:</strong></p>
+<pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X DELETE \
 </span><span style="color:#c0c5ce;">  https://api.github.com/user/starred/OWNER/REPO
 </span></code></pre>
@@ -646,15 +700,16 @@ The name of the repository without the .git extension. The name is not case sens
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}/starred
 </span></code></pre>
 <p>Lists repositories a user has starred.<br>
+If the specified user has a private profile, this endpoint returns an empty list unless the request is authenticated as that user. A request authenticated as the specified user returns starred repositories visible to the token even if the token has no OAuth scopes.<br>
 This endpoint supports the following custom media types. For more information, see "Media types."</p>
 <p>application/vnd.github.star+json: Includes a timestamp of when the star was created.</p>
-<h3 id="parameters-6">Parameters<a href="#parameters-6" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
-<h4 id="headers-6">Headers<a href="#headers-6" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
+<h3 id="parameters-7">Parameters<a href="#parameters-7" aria-label="Link to heading 'Parameters'" data-heading-content="Parameters" class="anchor"></a></h3>
+<h4 id="headers-7">Headers<a href="#headers-7" aria-label="Link to heading 'Headers'" data-heading-content="Headers" class="anchor"></a></h4>
 <ul>
 <li><strong><code>accept</code></strong> (string)<br>
 Setting to <code>application/vnd.github+json</code> is recommended.</li>
 </ul>
-<h4 id="path-and-query-parameters-6">Path and query parameters<a href="#path-and-query-parameters-6" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
+<h4 id="path-and-query-parameters-7">Path and query parameters<a href="#path-and-query-parameters-7" aria-label="Link to heading 'Path and query parameters'" data-heading-content="Path and query parameters" class="anchor"></a></h4>
 <ul>
 <li>
 <p><strong><code>username</code></strong> (string) (required)<br>
@@ -683,12 +738,12 @@ The page number of the results to fetch. For more information, see "Using pagina
 Default: <code>1</code></p>
 </li>
 </ul>
-<h3 id="http-response-status-codes-6">HTTP response status codes<a href="#http-response-status-codes-6" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
+<h3 id="http-response-status-codes-7">HTTP response status codes<a href="#http-response-status-codes-7" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li><strong>200</strong> - OK</li>
 </ul>
-<h3 id="code-examples-6">Code examples<a href="#code-examples-6" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
-<h4 id="example-4">Example<a href="#example-4" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
+<h3 id="code-examples-7">Code examples<a href="#code-examples-7" aria-label="Link to heading 'Code examples'" data-heading-content="Code examples" class="anchor"></a></h3>
+<h4 id="example-5">Example<a href="#example-5" aria-label="Link to heading 'Example'" data-heading-content="Example" class="anchor"></a></h4>
 <p><strong>Request:</strong></p>
 <pre lang="curl" style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">curl -L \
 </span><span style="color:#c0c5ce;">  -X GET \

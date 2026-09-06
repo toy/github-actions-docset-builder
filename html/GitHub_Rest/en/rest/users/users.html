@@ -7,7 +7,8 @@
 <h2 id="get-the-authenticated-user" title="GET /user (Get the authenticated user)" data-entry-type="Resource">Get the authenticated user<a href="#get-the-authenticated-user" aria-label="Link to heading 'Get the authenticated user'" data-heading-content="Get the authenticated user" class="anchor"></a></h2>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /user
 </span></code></pre>
-<p>OAuth app tokens and personal access tokens (classic) need the user scope in order for the response to include private profile information.</p>
+<p>OAuth app tokens and personal access tokens (classic) need the read:user scope, or the broader user scope, for this endpoint to return the private user response. The private user response includes additional fields such as private_gists, total_private_repos, owned_private_repos, disk_usage, collaborators, and two_factor_authentication. Tokens without these scopes receive the public user response.<br>
+The private and public user response types are unrelated to the private profile setting. A token without scopes still authenticates as the token's owner, so values subject to private profile visibility, such as followers and following, may differ from an unauthenticated response.</p>
 <h3 id="http-response-status-codes">HTTP response status codes<a href="#http-response-status-codes" aria-label="Link to heading 'HTTP response status codes'" data-heading-content="HTTP response status codes" class="anchor"></a></h3>
 <ul>
 <li>
@@ -503,6 +504,7 @@ Default: <code>30</code></p>
 <pre style="background-color:#2b303b;"><code><span style="color:#c0c5ce;">GET /users/{username}
 </span></code></pre>
 <p>Provides publicly available information about someone with a GitHub account.<br>
+If the specified user has a private profile, the followers and following values are 0 unless the request is authenticated as that user. A request authenticated as the specified user returns the actual values even if the token has no OAuth scopes.<br>
 The events_url value is a URI template. Replace {/privacy} with /public to retrieve only public events. Omit it to retrieve public events and, when authenticated as the user, private events. For more information, see "List events for the authenticated user."<br>
 If you are requesting information about an Enterprise Managed User, or a GitHub App bot that is installed in an organization that uses Enterprise Managed Users, your requests must be authenticated as a user or GitHub App that has access to the organization to view that account's information. If you are not authorized, the request will return a 404 Not Found status.<br>
 The email key in the following response is the publicly visible email address from your GitHub profile page. When setting up your profile, you can select a primary email address to be public which provides an email entry for this endpoint. If you do not set a public email address for email, then it will have a value of null. You only see publicly visible email addresses when authenticated with GitHub. For more information, see Authentication.<br>
